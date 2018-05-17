@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent" >
+
+
+
+
+
+<LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/custom_header" />
+
+    <LinearLayout
+        android:id="@+id/ll_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/but_DayStart"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="Day Start"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="16dp"
+            android:background="@drawable/custom_button"/>
+
+        <Button
+            android:id="@+id/but_Exit"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="Exit"
+            android:paddingLeft="45dp"
+            android:paddingRight="40dp"
+
+
+            android:textSize="16dp"
+            android:background="@drawable/custom_button"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_startAfterDayEndFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time : "
+            android:textStyle="bold|italic"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/txt_DayStarttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sunil"
+            android:textStyle="bold|italic"
+            android:textSize="16dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_map"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <fragment
+            android:id="@+id/map"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="200dp"
+            map:cameraBearing="112.5"
+            map:cameraTargetLat="22.7253"
+            map:cameraTargetLng="75.8655"
+            map:cameraTilt="30"
+            map:cameraZoom="13"
+
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:id="@+id/tv_MapLocationCorrectText"
+            android:visibility="gone"
+            android:text="Location on map is correct according to you?"/>
+        <RadioGroup
+            android:id="@+id/rg_yes_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <RadioButton
+                android:id="@+id/rb_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"/>
+            <RadioButton
+                android:id="@+id/rb_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"/>
+        </RadioGroup>
+        <LinearLayout
+            android:id="@+id/ll_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_rfrshCmnt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_gravity="fill"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingBottom="10dp"
+                android:textColor="@android:color/black"
+                android:text="If you are inside store then please go out of the store and then click refresh button to update you location"/>
+            <Button android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/logo_background"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+
+                android:textColor="#FFFF4424"
+
+                android:id="@+id/btn_refresh"
+                android:textStyle="bold"
+                android:text="Refresh"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_startAfterDayEndSecond"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/ll_containView"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <EditText
+            android:id="@+id/et_otherPleaseSpecify"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+           android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/et_boundary_retrun"
+            android:visibility="gone"/>
+
+        <RadioButton
+            android:id="@+id/cb_NoWorking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:text="No Working"
+            android:onClick="onRadioButtonClicked"/>
+        <Button
+            android:id="@+id/but_Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:text="Next"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"/>
+    </LinearLayout>
+</LinearLayout>
+    </ScrollView>

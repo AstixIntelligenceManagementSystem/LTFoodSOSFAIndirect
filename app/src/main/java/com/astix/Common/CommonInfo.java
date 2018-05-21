@@ -9,7 +9,7 @@ public class CommonInfo
 
 
 	// Its for Live  Path on 194 server for SFA
-/*
+
 
 
 	public static File imageF_savedInstance=null;
@@ -43,8 +43,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 60;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.6";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 64;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.7";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -92,7 +92,7 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 
-*/
+
 
 
 
@@ -196,6 +196,7 @@ public class CommonInfo
 
 /*
 
+
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
 	public static String clickedTagPhoto_savedInstance=null;
@@ -274,16 +275,17 @@ public class CommonInfo
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
-
-
-
 */
+
+
+
+
 
 
 	// Its for Development  Path on 194 server for SFA
 
 
-      public static Uri uriSavedImage_savedInstance=null;
+       /*public static Uri uriSavedImage_savedInstance=null;
 
 	    public static String userDate="0";
 	    public static String pickerDate="0";
@@ -331,14 +333,14 @@ public class CommonInfo
 
 	    public static String DistributorSyncPath="http://103.20.212.194/ReadXML_LTFoodsSFADistributionDevelopment/Default.aspx";
 
-	   public static String URLImageLinkToViewStoreOverWebProtal="http://103.20.212.194/ltace/Reports/frmPDAImgsDev.aspx";
+	    public static String URLImageLinkToViewStoreOverWebProtal="http://103.20.212.194/ltace/Reports/frmPDAImgsDev.aspx";
 
 	    public static String OrderSyncPathSO="http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSO.aspx";
 
 		public static String OrderXMLFolder="LTACESFAXml";
 		public static String ImagesFolder="LTACESFAImages";
-	public static String ImagesFolderServer="LTACESFAImagesServer";
-	public static String VideoFolder="VideoLTFOODS";
+	    public static String ImagesFolderServer="LTACESFAImagesServer";
+	    public static String VideoFolder="VideoLTFOODS";
 	    public static String TextFileFolder="LTACETextFile";
 	    public static String InvoiceXMLFolder="LTACEInvoiceXml";
 		public static String FinalLatLngJsonFile="LTACESFAFinalLatLngJson";
@@ -350,7 +352,7 @@ public class CommonInfo
 		public static int DistanceRange=3000;
 	    public static String SalesPersonTodaysTargetMsg="";
 	    public static final String Preference="LTFoodsPrefrence";
-	public static final String AttandancePreference="LTFoodsAttandancePreference";
+    	public static final String AttandancePreference="LTFoodsAttandancePreference";
 	    public static final String DistributorXMLFolder="LTFoodsDistributorXMLFolder";
 		public static int flgAllRoutesData=1;
     	public static int flgLTFoodsSOOnlineOffLine=0;
@@ -362,13 +364,13 @@ public class CommonInfo
 	    public static int SalesmanNodeType=0;
 	    public static int flgDataScope=0;
         public static int flgNewStoreORStoreValidation=0;
-	public static int DayStartClick=0;
-
+	    public static int DayStartClick=0;
+*/
 
 
 	// Its for Test Release  Path on 194 server for SFA
-/*
-	public static Uri uriSavedImage_savedInstance=null;
+
+	/*public static Uri uriSavedImage_savedInstance=null;
 
 	public static String userDate="0";
 	public static String pickerDate="0";
@@ -402,8 +404,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 59;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.5";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 71;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.11";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsTestRelease/DefaultSOSFA.aspx";

@@ -1056,6 +1056,7 @@ public class ServiceWorker
 					String DisplayMessage="No Message";
 					String flgValidApplication="0";
 					String	MessageForInvalid="No Message";
+					String flgPersonTodaysAtt="0";
 
 
 					Element element = (Element) tblSchemeStoreMappingNode.item(i);
@@ -1124,12 +1125,18 @@ public class ServiceWorker
 					{
 						MessageForInvalid=xmlParser.getCharacterDataFromElement(line);
 					}
+					NodeList flgPersonTodaysAttNode = element.getElementsByTagName("flgPersonTodaysAtt");
+					line = (Element) flgPersonTodaysAttNode.item(0);
+					if(flgPersonTodaysAttNode.getLength()>0)
+					{
+						flgPersonTodaysAtt=xmlParser.getCharacterDataFromElement(line);
+					}
 
 
 
 
 
-					dbengine.savetblUserAuthenticationMstr(flgUserAuthenticated,flgAllRoutesData,PersonNodeID,PersonNodeType,CoverageAreaNodeID,CoverageAreaNodeType,flgAppStatus,DisplayMessage,flgValidApplication,MessageForInvalid);
+					dbengine.savetblUserAuthenticationMstr(flgUserAuthenticated,flgAllRoutesData,PersonNodeID,PersonNodeType,CoverageAreaNodeID,CoverageAreaNodeType,flgAppStatus,DisplayMessage,flgValidApplication,MessageForInvalid,flgPersonTodaysAtt);
 
 	             }
 
@@ -17900,8 +17907,8 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 			}
 			NodeList tblSPGetDistributorDetailsNode = doc.getElementsByTagName("tblGetPDAQuestMstr");
 			for (int i = 0; i < tblSPGetDistributorDetailsNode.getLength(); i++)
-			{
-				String QuestID="0";
+				{
+					String QuestID="0";
 				String QuestCode="0";
 				String QuestDesc="0";
 				String QuestType="0";

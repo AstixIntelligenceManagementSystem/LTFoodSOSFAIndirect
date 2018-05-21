@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +53,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -60,7 +63,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-public class DayStartActivity extends BaseActivity implements InterfaceClass,OnMapReadyCallback
+public class DayStartActivity extends BaseActivity implements InterfaceClass,OnMapReadyCallback,CompoundButton.OnCheckedChangeListener
 {
     static int flgDaySartWorking = 0;
     DatabaseAssistant DASFA = new DatabaseAssistant(this);
@@ -73,36 +76,6 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
     String OptionDesc="NA";
 
 
-    public String fnAddressFromLauncher="NA";
-    String SOLattitudeFromLauncher="NA";
-    String SOLongitudeFromLauncher="NA";
-    String SOAccuracyFromLauncer="NA";
-
-    String SOProviderFromLauncher="NA";
-
-    String SOGpsLatFromLauncher="NA";
-    String SOGpsLongFromLauncher="NA";
-    String SOGpsAccuracyFromLauncher="NA";
-
-    String SONetworkLatFromLauncher="NA";
-    String SONetworkLongFromLauncher="NA";
-    String SONetworkAccuracyFromLauncher="NA";
-
-    String SOFusedLatFromLauncher="NA";
-    String SOFusedLongFromLauncher="NA";
-    String SOFusedAccuracyFromLauncher="NA";
-
-    String SOAllProvidersLocationFromLauncher="NA";
-
-    String SOGpsAddressFromLauncher="NA";
-    String SONetwAddressFromLauncher="NA";
-    String SOFusedAddressFromLauncher="NA";
-
-    String SOFusedLocationLatitudeWithFirstAttemptFromLauncher="NA";
-    String SOFusedLocationLongitudeWithFirstAttemptFromLauncher="NA";
-    String SOFusedLocationAccuracyWithFirstAttemptFromLauncher="NA";
-
-    String finalAddress="NA";
     String finalPinCode="NA";
     String finalCity="NA";
     String finalState="NA";
@@ -120,7 +93,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
     public LocationManager locationManager;
     int intentFrom=0;
     LinearLayout ll_map;
-    RadioButton rb_NoWorking;
+
     EditText et_otherPleaseSpecify;
     public String ReasonId="0";;
     public String ReasonText="NA";
@@ -128,8 +101,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
     String[] reasonNames;
     DBAdapterKenya dbengine = new DBAdapterKenya(this);
 
-    LinkedHashMap<String, String> hmapReasonIdAndDescr_details=new LinkedHashMap<String, String>();
-    LinkedHashMap<Integer, String> hmapReasonIdAndDescrForOption_details=new LinkedHashMap<Integer, String>();
+
     public String fDate;
     public SimpleDateFormat sdf;
     SharedPreferences sPrefAttandance;
@@ -141,12 +113,18 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
     String LongitudeFromLauncher="NA";
     public String AccuracyFromLauncher="NA";
     String AddressFromLauncher="NA";
-    LinearLayout ll_start,ll_startAfterDayEndFirst,ll_startAfterDayEndSecond,ll_containView;
+    LinearLayout ll_start,ll_startAfterDayEndFirst,ll_startAfterDayEndSecond,ll_Working,ll_NoWorking;
     Button but_Next;
 
     TextView txt_DayStarttime;
-    RadioGroup rg;
 
+    LinkedHashMap<String,String>  hmapSelectedCheckBoxData=new LinkedHashMap<String,String>();
+
+    LinkedHashMap<Integer, String> hmapReasonIdAndDescrForWorking_details=new LinkedHashMap<Integer, String>();
+    LinkedHashMap<Integer, String> hmapReasonIdAndDescrForNotWorking_details=new LinkedHashMap<Integer, String>();
+
+    public CheckBox[] cb;
+    public RadioButton[] rb;
     public void customHeader()
     {
 
@@ -191,51 +169,173 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
             });
         }
     }
-    private void getReasonDetail() throws IOException
+    private void getDataFromDatabase() throws IOException
     {
+        hmapReasonIdAndDescrForWorking_details=dbengine.fetch_Reason_List_for_option();
+        hmapReasonIdAndDescrForNotWorking_details=dbengine.fetch_NoWorking_Reason_List();
+    }
 
-        hmapReasonIdAndDescr_details=dbengine.fetch_Reason_List();
 
-        int index=0;
-        if(hmapReasonIdAndDescr_details!=null)
+    private void createCheckBoxForWorking()
+    {
+        cb = new CheckBox[hmapReasonIdAndDescrForWorking_details.size()];
+
+        int i = 0;
+        for (Map.Entry<Integer, String> entry : hmapReasonIdAndDescrForWorking_details.entrySet())
         {
-            reasonNames=new String[hmapReasonIdAndDescr_details.size()];
-            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(hmapReasonIdAndDescr_details);
-            Set set2 = map.entrySet();
-            Iterator iterator = set2.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry me2 = (Map.Entry)iterator.next();
-                reasonNames[index]=me2.getKey().toString();
-                index=index+1;
-            }
+            cb[i] = new CheckBox(this);
+            cb[i].setText(entry.getValue());
+            cb[i].setTag(entry.getKey().toString().trim());
+            cb[i].setOnCheckedChangeListener(this);
+
+            ll_Working.addView(cb[i]);
+            i = i + 1;
         }
+
+    }
+
+    public void onCheckedChanged(CompoundButton cb, boolean isChecked){
+        String checkedText = cb.getText()+"";
+        String checkedID = cb.getTag()+"";
+
+        if(Integer.parseInt(checkedID.trim())==6)
+        {
+            et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
+            et_otherPleaseSpecify.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
+            et_otherPleaseSpecify.setVisibility(View.GONE);
+        }
+
+      if(isChecked)
+           {
+
+              // for unchecked all the Radio Button in NoT Working
+               int i=0;
+               for (Map.Entry<Integer, String> entry : hmapReasonIdAndDescrForNotWorking_details.entrySet())
+               {
+                   RadioButton rb = (RadioButton)ll_NoWorking.getChildAt(i);
+                   rb.setChecked(false);
+                   i = i + 1;
+               }
+
+               if(Integer.parseInt(checkedID.trim())==6)
+               {
+                   et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
+                   et_otherPleaseSpecify.setVisibility(View.VISIBLE);
+               }
+               else
+               {
+                   et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
+                   et_otherPleaseSpecify.setVisibility(View.GONE);
+               }
+               if(Integer.parseInt(checkedID.trim())==6)
+               {
+                   if(!TextUtils.isEmpty(et_otherPleaseSpecify.getText().toString().trim()))
+                   {
+                       hmapSelectedCheckBoxData.put(checkedID.trim(),et_otherPleaseSpecify.getText().toString().trim());
+                   }
+                   else
+                   {
+                       hmapSelectedCheckBoxData.put(checkedID.trim(),"NA");
+                   }
+
+               }
+               else
+               {
+                   hmapSelectedCheckBoxData.put(checkedID.trim(),checkedText.trim());
+               }
+
+                CommonInfo.DayStartClick=1;
+
+           }
+           else
+           {
+               if(Integer.parseInt(checkedID.trim())==6)
+               {
+                   et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
+                   et_otherPleaseSpecify.setVisibility(View.GONE);
+                   et_otherPleaseSpecify.setText("");
+               }
+
+              hmapSelectedCheckBoxData.remove(checkedID.trim());
+               if(hmapSelectedCheckBoxData.size()==0)
+               {
+                   CommonInfo.DayStartClick=0;
+               }
+
+           }
+
 
 
     }
 
-    private void getOptionDetail() throws IOException
+    private void createRadioButtonForNotWorking()
     {
-
-        hmapReasonIdAndDescrForOption_details=dbengine.fetch_Reason_List_for_option();
-
-        int index=0;
-      /*  if(hmapReasonIdAndDescrForOption_details!=null)
+         rb = new RadioButton[hmapReasonIdAndDescrForNotWorking_details.size()];
+         int i = 0;
+        for (Map.Entry<Integer, String> entry : hmapReasonIdAndDescrForNotWorking_details.entrySet())
         {
-            reasonNames=new String[hmapReasonIdAndDescrForOption_details.size()];
-            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(hmapReasonIdAndDescr_details);
-            Set set2 = map.entrySet();
-            Iterator iterator = set2.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry me2 = (Map.Entry)iterator.next();
-                reasonNames[index]=me2.getKey().toString();
-                index=index+1;
-            }
+            rb[i] = new RadioButton(this);
+            rb[i].setText(entry.getValue());
+            rb[i].setTag(entry.getKey().toString().trim());
+            rb[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton cb, boolean isChecked)
+                {
+                    String checkedText = cb.getText()+"";
+                    String checkedID = cb.getTag()+"";
+                    if(isChecked)
+                    {
+                        ReasonText = hmapReasonIdAndDescrForNotWorking_details.get(checkedID);
+                        ReasonId = "" + checkedID;
+
+
+                        // for checked Selected the Radio Button in NoT Working
+                        int i=0;
+                        for (Map.Entry<Integer, String> entry : hmapReasonIdAndDescrForNotWorking_details.entrySet())
+                        {
+                            RadioButton rb = (RadioButton)ll_NoWorking.getChildAt(i);
+                            if(rb.getTag().toString().trim().equals(checkedID.trim()))
+                            {
+                                rb.setChecked(true);
+                            }
+                            else
+                            {
+                                rb.setChecked(false);
+                            }
+
+                            i = i + 1;
+                        }
+
+                        // for unchecked all the CheckBox in Today Working
+                        i=0;
+                        for (Map.Entry<Integer, String> entry : hmapReasonIdAndDescrForWorking_details.entrySet())
+                        {
+                            cb = (CheckBox) ll_Working.getChildAt(i);
+                            cb.setChecked(false);
+                            i = i + 1;
+                        }
+                        hmapSelectedCheckBoxData.clear();
+                        hmapSelectedCheckBoxData.clear();
+
+                        CommonInfo.DayStartClick=2;
+                    }
+                    else
+                    {
+
+                    }
+                }
+            });
+            ll_NoWorking.addView(rb[i]);
+            i = i + 1;
         }
-*/
 
     }
-
-    @Override
+        @Override
     public void onMapReady(GoogleMap googleMap)
     {
         if(!LattitudeFromLauncher.equals("NA") && !LattitudeFromLauncher.equals("0.0"))
@@ -248,11 +348,8 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
             {
 
             }
+           if(AccuracyFromLauncher.equals("0.0") || AccuracyFromLauncher.equals("NA")|| AccuracyFromLauncher.equals("")|| AccuracyFromLauncher==null){
 
-
-
-            if(AccuracyFromLauncher.equals("0.0") || AccuracyFromLauncher.equals("NA")|| AccuracyFromLauncher.equals("")|| AccuracyFromLauncher==null){
-                //dont use marker
             }
             else{
 
@@ -311,76 +408,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
     }
 
 
-    private void createRadioButton()
-    {
-        final RadioButton[] rb = new RadioButton[hmapReasonIdAndDescrForOption_details.size()];
-        rg = new RadioGroup(this); //create the RadioGroup
 
-        rg.setOrientation(RadioGroup.VERTICAL);//or RadioGroup.VERTICAL
-
-        // using for-each loop for iteration over Map.entrySet()
-        int i=0;
-        for (Map.Entry<Integer,String> entry : hmapReasonIdAndDescrForOption_details.entrySet())
-        {
-            rb[i]  = new RadioButton(this);
-            rb[i].setText(entry.getValue());
-            rb[i].setId(Integer.parseInt(entry.getKey().toString().trim()));
-            rg.addView(rb[i]);
-            i=i+1;
-        }
-
-       // rb_NoWorking=(RadioButton)findViewById(R.id.cb_NoWorking);
-       // rb_NoWorking.setVisibility(View.VISIBLE);
-       // rg.addView(rb_NoWorking);
-        ll_containView.addView(rg);//you add the whole RadioGroup to the layout
-
-        rb_NoWorking=(RadioButton)findViewById(R.id.cb_NoWorking);
-        // rb_NoWorking.setVisibility(View.VISIBLE);
-
-
-
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                rb_NoWorking.setChecked(false);
-                if (null != rb)
-                {
-                    if(checkedId==6)
-                    {
-                        et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
-                        et_otherPleaseSpecify.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        et_otherPleaseSpecify=(EditText)findViewById(R.id.et_otherPleaseSpecify);
-                        et_otherPleaseSpecify.setVisibility(View.GONE);
-                    }
-                    if(checkedId==8)
-                    {
-                        CommonInfo.DayStartClick=1;
-                    }
-                    else if(checkedId==9)
-                    {
-                        CommonInfo.DayStartClick=2;
-                    }
-                    else
-                    {
-                        CommonInfo.DayStartClick=3;
-                    }
-
-                    ReasonText=hmapReasonIdAndDescrForOption_details.get(checkedId);
-
-                    ReasonId=""+checkedId;
-
-                }
-
-            }
-        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -389,14 +417,12 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
         setContentView(R.layout.activity_daystart);
         Intent intent=getIntent();
         intentFrom= intent.getIntExtra("IntentFrom", 0);
-
         sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
-
         customHeader();
+
         try
         {
-            getReasonDetail();
-            getOptionDetail();
+            getDataFromDatabase();
         }
         catch(Exception e)
         {
@@ -416,8 +442,10 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
         ll_map=(LinearLayout)findViewById(R.id.ll_map);
         ll_map.setVisibility(View.GONE);
 
-        ll_containView=(LinearLayout)findViewById(R.id.ll_containView);
-        ll_containView.setVisibility(View.GONE);
+        ll_Working=(LinearLayout)findViewById(R.id.ll_Working);
+        ll_Working.setVisibility(View.GONE);
+        ll_NoWorking=(LinearLayout)findViewById(R.id.ll_NoWorking);
+        ll_NoWorking.setVisibility(View.GONE);
 
 
 
@@ -457,7 +485,11 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                 }
                 else
                 {
-                    createRadioButton();
+
+                    ll_Working.setVisibility(View.VISIBLE);
+                     ll_NoWorking.setVisibility(View.VISIBLE);
+                    createCheckBoxForWorking();
+                    createRadioButtonForNotWorking();
                     txt_DayStarttime=(TextView)findViewById(R.id.txt_DayStarttime);
                     txt_DayStarttime.setText(getDateAndTimeInSecond());
 
@@ -479,8 +511,6 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                     ll_startAfterDayEndSecond.setVisibility(View.VISIBLE);
                     ll_map=(LinearLayout)findViewById(R.id.ll_map);
                     ll_map.setVisibility(View.VISIBLE);
-                    ll_containView.setVisibility(View.VISIBLE);
-
 
 
                     LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
@@ -527,61 +557,79 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                     alertDialog.show();
                     return;
                 }
-                else if (ReasonId.equals("6"))
+                else if(hmapSelectedCheckBoxData.containsKey("6") && TextUtils.isEmpty(et_otherPleaseSpecify.getText().toString().trim()))
                 {
-                    if(TextUtils.isEmpty(et_otherPleaseSpecify.getText().toString().trim()))
-                    {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DayStartActivity.this);
-                        alertDialog.setTitle("Error");
-                        alertDialog.setMessage("Please Specify the reason first to proceed.");
-                        alertDialog.setIcon(R.drawable.error);
-                        alertDialog.setCancelable(false);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(DayStartActivity.this);
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage("Please Specify the reason first to proceed.");
+                    alertDialog.setIcon(R.drawable.error);
+                    alertDialog.setCancelable(false);
 
-                        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog,int which)
                         {
-                            public void onClick(DialogInterface dialog,int which)
-                            {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertDialog.show();
-                        return;
-                    }
-                    else
-                    {
-                        dbengine.updatetblAttandanceDetails("6","Other Please Specify",ReasonId,et_otherPleaseSpecify.getText().toString().trim());
-                        syncStartAfterSavindData();
-                    }
-                }
-                else if (ReasonId.equals("0"))
-                {
-                    if (ReasonText.equals("")||ReasonText.equals("NA") ||ReasonText.equals("Select Reason"))
-                    {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DayStartActivity.this);
-                        alertDialog.setTitle("Error");
-                        alertDialog.setMessage("Please Specify the reason first to proceed.");
-                        alertDialog.setIcon(R.drawable.error);
-                        alertDialog.setCancelable(false);
+                            dialog.dismiss();
 
-                        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog,int which)
-                            {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertDialog.show();
-                        return;
-                    }
-                    else
-                    {
-                        dbengine.updatetblAttandanceDetails("33","No Working",ReasonId,ReasonText);
-                        syncStartAfterSavindData();
-                    }
+
+                        }
+                    });
+                    alertDialog.show();
+                    return;
                 }
-                else
+               else
                 {
-                    dbengine.updatetblAttandanceDetails("33","No Working",ReasonId,ReasonText);
+                    if(hmapSelectedCheckBoxData.containsKey("6"))
+                    {
+                        hmapSelectedCheckBoxData.remove("6");
+
+                        hmapSelectedCheckBoxData.put("6",et_otherPleaseSpecify.getText().toString().trim());
+                    }
+
+                     if(hmapSelectedCheckBoxData.size()>0)
+                      {
+                        ReasonId="";
+                        ReasonText="";
+                        for(Map.Entry<String, String> entry:hmapSelectedCheckBoxData.entrySet())
+                        {
+                            String key = entry.getKey().toString().trim();
+                            String value = entry.getValue().toString().trim();
+
+                            if(ReasonId.equals(""))
+                            {
+                                ReasonId= key;
+                            }
+                            else
+                            {
+                                ReasonId=ReasonId+"$"+key;
+                            }
+
+                            if(ReasonText.equals(""))
+                            {
+                                ReasonText= value;
+                            }
+                            else
+                            {
+                                ReasonText=ReasonText+"$"+value;
+                            }
+                        }
+
+
+
+                    }
+
+
+                    String commentValue="NA";
+                            EditText commenttext=(EditText)findViewById(R.id.commenttext);
+                           if(!TextUtils.isEmpty(commenttext.getText().toString().trim()))
+                           {
+                               commentValue=commenttext.getText().toString().trim();
+                           }
+                           else
+                           {
+
+                           }
+                    dbengine.updatetblAttandanceDetails("33","No Working",ReasonId,ReasonText,commentValue);
                     syncStartAfterSavindData();
                 }
 
@@ -922,26 +970,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
         alertDialog.show();
     }
 
-    public void onRadioButtonClicked(View view)
-    {
-        boolean checked = ((RadioButton) view).isChecked();
-        String str="";
-        // Check which checkbox was clicked
-        switch(view.getId()) {
 
-            case R.id.cb_NoWorking:
-
-                CommonInfo.DayStartClick=3;
-                ReasonId="0";
-               // rg.clearCheck();
-                str = checked?displayAlertDialog():"cb_NoWorking Deselected";
-                but_Next.setText("Submit");
-
-
-                break;
-        }
-       // Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-    }
 
     public void showNoConnAlert()
     {

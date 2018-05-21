@@ -815,7 +815,6 @@ public class ReturnActivity extends Activity implements OnItemSelectedListener, 
 	}
 
 	public void createProductDetail(int CheckIfStoreExistInStoreProdcutPurchaseDetails) {
-		System.out.println("Abhinav Nitish Ankit New :"+CheckIfStoreExistInStoreProdcutPurchaseDetails);
 		hide_View=new View[hmapCtgryPrdctDetail.size()];
 		prductId=changeHmapToArrayKey(hmapCtgryPrdctDetail);
 		if(prductId.length>0)
@@ -1276,7 +1275,7 @@ public class ReturnActivity extends Activity implements OnItemSelectedListener, 
 
 
 	public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
-	{ // BEST QUALITY MATCH
+	{
 
 		//First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();

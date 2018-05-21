@@ -278,7 +278,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         {
             dayEndFunctionalityAfterDialogSummary();
         }
-        if(CommonInfo.DayStartClick==1)
+        if(CommonInfo.DayStartClick==2)
+        {
+            CommonInfo.DayStartClick=0;
+            finish();
+
+        }
+       /* if(CommonInfo.DayStartClick==1)
         {
             CommonInfo.DayStartClick=0;
             DistributiorVisit();
@@ -298,7 +304,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         else
         {
             ll_Parent.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     public void DistributiorVisit()

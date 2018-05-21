@@ -124,7 +124,7 @@ public class SplashScreen extends AppCompatActivity
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();
 
-       // imei="867290026163310";  // Live user
+        imei="867290026163310";  // Live user
 
        // imei="356417061840118"; // Shivani Kesarsa
        //  imei="353572080913610"; // stagging
@@ -132,7 +132,8 @@ public class SplashScreen extends AppCompatActivity
       // imei="358674084810068"; // Test Release
       //  imei="867290026163310"; // Dev Release
 
-imei="354010084603910";// Dev For Alok
+      // imei="354010084603910";// Dev For Alok
+        //9 imei="359473079352536";  // Test Ramesh
 
 
         CommonInfo.imei = imei;
@@ -1052,6 +1053,7 @@ imei="354010084603910";// Dev For Alok
                     {
                         dbengine.open();
                         serverDateForSPref=	dbengine.fnGetServerDate();
+
                         dbengine.close();
 
                         if(sPref.contains("DatePref"))
@@ -1144,9 +1146,24 @@ imei="354010084603910";// Dev For Alok
 
     public void callDayStartActivity()
     {
-        Intent intent=new Intent(this,DayStartActivity.class);
-        startActivity(intent);
-        finish();
+        dbengine.open();
+        int flgPersonTodaysAtt=dbengine.FetchflgPersonTodaysAtt();
+        dbengine.close();
+        if(flgPersonTodaysAtt==0)
+        {
+            Intent intent=new Intent(this,DayStartActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
+            intent.putExtra("imei", imei);
+            SplashScreen.this.startActivity(intent);
+            finish();
+        }
+
+
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)

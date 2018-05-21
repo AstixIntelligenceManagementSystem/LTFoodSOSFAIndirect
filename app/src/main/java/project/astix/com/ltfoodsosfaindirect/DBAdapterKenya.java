@@ -43,7 +43,7 @@ public class DBAdapterKenya
     private static final String TABLE_tblAttandanceDetails="tblAttandanceDetails";
     private static final String DATABASE_CREATE_TABLE_tblAttandanceDetails="create table tblAttandanceDetails(AttandanceTime text null," +
             "PersonNodeID text null, PersonNodeType text null," +
-            "OptionID text null,OptionDesc text null,ReasonID text null,ReasonDesc text null, Address text null,PinCode text null, City text null, State text null," +
+            "OptionID text null,OptionDesc text null,ReasonID text null,ReasonDesc text null,Comment text null, Address text null,PinCode text null, City text null, State text null," +
             "fnLati text null,fnLongi text null,fnAccuracy text null," +
             "flgLocNotFound text null,fnAccurateProvider text null,AllProvidersLocation text null,fnAddress text null," +
             "GpsLat text null, GpsLong text null, GpsAccuracy text null, GpsAddress text null, NetwLat text null, " +
@@ -199,7 +199,7 @@ public class DBAdapterKenya
 
     // Tables Data Coming at Splash Screen Starts
 	private static final String TABLE_tblUserAuthenticationMstr_Define = "tblUserAuthenticationMstr";
-	private static final String TABLE_tblUserAuthenticationMstr_Definition = "create table tblUserAuthenticationMstr (flgUserAuthenticated text null,flgAllRoutesData integer null,PersonNodeID integer null,PersonNodeType integer null,CoverageAreaNodeID integer null,CoverageAreaNodeType integer null,flgAppStatus text null,DisplayMessage text null,flgValidApplication text null,MessageForInvalid text null);";
+	private static final String TABLE_tblUserAuthenticationMstr_Definition = "create table tblUserAuthenticationMstr (flgUserAuthenticated text null,flgAllRoutesData integer null,PersonNodeID integer null,PersonNodeType integer null,CoverageAreaNodeID integer null,CoverageAreaNodeType integer null,flgAppStatus text null,DisplayMessage text null,flgValidApplication text null,MessageForInvalid text null,flgPersonTodaysAtt text null);";
 
     private static final String TABLE_tblAvailableVersionMstr_Define = "tblAvailableVersionMstr";
     private static final String TABLE_tblAvailableVersionMstr_Definition = "create table tblAvailableVersionMstr (VersionID text null,VersionSerialNo text null,VersionDownloadStatus text null,ServerDate text null);";//, AutoIdOutlet int null
@@ -1256,6 +1256,7 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 				db.execSQL("DROP TABLE IF EXISTS tblQuestIDForName");
 				db.execSQL("DROP TABLE IF EXISTS tblStoreCountDetails");
 				db.execSQL("DROP TABLE IF EXISTS tblPreAddedStores");
+                db.execSQL("DROP TABLE IF EXISTS tblOptionMstr");
 				db.execSQL("DROP TABLE IF EXISTS tblCoverageMaster");
 				db.execSQL("DROP TABLE IF EXISTS tblRouteMasterWithCoverageMapping");
 				db.execSQL("DROP TABLE IF EXISTS tblStoreImageList");
@@ -19750,7 +19751,8 @@ open();
 														  int PersonNodeID,int PersonNodeType,
 														  int CoverageAreaNodeID,int CoverageAreaNodeType
                                                           ,String flgAppStatus,String DisplayMessage
-                                                            ,String flgValidApplication,String MessageForInvalid)
+                                                            ,String flgValidApplication,String MessageForInvalid,
+                                                          String flgPersonTodaysAtt)
 				{
 									
 									ContentValues initialValues = new ContentValues();
@@ -19765,6 +19767,7 @@ open();
                                     initialValues.put("DisplayMessage", DisplayMessage.trim());
                                     initialValues.put("flgValidApplication", flgValidApplication.trim());
                                     initialValues.put("MessageForInvalid", MessageForInvalid.trim());
+                                    initialValues.put("flgPersonTodaysAtt", flgPersonTodaysAtt.trim());
 
 
                     return db.insert(TABLE_tblUserAuthenticationMstr_Define, null, initialValues);
@@ -21178,6 +21181,40 @@ open();
 								close();
 							}
 						}
+
+    public LinkedHashMap<Integer, String> fetch_NoWorking_Reason_List()
+    {
+        open();
+        LinkedHashMap<Integer, String> hmapCatgry = new LinkedHashMap<Integer, String>();
+        Cursor cursor = db.rawQuery("SELECT ReasonId,ReasonDescr FROM tblNoVisitReasonMaster where flgNoVisitOption="+1,null);
+        try
+        {
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+                   // hmapCatgry.put("Select Reason", "0");
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+                        hmapCatgry.put(Integer.parseInt(cursor.getString(0).toString()),cursor.getString(1).toString());
+                        cursor.moveToNext();
+                    }
+                }
+
+            }
+
+            else
+            {
+                hmapCatgry.put(0, "No Reason");
+            }
+            return hmapCatgry;
+        }
+        finally
+        {
+            cursor.close();
+            close();
+        }
+    }
 
    // where ReasonDescr='"+ReasonDescr+"'"
     public LinkedHashMap<Integer, String> fetch_Reason_List_for_option()
@@ -32111,7 +32148,8 @@ close();
         return SONodeIdAndNodeType;
     }
 
-    public void updatetblAttandanceDetails(String OptionID,String OptionDesc,String ReasonID,String ReasonDesc)
+    public void updatetblAttandanceDetails(String OptionID,String OptionDesc,String ReasonID,String ReasonDesc,
+                                           String Comment)
     {
         open();
         try {
@@ -32122,6 +32160,7 @@ close();
             values.put("OptionDesc",OptionDesc.trim());
             values.put("ReasonID",ReasonID.trim());
             values.put("ReasonDesc",ReasonDesc);
+            values.put("Comment",Comment);
             db.update(TABLE_tblAttandanceDetails,values,"",new String[]{});
         }catch(SQLiteException exception)
         {
@@ -32165,6 +32204,31 @@ close();
         }
         finally {
 
+        }
+
+    }
+    public int FetchflgPersonTodaysAtt()
+    {
+        int CatId=0;
+
+        Cursor cursor = db.rawQuery("SELECT flgPersonTodaysAtt from tblUserAuthenticationMstr", null);
+        try {
+
+            if (cursor.moveToFirst())
+            {
+
+                for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                {
+
+                    String abc =(String) cursor.getString(0).toString();
+                    CatId=Integer.parseInt(abc);
+                    cursor.moveToNext();
+                }
+
+            }
+            return CatId;
+        } finally {
+            cursor.close();
         }
 
     }

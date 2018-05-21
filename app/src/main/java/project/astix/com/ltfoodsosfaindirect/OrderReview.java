@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.CookieHandler;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -98,11 +99,12 @@ import org.json.JSONObject;
 
 public class OrderReview extends Activity implements OnItemSelectedListener, OnClickListener, OnFocusChangeListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
 GoogleApiClient.OnConnectionFailedListener{
-	Dialog dialog;
+//nitika
+    //public TextView tvPreAmtOutstandingVALNew;
 
-	//nitika
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
-
+    Dialog dialog;
+	ImageView	menu;
 	// variable
 	String PcsOrKg="0";
 
@@ -113,10 +115,6 @@ GoogleApiClient.OnConnectionFailedListener{
 	public  int flgInternetOnOffWhileLocationTrackingOrderReview=0;
 	public  int flgRestartOrderReview=0;
 	public  int flgStoreOrderOrderReview=0;
-
-	LinkedHashMap<String,String> hmapFetchPDASavedData=new LinkedHashMap<>();
-	int flgOrderType=0;
-
 
 	public int powerCheck=0;
 
@@ -143,7 +141,7 @@ GoogleApiClient.OnConnectionFailedListener{
 		String progressTitle;
 		public String date;
 		public String pickerDate;
-		public String SN;
+		public String SN="";
 		 boolean alertOpens=false;
 		 int flagClkdButton=0;
 		 
@@ -167,8 +165,11 @@ GoogleApiClient.OnConnectionFailedListener{
 		int CheckIfStoreExistInStoreProdcutInvoiceDetails=0;
 		public String strGlobalOrderID="0";
 		ProgressDialog mProgressDialog;
-		 
-		 
+
+
+	LinkedHashMap<String,String> hmapFetchPDASavedData=new LinkedHashMap<>();
+	int flgOrderType=0;
+
 	//****************************************************************	 
 		//Field
 		String fusedData;
@@ -261,9 +262,9 @@ GoogleApiClient.OnConnectionFailedListener{
 	    
 	 public EditText   ed_search;
 		public ImageView  btn_go;
-
-
-	ImageView	menu;
+		
+		  
+		
 	//****************************************************************	 
 		//Arrays, HashMap
 		View[] hide_View;
@@ -381,11 +382,11 @@ GoogleApiClient.OnConnectionFailedListener{
 		   //
 		   //hmapMinDlvrQty= key =ProductID         value=QPTaxAmount
 		   LinkedHashMap<String, String> hmapMinDlvrQtyQPTaxAmount=new LinkedHashMap<String, String>();
-		 
-		 public int flgApplyFreeProductSelection=0;
-		
-		 ArrayList<String> arredtboc_OderQuantityFinalSchemesToApply;
-	HashMap<String, String> hmapProductIDAvgPricePerUnit=new HashMap<String, String>();
+
+
+
+		// hmapProductId key = ProductID value= AvgPriceUnit
+		HashMap<String, String> hmapProductIDAvgPricePerUnit=new HashMap<String, String>();
 	//hmapProductStock= key =ProductID         value=ProductOverAllVolume
 	HashMap<String, String> hmapProductOverAllVolume=new HashMap<String, String>();
 
@@ -394,8 +395,11 @@ GoogleApiClient.OnConnectionFailedListener{
 	HashMap<String, String> hmapPrdctRtAfterTaxPcs=new HashMap<String, String>();
 	HashMap<String, String> hmapPrdctRtAfterTaxKG=new HashMap<String, String>();
 
-
-	//Database
+		 public int flgApplyFreeProductSelection=0;
+		
+		 ArrayList<String> arredtboc_OderQuantityFinalSchemesToApply;
+		 
+		//Database
 		 
 		DBAdapterKenya dbengine = new DBAdapterKenya(this); 
 		DatabaseAssistant DA = new DatabaseAssistant(this);
@@ -535,10 +539,7 @@ GoogleApiClient.OnConnectionFailedListener{
 		 			 }
 					isGPSok = false;
 				   }*/
-		          
-		         
-		     
-		  		
+
 			}
 		
 		@Override
@@ -547,10 +548,8 @@ GoogleApiClient.OnConnectionFailedListener{
 			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_product_list_review);
-			 //Toast.makeText(OrderReview.this, "OrderReview Page is called", Toast.LENGTH_SHORT).show();
-			
+			//Toast.makeText(OrderReview.this, "OrderReview Page is called", Toast.LENGTH_SHORT).show();
 			locationManager=(LocationManager) this.getSystemService(LOCATION_SERVICE);
-			
 			boolean isGPSok = false;
 			boolean isNWok=false;
 			isGPSok = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -578,19 +577,18 @@ GoogleApiClient.OnConnectionFailedListener{
 				isGPSok = false;
 				 isNWok=false;
 			  }
-
 			menu=(ImageView)findViewById(R.id.menu);
 			getDataFromIntent();
 			initializeFields();
 			videoPlayFunctionality();
 			PDF_Doc_PlayFunctionality();
 
-			menu.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					open_pop_up();
-				}
-			});
+            menu.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    open_pop_up();
+                }
+            });
 			if(powerCheck==0)
 			{
 				PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -657,10 +655,12 @@ GoogleApiClient.OnConnectionFailedListener{
 			  // TODO Auto-generated method stub
 			  if(keyCode==KeyEvent.KEYCODE_BACK)
 			  {
+
 				  mCustomKeyboardNumWithoutDecimal.hideCustomKeyboard();
 				  mCustomKeyboardNum.hideCustomKeyboard();
 
 				  return false;
+
 			  }
 			  if(keyCode==KeyEvent.KEYCODE_HOME)
 			  {
@@ -877,9 +877,10 @@ public void loadPurchaseProductDefault()
 }
 
 		public void initializeFields() {
-
+			//nitika
 			mCustomKeyboardNum= new CustomKeyboard(this, R.id.keyboardviewNum, R.xml.num );
 			mCustomKeyboardNumWithoutDecimal= new CustomKeyboard(this, R.id.keyboardviewNumDecimal, R.xml.num_without_decimal );
+
 
 			//	spinner_product=(TextView) findViewById(R.id.spinner_product);
 			
@@ -911,45 +912,62 @@ public void loadPurchaseProductDefault()
 						{
 							/*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 							{*/
-							fnIfLastFocusOnOrderKGBox();
-							getOrderData(ProductIdOnClickedEdit);
-
-							fnUpdateSchemeNameOnScehmeControl(ProductIdOnClickedEdit);
-
+                            fnIfLastFocusOnOrderKGBox();
+								 getOrderData(ProductIdOnClickedEdit);
+								 
+								 fnUpdateSchemeNameOnScehmeControl(ProductIdOnClickedEdit);
+								  
 							/*}*/
 						}
-
-						orderBookingTotalCalc();
-
-
+						
+						 orderBookingTotalCalc();
+						
 					}
 			 });
 			
 			
 			final Button btn_AmountCollect=(Button) findViewById(R.id.btn_collectAmount);
+
+			/*if(flgOrderType==0){
+				btn_AmountCollect.setVisibility(View.GONE);
+			}
+			else {
+				int flgISR=	dbengine.FetchflgflgISR();
+				if(flgISR==1)
+				{
+					btn_AmountCollect.setVisibility(View.GONE);
+				}
+				else
+				{
+					btn_AmountCollect.setVisibility(View.VISIBLE);
+				}
+			}*/
+
+
 			btn_AmountCollect.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-/*
 
-					if(ed_LastEditextFocusd!=null)
-					{
-						fnIfLastFocusOnOrderKGBox();
+                  /*  if(ed_LastEditextFocusd!=null)
+                    {
+                        fnIfLastFocusOnOrderKGBox();
 
-						getOrderData(ProductIdOnClickedEdit);
+                        getOrderData(ProductIdOnClickedEdit);
 
-					}
-					orderBookingTotalCalc();
-*/
+                    }
+                    orderBookingTotalCalc();
 
 					// TODO Auto-generated method stub
-					/*Intent AmtCollectIntent = new Intent(OrderReview.this, AmountCollected.class);
+					Intent AmtCollectIntent = new Intent(OrderReview.this, CollectionActivityNew.class);
 					AmtCollectIntent.putExtra("storeID", storeID);
 					AmtCollectIntent.putExtra("imei", imei);
 					AmtCollectIntent.putExtra("userdate", date);
 					AmtCollectIntent.putExtra("pickerDate", pickerDate);
-					AmtCollectIntent.putExtra("SN", "SN");
+					AmtCollectIntent.putExtra("SN", SN);
+					AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
+					AmtCollectIntent.putExtra("flgOrderType", flgOrderType);
+
 					startActivity(AmtCollectIntent);
 					finish();*/
 				}
@@ -962,14 +980,14 @@ public void loadPurchaseProductDefault()
 				@Override
 				public void onClick(View v) {
 
-					if(ed_LastEditextFocusd!=null)
-					{
-						fnIfLastFocusOnOrderKGBox();
+                    if(ed_LastEditextFocusd!=null)
+                    {
+                        fnIfLastFocusOnOrderKGBox();
 
-						getOrderData(ProductIdOnClickedEdit);
+                        getOrderData(ProductIdOnClickedEdit);
 
-					}
-					orderBookingTotalCalc();
+                    }
+                    orderBookingTotalCalc();
 					// TODO Auto-generated method stub
 					Intent AmtCollectIntent = new Intent(OrderReview.this, Delivery_Details_Activity.class);
 					AmtCollectIntent.putExtra("storeID", storeID);
@@ -979,6 +997,7 @@ public void loadPurchaseProductDefault()
 					AmtCollectIntent.putExtra("SN", "SN");
 					AmtCollectIntent.putExtra("OrderPDAID", strGlobalOrderID);
 					AmtCollectIntent.putExtra("flgOrderType", flgOrderType);
+
 
 					startActivity(AmtCollectIntent);
 					finish();
@@ -1185,18 +1204,18 @@ public void loadPurchaseProductDefault()
 					{*/
 					 
 					  // dbengine.close();
-
-				   if(ed_LastEditextFocusd!=null)
-				   {
+					   
+						if(ed_LastEditextFocusd!=null)
+						{
 							/* if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 							   {*/
-					   fnIfLastFocusOnOrderKGBox();
-					   getOrderData(ProductIdOnClickedEdit);
+                            fnIfLastFocusOnOrderKGBox();
+								   getOrderData(ProductIdOnClickedEdit); 
 							   /*}*/
-
-				   }
-
-				   orderBookingTotalCalc();
+							  
+						}
+					  
+					   orderBookingTotalCalc();
 					   progressTitle="While we save your data";
 					   new SaveData().execute("1");
 					   if(!alertOpens)
@@ -1338,17 +1357,17 @@ public void loadPurchaseProductDefault()
 				   if ((dbengine.PrevLocChk(storeID.trim())) )
 					{
 					   dbengine.close();
-						if(ed_LastEditextFocusd!=null)
-						{
+					 if(ed_LastEditextFocusd!=null)
+					 {
 						  /*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 						   {*/
-							fnIfLastFocusOnOrderKGBox();
-							getOrderData(ProductIdOnClickedEdit);
-						   /*}*/
-						}
-
-
-						orderBookingTotalCalc();
+                         fnIfLastFocusOnOrderKGBox();
+							   getOrderData(ProductIdOnClickedEdit); 
+						   /*}*/ 
+					 }
+					 
+				  
+				   orderBookingTotalCalc();
 				   if(!alertOpens)
 				   {
 					   progressTitle="While we save your data then exit";
@@ -1473,11 +1492,11 @@ public void loadPurchaseProductDefault()
 			   {
 			    // TODO Auto-generated method stub
 
-
-
 				   long StartClickTime = System.currentTimeMillis();
 					Date dateobj1 = new Date(StartClickTime);
-					SimpleDateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+				//	SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.ENGLISH);
+				   //change now
+				   SimpleDateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
 					String StartClickTimeFinal = df1.format(dateobj1);
 					
 					
@@ -1533,12 +1552,12 @@ public void loadPurchaseProductDefault()
 				   {
 					   /*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 					   {*/
-					   fnIfLastFocusOnOrderKGBox();
-					   getOrderData(ProductIdOnClickedEdit);
-					   /*}*/
+                       fnIfLastFocusOnOrderKGBox();
+						   getOrderData(ProductIdOnClickedEdit);
+					   /*}*/   
 				   }
-
-
+				  
+				 
 				   orderBookingTotalCalc();
 				
 				   if(!alertOpens)
@@ -1597,16 +1616,16 @@ public void loadPurchaseProductDefault()
 				      if(isStockAvilable)
 				      { 
 				    	  flagClkdButton=1;
-						  if(ed_LastEditextFocusd!=null)
-						  {
+				    	  if(ed_LastEditextFocusd!=null)
+				    	  {
 				    		  /*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 							   {*/
-							  fnIfLastFocusOnOrderKGBox();
-							  getOrderData(ProductIdOnClickedEdit);
-							   /*}*/
-						  }
-
-						  orderBookingTotalCalc();
+                              fnIfLastFocusOnOrderKGBox();
+								   getOrderData(ProductIdOnClickedEdit);
+							   /*}*/  
+				    	  }
+				    	 
+				    	  orderBookingTotalCalc();
 			    	   if(!alertOpens)
 			    	   {
 			    		   progressTitle="Please Wait.. ";
@@ -1684,17 +1703,15 @@ public void loadPurchaseProductDefault()
 			     @Override
 			        public void onClick(View v) 
 			         {
-
-						 if(ed_LastEditextFocusd!=null)
-						 {
-							 fnIfLastFocusOnOrderKGBox();
-
-							 getOrderData(ProductIdOnClickedEdit);
-
-						 }
-						 orderBookingTotalCalc();
-
 					         // TODO Auto-generated method stub
+                         if(ed_LastEditextFocusd!=null)
+                         {
+                             fnIfLastFocusOnOrderKGBox();
+
+                             getOrderData(ProductIdOnClickedEdit);
+
+                         }
+                         orderBookingTotalCalc();
 					         if(v.getId()==R.id.txtVw_schemeApld)
 					          {
 					        	 if(!v.getTag().equals("null"))
@@ -1723,12 +1740,12 @@ public void loadPurchaseProductDefault()
 				   {
 					   /*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
 					   {*/
-					   fnIfLastFocusOnOrderKGBox();
-					   getOrderData(ProductIdOnClickedEdit);
-					   /*}*/
+                       fnIfLastFocusOnOrderKGBox();
+						   getOrderData(ProductIdOnClickedEdit);
+					   /*}*/  
 				   }
-
-
+				
+				 
 				   orderBookingTotalCalc();
 				   if(!alertOpens)
 				   {
@@ -1764,13 +1781,14 @@ public void loadPurchaseProductDefault()
 			   }
 			  });
 			 // spinner_category.setOnItemSelectedListener(this);
-
-
-
-
-
+			  
+			  
+			 
+			  
+			  
 
 			getDataPcsOrKGFromDatabase();
+			  
 			  new GetData().execute();
 			  
 			
@@ -1822,76 +1840,76 @@ public void loadPurchaseProductDefault()
 			 }
 
 
-	private void getProductData() {
-		// CategoryID,ProductID,ProductShortName,ProductRLP,Date/Qty)
+		private void getProductData() {
+			// CategoryID,ProductID,ProductShortName,ProductRLP,Date/Qty)
+			
+			arrLstHmapPrdct=dbengine.fetch_catgry_prdctsData(storeID,StoreCurrentStoreType);
+			hmapSchemeIDandDescr=dbengine.fnSchemeIDandDescr();
+			
+			HashMap<String, String>  hmapTempProd=dbengine.FetchLODqty(storeID);
+			if(arrLstHmapPrdct.size()>0)
+			{
+				 hmapCtgryPrdctDetail=arrLstHmapPrdct.get(0);
+				 hmapPrdctVolRatTax=arrLstHmapPrdct.get(1);
+				 hmapPrdctOdrQty=arrLstHmapPrdct.get(2);
+				 hmapPrdctSmpl=arrLstHmapPrdct.get(3);
+				 hmapPrdctFreeQty=arrLstHmapPrdct.get(4);
+				 hmapPrdctIdPrdctName=arrLstHmapPrdct.get(5);
+				 hmapPrdctIdPrdctDscnt=arrLstHmapPrdct.get(6);
+				 hmapProductRetailerMarginPercentage=arrLstHmapPrdct.get(7);
+				 hmapProductVatTaxPerventage=arrLstHmapPrdct.get(8);
+				 hmapProductMRP=arrLstHmapPrdct.get(9);
+				 hmapProductDiscountPercentageGive=arrLstHmapPrdct.get(10);
+				 hmapProductVolumePer=arrLstHmapPrdct.get(11);
+				 hmapProductTaxValue=arrLstHmapPrdct.get(12);
+				 hmapProductLODQty=arrLstHmapPrdct.get(13);
+				 hmapProductIdOrdrVal=arrLstHmapPrdct.get(14);
+				 
+				 hmapProductStandardRate=arrLstHmapPrdct.get(15);
+				 
+				 hmapProductStandardRateBeforeTax=arrLstHmapPrdct.get(16);
+				 
+				 hmapProductStandardTax=arrLstHmapPrdct.get(17);
+				 hmapProductIdStock=arrLstHmapPrdct.get(18);
+				hmapProductflgPriceAva=arrLstHmapPrdct.get(19);
+				hmapProductIDAvgPricePerUnit=arrLstHmapPrdct.get(20);
+				hmapProductOverAllVolume=arrLstHmapPrdct.get(21);
+				hmapPrdctOdrQtyKG=arrLstHmapPrdct.get(22);
 
-		arrLstHmapPrdct=dbengine.fetch_catgry_prdctsData(storeID,StoreCurrentStoreType);
-		hmapSchemeIDandDescr=dbengine.fnSchemeIDandDescr();
+				hmapPrdctGSTPcs=arrLstHmapPrdct.get(23);
+				hmapPrdctGSTKg=arrLstHmapPrdct.get(24);
+				hmapPrdctRtAfterTaxPcs=arrLstHmapPrdct.get(25);
+				hmapPrdctRtAfterTaxKG=arrLstHmapPrdct.get(26);
 
-		HashMap<String, String>  hmapTempProd=dbengine.FetchLODqty(storeID);
-		if(arrLstHmapPrdct.size()>0)
-		{
-			hmapCtgryPrdctDetail=arrLstHmapPrdct.get(0);
-			hmapPrdctVolRatTax=arrLstHmapPrdct.get(1);
-			hmapPrdctOdrQty=arrLstHmapPrdct.get(2);
-			hmapPrdctSmpl=arrLstHmapPrdct.get(3);
-			hmapPrdctFreeQty=arrLstHmapPrdct.get(4);
-			hmapPrdctIdPrdctName=arrLstHmapPrdct.get(5);
-			hmapPrdctIdPrdctDscnt=arrLstHmapPrdct.get(6);
-			hmapProductRetailerMarginPercentage=arrLstHmapPrdct.get(7);
-			hmapProductVatTaxPerventage=arrLstHmapPrdct.get(8);
-			hmapProductMRP=arrLstHmapPrdct.get(9);
-			hmapProductDiscountPercentageGive=arrLstHmapPrdct.get(10);
-			hmapProductVolumePer=arrLstHmapPrdct.get(11);
-			hmapProductTaxValue=arrLstHmapPrdct.get(12);
-			hmapProductLODQty=arrLstHmapPrdct.get(13);
-			hmapProductIdOrdrVal=arrLstHmapPrdct.get(14);
-
-			hmapProductStandardRate=arrLstHmapPrdct.get(15);
-
-			hmapProductStandardRateBeforeTax=arrLstHmapPrdct.get(16);
-
-			hmapProductStandardTax=arrLstHmapPrdct.get(17);
-			hmapProductIdStock=arrLstHmapPrdct.get(18);
-			hmapProductflgPriceAva=arrLstHmapPrdct.get(19);
-			hmapProductIDAvgPricePerUnit=arrLstHmapPrdct.get(20);
-			hmapProductOverAllVolume=arrLstHmapPrdct.get(21);
-			hmapPrdctOdrQtyKG=arrLstHmapPrdct.get(22);
-
-			hmapPrdctGSTPcs=arrLstHmapPrdct.get(23);
-			hmapPrdctGSTKg=arrLstHmapPrdct.get(24);
-			hmapPrdctRtAfterTaxPcs=arrLstHmapPrdct.get(25);
-			hmapPrdctRtAfterTaxKG=arrLstHmapPrdct.get(26);
-
-			Iterator it = hmapProductLODQty.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry pair = (Entry)it.next();
-				if(hmapTempProd.containsKey(pair.getKey().toString()))
-				{
-					hmapProductLODQty.put(pair.getKey().toString(), hmapTempProd.get(pair.getKey().toString()));
-				}
-				// System.out.println(pair.getKey() + " = " + pair.getValue());
-				//it.remove(); // avoids a ConcurrentModificationException
+				 Iterator it = hmapProductLODQty.entrySet().iterator();
+				    while (it.hasNext()) {
+				        Entry pair = (Entry)it.next();
+				        if(hmapTempProd.containsKey(pair.getKey().toString()))
+		        		{
+				        	hmapProductLODQty.put(pair.getKey().toString(), hmapTempProd.get(pair.getKey().toString()));
+		        		}
+				       // System.out.println(pair.getKey() + " = " + pair.getValue());
+				        //it.remove(); // avoids a ConcurrentModificationException
+				    }
+				    
+				    Iterator it11 = hmapPrdctIdPrdctName.entrySet().iterator();
+					  int pSize=hmapPrdctIdPrdctName.size();
+					  products=new String[pSize];
+					  int cntPsize=0;
+					    while (it11.hasNext()) {
+					        Entry pair = (Entry)it11.next();
+					        
+					        products[cntPsize]=pair.getValue().toString();
+					        cntPsize++;
+					       // System.out.println(pair.getKey() + " = " + pair.getValue());
+					        //it.remove(); // avoids a ConcurrentModificationException
+					    }
+					  
+					  				 
 			}
-
-			Iterator it11 = hmapPrdctIdPrdctName.entrySet().iterator();
-			int pSize=hmapPrdctIdPrdctName.size();
-			products=new String[pSize];
-			int cntPsize=0;
-			while (it11.hasNext()) {
-				Entry pair = (Entry)it11.next();
-
-				products[cntPsize]=pair.getValue().toString();
-				cntPsize++;
-				// System.out.println(pair.getKey() + " = " + pair.getValue());
-				//it.remove(); // avoids a ConcurrentModificationException
-			}
-
-
-		}
-
-
-
+			
+			
+			
 	}
 		private void getSchemeSlabDetails() {
 			  
@@ -2766,13 +2784,12 @@ public void loadPurchaseProductDefault()
 		et_Stock.setBackgroundResource(R.drawable.edit_text_bg_stock);
 		et_Stock.setTypeface(null, Typeface.BOLD);
 
-		//	et_Stock.setOnFocusChangeListener(this);
+			et_Stock.setOnFocusChangeListener(this);
 
 		final EditText et_SampleQTY=(EditText) viewProduct.findViewById(R.id.et_SampleQTY);
 		et_SampleQTY.setTag("etSampleQty"+"_"+productIdDynamic);
 		//et_SampleQTY.setOnFocusChangeListener(this);
-
-			if(flgOrderType==1)
+		if(flgOrderType==1)
 		{
 			et_Stock.setBackgroundResource(R.drawable.edit_text_diable_bg_transprent);
 			if(hmapFetchPDASavedData!=null && hmapFetchPDASavedData.containsKey(productIdDynamic))
@@ -2792,12 +2809,16 @@ public void loadPurchaseProductDefault()
 		}
 		else
 		{
+			et_Stock.setTextColor(getResources().getColor(R.color.black));
+			//setTextColor(getResources().getColor(R.color.black));
 			et_Stock.setEnabled(true);
 		}
 
 		final EditText et_OrderQty=(EditText) viewProduct.findViewById(R.id.et_OrderQty);
 		et_OrderQty.setTag("etOrderQty"+"_"+productIdDynamic);
 		//et_OrderQty.setOnFocusChangeListener(this);
+
+
 
 		if(hmapProductflgPriceAva.get(productIdDynamic).equals("1"))
 		{
@@ -3021,6 +3042,9 @@ public void loadPurchaseProductDefault()
 
 			if(Integer.parseInt(ProductValuesToFill.split(Pattern.quote("^"))[1])==0)
 			{
+
+
+
 				if(flgOrderType!=1)
 				{
 					et_Stock.setText("");
@@ -3028,17 +3052,40 @@ public void loadPurchaseProductDefault()
 					et_Stock.setHint(OrderReview.this.getResources().getString(R.string.StockQty));
 				}
 			}
+
+
 			if(flgOrderType!=1)
 			{
 				hmapProductIdStock.put(productIdDynamic, ProductValuesToFill.split(Pattern.quote("^"))[1]);
 			}
+
+
+
+
 			if(!ProductValuesToFill.split(Pattern.quote("^"))[9].toString().equals("0") && !ProductValuesToFill.split(Pattern.quote("^"))[9].toString().equals("")) {
 				et_KGPerUnilt.setText(ProductValuesToFill.split(Pattern.quote("^"))[9].toString());
 			}
 			txt_gst_pcs.setText(ProductValuesToFill.split(Pattern.quote("^"))[10].toString());
 			txt_gst_kg.setText(ProductValuesToFill.split(Pattern.quote("^"))[11].toString());
-			text_after_tax_pcs.setText(ProductValuesToFill.split(Pattern.quote("^"))[12].toString());
-			txt_rate_after_tax_kg.setText(ProductValuesToFill.split(Pattern.quote("^"))[13].toString());
+		/*	text_after_tax_pcs.setText(ProductValuesToFill.split(Pattern.quote("^"))[12].toString());
+			txt_rate_after_tax_kg.setText(ProductValuesToFill.split(Pattern.quote("^"))[13].toString());*/
+
+
+			Double after_tax_pcs=(Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[12].toString())-Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[10].toString()));
+			Double after_tax_kg=(Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[13].toString())-Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[11].toString()));
+
+			//nitishdubey15
+			Double fnlAfter_tax_pcs=Double.parseDouble(new DecimalFormat("##.##").format(after_tax_pcs));
+			Double fnlAfter_tax_kg=Double.parseDouble(new DecimalFormat("##.##").format(after_tax_kg));
+			text_after_tax_pcs.setText(""+fnlAfter_tax_pcs);
+			txt_rate_after_tax_kg.setText(""+fnlAfter_tax_kg);
+
+
+		/*	String after_tax_pcs=""+(Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[12].toString())-Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[10].toString()));
+			String after_tax_kg=""+(Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[13].toString())-Double.parseDouble(ProductValuesToFill.split(Pattern.quote("^"))[11].toString()));
+			text_after_tax_pcs.setText(after_tax_pcs);
+			txt_rate_after_tax_kg.setText(after_tax_kg);*/
+
 
 			hmapProductIdStock.put(productIdDynamic, ProductValuesToFill.split(Pattern.quote("^"))[1]);
 			hmapPrdctOdrQty.put(productIdDynamic, ProductValuesToFill.split(Pattern.quote("^"))[2]);
@@ -3265,6 +3312,495 @@ public void loadPurchaseProductDefault()
 	}
 
 
+	private TextWatcher getTextWatcher(final EditText myBoxnew)
+	{
+		return new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				int getPIDTag=Integer.parseInt(myBoxnew.getTag().toString().split("_")[1].toString());
+				if(myBoxnew.getId()==R.id.et_SampleQTY)
+				{
+					if(!myBoxnew.getText().toString().equals(""))
+					{
+						int boxSample=0;
+						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().toString().trim().toLowerCase().equals("Smpl.Qty"))
+						{
+							boxSample=0;
+						}
+						else
+						{
+							boxSample         =Integer.parseInt(myBoxnew.getText().toString());
+						}
+						hmapPrdctSmpl.put(""+getPIDTag, ""+boxSample);
+					}
+					else
+					{
+						hmapPrdctSmpl.put(""+getPIDTag, "0");
+						//myBoxnew.setText("");
+
+					}
+				}
+
+				if(myBoxnew.getId()==R.id.et_Stock)
+				{
+					if(!myBoxnew.getText().toString().equals(""))
+					{
+						int boxSample=0;
+						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().toString().trim().toLowerCase().equals("Smpl.Qty"))
+						{
+							boxSample=0;
+						}
+						else
+						{
+							boxSample=Integer.parseInt(myBoxnew.getText().toString());
+						}
+						hmapProductIdStock.put(""+getPIDTag, ""+boxSample);
+					}
+					else
+					{
+						myBoxnew.setText("0");
+
+						hmapProductIdStock.put(""+getPIDTag, "0");
+
+			/*			if(flgOrderType!=1)
+						{
+							myBoxnew.setText("0");
+
+							hmapProductIdStock.put(""+getPIDTag, "0");
+						}*/
+
+						//hmapProductIdStock.put(""+getPIDTag, "0");
+						//myBoxnew.setText("");
+
+					}
+				}
+
+				if(myBoxnew.getId()== R.id.et_OrderQty)
+				{
+					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
+						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
+
+
+						}
+					}
+					if(!myBoxnew.getText().toString().equals(""))
+					{
+						int boxQty=0;
+						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().equals("Q.Qty") || myBoxnew.getText().equals("Q . Qty"))
+						{
+							boxQty=0;
+						}
+						else
+						{
+							boxQty =Integer.parseInt(myBoxnew.getText().toString());
+						}
+						hmapPrdctOdrQty.put(""+getPIDTag, ""+boxQty);
+
+						//	View viewRow=(View)myBoxnew.getParent().getParent();
+						Rate_OrderQtyUnitToKGPerUnit(""+boxQty,""+getPIDTag );//,(View)myBoxnew.getParent().getParent()
+
+					}
+					else
+					{
+						hmapPrdctOdrQty.put(""+getPIDTag, "0");
+						hmapPrdctOdrQtyKG.put(""+getPIDTag, "0");
+						((TextView) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvOrderVal_"+getPIDTag)).setText("0.00");
+						//myBoxnew.setText("0");
+						myBoxnew.setHint("O.Qty");
+						Rate_OrderQtyUnitToKGPerUnit("0",""+getPIDTag );
+
+
+
+					}
+				}
+
+
+				if(myBoxnew.getId()==R.id.et_KGPerUnilt)
+				{
+					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
+						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
+
+						}
+					}
+					if(!myBoxnew.getText().toString().equals(""))
+					{
+						String boxQty="0";
+
+						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().equals("Q.Qty") || myBoxnew.getText().equals("Q . Qty"))
+						{
+
+							boxQty="0";
+
+						}
+						else
+						{
+							boxQty =fnGetBoxVal(myBoxnew);//myBoxnew.getText().toString();
+						}
+						hmapPrdctOdrQtyKG.put(""+getPIDTag, boxQty);
+						//Rate_PerKGUnitToSingle(""+boxQty,""+getPIDTag );//,(View)myBoxnew.getParent().getParent()
+
+					}
+					else
+					{
+
+						//myBoxnew.setText("");
+						hmapPrdctOdrQty.put(""+getPIDTag, "0");
+						hmapPrdctOdrQtyKG.put(""+getPIDTag, "0");
+
+						myBoxnew.setHint("O.Qty/KG");
+
+
+						((TextView) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvOrderVal_"+getPIDTag)).setText("0.00");
+
+
+
+
+
+
+
+					}
+				}
+
+
+				if(myBoxnew.getId()==R.id.txtVwRate)
+				{
+					String RateOffer="0";
+					((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("etProductAvgPricePerUnit" + "_" + getPIDTag)).removeTextChangedListener(getTextWatcher(((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("etProductAvgPricePerUnit" + "_" + getPIDTag))));
+					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
+						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
+
+							if(!myBoxnew.getText().toString().equals(""))
+							{
+								RateOffer= fnGetBoxVal(myBoxnew);// myBoxnew.getText().toString().trim();
+
+
+							}
+							else
+							{
+								RateOffer="0";
+								//	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+getPIDTag)).setText("");
+								hmapProductStandardRate.put(""+getPIDTag, "0");
+							}
+						}
+					}
+					else
+					{
+						//((EditText)ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+getPIDTag)).setText("");
+						hmapProductStandardRate.put(""+getPIDTag, "0");
+					}
+					Rate_Kg_to_Pcs_Conversion(RateOffer,""+getPIDTag );
+				}
+
+
+
+				if(myBoxnew.getId()==R.id.et_ProductAvgPricePerUnit)
+				{
+
+					((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvRate_"+getPIDTag)).removeTextChangedListener(getTextWatcher((((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvRate_"+getPIDTag)))));
+					String RateOffer_in_Pcs="0";
+					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
+						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
+
+							if(!myBoxnew.getText().toString().equals(""))
+							{
+								//RateOffer=  myBoxnew.getText().toString().trim();
+								RateOffer_in_Pcs= fnGetBoxVal(myBoxnew);// myBoxnew.getText().toString().trim();
+
+								//Rate_Kg_to_Pcs_Conversion(RateOffer,""+getPIDTag,viewRow );
+							}
+							else
+							{
+								RateOffer_in_Pcs="0";
+								//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+getPIDTag)).setText("");
+								hmapProductStandardRate.put(""+getPIDTag, "0");
+							}
+						}
+					}
+					else
+					{
+						//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+getPIDTag)).setText("");
+						hmapProductStandardRate.put(""+getPIDTag, "0");
+					}
+					Rate_Pcs_to_Kg_Conversion(RateOffer_in_Pcs,""+getPIDTag );//,((View)myBoxnew.getParent().getParent())
+				}
+			}
+
+		};
+	}
+    /*TextWatcher watcher=new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+
+    };*/
+/*	private class MyTextWatcher implements TextWatcher{
+
+		private EditText myBoxnew;
+		View viewRow;
+		private MyTextWatcher(EditText myBox) {
+			this.myBoxnew = myBox;
+			viewRow=(View) myBox.getParent().getParent();
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			//do nothing
+		}
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			//do nothing
+		}
+		public void afterTextChanged(Editable s) {
+
+			String qtyString = s.toString().trim();
+			//int quantity = qtyString.equals("") ? 0:Integer.valueOf(qtyString);
+
+		*//*	EditText qtyView = (EditText) view.findViewById(R.id.quantity);
+			Product product = (Product) qtyView.getTag();
+*//*
+
+
+			return;
+		}
+	}*/
+    public void 	Rate_OrderQtyUnitToKGPerUnit(String unit,String PRODUCT_ID){
+        Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
+        Double kgVolume=(gram * 0.001);
+        Double valueOfKGLitre=kgVolume*Integer.parseInt(unit);
+        valueOfKGLitre= Double.parseDouble(new DecimalFormat("##.##").format(valueOfKGLitre));
+        //((EditText) viewRow.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText(String.valueOf(valueOfKGLitre));
+        if(Double.parseDouble(hmapPrdctOdrQtyKG.get(PRODUCT_ID))!=(valueOfKGLitre)) {
+            hmapPrdctOdrQtyKG.put(PRODUCT_ID, ""+valueOfKGLitre);
+			/*((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("" + valueOfKGLitre);*/
+            if(unit.equals("0"))
+            {
+                ((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("");
+                ((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setHint("O.Qty/KG");
+            }
+            else {
+                ((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("" + valueOfKGLitre);
+            }
+        }
+    }
+
+    public void 	Rate_PerKGUnitToSingle(String unit,String PRODUCT_ID){
+        Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
+        Double kilogram = ((gram * 0.001) );
+        Double DtotalOverallKGSales =  kilogram;
+        DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
+        String kgrate=((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).getText().toString();
+        if(kgrate.equals(""))
+        {
+            kgrate="0.0";
+        }
+        if(TextUtils.isEmpty(kgrate))
+        {
+            kgrate="0.0";
+        }
+        if(((Double.parseDouble(kgrate)% DtotalOverallKGSales)==0) && (kilogram<=(Double.parseDouble(kgrate)))) {
+
+
+
+            Double orderQtyValue = (Double.parseDouble(kgrate) / DtotalOverallKGSales);
+
+            int valuetQty =orderQtyValue.intValue();
+            if(!hmapPrdctOdrQty.get(PRODUCT_ID).equals(""+valuetQty)) {
+                ((EditText)  ll_prdct_detal.findViewWithTag("etOrderQty" + "_" + PRODUCT_ID)).setText(String.valueOf(valuetQty));
+            }
+        }
+        else
+        {
+
+            Double perkilogram =gram * 0.001;
+
+
+            ((EditText)  ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setError("Please fill in multiple of "+String.valueOf(perkilogram));
+
+            ((EditText)  ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("");
+            hmapPrdctOdrQtyKG.put(PRODUCT_ID,"0.0");
+        }
+    }
+
+
+//nitika
+public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
+
+	((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("");
+
+	((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("");
+
+	((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("");
+	((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("");
+/*
+
+		Double kgLtr=1.0;
+		if(hmapProductOverAllVolume.containsKey(PRODUCT_ID))
+		{
+			kgLtr=(Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID)))/1000;
+
+		}
+	//	EditText editextRateofferKg= (EditText) viewRow.findViewWithTag(PRODUCT_ID+"^"+"RateOffer");
+		Double totalVal=Integer.parseInt(rate_in_pcs)*kgLtr;
+		((EditText) viewRow.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).setText(String.valueOf(totalVal));
+		//hashmapRateOfferinPcsAndKG.put(PRODUCT_ID,String.valueOf(Integer.parseInt(rate_in_pcs))+"^"+String.valueOf(totalVal));
+
+		//SetHashmapValueof_editextRateofferKg(String.valueOf(totalVal.intValue()),PRODUCT_ID);
+*/
+
+
+	//String mMoney="" +((Double.parseDouble(((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString())));
+
+	String mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID));
+		/*if(!mMoney.equals("0"))
+		{
+			mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID));
+		}*/
+
+
+	Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
+	String kilogram ="" +( ((gram * 0.001)) * Double.parseDouble(mMoney));
+	Double DtotalOverallKGSales =  Double.parseDouble(kilogram);
+	hmapProductStandardRate.put(PRODUCT_ID, ""+DtotalOverallKGSales);
+	DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
+//hmapProductVatTaxPerventage
+	//	((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setFocusable(false);
+	hmapProductIDAvgPricePerUnit.put(PRODUCT_ID,""+Double.parseDouble(mMoney));// );
+
+	String myrt=((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString();
+	//String myrt=((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString();
+	((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).removeTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
+	Double dbltextbeforeaxpcs=(DtotalOverallKGSales/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID))/100)));
+
+	//Double dbltxtgstpcs=(DtotalOverallKGSales*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
+	Double dbltxtgstpcs=(DtotalOverallKGSales-dbltextbeforeaxpcs);
+	dbltxtgstpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstpcs));
+	//Double dbltextbeforeaxpcs=(DtotalOverallKGSales-dbltxtgstpcs);
+	dbltextbeforeaxpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltextbeforeaxpcs));
+	hmapPrdctGSTPcs.put(PRODUCT_ID,"" + dbltxtgstpcs);
+	hmapPrdctRtAfterTaxPcs.put(PRODUCT_ID,"" + DtotalOverallKGSales);
+	((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("" + dbltxtgstpcs);
+	((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("" + dbltextbeforeaxpcs);
+
+
+//et_ProductAvgPricePerUnit
+	//txt_gst_kg
+
+// ((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? 0:((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString()
+	//String myvalnew=((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
+	Double dbltxtratebeforetaxkg=((Double.parseDouble(mMoney))/(1+Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID))/100));
+	//Double dbltxtgstkg=((Double.parseDouble(mMoney))*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
+	Double dbltxtgstkg=Double.parseDouble(mMoney)-dbltxtratebeforetaxkg;
+	dbltxtgstkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstkg));
+	((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("" + dbltxtgstkg);
+	//Double dbltxtratebeforetaxkg=(Double.parseDouble(mMoney)-dbltxtgstkg);
+	dbltxtratebeforetaxkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtratebeforetaxkg));
+	hmapPrdctGSTKg.put(PRODUCT_ID,"" + dbltxtgstkg);
+	hmapPrdctRtAfterTaxKG.put(PRODUCT_ID,"" + mMoney);
+
+	((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("" + dbltxtratebeforetaxkg);
+
+	if(Double.parseDouble(hmapProductStandardRate.get(PRODUCT_ID))!=Double.parseDouble(myrt)) {
+
+		((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setText("" + DtotalOverallKGSales);
+		//((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).addTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
+
+		//	((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setFocusable(true);
+		//((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setOnFocusChangeListener(this);
+
+
+
+	}
+
+}
+	public void Rate_Kg_to_Pcs_Conversion(String rate_in_kg,String PRODUCT_ID){
+
+		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("");
+
+		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("");
+
+		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("");
+		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("");
+
+
+		//String mMoney="" +((Double.parseDouble(((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString())));
+		/*if(!mMoney.equals("0"))
+		{*/
+		String mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID));
+		//}
+		Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
+		String kilogram ="" +(Double.parseDouble(mMoney)/ ((gram * 0.001) ));
+		Double DtotalOverallKGSales =  Double.parseDouble(kilogram);
+
+
+//txt_gst_kg
+		//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString()
+		//	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).setFocusable(false);
+		((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).removeTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID))));
+		String myrt=((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
+
+		Double dbltxtratebeforetaxkg=DtotalOverallKGSales/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID))/100));
+		Double dbltxtgstkg=DtotalOverallKGSales-dbltxtratebeforetaxkg;
+		//Double dbltxtratebeforetaxkg=(DtotalOverallKGSales-dbltxtgstkg);
+		dbltxtratebeforetaxkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtratebeforetaxkg));
+		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("" + dbltxtratebeforetaxkg);
+
+		//Double dbltxtgstkg=(DtotalOverallKGSales*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
+
+		dbltxtgstkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstkg));
+		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("" + dbltxtgstkg);
+
+		hmapPrdctGSTKg.put(PRODUCT_ID,"" + dbltxtgstkg);
+		hmapPrdctRtAfterTaxKG.put(PRODUCT_ID,"" + DtotalOverallKGSales);
+
+
+		DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
+		//((EditText) viewRow.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).setText(""+DtotalOverallKGSales);
+		hmapProductIDAvgPricePerUnit.put(PRODUCT_ID, ""+DtotalOverallKGSales);
+		hmapProductStandardRate.put(PRODUCT_ID, ""+mMoney);
+
+
+
+//txt_rate_after_tax_kg
+		Double dbltextbeforetaxpcs=Double.parseDouble(mMoney)/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID))/100));
+		//Double dbltxtgstpcs=(Double.parseDouble(mMoney)*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
+		Double dbltxtgstpcs=(Double.parseDouble(mMoney)-dbltextbeforetaxpcs);
+		dbltxtgstpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstpcs));
+		//Double dbltextbeforetaxpcs=(Double.parseDouble(mMoney)-dbltxtgstpcs);
+		dbltextbeforetaxpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltextbeforetaxpcs));
+
+		hmapPrdctGSTPcs.put(PRODUCT_ID,"" + dbltxtgstpcs);
+		hmapPrdctRtAfterTaxPcs.put(PRODUCT_ID,"" + mMoney);
+
+		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("" + dbltxtgstpcs);
+		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("" + dbltextbeforetaxpcs);
+		//String myrt=	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
+		if(Double.parseDouble(hmapProductIDAvgPricePerUnit.get(PRODUCT_ID))!=(Double.parseDouble(myrt))) {
+
+
+			((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).setText("" + DtotalOverallKGSales);
+			((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).addTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
+
+		}
+
+	}
 
 	public void createProductPrepopulateDetail(int CheckIfStoreExistInStoreProdcutPurchaseDetails) {
 		
@@ -3861,7 +4397,16 @@ public void loadPurchaseProductDefault()
 				
 				txtVw_schemeApld.setText("");
 				txtVw_schemeApld.setTag("0");
-				
+			   if(ed_LastEditextFocusd!=null)
+			   {
+						  /*if(!(ed_LastEditextFocusd.getText().toString()).equals(viewCurrentBoxValue))
+						   {*/
+				   getOrderData(ProductIdOnClickedEdit);
+						   /*}*/
+			   }
+
+
+			   orderBookingTotalCalc();
 				filterProduct(spinnerCategorySelected);
 			}
 			
@@ -4023,7 +4568,7 @@ public void loadPurchaseProductDefault()
 
 						}
 						else
-						{	Double perkilogram =gram * 0.001;
+						{  Double perkilogram =gram * 0.001;
 							hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,"0.0");
 							hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
 							et_ValueOnFocuslost.setError("Please fill in multiple of "+String.valueOf(perkilogram));
@@ -4322,6 +4867,379 @@ public void loadPurchaseProductDefault()
 
 
 	}
+
+/*
+	public void onFocusChange(View v, boolean hasFocus) {
+		// TODO Auto-generated method stub
+
+
+		txtVw_schemeApld.setText("No Scheme Applicable");
+		txtVw_schemeApld.setTag("0");
+
+		EditText et_ValueOnFocuslostnew=null;
+		String ProductIdOnClickedControl=v.getTag().toString().split("_")[1];
+		if(!hasFocus)
+		{
+			isbtnExceptionVisible=0;
+			System.out.println("Abhinav Ankit Anurag");
+			View viewRow=(View) v.getParent();
+
+			//	System.out.println("Dubey textView = "+textViewFreeQty.getTag()+" ProductIdOnClickedControl ="+ProductIdOnClickedControl);
+			//hideSoftKeyboard(v);
+			if(v instanceof EditText)
+			{
+
+
+				//ProductIdOnClickedEdit
+				EditText et_ValueOnFocuslost=(EditText) v;
+				et_ValueOnFocuslost.removeTextChangedListener(getTextWatcher(et_ValueOnFocuslost));
+				//et_ValueOnFocuslost.setCursorVisible(false);
+				et_ValueOnFocuslostnew=et_ValueOnFocuslost;
+				ProductIdOnClickedEdit=et_ValueOnFocuslost.getTag().toString().split(Pattern.quote("_"))[1];
+				CtaegoryIddOfClickedView=hmapCtgryPrdctDetail.get(ProductIdOnClickedEdit);
+				condtnOddEven=hmapProductViewTag.get(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit);
+				// View viewOldBackgound;
+				if(condtnOddEven.equals("even"))
+				{
+					// viewOldBackgound=ll_prdct_detal.findViewWithTag(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit+"_"+"even");
+					// viewOldBackgound.setBackgroundResource(R.drawable.card_background_even);
+				}
+				else
+				{
+					//viewOldBackgound=ll_prdct_detal.findViewWithTag(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit+"_"+"odd");
+
+					//viewOldBackgound.setBackgroundResource(R.drawable.card_background_odd);
+				}
+
+				if(v.getId()==R.id.et_Stock)
+				{
+					et_ValueOnFocuslost.setHint("Stock");
+
+				}//txtVwRate
+
+
+				if(v.getId()==R.id.et_KGPerUnilt)
+				{
+					if(!TextUtils.isEmpty(et_ValueOnFocuslost.getText().toString()))
+					{
+						*/
+/*EditText ediTextRate= (EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+ProductIdOnClickedEdit);
+						if(ediTextRate!=null && ediTextRate !=null) {*//*
+
+						//if (!TextUtils.isEmpty(ediTextRate.getText().toString().trim()) ) {
+						Double gram = Double.parseDouble(hmapProductOverAllVolume.get(ProductIdOnClickedEdit));
+						Double kilogram = ((gram * 0.001) );
+						Double DtotalOverallKGSales =  kilogram;
+						DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
+						String myboxVal=fnGetBoxVal(et_ValueOnFocuslost);
+
+						hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,""+myboxVal);
+						if(((Double.parseDouble(myboxVal)% DtotalOverallKGSales)==0) && (kilogram<=(Double.parseDouble(myboxVal)))) {
+							Double orderQtyValue = (Double.parseDouble(myboxVal) / DtotalOverallKGSales);
+							int valuetQty =orderQtyValue.intValue();
+
+							EditText ediTextOrder = (EditText) ((View) et_ValueOnFocuslost.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
+							ediTextOrder.setText(String.valueOf(valuetQty));
+							hmapPrdctOdrQty.put(ProductIdOnClickedEdit,String.valueOf(valuetQty));
+							if(hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99"))
+							{
+								hmapProductStandardRate.put(ProductIdOnClickedEdit,"0");
+							}
+							getOrderData(ProductIdOnClickedEdit);
+
+
+
+						}
+						else
+						{	Double perkilogram =gram * 0.001;
+							hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,"0.0");
+							hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
+							et_ValueOnFocuslost.setError("Please fill in multiple of "+String.valueOf(perkilogram));
+							et_ValueOnFocuslost.setText("");
+
+						}
+						//}
+						//}
+
+
+						*/
+/*	ediTextetProductAvgPricePerUnit.setText(""+DtotalOverallKGSales);
+							hmapProductIDAvgPricePerUnit.put(productIdOfTag, ""+DtotalOverallKGSales);
+							hmapProductStandardRate.put(productIdOfTag, ediTextRate.getText().toString());*//*
+
+
+
+
+
+					}
+					else
+					{
+						hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
+
+						EditText ediTextOrder = (EditText)  ((View) et_ValueOnFocuslost.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
+						if(ediTextOrder!=null)
+						{
+							ediTextOrder.setText("");
+
+						}
+
+					}
+					//getOrderData(ProductIdOnClickedEdit);
+				}
+
+
+				if(v.getId()==R.id.txtVwRate)
+				{
+					et_ValueOnFocuslost.setHint("Rate");
+					et_ValueOnFocuslost.setError(null);
+					if (hmapProductflgPriceAva.get(ProductIdOnClickedEdit).equals("1")) {
+						EditText ediTextOrder = (EditText)  ((View) et_ValueOnFocuslost.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
+						EditText ediTextOrderKG = (EditText)  ((View) et_ValueOnFocuslost.getParent().getParent()).findViewWithTag("etKGPerUnilt" + "_" + ProductIdOnClickedEdit);
+
+						if(TextUtils.isEmpty(et_ValueOnFocuslost.getText().toString().trim()))
+						{
+							String myboxVal=fnGetBoxVal(et_ValueOnFocuslost);
+							if (ediTextOrder != null) {
+
+								ediTextOrder.setText("");
+								ediTextOrderKG.setText("");
+								//hmapProductStandardRate.put(""+ProductIdOnClickedEdit, "0");
+							}
+						}
+
+
+
+					}
+
+				}
+				if(v.getId()==R.id.et_SampleQTY)
+				{
+					et_ValueOnFocuslost.setHint("Smpl.Qty");
+
+				}
+				if(v.getId()== R.id.et_OrderQty)
+				{
+					et_ValueOnFocuslost.setHint("O.Qty");
+				}
+				if(!viewCurrentBoxValue.equals(et_ValueOnFocuslost.getText().toString().trim()))
+				{
+					if(v.getId()==R.id.et_Stock)
+					{
+						et_ValueOnFocuslost.setHint("Stock");
+
+					}
+
+					if(v.getId()==R.id.txtVwRate)
+					{
+						et_ValueOnFocuslost.setHint("Rate");
+
+						EditText temped=(EditText) ll_prdct_detal.findViewWithTag("etOrderQty_"+et_ValueOnFocuslost.getTag().toString().split(Pattern.quote("_"))[1]);
+						EditText temprt=(EditText) ll_prdct_detal.findViewWithTag("tvRate_"+et_ValueOnFocuslost.getTag().toString().split(Pattern.quote("_"))[1]);
+
+
+					}
+					if(v.getId()==R.id.et_SampleQTY)
+					{
+						et_ValueOnFocuslost.setHint("Smpl.Qty");
+						*/
+/*hmapPrdctSmpl.remove(ProductIdOnClickedControl);
+						hmapPrdctSmpl.put(ProductIdOnClickedControl, et_ValueOnFocuslost.getText().toString().trim());*//*
+
+					}
+					if(v.getId()== R.id.et_OrderQty)
+					{
+
+						if(Integer.parseInt(hmapPrdctOdrQty.get(ProductIdOnClickedEdit))>0)
+						{
+							if(hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99"))
+							{
+								hmapProductStandardRate.put(ProductIdOnClickedEdit,"0");
+
+							}
+							getOrderData(ProductIdOnClickedEdit);
+							*/
+/*if((!hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("") && !hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99")) && !hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99.00") && !hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99.0"))
+							{
+
+								getOrderData(ProductIdOnClickedControl);
+							}
+							else
+							{
+								EditText temprt=(EditText) ll_prdct_detal.findViewWithTag("tvRate_"+et_ValueOnFocuslostnew.getTag().toString().split(Pattern.quote("_"))[1]);
+								temprt.setSelected(true);
+								temprt.requestFocus();
+								temprt.setCursorVisible(true);
+							}*//*
+
+						}
+						*/
+/*if((!hmapProductStandardRate.get(ProductIdOnClickedControl).equals("") && !hmapProductStandardRate.get(ProductIdOnClickedControl).equals("-99")) && !hmapProductStandardRate.get(ProductIdOnClickedControl).equals("-99.00") && !hmapProductStandardRate.get(ProductIdOnClickedControl).equals("-99.0"))
+						{
+							getOrderData(ProductIdOnClickedControl);
+						}
+						else
+						{
+
+
+							//v.setFocusable(false);
+							//EditText temped=(EditText) ll_prdct_detal.findViewWithTag("etOrderQty_"+v.getTag().toString().split(Pattern.quote("_"))[1]);
+							*//*
+*/
+/*EditText temprt=(EditText) ll_prdct_detal.findViewWithTag("tvRate_"+et_ValueOnFocuslost.getTag().toString().split(Pattern.quote("_"))[1]);
+							temprt.setSelected(true);
+							temprt.requestFocus();*//*
+*/
+/*
+
+
+						}
+*//*
+
+					}
+
+
+				}
+			}
+
+		}
+
+		else
+		{
+
+
+			txtVw_schemeApld.setText("No Scheme Applicable");
+			txtVw_schemeApld.setTag("0");
+
+			if(v instanceof EditText)
+			{
+				//showSoftKeyboard(v);
+
+
+				EditText edtBox=(EditText) v;
+
+				//ProductIdOnClickedEdit
+				ProductIdOnClickedEdit=edtBox.getTag().toString().split(Pattern.quote("_"))[1];
+				ed_LastEditextFocusd=edtBox;
+				CtaegoryIddOfClickedView=hmapCtgryPrdctDetail.get(ProductIdOnClickedEdit);
+				condtnOddEven=hmapProductViewTag.get(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit);
+				// View viewParent;
+				if(condtnOddEven.equals("even"))
+				{
+					// viewParent=ll_prdct_detal.findViewWithTag(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit+"_"+"even");
+				}
+				else
+				{
+					// viewParent=ll_prdct_detal.findViewWithTag(CtaegoryIddOfClickedView+"_"+ProductIdOnClickedEdit+"_"+"odd");
+				}
+				// viewParent.setBackgroundResource(R.drawable.edit_text_diable_bg_clicked);
+				if(v.getId()== R.id.et_OrderQty)
+				{
+
+
+					edtBox.addTextChangedListener(getTextWatcher(edtBox));
+					edtBox.setHint("");
+					viewCurrentBoxValue=edtBox.getText().toString().trim();
+					if(((ImageView) ll_prdct_detal.findViewWithTag("btnException_"+(ProductIdOnClickedEdit))).getVisibility()==View.VISIBLE)
+					{
+						isbtnExceptionVisible=1;
+					}
+
+				}
+
+				if(v.getId()==R.id.et_SampleQTY)
+				{
+					edtBox.setHint("");
+
+
+
+				}
+
+				if(v.getId()==R.id.et_ProductAvgPricePerUnit)
+				{
+
+					EditText ediTextbox = (EditText)  ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("tvRate" + "_" + ProductIdOnClickedEdit);
+					ediTextbox.removeTextChangedListener(getTextWatcher(ediTextbox));
+					edtBox.addTextChangedListener(getTextWatcher(edtBox));
+
+				}//tx
+				if(v.getId()==R.id.et_Stock)
+				{
+					edtBox.setHint("");
+				}
+				if(v.getId()==R.id.txtVwRate)
+				{
+					EditText ediTextbox = (EditText)  ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("etProductAvgPricePerUnit" + "_" + ProductIdOnClickedEdit);
+					ediTextbox.removeTextChangedListener(getTextWatcher(ediTextbox));
+					edtBox.setHint("");
+					edtBox.addTextChangedListener(getTextWatcher(edtBox));
+				}
+
+			}
+
+			if(hmapProductRelatedSchemesList.size()>0)
+			{
+				if(hmapProductRelatedSchemesList.containsKey(ProductIdOnClickedControl))
+				{
+					fnUpdateSchemeNameOnScehmeControl(ProductIdOnClickedControl);
+				}
+				else
+				{
+					//SchemeNameOnScehmeControl="No Scheme Applicable";
+					txtVw_schemeApld.setText("No Scheme Applicable");
+					txtVw_schemeApld.setTag("0");
+				}
+			}
+			else
+			{
+				//SchemeNameOnScehmeControl="No Scheme Applicable";
+				txtVw_schemeApld.setText("No Scheme Applicable");
+				txtVw_schemeApld.setTag("0");
+			}
+
+
+
+
+		}
+
+		*/
+/*if(v.getId()==R.id.et_OrderQty)
+		{
+			*//*
+*/
+/*if(flgnwstausforfocus==false) {
+				EditText temped = (EditText) ll_prdct_detal.findViewWithTag("etOrderQty_" + ed_LastEditextFocusd.getTag().toString().split(Pattern.quote("_"))[1]);
+				if (temped.getText().length() != 0) {
+
+					if ((!hmapProductStandardRate.get(ed_LastEditextFocusd.getTag().toString().split(Pattern.quote("_"))[1]).equals("") && !hmapProductStandardRate.get(ed_LastEditextFocusd.getTag().toString().split(Pattern.quote("_"))[1]).equals("-99")) && !hmapProductStandardRate.get(ed_LastEditextFocusd.getTag().toString().split(Pattern.quote("_"))[1]).equals("-99.00") && !hmapProductStandardRate.get(ed_LastEditextFocusd.getTag().toString().split(Pattern.quote("_"))[1]).equals("-99.0")) {
+						orderBookingTotalCalc();
+					} else {
+						flgnwstausforfocus = true;
+					*//*
+*/
+/**//*
+*/
+/*ed_LastEditextFocusd.setSelected(true);
+					ed_LastEditextFocusd.requestFocus();*//*
+*/
+/**//*
+*/
+/*
+					}
+				}
+			}*//*
+*/
+/*
+		}
+*//*
+
+
+
+		orderBookingTotalCalc();
+
+
+	}
+*/
+
 
 	private void getOrderData(String ProductIdOnClickedControl123)
 	 {
@@ -4761,7 +5679,7 @@ public void loadPurchaseProductDefault()
 		ArrayList<String> stringSchemeIdWthAllVal=new ArrayList<String>();
 		ArrayList<HashMap<String, String>> listArrayHashmapProduct=new ArrayList<HashMap<String, String>>();
 		ArrayList<String[]> listArrayFreePrdctQty=new ArrayList<String[]>();
-		
+
 		if(arredtboc_OderQuantityFinalSchemesToApply.size()>0)
 		{
 			for(String strListMpdWdPrdct:arredtboc_OderQuantityFinalSchemesToApply)
@@ -4785,7 +5703,7 @@ public void loadPurchaseProductDefault()
 				int totalProductLine=Integer.parseInt(strListMpdWdPrdct.split(Pattern.quote("^"))[12]);
 				double totalProductVal=Double.parseDouble(strListMpdWdPrdct.split(Pattern.quote("^"))[13]);
 				double totalProductVol=Double.parseDouble(strListMpdWdPrdct.split(Pattern.quote("^"))[14]);
-				
+
 				if(hmapSchemeIdStoreID.containsKey(""+schId))
 				{
 					String[] arrProductIDBenifitsListOnPurchase=dbengine.fectProductIDBenifitsListOnPurchase(schId,schSlabId,schSlbBuckId);
@@ -4797,35 +5715,35 @@ public void loadPurchaseProductDefault()
 							int BenifitRowID=Integer.parseInt(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[0]);
 							int BenSubBucketType=Integer.parseInt(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[1]);
 							int BenDiscApplied=Integer.parseInt(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[2]);
-							
+
 							// MinValueQty of free product
 							//String CouponCode=strProductIDBenifitsListOnPurchase.split("^")[0];
 							Double BenSubBucketValue=Double.parseDouble(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[4]);
 							Double Per=Double.parseDouble(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[5]);
 							Double UOM=Double.parseDouble(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[6]);
 							int chkflgProDataCalculation=Integer.parseInt(strProductIDBenifitsListOnPurchase.split(Pattern.quote("^"))[7]);
-							
+
 							//BenSubBucketType
 							//1. Free Other Product =
 							//2. Discount in Percentage with other product
 							//3. Discount in Amount with other product
 							//4. Coupons
 							//5. Free Same Product
-							
+
 							//6. Discount in Percentage with same product
 							//7. Discount in Amount with same product
 							//8. Percentage On Invoice
 							//9.  Amount On Invoice
 							//10. PerVolume Discount
-							
-							
+
+
 							if(BenSubBucketType==1 || BenSubBucketType==2 || BenSubBucketType==3 ||BenSubBucketType==5 ||BenSubBucketType==6 || BenSubBucketType==7) //1. Free Other Product 2. Discount in Percentage with other product 3. Discount in Amount with other product 
 							{
 								HashMap<String, String> arrProductIDMappedInSchSlbSubBukBenifits=new HashMap<String, String>();
 								//productFullFilledSlabGlobal;
 								//BenValue
 								int isHaveMoreBenifits=0;
-								
+
 								String[] strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,toMultiply,BenSubBucketValue,BenSubBucketType);
 								if(BenSubBucketType==1 || BenSubBucketType==2 || BenSubBucketType==3)
 								{
@@ -4833,148 +5751,162 @@ public void loadPurchaseProductDefault()
 								}
 								else
 								{
-									
+
 									for(String productIdToFillSlab:productFullFilledSlabGlobal)
 									{
 										arrProductIDMappedInSchSlbSubBukBenifits.put(hmapPrdctIdPrdctName.get(productIdToFillSlab), productIdToFillSlab);
 									}
-									
+
 								}
-								
+
 								defaultValForAlert=strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail[0];
 								defaultValForAlert=strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail[0];
 								HashMap<String, String> hmapFreeProdID=new HashMap<String, String>();
 								HashMap<String, String> hmapFreeProdIDAlrt=new HashMap<String, String>();
 								if(arrProductIDMappedInSchSlbSubBukBenifits.size()>0)
 								{
-									
+
 									String[] arrBenifitAssignedVal=new String[arrProductIDMappedInSchSlbSubBukBenifits.size()];
 									int countAssignVal=0;
-								for(Entry<String, String> allPrdctNamePrdctId:arrProductIDMappedInSchSlbSubBukBenifits.entrySet())
+									for(Entry<String, String> allPrdctNamePrdctId:arrProductIDMappedInSchSlbSubBukBenifits.entrySet())
 									{
-									Double accAsignVal=0.0;
-									String productIdForFree=allPrdctNamePrdctId.getValue();
-									
-									String maxBenifiAssignedValToCalc="";
-									String maxBenifiAssignedVal=dbengine.getValOfSchemeAlrtSelected(storeID,""+schId,""+schSlabId,strGlobalOrderID);
-									if(Double.parseDouble(maxBenifiAssignedVal)>0)
-									{
-									
-										maxBenifiAssignedValToCalc=maxBenifiAssignedVal;
-										
-									}
-									else
-									{
-										dbengine.deleteAlertValueProduct(storeID,""+schId,strGlobalOrderID);
-									}
-									boolean defaultSelected=false;
-									if(!maxBenifiAssignedValToCalc.equals(""))
-									{
-										
-										if(Double.parseDouble(maxBenifiAssignedValToCalc)>0)
+										Double accAsignVal=0.0;
+										String productIdForFree=allPrdctNamePrdctId.getValue();
+
+										String maxBenifiAssignedValToCalc="";
+										String maxBenifiAssignedVal=dbengine.getValOfSchemeAlrtSelected(storeID,""+schId,""+schSlabId,strGlobalOrderID);
+										if(Double.parseDouble(maxBenifiAssignedVal)>0)
 										{
-											accAsignVal=Double.parseDouble(maxBenifiAssignedValToCalc);
-										
-										 String[] strBeniftRowIdTest=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,1,BenSubBucketValue,BenSubBucketType);
-									for(int i=0;i<strBeniftRowIdTest.length;i++)
-									{
-										
-										Double benifit=Double.parseDouble(strBeniftRowIdTest[i]);
-										if(Double.parseDouble(maxBenifiAssignedValToCalc)==benifit)
-										{
-											if(countAssignVal==(arrProductIDMappedInSchSlbSubBukBenifits.size()-1))
-											{
-												accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree,true );
-												
-											}
-											else
-											{
-												accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree,false );
-											}
-										//	accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree);
-											
-											defaultSelected=true;
-											break;
-										}
-									}	
-								}
-										
-									}
-									if(!defaultSelected)
-									{
-										if(countAssignVal==(arrProductIDMappedInSchSlbSubBukBenifits.size()-1))
-										{
-											accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, BenSubBucketValue, schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per,productIdForFree,true );
-											
+
+											maxBenifiAssignedValToCalc=maxBenifiAssignedVal;
+
 										}
 										else
 										{
-											accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, BenSubBucketValue, schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per,productIdForFree,false );
+											dbengine.deleteAlertValueProduct(storeID,""+schId,strGlobalOrderID);
 										}
-										
-									}
-									
-									String productNameValue=allPrdctNamePrdctId.getKey();
-									hmapFreeProdIDAlrt.put(productNameValue,productIdForFree);
-								hmapFreeProdID.put(productNameValue,productIdForFree);
-									
-									if(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail.length>1)
-									{	
-										String subValues=String.valueOf(schId+"~"+schSlabId+"~"+schSlbBuckId+"~"+schSlabSubBucketValue+"~"+0+"~"+schSlabSubBucketType+"~"+BenifitRowID+"~"+
-												BenSubBucketType+"~"+0+"~"+BenSubBucketValue+"~"+0+"~"+0+"~"+
-												0+"~"+0+"~"+0+"~"+0.0+"~"+0.0+"~"+schSlbSubRowID+"~"+SchTypeId+"~"+chkflgProDataCalculation);
-										stringSchemeIdWthAllVal.add(subValues);
-										//listArrayHashmapProduct.add(hmapFreeProdID);
-										isHaveMoreBenifits=1;
-										arrBenifitAssignedVal[countAssignVal]=(String.valueOf(accAsignVal));
-							//			listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
-										
-										
-										
-									}
-									else
-									{
-										isHaveMoreBenifits=0;
-										
+										boolean defaultSelected=false;
+										if(!maxBenifiAssignedValToCalc.equals(""))
+										{
 
-										ArrayList<String> noAlrtStringSchemeIdWthAllValTemp=new ArrayList<String>();
-										
-										String noAlrtsubValues=String.valueOf(accAsignVal+"~"+schId+"~"+schSlabId+"~"+schSlbBuckId+"~"+schSlabSubBucketValue+"~"+0+"~"+schSlabSubBucketType+"~"+BenifitRowID+"~"+
-												BenSubBucketType+"~"+0+"~"+BenSubBucketValue+"~"+0+"~"+0+"~"+
-												0+"~"+0+"~"+0+"~"+0.0+"~"+0.0+"~"+schSlbSubRowID+"~"+SchTypeId);
-										
-										noAlrtStringSchemeIdWthAllValTemp.add(noAlrtsubValues);
-									
-										
-										//String[] arrayProductId=changeHmapToArrayValue(arrProductIDMappedInSchSlbSubBukBenifits);
-										noAlrtHshMaptoSaveData.put(productIdForFree, noAlrtStringSchemeIdWthAllValTemp);
-									
-									}
-									countAssignVal++;
+											if(Double.parseDouble(maxBenifiAssignedValToCalc)>0)
+											{
+												accAsignVal=Double.parseDouble(maxBenifiAssignedValToCalc);
+
+												String[] strBeniftRowIdTest=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,1,BenSubBucketValue,BenSubBucketType);
+												for(int i=0;i<strBeniftRowIdTest.length;i++)
+												{
+
+													Double benifit=Double.parseDouble(strBeniftRowIdTest[i]);
+													if(Double.parseDouble(maxBenifiAssignedValToCalc)==benifit)
+													{
+														if(countAssignVal==(arrProductIDMappedInSchSlbSubBukBenifits.size()-1))
+														{
+															accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree,true );
+
+														}
+														else
+														{
+															if(BenSubBucketType==6)
+															{
+																accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree,true );
+															}
+															else{
+																accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree,false );
+															}
+
+														}
+														//	accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, Double.parseDouble(maxBenifiAssignedVal), schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per ,productIdForFree);
+
+														defaultSelected=true;
+														break;
+													}
+												}
+											}
+
+										}
+										if(!defaultSelected)
+										{
+											if(countAssignVal==(arrProductIDMappedInSchSlbSubBukBenifits.size()-1))
+											{
+												accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, BenSubBucketValue, schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per,productIdForFree,true );
+
+											}
+											else
+											{
+												if(BenSubBucketType==6)
+												{
+													accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, BenSubBucketValue, schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per,productIdForFree,true );
+												}
+												else{
+													accAsignVal=getAccAsignValue(schSlabSubBucketType, chkflgProDataCalculation, BenSubBucketValue, schSlabSubBucketValue, totalProductQty, totalProductLine, totalProductVal, totalProductVol, totalInvoice,Per,productIdForFree,false );
+												}
+
+											}
+
+										}
+
+										String productNameValue=allPrdctNamePrdctId.getKey();
+										hmapFreeProdIDAlrt.put(productNameValue,productIdForFree);
+										hmapFreeProdID.put(productNameValue,productIdForFree);
+
+										if(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail.length>1)
+										{
+											String subValues=String.valueOf(schId+"~"+schSlabId+"~"+schSlbBuckId+"~"+schSlabSubBucketValue+"~"+0+"~"+schSlabSubBucketType+"~"+BenifitRowID+"~"+
+													BenSubBucketType+"~"+0+"~"+BenSubBucketValue+"~"+0+"~"+0+"~"+
+													0+"~"+0+"~"+0+"~"+0.0+"~"+0.0+"~"+schSlbSubRowID+"~"+SchTypeId+"~"+chkflgProDataCalculation);
+											stringSchemeIdWthAllVal.add(subValues);
+											//listArrayHashmapProduct.add(hmapFreeProdID);
+											isHaveMoreBenifits=1;
+											arrBenifitAssignedVal[countAssignVal]=(String.valueOf(accAsignVal));
+											//			listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
+
+
+
+										}
+										else
+										{
+											isHaveMoreBenifits=0;
+
+
+											ArrayList<String> noAlrtStringSchemeIdWthAllValTemp=new ArrayList<String>();
+
+											String noAlrtsubValues=String.valueOf(accAsignVal+"~"+schId+"~"+schSlabId+"~"+schSlbBuckId+"~"+schSlabSubBucketValue+"~"+0+"~"+schSlabSubBucketType+"~"+BenifitRowID+"~"+
+													BenSubBucketType+"~"+0+"~"+BenSubBucketValue+"~"+0+"~"+0+"~"+
+													0+"~"+0+"~"+0+"~"+0.0+"~"+0.0+"~"+schSlbSubRowID+"~"+SchTypeId);
+
+											noAlrtStringSchemeIdWthAllValTemp.add(noAlrtsubValues);
+
+
+											//String[] arrayProductId=changeHmapToArrayValue(arrProductIDMappedInSchSlbSubBukBenifits);
+											noAlrtHshMaptoSaveData.put(productIdForFree, noAlrtStringSchemeIdWthAllValTemp);
+
+										}
+										countAssignVal++;
 									}// for loop arrProductIDMappedInSchSlbSubBukBenifits.entrySet() ends here
-								
-								if(isHaveMoreBenifits==1)
-								{
-								if(disValClkdOpenAlert)
-								{
-									
-									
-									listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
-									listArrayHashmapProduct.add(hmapFreeProdIDAlrt);
-								}
-								else
-								{
-									
-									listArrayFreePrdctQty.add(arrBenifitAssignedVal);
-									listArrayHashmapProduct.add(hmapFreeProdID);
-								}
+
+									if(isHaveMoreBenifits==1)
+									{
+										if(disValClkdOpenAlert)
+										{
+
+
+											listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
+											listArrayHashmapProduct.add(hmapFreeProdIDAlrt);
+										}
+										else
+										{
+
+											listArrayFreePrdctQty.add(arrBenifitAssignedVal);
+											listArrayHashmapProduct.add(hmapFreeProdID);
+										}
 									}
 								}//if(arrProductIDMappedInSchSlbSubBukBenifits.size()>0)
 								alrtStopResult=false;
 							}//if(BenSubBucketType==1 || BenSubBucketType==2 || BenSubBucketType==3) ends here
 							if(BenSubBucketType==10) //10. Free pr Unit Volume
 							{
-								
+
 								HashMap<String, String> hmapMultiplePuschasedProductVolumeAndValue=new HashMap<String, String>();
 								HashMap<String, String> arrProductIDMappedInSchSlbSubBukBenifits=new HashMap<String, String>();
 								LinkedHashMap<String, String> hmapFreeProdID=new LinkedHashMap<String, String>();
@@ -4982,16 +5914,16 @@ public void loadPurchaseProductDefault()
 								
 								/*String productNameValue=hmapPrdctIdPrdctName.get(ProductIdOnClicked);
 								arrProductIDMappedInSchSlbSubBukBenifits.put(productNameValue,ProductIdOnClicked);*/
-								
-								
-								 
-							
-								  String[] strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,toMultiply,BenSubBucketValue,BenSubBucketType); 
-									 defaultValForAlert=strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail[0];
-									
-								
-								
-								
+
+
+
+
+								String[] strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,toMultiply,BenSubBucketValue,BenSubBucketType);
+								defaultValForAlert=strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail[0];
+
+
+
+
 								dbengine.close();
 								Double AssigendValue=Double.parseDouble(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail[0]);
 								double totVolumeofProducts=0.00;
@@ -5004,18 +5936,18 @@ public void loadPurchaseProductDefault()
 									int isHaveMoreBenifits=0;
 									for(String prdctIdMpdWithScheme:productFullFilledSlabGlobal)
 									{
-										
-										
+
+
 										if(Integer.parseInt(hmapPrdctOdrQty.get(prdctIdMpdWithScheme))>0)
 										{
-											 
-													
+
+
 											maxBenifiAssignedVal=dbengine.getValOfSchemeAlrtSelected(storeID,""+schId,""+schSlabId,strGlobalOrderID);
 											if(Double.parseDouble(maxBenifiAssignedVal)>0)
 											{
-											
+
 												maxBenifiAssignedValToCalc=maxBenifiAssignedVal;
-												
+
 											}
 											else
 											{
@@ -5030,45 +5962,45 @@ public void loadPurchaseProductDefault()
 											hmapMultiplePuschasedProductVolumeAndValue.put(prdctIdMpdWithScheme, hmapPrdctIdPrdctName.get(prdctIdMpdWithScheme)+"^"+prdPrice+"^"+prdVol);
 											totlCombinedPriceOfProdcuts=totlCombinedPriceOfProdcuts+prdPrice;
 											totVolumeofProducts=totVolumeofProducts+prdVol;
-											
-										
+
+
 										}
-										
-										
+
+
 									}
 									if(!maxBenifiAssignedValToCalc.equals(""))
 									{
 										boolean defaultSelected=false;
 										if(Double.parseDouble(maxBenifiAssignedValToCalc)>0)
 										{
-										if(countPerVol==0)
-										{
-											countPerVol=1;
+											if(countPerVol==0)
+											{
+												countPerVol=1;
+											}
+											String[] strBeniftRowIdTest=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,1,BenSubBucketValue,BenSubBucketType);
+											for(int i=0;i<strBeniftRowIdTest.length;i++)
+											{
+
+												Double benifit=Double.parseDouble(strBeniftRowIdTest[i]);
+												if(Double.parseDouble(maxBenifiAssignedValToCalc)==benifit)
+												{
+													AssigendValue=Double.parseDouble(maxBenifiAssignedValToCalc)*toMultiply;
+													defaultSelected=true;
+													break;
+												}
+											}
+											if(!defaultSelected)
+											{
+												AssigendValue=Double.parseDouble(maxBenifiAssignedValToCalc);
+											}
+
+
+
 										}
-										 String[] strBeniftRowIdTest=dbengine.fectStatusIfBeniftRowIdExistsInSchemeSlabBenefitsValueDetailWithoutMultiply(BenifitRowID,1,BenSubBucketValue,BenSubBucketType);
-									for(int i=0;i<strBeniftRowIdTest.length;i++)
-									{
-										
-										Double benifit=Double.parseDouble(strBeniftRowIdTest[i]);
-										if(Double.parseDouble(maxBenifiAssignedValToCalc)==benifit)
-										{
-											AssigendValue=Double.parseDouble(maxBenifiAssignedValToCalc)*toMultiply;
-											defaultSelected=true;
-											break;
-										}
+
 									}
-									if(!defaultSelected)
-									{
-										AssigendValue=Double.parseDouble(maxBenifiAssignedValToCalc);
-									}
-											
-										
-											
-										}
-										
-									}
-									
-								
+
+
 									if(hmapMultiplePuschasedProductVolumeAndValue.size()>0)
 									{
 										double totOverAllValueDis=0.00;
@@ -5077,26 +6009,26 @@ public void loadPurchaseProductDefault()
 											if(chkflgProDataCalculation==1)
 											{
 												if(Per.intValue()==0)
-										          {
-										          totOverAllValueDis=totVolumeofProducts*(AssigendValue/schSlabSubBucketValue);//BenSubBucketValue;BenSubBucketValue;
-										          }
-										          else
-										          {
-										           //totOverAllValueDis=(totVolumeofProducts*(AssigendValue/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
-										        	  totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
-										          }
+												{
+													totOverAllValueDis=totVolumeofProducts*(AssigendValue/schSlabSubBucketValue);//BenSubBucketValue;BenSubBucketValue;
+												}
+												else
+												{
+													//totOverAllValueDis=(totVolumeofProducts*(AssigendValue/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
+													totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
+												}
 											}
 											else if(chkflgProDataCalculation==0)
 											{
 												if(Per.intValue()==0)
 												{
-												totOverAllValueDis=AssigendValue;
+													totOverAllValueDis=AssigendValue;
 												}
 												else
 												{
-													
+
 													totOverAllValueDis=(Double.valueOf(totVolumeofProducts/Per).intValue())*AssigendValue;
-													
+
 												}
 											}
 										}
@@ -5105,20 +6037,20 @@ public void loadPurchaseProductDefault()
 											if(chkflgProDataCalculation==1)
 											{
 												if(Per.intValue()==0)
-										          {
-										          totOverAllValueDis=totlCombinedPriceOfProdcuts*(AssigendValue/schSlabSubBucketValue);
-										          }
-										          else
-										          {
-										           //totOverAllValueDis=(totVolumeofProducts*(totlCombinedPriceOfProdcuts/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;(totlCombinedPriceOfProdcuts*BenSubBucketValue)/Per;
-										        	  totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//(totVolumeofProducts*(totlCombinedPriceOfProdcuts/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;(totlCombinedPriceOfProdcuts*BenSubBucketValue)/Per;
-										          }
+												{
+													totOverAllValueDis=totlCombinedPriceOfProdcuts*(AssigendValue/schSlabSubBucketValue);
+												}
+												else
+												{
+													//totOverAllValueDis=(totVolumeofProducts*(totlCombinedPriceOfProdcuts/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;(totlCombinedPriceOfProdcuts*BenSubBucketValue)/Per;
+													totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//(totVolumeofProducts*(totlCombinedPriceOfProdcuts/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;(totlCombinedPriceOfProdcuts*BenSubBucketValue)/Per;
+												}
 											}
 											else if(chkflgProDataCalculation==0)
 											{
 												if(Per.intValue()==0)
 												{
-												totOverAllValueDis=AssigendValue;
+													totOverAllValueDis=AssigendValue;
 												}
 												else
 												{
@@ -5129,15 +6061,15 @@ public void loadPurchaseProductDefault()
 										if(schSlabSubBucketType==1)//Quantity Based
 										{
 											if(Per.intValue()==0)
-									          {
-									          totOverAllValueDis=totVolumeofProducts*(AssigendValue/schSlabSubBucketValue);//BenSubBucketValue;BenSubBucketValue;
-									          }
-									          else
-									          {
-									           //totOverAllValueDis=(totVolumeofProducts*(AssigendValue/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
-									        	  totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
-									          }									//totOverAllValueDis=AssigendValue*toMultiply;
-											
+											{
+												totOverAllValueDis=totVolumeofProducts*(AssigendValue/schSlabSubBucketValue);//BenSubBucketValue;BenSubBucketValue;
+											}
+											else
+											{
+												//totOverAllValueDis=(totVolumeofProducts*(AssigendValue/Double.parseDouble(schSlabSubBucketValue))/Per);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
+												totOverAllValueDis=((totVolumeofProducts/Per)*AssigendValue);//BenSubBucketValue;(totVolumeofProducts*BenSubBucketValue)/Per;
+											}									//totOverAllValueDis=AssigendValue*toMultiply;
+
 										}
 										String[] arrPurchasedProductListVolumeAndValue=changeHmapToArrayKey(hmapMultiplePuschasedProductVolumeAndValue);
 										String[] arrBenifitAssignedVal=new String[arrPurchasedProductListVolumeAndValue.length];
@@ -5147,7 +6079,7 @@ public void loadPurchaseProductDefault()
 											double calculatedBenifitAssignedValueSKULevel=0.00;
 											double prodValOrVol=0.00;
 											double caculateVolOrValOnSchSlabBasis=0.00;
-											
+
 											if(schSlabSubBucketType==5)//Vol-Flat Disc on Same Prd
 											{
 												if(chkflgProDataCalculation==0)
@@ -5164,14 +6096,14 @@ public void loadPurchaseProductDefault()
 														prodValOrVol=Double.parseDouble(hmapMultiplePuschasedProductVolumeAndValue.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]).split(Pattern.quote("^"))[2]);
 														calculatedBenifitAssignedValueSKULevel=Double.valueOf(prodValOrVol/totVolumeofProducts).intValue()*totOverAllValueDis;
 													}
-												
+
 												}
 												else
 												{
 													prodValOrVol=Double.parseDouble(hmapMultiplePuschasedProductVolumeAndValue.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]).split(Pattern.quote("^"))[2]);
-													calculatedBenifitAssignedValueSKULevel=(prodValOrVol/totVolumeofProducts)*totOverAllValueDis;	
+													calculatedBenifitAssignedValueSKULevel=(prodValOrVol/totVolumeofProducts)*totOverAllValueDis;
 												}
-												
+
 											}
 											if(schSlabSubBucketType==4)//Val-Flat Disc on Same Prd
 											{
@@ -5189,9 +6121,9 @@ public void loadPurchaseProductDefault()
 														prodValOrVol=Double.parseDouble(hmapMultiplePuschasedProductVolumeAndValue.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]).split(Pattern.quote("^"))[1]);
 														calculatedBenifitAssignedValueSKULevel=(prodValOrVol/totlCombinedPriceOfProdcuts)*totOverAllValueDis;
 													}
-												
+
 												}
-												
+
 											}
 											if(schSlabSubBucketType==1)//Quantity Based
 											{
@@ -5209,12 +6141,12 @@ public void loadPurchaseProductDefault()
 														prodValOrVol=Double.parseDouble(hmapMultiplePuschasedProductVolumeAndValue.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]).split(Pattern.quote("^"))[2]);
 														calculatedBenifitAssignedValueSKULevel=Double.valueOf(prodValOrVol/totVolumeofProducts).intValue()*totOverAllValueDis;
 													}
-												
+
 												}
 												else
 												{
 													prodValOrVol=Double.parseDouble(hmapMultiplePuschasedProductVolumeAndValue.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]).split(Pattern.quote("^"))[2]);
-													calculatedBenifitAssignedValueSKULevel=(prodValOrVol/totVolumeofProducts)*totOverAllValueDis;	
+													calculatedBenifitAssignedValueSKULevel=(prodValOrVol/totVolumeofProducts)*totOverAllValueDis;
 												}
 											}
 											String productNameValue=hmapPrdctIdPrdctName.get(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList]);
@@ -5230,83 +6162,83 @@ public void loadPurchaseProductDefault()
 												stringSchemeIdWthAllVal.add(subValues);
 												isHaveMoreBenifits=1;
 												//listArrayHashmapProduct.add(hmapFreeProdID);
-												
+
 											}
 											else
 											{
 												ArrayList<String> noAlrtStringSchemeIdWthAllValTemp=new ArrayList<String>();
-												
+
 												String noAlrtsubValues=String.valueOf(calculatedBenifitAssignedValueSKULevel+"~"+schId+"~"+schSlabId+"~"+schSlbBuckId+"~"+schSlabSubBucketValue+"~"+0+"~"+schSlabSubBucketType+"~"+BenifitRowID+"~"+
 														BenSubBucketType+"~"+0+"~"+BenSubBucketValue+"~"+0+"~"+0+"~"+
 														0+"~"+0+"~"+0+"~"+0.0+"~"+0.0+"~"+schSlbSubRowID+"~"+SchTypeId);
-												
+
 												noAlrtStringSchemeIdWthAllValTemp.add(noAlrtsubValues);
-											
-												
+
+
 												String[] arrayProductId=changeHmapToArrayValue(arrProductIDMappedInSchSlbSubBukBenifits);
 												noAlrtHshMaptoSaveData.put(arrPurchasedProductListVolumeAndValue[cntPurchasedProductList], noAlrtStringSchemeIdWthAllValTemp);
 											}
-											
-											
+
+
 											//listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
 										}
 										if(isHaveMoreBenifits==1)
 										{
-										if(disValClkdOpenAlert)
-										{
-											
-											listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
-											listArrayHashmapProduct.add(hmapFreeProdIDAlrt);
-										}
-										else
-										{
-											
-											listArrayFreePrdctQty.add(arrBenifitAssignedVal);
-											listArrayHashmapProduct.add(hmapFreeProdID);
-										}
+											if(disValClkdOpenAlert)
+											{
+
+												listArrayFreePrdctQty.add(strBeniftRowIdExistsInSchemeSlabBenefitsValueDetail);
+												listArrayHashmapProduct.add(hmapFreeProdIDAlrt);
+											}
+											else
+											{
+
+												listArrayFreePrdctQty.add(arrBenifitAssignedVal);
+												listArrayHashmapProduct.add(hmapFreeProdID);
+											}
 										}
 									}
 								}
-								
+
 								//Now get the Free Product EditTextBox ID and  gets its current value
 								//Minus the AppliedQty from the present value	
 							}// if(BensubBucketType==10) ends here
 						}//for(String strProductIDBenifitsListOnPurchase:arrProductIDBenifitsListOnPurchase ) ends here
-						
+
 					}//arrProductIDBenifitsListOnPurchase length condition ends here
-					
+
 				}//hmapSchemeIdStoreID.containsKey(""+schId) ends here
 			}// for loops ends here for arredtboc_OderQuantityFinalSchemesToApply
-			
+
 			if(noAlrtHshMaptoSaveData.size()>0)
 			{
 				boolean flagMappedToProduct=false; // if noAlrtHshMaptoSaveData doenot contains arrProductIDMappedInSchSlbSubBukRowId
 				if(productFullFilledSlabGlobal!=null && productFullFilledSlabGlobal.size()>0)
 				{
-									
-						for(int cntProdcutsRowIdCnt=0;cntProdcutsRowIdCnt<productFullFilledSlabGlobal.size();cntProdcutsRowIdCnt++)
+
+					for(int cntProdcutsRowIdCnt=0;cntProdcutsRowIdCnt<productFullFilledSlabGlobal.size();cntProdcutsRowIdCnt++)
+					{
+
+						if(noAlrtHshMaptoSaveData.containsKey(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt)))
 						{
-							
-							if(noAlrtHshMaptoSaveData.containsKey(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt)))
-							{
-								flagMappedToProduct=true;
-								HashMap<String, ArrayList<String>> noAlrtHshMaptoSaveDataTemp=new HashMap<String, ArrayList<String>>();
-								noAlrtHshMaptoSaveDataTemp.put(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt), noAlrtHshMaptoSaveData.get(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt)));
-								saveFreeProductDataWithSchemeToDatabase(noAlrtHshMaptoSaveDataTemp, productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt));
-							}
+							flagMappedToProduct=true;
+							HashMap<String, ArrayList<String>> noAlrtHshMaptoSaveDataTemp=new HashMap<String, ArrayList<String>>();
+							noAlrtHshMaptoSaveDataTemp.put(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt), noAlrtHshMaptoSaveData.get(productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt)));
+							saveFreeProductDataWithSchemeToDatabase(noAlrtHshMaptoSaveDataTemp, productFullFilledSlabGlobal.get(cntProdcutsRowIdCnt));
 						}
+					}
 						
 						/*if(!flagMappedToProduct)
 						{
 							saveFreeProductDataWithSchemeToDatabase(noAlrtHshMaptoSaveData, ProductIdOnClicked);
 					}*/
-					
+
 				}
-				
+
 				else
 				{
 					saveFreeProductDataWithSchemeToDatabase(noAlrtHshMaptoSaveData, ProductIdOnClicked);
-				}	
+				}
 			}
 			//saveFreeProductDataWithSchemeToDatabase(noAlrtHshMaptoSaveData, ProductIdOnClicked);
 			if(listArrayHashmapProduct.size()>0)
@@ -5315,160 +6247,148 @@ public void loadPurchaseProductDefault()
 				if(disValClkdOpenAlert)
 				{
 					disValClkdOpenAlert=false;
-					
+
 					customAlert(listArrayHashmapProduct, listArrayFreePrdctQty,alrtObjectTypeFlag , stringSchemeIdWthAllVal,ProductIdOnClicked);
 				}
 				else
 				{
-				
+
 					String[] arrayProductIdToDefault=changeHmapToArrayValue(listArrayHashmapProduct.get(0));
-				
+
 					for(int abc=0;abc<arrayProductIdToDefault.length;abc++)
 					{
 						ArrayList<String> arrayListSaveAssigndVal=new ArrayList<String>();
 						HashMap<String, ArrayList<String>> alerValWithDefault=new HashMap<String, ArrayList<String>>();
-					
-				
-								String defaultVal=(listArrayFreePrdctQty.get(0))[abc].toString();
-							
-							String defaultValWithDefltAssigndVal=defaultVal+"~"+stringSchemeIdWthAllVal.get(0).toString();
-							String spinnerValSelected= dbengine.getValOfSchemeAlrtSelected(storeID,(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[1],(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[0],strGlobalOrderID);
-							String[] spinnerPositionSelected=dbengine.getValOfSchemeAlrt(storeID,ProductIdOnClicked,""+(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[1],strGlobalOrderID);
-						
-							
-							arrayListSaveAssigndVal.add(defaultValWithDefltAssigndVal);
-							alerValWithDefault.put(arrayProductIdToDefault[abc], arrayListSaveAssigndVal);
-							if(defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("10") ||defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("7") || defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("6"))
+
+
+						String defaultVal=(listArrayFreePrdctQty.get(0))[abc].toString();
+
+						String defaultValWithDefltAssigndVal=defaultVal+"~"+stringSchemeIdWthAllVal.get(0).toString();
+						String spinnerValSelected= dbengine.getValOfSchemeAlrtSelected(storeID,(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[1],(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[0],strGlobalOrderID);
+						String[] spinnerPositionSelected=dbengine.getValOfSchemeAlrt(storeID,ProductIdOnClicked,""+(stringSchemeIdWthAllVal.get(0)).split(Pattern.quote("~"))[1],strGlobalOrderID);
+
+
+						arrayListSaveAssigndVal.add(defaultValWithDefltAssigndVal);
+						alerValWithDefault.put(arrayProductIdToDefault[abc], arrayListSaveAssigndVal);
+						if(defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("10") ||defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("7") || defaultValWithDefltAssigndVal.split(Pattern.quote("~"))[8].equals("6"))
+						{
+							saveFreeProductDataWithSchemeToDatabase(alerValWithDefault,arrayProductIdToDefault[abc]);
+							// exception sighn
+							final ImageView btnExcptnAlrt=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+arrayProductIdToDefault[abc]);
+							EditText edOrderText=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+arrayProductIdToDefault[abc]);
+							if(edOrderText.getText().equals("") || TextUtils.isEmpty(edOrderText.getText().toString()))
 							{
-								saveFreeProductDataWithSchemeToDatabase(alerValWithDefault,arrayProductIdToDefault[abc]);
-								// exception sighn 
-								final ImageView btnExcptnAlrt=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+arrayProductIdToDefault[abc]);
-								EditText edOrderText=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+arrayProductIdToDefault[abc]);
-								if(edOrderText.getText().equals("") || TextUtils.isEmpty(edOrderText.getText().toString()))
-										{
-									btnExcptnAlrt.setVisibility(View.INVISIBLE);
-										}
-								else
-								{
-									btnExcptnAlrt.setVisibility(View.VISIBLE);
+								btnExcptnAlrt.setVisibility(View.INVISIBLE);
+							}
+							else
+							{
+								btnExcptnAlrt.setVisibility(View.VISIBLE);
+							}
+
+
+
+							btnExcptnAlrt.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+
+									disValClkdOpenAlert=true;
+									getOrderData(((btnExcptnAlrt.getTag().toString()).split(Pattern.quote("_")))[1]);
+
+									// orderBookingTotalCalc();
+
 								}
-								
-							
-								
-								btnExcptnAlrt.setOnClickListener(new OnClickListener() {
-									
-									@Override
-									public void onClick(View v) {
-										
-										disValClkdOpenAlert=true;
-										 getOrderData(((btnExcptnAlrt.getTag().toString()).split(Pattern.quote("_")))[1]);
-										 
-										// orderBookingTotalCalc();
-										
-									}
-								});
-							
+							});
+
+
+						}
+						else
+						{
+							saveFreeProductDataWithSchemeToDatabase(alerValWithDefault,ProductIdOnClicked);
+
+
+							final ImageView btnExcptnAlrt=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+ProductIdOnClicked);
+							EditText edOrderText=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+ProductIdOnClicked);
+							if(edOrderText.getText().equals("") || TextUtils.isEmpty(edOrderText.getText().toString()))
+							{
+								if(btnExcptnAlrt.getVisibility()==View.VISIBLE)
+								{
+									btnExcptnAlrt.setVisibility(View.INVISIBLE);
+								}
 
 							}
 							else
 							{
-								saveFreeProductDataWithSchemeToDatabase(alerValWithDefault,ProductIdOnClicked);
-								
-								
-								final ImageView btnExcptnAlrt=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+ProductIdOnClicked);
-								EditText edOrderText=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+ProductIdOnClicked);
-								if(edOrderText.getText().equals("") || TextUtils.isEmpty(edOrderText.getText().toString()))
-										{
-									if(btnExcptnAlrt.getVisibility()==View.VISIBLE)
-									{
-										btnExcptnAlrt.setVisibility(View.INVISIBLE);	
-									}
-									
-										}
-								else
-								{
-									
-									btnExcptnAlrt.setVisibility(View.VISIBLE);
-									btnExcptnAlrt.setOnClickListener(new OnClickListener() {
-										
-										@Override
-										public void onClick(View v) {
-											
-											disValClkdOpenAlert=true;
-											 getOrderData(((btnExcptnAlrt.getTag().toString()).split(Pattern.quote("_")))[1]);
-											 
-											// orderBookingTotalCalc();
-											
-										}
-									});
-								}
-									
 
-								for(int i=0;i<productFullFilledSlabGlobal.size();i++)
-								{
-									if(Integer.parseInt( hmapPrdctOdrQty.get(productFullFilledSlabGlobal.get(i)))>0)
-									{
-										final ImageView btnExcptnAlrtTemp=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+productFullFilledSlabGlobal.get(i));
-										EditText edOrderTextTemp=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+productFullFilledSlabGlobal.get(i));
-										
-										if(btnExcptnAlrtTemp.getVisibility()==View.INVISIBLE)
-										{
-											btnExcptnAlrtTemp.setVisibility(View.VISIBLE);
-											btnExcptnAlrtTemp.setOnClickListener(new OnClickListener() {
-												
-												@Override
-												public void onClick(View v) {
-													
-													disValClkdOpenAlert=true;
-													 getOrderData(((btnExcptnAlrtTemp.getTag().toString()).split(Pattern.quote("_")))[1]);
-													 
-													// orderBookingTotalCalc();
-													
-												}
-											});
-										}
-										
-										
-										
-									
-										
-									
-										
-										
+								btnExcptnAlrt.setVisibility(View.VISIBLE);
+								btnExcptnAlrt.setOnClickListener(new OnClickListener() {
+
+									@Override
+									public void onClick(View v) {
+
+										disValClkdOpenAlert=true;
+										getOrderData(((btnExcptnAlrt.getTag().toString()).split(Pattern.quote("_")))[1]);
+
+										// orderBookingTotalCalc();
+
 									}
-									
-								}
-							
-							
-							
+								});
 							}
-							
-						
-												}
-						
-						
-				//	}
-					
-					
-					
-				
+
+
+							for(int i=0;i<productFullFilledSlabGlobal.size();i++)
+							{
+								if(Integer.parseInt( hmapPrdctOdrQty.get(productFullFilledSlabGlobal.get(i)))>0)
+								{
+									final ImageView btnExcptnAlrtTemp=(ImageView) ll_prdct_detal.findViewWithTag("btnException_"+productFullFilledSlabGlobal.get(i));
+									EditText edOrderTextTemp=(EditText)ll_prdct_detal.findViewWithTag("etOrderQty_"+productFullFilledSlabGlobal.get(i));
+
+									if(btnExcptnAlrtTemp.getVisibility()==View.INVISIBLE)
+									{
+										btnExcptnAlrtTemp.setVisibility(View.VISIBLE);
+										btnExcptnAlrtTemp.setOnClickListener(new OnClickListener() {
+
+											@Override
+											public void onClick(View v) {
+
+												disValClkdOpenAlert=true;
+												getOrderData(((btnExcptnAlrtTemp.getTag().toString()).split(Pattern.quote("_")))[1]);
+
+												// orderBookingTotalCalc();
+
+											}
+										});
+									}
+
+
+
+
+
+
+
+
 								}
+
 							}
-			
+
+
+
+						}
+
+
+					}
+
+
+					//	}
+
+
+
+
+				}
+			}
+
 		}// ends here arredtboc_OderQuantityFinalSchemesToApply length check
 	}
-					
-					
-				
-			
-				
-				
-			
-		
-
-
-
-
 
 	@Override
 	public void onClick(View v) {
@@ -5565,6 +6485,78 @@ public void loadPurchaseProductDefault()
 		}
 	}
 
+	/*public void onClick(View v) {
+
+
+		String ProductIdOnClickedControl=v.getTag().toString().split(Pattern.quote("_"))[1];
+		if(hmapProductRelatedSchemesList.size()>0)
+		{
+			if(hmapProductRelatedSchemesList.containsKey(ProductIdOnClickedControl))
+			{
+				fnUpdateSchemeNameOnScehmeControl(ProductIdOnClickedControl);
+			}
+			else
+			{
+				//SchemeNameOnScehmeControl="No Scheme Applicable";
+				txtVw_schemeApld.setText("No Scheme Applicable");
+				txtVw_schemeApld.setTag("0");
+			}
+		}
+		else
+		{
+			//SchemeNameOnScehmeControl="No Scheme Applicable";
+			txtVw_schemeApld.setText("No Scheme Applicable");
+			txtVw_schemeApld.setTag("0");
+		}
+		if(v instanceof EditText)
+		{
+
+		*//*	etOrderQtyDisOrEnbl.removeTextChangedListener(getTextWatcher(etOrderQtyDisOrEnbl));
+
+			//et_ProductMRP.addTextChangedListener(getTextWatcher(et_ProductMRP));
+			et_KGPerUniltDisOrEnbl.removeTextChangedListener(getTextWatcher(et_KGPerUniltDisOrEnbl));
+			et_ProductAvgPricePerUnitDisOrEnbl.removeTextChangedListener(getTextWatcher(et_ProductAvgPricePerUnitDisOrEnbl));
+			txtVwRateDisOrEnbl.removeTextChangedListener(getTextWatcher(txtVwRateDisOrEnbl));*//*
+			System.out.println("Abhinav Edit Clkd");
+			edtBox=(EditText) v;
+			if(v.getId()== R.id.et_OrderQty)
+			{
+				edtBox.setHint("");
+				viewCurrentBoxValue=edtBox.getText().toString().trim();
+				//	edtBox.setOnFocusChangeListener(this);
+
+				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
+			}
+			if(v.getId()==R.id.et_KGPerUnilt)
+			{
+				edtBox.setHint("");
+				//	edtBox.setOnFocusChangeListener(this);
+				//viewCurrentBoxValue=edtBox.getText().toString().trim();
+				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
+			}
+			if(v.getId()==R.id.et_SampleQTY)
+			{
+				edtBox.setHint("");
+			}
+			if(v.getId()==R.id.et_Stock)
+			{
+				edtBox.setHint("");
+			}
+			if(v.getId()==R.id.txtVwRate)
+			{
+				edtBox.setHint("");
+				//edtBox.setOnFocusChangeListener(this);
+				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
+			}
+			if(v.getId()==R.id.et_ProductAvgPricePerUnit)
+			{
+				edtBox.setHint("");
+				//edtBox.setOnFocusChangeListener(this);
+				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
+			}
+		}
+	}
+*/
 	private void customAlert(ArrayList<HashMap<String, String>> arrLstHmap ,ArrayList<String[]> listfreeProductQty,final int fieldFlag,final ArrayList<String> listSchemeAllData,final String alrtProductIdOnClicked) {
 		
 		alertOpens=true;
@@ -5885,6 +6877,42 @@ public void loadPurchaseProductDefault()
 		}
 
 	private void setInvoiceTableView() {
+
+		LayoutInflater inflater = getLayoutInflater();
+		final View row123 = (View)inflater.inflate(R.layout.activity_detail_scheme, ll_scheme_detail , false);
+
+		decimalFormat.applyPattern(pattern);
+		//tvCurrentProdName = (TextView) findViewById(R.id.textView1_schemeVAL1111);
+		tvCredAmtVAL =  (TextView) row123.findViewById(R.id.textView1_CredAmtVAL);
+		tvINafterCredVAL =  (TextView) row123.findViewById(R.id.textView1_INafterCredVAL);
+		textView1_CredAmtVAL_new = (TextView) row123.findViewById(R.id.textView1_CredAmtVAL_new);
+
+
+		tv_NetInvValue = (TextView)row123.findViewById(R.id.tv_NetInvValue);
+		tvTAmt = (TextView)row123.findViewById(R.id.textView1_v2);
+		tvDis = (TextView)row123.findViewById(R.id.textView1_v3);
+		tv_GrossInvVal = (TextView)row123.findViewById(R.id.tv_GrossInvVal);
+		tvFtotal = (TextView)row123.findViewById(R.id.textView1_v5);
+		tvAddDisc =  (TextView)row123.findViewById(R.id.textView1_AdditionalDiscountVAL);
+		tv_NetInvAfterDiscount =  (TextView)row123.findViewById(R.id.tv_NetInvAfterDiscount);
+
+		tvAmtPrevDueVAL =  (TextView)row123.findViewById(R.id.tvAmtPrevDueVAL);
+		tvAmtOutstandingVAL =  (TextView)row123.findViewById(R.id.tvAmtOutstandingVAL);
+		etAmtCollVAL = (EditText)row123.findViewById(R.id.etAmtCollVAL);
+
+		tvNoOfCouponValue = (EditText)row123.findViewById(R.id.tvNoOfCouponValue);
+		txttvCouponAmountValue = (EditText)row123.findViewById(R.id.tvCouponAmountValue);
+		//tvPreAmtOutstandingVALNew=(TextView)row123.findViewById(R.id.tvPreAmtOutstandingVALNew);
+		ll_scheme_detail.addView(row123);
+
+		//Double outstandingvalue=dbengine.fnGetStoretblLastOutstanding(storeID);
+		//tvPreAmtOutstandingVALNew.setText(""+outstandingvalue);
+		orderBookingTotalCalc();
+
+	}
+
+
+	/*private void setInvoiceTableView() {
 		
 		 LayoutInflater inflater = getLayoutInflater();
 		 final View row123 = (View)inflater.inflate(R.layout.activity_detail_scheme, ll_scheme_detail , false);
@@ -5913,7 +6941,7 @@ public void loadPurchaseProductDefault()
 		 ll_scheme_detail.addView(row123);
 		 orderBookingTotalCalc();
 		
-	}
+	}*/
 
 	/*public void orderBookingTotalCalc()
 	{
@@ -6502,9 +7530,10 @@ public void loadPurchaseProductDefault()
 						//If No Percentage Discount or Flat Discount is Applicable Code Starts Here
 						ActualRateAfterDiscountBeforeTax=StandardRateBeforeTax;
 						DiscountAmount=0.00;
-						ActualTax=ActualRateAfterDiscountBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);
-						ActualRateAfterDiscountAfterTax=ActualRateAfterDiscountBeforeTax*(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
 
+						//ActualTax=ActualRateAfterDiscountBeforeTax*(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100);
+						ActualRateAfterDiscountAfterTax=ActualRateAfterDiscountBeforeTax*(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
+						ActualRateAfterDiscountAfterTax=StandardRate*(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
 						Double DiscAmtOnPreQtyBasic=DiscountAmount*Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
 
 						Double DiscAmtOnPreQtyBasicToDisplay=DiscAmtOnPreQtyBasic;
@@ -6513,18 +7542,24 @@ public void loadPurchaseProductDefault()
 						hmapPrdctIdPrdctDscnt.put(ProductID,""+DiscAmtOnPreQtyBasicToDisplay);
 
 						TotalProductLevelDiscount=TotalProductLevelDiscount+DiscAmtOnPreQtyBasic;
-						TotTaxAmount=TotTaxAmount+(ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
+						//TotTaxAmount=TotTaxAmount+(ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));
 
-						Double TaxValue=ActualTax * Double.parseDouble(hmapPrdctOdrQty.get(ProductID));
+
+						//Double OrderValPrdQtyBasis=(ActualRateAfterDiscountAfterTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)))+TaxValue;//In Case of Before Tax
+						//Double OrderValPrdQtyBasis=(ActualRateAfterDiscountAfterTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));//In Case of After Tax
+						Double OrderValPrdQtyBasis=(Double.parseDouble(hmapProductStandardRate.get(ProductID))*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));//In Case of After Tax
+						//hmapPrdctRtAfterTaxPcs
+						Double OrderValPrdQtyBasisToDisplay=OrderValPrdQtyBasis;
+						Double valBeforeTax=OrderValPrdQtyBasisToDisplay/(1+(Double.parseDouble(hmapProductVatTaxPerventage.get(ProductID))/100));
+						Double totalTax=OrderValPrdQtyBasisToDisplay-valBeforeTax;
+						TotTaxAmount=TotTaxAmount+totalTax;
+						Double TaxValue=totalTax;
 						TaxValue=Double.parseDouble(new DecimalFormat("##.##").format(TaxValue));
 						hmapProductTaxValue.put(ProductID, ""+TaxValue);
 						if(hmapMinDlvrQtyQPTaxAmount.containsKey(ProductID))
 						{
 							hmapMinDlvrQtyQPTaxAmount.put(ProductID, ""+TaxValue);
 						}
-						//Double OrderValPrdQtyBasis=(ActualRateAfterDiscountAfterTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)))+TaxValue;//In Case of Before Tax
-						Double OrderValPrdQtyBasis=(ActualRateAfterDiscountAfterTax*Double.parseDouble(hmapPrdctOdrQty.get(ProductID)));//In Case of After Tax
-						Double OrderValPrdQtyBasisToDisplay=OrderValPrdQtyBasis;
 						OrderValPrdQtyBasisToDisplay=Double.parseDouble(new DecimalFormat("##.##").format(OrderValPrdQtyBasisToDisplay));
 						((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText(""+OrderValPrdQtyBasisToDisplay);
 						hmapProductIdOrdrVal.put(ProductID, ""+OrderValPrdQtyBasis);
@@ -6538,14 +7573,19 @@ public void loadPurchaseProductDefault()
 
 		}
 		//Now the its Time to Show the OverAll Summary Code Starts Here
-
 		tvFtotal.setText((""+ TotalFreeQTY).trim());
 
 		TotalProductLevelDiscount=Double.parseDouble(new DecimalFormat("##.##").format(TotalProductLevelDiscount));
 		tvDis.setText((""+ TotalProductLevelDiscount).trim());
 
+
+		TotTaxAmount=Double.parseDouble(new DecimalFormat("##.##").format(TotTaxAmount));
+		tvTAmt.setText(""+ TotTaxAmount);
+
+
+
 		TotalOrderValBeforeTax=Double.parseDouble(new DecimalFormat("##.##").format(TotalOrderValBeforeTax));
-		tv_NetInvValue.setText((""+ TotalOrderValBeforeTax).trim());
+		tv_NetInvValue.setText((""+ (TotalOrderValBeforeTax-TotTaxAmount)).trim());
 
 		String percentBenifitMax=dbengine.fnctnGetMaxAssignedBen8DscntApld1(storeID,strGlobalOrderID);
 		Double percentMax=0.00;
@@ -6586,10 +7626,9 @@ public void loadPurchaseProductDefault()
 
 		tvAddDisc.setText(""+ "0.00");
 
-		tv_NetInvAfterDiscount.setText(""+ TotalOrderValBeforeTax);
 
-		TotTaxAmount=Double.parseDouble(new DecimalFormat("##.##").format(TotTaxAmount));
-		tvTAmt.setText(""+ TotTaxAmount);
+
+		tv_NetInvAfterDiscount.setText(""+ (TotalOrderValBeforeTax));
 
 		Double totalGrossVALMaxPercentage=TotalOrderValBeforeTax-TotalOrderValBeforeTax*(percentMaxGross/100);
 		Double totalGrossrVALMaxAmount=TotalOrderValBeforeTax-amountMaxGross;
@@ -6612,7 +7651,7 @@ public void loadPurchaseProductDefault()
 			dbengine.updatewhatAppliedFlag(1, storeID, Integer.parseInt(percentBenifitMaxGross.split(Pattern.quote("^"))[1]),strGlobalOrderID);
 		}
 
-		Double GrossInvValue=totalGrossVALAfterDiscount + TotTaxAmount;
+		Double GrossInvValue=totalGrossVALAfterDiscount;// + TotTaxAmount;
 		GrossInvValue=Double.parseDouble(new DecimalFormat("##.##").format(GrossInvValue));
 		tv_GrossInvVal.setText(""+GrossInvValue);
 		//Now the its Time to Show the OverAll Summary Code Starts Here
@@ -7839,7 +8878,7 @@ public void loadPurchaseProductDefault()
 				
 				
 				//dbengine.deleteAllXmlDataTable( "4");
-				dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+				dbengine.savetbl_XMLfiles(newfullFileName, "3","0");
 				dbengine.open();
 
 				dbengine.UpdateStoreFlag(storeID.trim(), 5);
@@ -8175,7 +9214,8 @@ public void loadPurchaseProductDefault()
 			  dbengine.open();
 			  hmapFetchPDASavedData=dbengine.fetchActualVisitData(storeID);
 			  dbengine.close();
-		   hmapMinDlvrQty=dbengine.getMinDlvryQntty(storeID);
+
+			  hmapMinDlvrQty=dbengine.getMinDlvryQntty(storeID);
 		   hmapMinDlvrQtyQPBT=dbengine.getMinDlvryQnttyQPBT(storeID);
 		   hmapMinDlvrQtyQPTaxAmount=dbengine.getMinDlvryQnttyQPTaxAmount(storeID);
 		   hmapMinDlvrQtyQPAT=dbengine.getMinDlvryQnttyQPAT(storeID);
@@ -8344,54 +9384,54 @@ public void loadPurchaseProductDefault()
 		 }
 	*/
 		public class SaveData extends AsyncTask<String, String, Void>
-		{
+		 {
 
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				//Text need to e changed according to btn Click
-
-
-				if(mProgressDialog.isShowing()==false)
-				{
-					mProgressDialog = new ProgressDialog(OrderReview.this);
-					mProgressDialog.setTitle("Please Wait");
-					mProgressDialog.setMessage(progressTitle);
-					mProgressDialog.setIndeterminate(true);
-					mProgressDialog.setCancelable(false);
-					mProgressDialog.show();
-				}
-			}
-
-			@Override
-			protected Void doInBackground(String... params)
-			{
-				String executedData=params[0];
-
-				int btnClkd;
-				if(executedData.contains("~"))
-				{
-					btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
-					isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
-				}
-
-				else
-				{
-					btnClkd=Integer.parseInt(executedData);
-				}
-
-
-				fnSaveFilledDataToDatabase(btnClkd);
-				return null;
-			}
-			@Override
-			protected void onPostExecute(Void args) {
-
-				if(mProgressDialog.isShowing()==true)
-				{
-					mProgressDialog.dismiss();
-				}
-				long syncTIMESTAMP = System.currentTimeMillis();
+		   @Override
+		         protected void onPreExecute() {
+		             super.onPreExecute();
+		             //Text need to e changed according to btn Click
+		             
+		             
+		             if(mProgressDialog.isShowing()==false)
+		             {
+		             mProgressDialog = new ProgressDialog(OrderReview.this);
+		             mProgressDialog.setTitle("Please Wait");
+		             mProgressDialog.setMessage(progressTitle);
+		             mProgressDialog.setIndeterminate(true);
+		             mProgressDialog.setCancelable(false);
+		            mProgressDialog.show();
+		             }
+		         }
+		   
+		  @Override
+		  protected Void doInBackground(String... params)
+		  {
+			  String executedData=params[0];
+			  
+			  int btnClkd;
+			  if(executedData.contains("~"))
+			  {
+				  btnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[0]);
+				  isReturnClkd=Integer.parseInt(executedData.split(Pattern.quote("~"))[1]);
+			  }
+			  
+			  else
+			  {
+				  btnClkd=Integer.parseInt(executedData);
+			  }
+			
+			  
+			  fnSaveFilledDataToDatabase(btnClkd);
+		   return null;
+		  }
+		   @Override
+		         protected void onPostExecute(Void args) {
+		   
+			   if(mProgressDialog.isShowing()==true)
+	           {
+		     mProgressDialog.dismiss();
+	           }
+			   long syncTIMESTAMP = System.currentTimeMillis();
 				Date dateobj = new Date(syncTIMESTAMP);
 				SimpleDateFormat df = new SimpleDateFormat(
 						"dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
@@ -8399,46 +9439,45 @@ public void loadPurchaseProductDefault()
 				dbengine.open();
 				dbengine.UpdateStoreEndVisit(storeID,startTS);
 				dbengine.close();
-				if(isReturnClkd==3)
-				{
-					Intent fireBackDetPg=new Intent(OrderReview.this,ReturnActivity.class);
-					fireBackDetPg.putExtra("storeID", storeID);
-					fireBackDetPg.putExtra("SN", SN);
-					fireBackDetPg.putExtra("bck", 1);
-					fireBackDetPg.putExtra("imei", imei);
-					fireBackDetPg.putExtra("userdate", date);
-					fireBackDetPg.putExtra("pickerDate", pickerDate);
-					fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
-					fireBackDetPg.putExtra("flgPageToRedirect", "2");
-					fireBackDetPg.putExtra("flgOrderType", flgOrderType);
-					// fireBackDetPg.putExtra("rID", routeID);
+		     if(isReturnClkd==3)
+		     {
+		    	   Intent fireBackDetPg=new Intent(OrderReview.this,ReturnActivity.class);
+		           fireBackDetPg.putExtra("storeID", storeID);
+		           fireBackDetPg.putExtra("SN", SN);
+		           fireBackDetPg.putExtra("bck", 1);
+		           fireBackDetPg.putExtra("imei", imei);
+		           fireBackDetPg.putExtra("userdate", date);
+		           fireBackDetPg.putExtra("pickerDate", pickerDate);
+		           fireBackDetPg.putExtra("OrderPDAID", strGlobalOrderID);
+		           fireBackDetPg.putExtra("flgPageToRedirect", "2");
+				 fireBackDetPg.putExtra("flgOrderType", flgOrderType);
+		          // fireBackDetPg.putExtra("rID", routeID);
+		         
+		           startActivity(fireBackDetPg);
+		           finish(); 
+		     }
+		     
+		     else if(isReturnClkd==2)
+		     {
+		    	 //Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
+		    	Intent fireBackDetPg=new Intent(OrderReview.this,ProductOrderFilterSearch.class);
+			    fireBackDetPg.putExtra("storeID", storeID);
+			    fireBackDetPg.putExtra("SN", SN);
+			    fireBackDetPg.putExtra("bck", 1);
+			    fireBackDetPg.putExtra("imei", imei);
+			    fireBackDetPg.putExtra("userdate", date);
+			    fireBackDetPg.putExtra("pickerDate", pickerDate);
+				 fireBackDetPg.putExtra("flgOrderType", flgOrderType);
 
-					startActivity(fireBackDetPg);
-					finish();
-				}
+				 //fireBackDetPg.putExtra("rID", routeID);
+			    startActivity(fireBackDetPg);
+			    finish();
+		     }
+		  
+		   }
 
-				else if(isReturnClkd==2)
-				{
-					//Intent fireBackDetPg=new Intent(ProductOrderSearch.this,POSMaterialActivity.class);
-					Intent fireBackDetPg=new Intent(OrderReview.this,ProductOrderFilterSearch.class);
-					fireBackDetPg.putExtra("storeID", storeID);
-					fireBackDetPg.putExtra("SN", SN);
-					fireBackDetPg.putExtra("bck", 1);
-					fireBackDetPg.putExtra("imei", imei);
-					fireBackDetPg.putExtra("userdate", date);
-					fireBackDetPg.putExtra("pickerDate", pickerDate);
-					fireBackDetPg.putExtra("flgOrderType", flgOrderType);
-
-					//fireBackDetPg.putExtra("rID", routeID);
-					startActivity(fireBackDetPg);
-					finish();
-				}
-
-			}
-
-
-		}
-
+		
+		 }
 		
 	/*	public void hideSoftKeyboard(View view){
 			  InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -8868,6 +9907,7 @@ public void loadPurchaseProductDefault()
 
 			@Override
 			public void onFinish() {
+
 
 				isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 				String GpsLat="0";
@@ -9629,7 +10669,7 @@ public void loadPurchaseProductDefault()
 			if(!alertOpens)
 			{
 				progressTitle="While we save your data";
-				new OrderReview.SaveData().execute("1");
+				new SaveData().execute("1");
 			}
 
 
@@ -9651,7 +10691,7 @@ public void loadPurchaseProductDefault()
 			if(!alertOpens)
 			{
 				progressTitle="While we save your data then exit";
-				new OrderReview.SaveData().execute("2");
+				new SaveData().execute("2");
 			}
 
 		}
@@ -9660,7 +10700,7 @@ public void loadPurchaseProductDefault()
 			butClickForGPS=0;
 			try
 			{
-				OrderReview.FullSyncDataNow task = new OrderReview.FullSyncDataNow(OrderReview.this);
+				FullSyncDataNow task = new FullSyncDataNow(OrderReview.this);
 				task.execute();
 			}
 			catch (Exception e) {
@@ -9687,7 +10727,7 @@ public void loadPurchaseProductDefault()
 			if(!alertOpens)
 			{
 				progressTitle="While we save your data then review Order";
-				new OrderReview.SaveData().execute("6");
+				new SaveData().execute("6");
 			}
 
 		}
@@ -9788,278 +10828,6 @@ public void loadPurchaseProductDefault()
 		}
 
 	}
-	private TextWatcher getTextWatcher(final EditText myBoxnew)
-	{
-		return new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				int getPIDTag=Integer.parseInt(myBoxnew.getTag().toString().split("_")[1].toString());
-				if(myBoxnew.getId()==R.id.et_SampleQTY)
-				{
-					if(!myBoxnew.getText().toString().equals(""))
-					{
-						int boxSample=0;
-						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().toString().trim().toLowerCase().equals("Smpl.Qty"))
-						{
-							boxSample=0;
-						}
-						else
-						{
-							boxSample         =Integer.parseInt(myBoxnew.getText().toString());
-						}
-						hmapPrdctSmpl.put(""+getPIDTag, ""+boxSample);
-					}
-					else
-					{
-						hmapPrdctSmpl.put(""+getPIDTag, "0");
-						//myBoxnew.setText("");
-
-					}
-				}
-
-				if(myBoxnew.getId()==R.id.et_Stock)
-				{
-					if(!myBoxnew.getText().toString().equals(""))
-					{
-						int boxSample=0;
-						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().toString().trim().toLowerCase().equals("Smpl.Qty"))
-						{
-							boxSample=0;
-						}
-						else
-						{
-							boxSample=Integer.parseInt(myBoxnew.getText().toString());
-						}
-						hmapProductIdStock.put(""+getPIDTag, ""+boxSample);
-					}
-					else
-					{	myBoxnew.setText("0");
-
-						hmapProductIdStock.put(""+getPIDTag, "0");
-
-			/*			if(flgOrderType!=1)
-						{
-							myBoxnew.setText("0");
-
-							hmapProductIdStock.put(""+getPIDTag, "0");
-						}*/
-
-						//hmapProductIdStock.put(""+getPIDTag, "0");
-						//myBoxnew.setText("");
-
-					}
-				}
-
-				if(myBoxnew.getId()== R.id.et_OrderQty)
-				{
-					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
-						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
-
-
-						}
-					}
-					if(!myBoxnew.getText().toString().equals(""))
-					{
-						int boxQty=0;
-						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().equals("Q.Qty") || myBoxnew.getText().equals("Q . Qty"))
-						{
-							boxQty=0;
-						}
-						else
-						{
-							boxQty =Integer.parseInt(myBoxnew.getText().toString());
-						}
-						hmapPrdctOdrQty.put(""+getPIDTag, ""+boxQty);
-
-						//	View viewRow=(View)myBoxnew.getParent().getParent();
-						Rate_OrderQtyUnitToKGPerUnit(""+boxQty,""+getPIDTag );//,(View)myBoxnew.getParent().getParent()
-
-					}
-					else
-					{
-						hmapPrdctOdrQty.put(""+getPIDTag, "0");
-						hmapPrdctOdrQtyKG.put(""+getPIDTag, "0");
-						((TextView) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvOrderVal_"+getPIDTag)).setText("0.00");
-						//myBoxnew.setText("0");
-						myBoxnew.setHint("O.Qty");
-						Rate_OrderQtyUnitToKGPerUnit("0",""+getPIDTag );
-
-
-
-					}
-				}
-
-
-				if(myBoxnew.getId()==R.id.et_KGPerUnilt)
-				{
-					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
-						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
-
-						}
-					}
-					if(!myBoxnew.getText().toString().equals(""))
-					{
-						String boxQty="0";
-
-						if(myBoxnew.getText().toString().equals("") || myBoxnew.getText().equals("0") || myBoxnew.getText().equals("Q.Qty") || myBoxnew.getText().equals("Q . Qty"))
-						{
-
-							boxQty="0";
-
-						}
-						else
-						{
-							boxQty =fnGetBoxVal(myBoxnew);//myBoxnew.getText().toString();
-						}
-						hmapPrdctOdrQtyKG.put(""+getPIDTag, boxQty);
-						//Rate_PerKGUnitToSingle(""+boxQty,""+getPIDTag );//,(View)myBoxnew.getParent().getParent()
-
-					}
-					else
-					{
-
-						//myBoxnew.setText("");
-						hmapPrdctOdrQty.put(""+getPIDTag, "0");
-						hmapPrdctOdrQtyKG.put(""+getPIDTag, "0");
-
-						myBoxnew.setHint("O.Qty/KG");
-
-
-						((TextView) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvOrderVal_"+getPIDTag)).setText("0.00");
-
-
-
-
-
-
-
-					}
-				}
-
-
-				if(myBoxnew.getId()==R.id.txtVwRate)
-				{
-					String RateOffer="0";
-					((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("etProductAvgPricePerUnit" + "_" + getPIDTag)).removeTextChangedListener(getTextWatcher(((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("etProductAvgPricePerUnit" + "_" + getPIDTag))));
-					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
-						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
-
-							if(!myBoxnew.getText().toString().equals(""))
-							{
-								RateOffer= fnGetBoxVal(myBoxnew);// myBoxnew.getText().toString().trim();
-
-
-							}
-							else
-							{
-								RateOffer="0";
-								//	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+getPIDTag)).setText("");
-								hmapProductStandardRate.put(""+getPIDTag, "0");
-							}
-						}
-					}
-					else
-					{
-						//((EditText)ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+getPIDTag)).setText("");
-						hmapProductStandardRate.put(""+getPIDTag, "0");
-					}
-					Rate_Kg_to_Pcs_Conversion(RateOffer,""+getPIDTag );
-				}
-
-
-
-				if(myBoxnew.getId()==R.id.et_ProductAvgPricePerUnit)
-				{
-
-					((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvRate_"+getPIDTag)).removeTextChangedListener(getTextWatcher((((EditText) ((View) myBoxnew.getParent().getParent()).findViewWithTag("tvRate_"+getPIDTag)))));
-					String RateOffer_in_Pcs="0";
-					if(!TextUtils.isEmpty(myBoxnew.getText().toString().trim())) {
-						if (hmapProductflgPriceAva.get(""+getPIDTag).equals("1")) {
-
-							if(!myBoxnew.getText().toString().equals(""))
-							{
-								//RateOffer=  myBoxnew.getText().toString().trim();
-								RateOffer_in_Pcs= fnGetBoxVal(myBoxnew);// myBoxnew.getText().toString().trim();
-
-								//Rate_Kg_to_Pcs_Conversion(RateOffer,""+getPIDTag,viewRow );
-							}
-							else
-							{
-								RateOffer_in_Pcs="0";
-								//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+getPIDTag)).setText("");
-								hmapProductStandardRate.put(""+getPIDTag, "0");
-							}
-						}
-					}
-					else
-					{
-						//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+getPIDTag)).setText("");
-						hmapProductStandardRate.put(""+getPIDTag, "0");
-					}
-					Rate_Pcs_to_Kg_Conversion(RateOffer_in_Pcs,""+getPIDTag );//,((View)myBoxnew.getParent().getParent())
-				}
-			}
-
-		};
-	}
-	public String fnGetBoxVal(EditText mBox)
-	{
-		String curntProID=mBox.getTag().toString().split(Pattern.quote("_"))[1];
-		String myboxVal="0";
-		if(mBox.getText().toString().length()==1)
-		{
-			if(mBox.getText().toString().equals("."))
-			{
-				myboxVal="0.0";
-				if(mBox.getId()== R.id.et_OrderQty)
-				{
-					hmapPrdctOdrQtyKG.put(curntProID,"0.0");
-					hmapPrdctOdrQty.put(curntProID,"0");
-				}
-				if(mBox.getId()== R.id.et_KGPerUnilt)
-				{
-					hmapPrdctOdrQtyKG.put(curntProID,"0.0");
-					hmapPrdctOdrQty.put(curntProID,"0");
-				}
-			}
-			else
-			{
-				myboxVal=mBox.getText().toString();
-			}
-		}
-		else
-		{
-			if(mBox.getText().toString().length()==0)
-			{
-				if(mBox.getId()== R.id.et_OrderQty)
-				{
-					hmapPrdctOdrQtyKG.put(curntProID,"0.0");
-					hmapPrdctOdrQty.put(curntProID,"0");
-				}
-				if(mBox.getId()== R.id.et_KGPerUnilt)
-				{
-					hmapPrdctOdrQtyKG.put(curntProID,"0.0");
-					hmapPrdctOdrQty.put(curntProID,"0");
-				}
-				myboxVal="0";
-			}
-			else {
-				myboxVal = mBox.getText().toString();
-			}
-		}
-		return myboxVal;
-	}
-
 	public void getDataPcsOrKGFromDatabase(){
 
 		PcsOrKg=	dbengine.fnGettblOrderInPcsOrKg(storeID,strGlobalOrderID);
@@ -10067,48 +10835,48 @@ public void loadPurchaseProductDefault()
 
 
 	}
-	public void fnIfLastFocusOnOrderKGBox()
-	{
-		if(ed_LastEditextFocusd.getId()==R.id.et_KGPerUnilt)
-		{
-			if(!TextUtils.isEmpty(ed_LastEditextFocusd.getText().toString()))
-			{
-				String myboxVal=fnGetBoxVal(ed_LastEditextFocusd);
+    public void fnIfLastFocusOnOrderKGBox()
+    {
+        if(ed_LastEditextFocusd.getId()==R.id.et_KGPerUnilt)
+        {
+            if(!TextUtils.isEmpty(ed_LastEditextFocusd.getText().toString()))
+            {
+                String myboxVal=fnGetBoxVal(ed_LastEditextFocusd);
 
 						/*EditText ediTextRate= (EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+ProductIdOnClickedEdit);
 						if(ediTextRate!=null && ediTextRate !=null) {*/
-				//if (!TextUtils.isEmpty(ediTextRate.getText().toString().trim()) ) {
-				Double gram = Double.parseDouble(hmapProductOverAllVolume.get(ProductIdOnClickedEdit));
-				Double kilogram = ((gram * 0.001) );
-				Double DtotalOverallKGSales =  kilogram;
-				DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
-				hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,""+Double.parseDouble(myboxVal));
-				if(((Double.parseDouble(myboxVal)% DtotalOverallKGSales)==0) && (kilogram<=(Double.parseDouble(myboxVal)))) {
-					Double orderQtyValue = (Double.parseDouble(ed_LastEditextFocusd.getText().toString()) / DtotalOverallKGSales);
-					int valuetQty =orderQtyValue.intValue();
+                //if (!TextUtils.isEmpty(ediTextRate.getText().toString().trim()) ) {
+                Double gram = Double.parseDouble(hmapProductOverAllVolume.get(ProductIdOnClickedEdit));
+                Double kilogram = ((gram * 0.001) );
+                Double DtotalOverallKGSales =  kilogram;
+                DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
+                hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,""+Double.parseDouble(myboxVal));
+                if(((Double.parseDouble(myboxVal)% DtotalOverallKGSales)==0) && (kilogram<=(Double.parseDouble(myboxVal)))) {
+                    Double orderQtyValue = (Double.parseDouble(ed_LastEditextFocusd.getText().toString()) / DtotalOverallKGSales);
+                    int valuetQty =orderQtyValue.intValue();
 
-					EditText ediTextOrder = (EditText) ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
-					ediTextOrder.setText(String.valueOf(valuetQty));
-					hmapPrdctOdrQty.put(ProductIdOnClickedEdit,String.valueOf(valuetQty));
-					if(hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99"))
-					{
-						hmapProductStandardRate.put(ProductIdOnClickedEdit,"0");
-					}
-					//getOrderData(ProductIdOnClickedEdit);
+                    EditText ediTextOrder = (EditText) ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
+                    ediTextOrder.setText(String.valueOf(valuetQty));
+                    hmapPrdctOdrQty.put(ProductIdOnClickedEdit,String.valueOf(valuetQty));
+                    if(hmapProductStandardRate.get(ProductIdOnClickedEdit).equals("-99"))
+                    {
+                        hmapProductStandardRate.put(ProductIdOnClickedEdit,"0");
+                    }
+                    //getOrderData(ProductIdOnClickedEdit);
 
 
 
-				}
-				else
-				{	Double perkilogram =gram * 0.001;
-					hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,"0.0");
-					hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
-					//ed_LastEditextFocusd.setError("Please fill in multiple of "+String.valueOf(perkilogram));
-					ed_LastEditextFocusd.setText("");
+                }
+                else
+                {	Double perkilogram =gram * 0.001;
+                    hmapPrdctOdrQtyKG.put(ProductIdOnClickedEdit,"0.0");
+                    hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
+                    //ed_LastEditextFocusd.setError("Please fill in multiple of "+String.valueOf(perkilogram));
+                    ed_LastEditextFocusd.setText("");
 
-				}
-				//}
-				//}
+                }
+                //}
+                //}
 
 
 						/*	ediTextetProductAvgPricePerUnit.setText(""+DtotalOverallKGSales);
@@ -10118,223 +10886,72 @@ public void loadPurchaseProductDefault()
 
 
 
-			}
-			else
-			{
-				hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
+            }
+            else
+            {
+                hmapPrdctOdrQty.put(ProductIdOnClickedEdit,"0");
 
-				EditText ediTextOrder = (EditText)  ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
-				if(ediTextOrder!=null)
-				{
-					ediTextOrder.setText("");
+                EditText ediTextOrder = (EditText)  ((View) ed_LastEditextFocusd.getParent().getParent()).findViewWithTag("etOrderQty" + "_" + ProductIdOnClickedEdit);
+                if(ediTextOrder!=null)
+                {
+                    ediTextOrder.setText("");
 
-				}
+                }
 
-			}
-		}
-
-
-	}
-	public void Rate_Kg_to_Pcs_Conversion(String rate_in_kg,String PRODUCT_ID){
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("");
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("");
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("");
-		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("");
+            }
+        }
 
 
-		//String mMoney="" +((Double.parseDouble(((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString())));
-		/*if(!mMoney.equals("0"))
-		{*/
-		String mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID));
-		//}
-		Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
-		String kilogram ="" +(Double.parseDouble(mMoney)/ ((gram * 0.001) ));
-		Double DtotalOverallKGSales =  Double.parseDouble(kilogram);
-		DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
-		//((EditText) viewRow.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).setText(""+DtotalOverallKGSales);
-		hmapProductIDAvgPricePerUnit.put(PRODUCT_ID, ""+DtotalOverallKGSales);
-		hmapProductStandardRate.put(PRODUCT_ID, ""+Double.parseDouble(mMoney));
-//txt_gst_kg
-		//((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString()
-		//	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).setFocusable(false);
-		((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).removeTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID))));
-		String myrt=((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
-		Double dbltxtgstkg=(DtotalOverallKGSales*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
-		dbltxtgstkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstkg));
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("" + dbltxtgstkg);
-		Double dbltxtrateaftertaxkg=(DtotalOverallKGSales+dbltxtgstkg);
-		dbltxtrateaftertaxkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtrateaftertaxkg));
-		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("" + dbltxtrateaftertaxkg);
-		hmapPrdctGSTKg.put(PRODUCT_ID,"" + dbltxtgstkg);
-		hmapPrdctRtAfterTaxKG.put(PRODUCT_ID,"" + dbltxtrateaftertaxkg);
+    }
 
 
-
-
-
-
-
-		Double dbltxtgstpcs=(Double.parseDouble(mMoney)*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
-		dbltxtgstpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstpcs));
-		Double dbltextaftertaxpcs=(Double.parseDouble(mMoney)+dbltxtgstpcs);
-		dbltextaftertaxpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltextaftertaxpcs));
-		hmapPrdctGSTPcs.put(PRODUCT_ID,"" + dbltxtgstpcs);
-		hmapPrdctRtAfterTaxPcs.put(PRODUCT_ID,"" + dbltextaftertaxpcs);
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("" + dbltxtgstpcs);
-		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("" + dbltextaftertaxpcs);
-		//String myrt=	((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
-		if(Double.parseDouble(hmapProductIDAvgPricePerUnit.get(PRODUCT_ID))!=(Double.parseDouble(myrt))) {
-
-
-			((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit" + "_" + PRODUCT_ID)).setText("" + DtotalOverallKGSales);
-			((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).addTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
-
-		}
-
-	}
-
-	public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("");
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("");
-
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("");
-		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("");
-/*
-
-		Double kgLtr=1.0;
-		if(hmapProductOverAllVolume.containsKey(PRODUCT_ID))
-		{
-			kgLtr=(Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID)))/1000;
-
-		}
-	//	EditText editextRateofferKg= (EditText) viewRow.findViewWithTag(PRODUCT_ID+"^"+"RateOffer");
-		Double totalVal=Integer.parseInt(rate_in_pcs)*kgLtr;
-		((EditText) viewRow.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).setText(String.valueOf(totalVal));
-		//hashmapRateOfferinPcsAndKG.put(PRODUCT_ID,String.valueOf(Integer.parseInt(rate_in_pcs))+"^"+String.valueOf(totalVal));
-
-		//SetHashmapValueof_editextRateofferKg(String.valueOf(totalVal.intValue()),PRODUCT_ID);
-*/
-
-
-		//String mMoney="" +((Double.parseDouble(((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString())));
-
-		String mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID));
-		/*if(!mMoney.equals("0"))
-		{
-			mMoney=fnGetBoxVal((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID));
-		}*/
-
-
-		Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
-		String kilogram ="" +( ((gram * 0.001)) * Double.parseDouble(mMoney));
-		Double DtotalOverallKGSales =  Double.parseDouble(kilogram);
-		DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
-		hmapProductStandardRate.put(PRODUCT_ID, ""+DtotalOverallKGSales);
-		//	((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setFocusable(false);
-		hmapProductIDAvgPricePerUnit.put(PRODUCT_ID,""+Double.parseDouble(mMoney));// );
-
-		String myrt=((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString();
-		//String myrt=((EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+PRODUCT_ID)).getText().toString();
-		((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).removeTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
-		Double dbltxtgstpcs=(DtotalOverallKGSales*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
-		dbltxtgstpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstpcs));
-		Double dbltextaftertaxpcs=(DtotalOverallKGSales+dbltxtgstpcs);
-		dbltextaftertaxpcs= Double.parseDouble(new DecimalFormat("##.##").format(dbltextaftertaxpcs));
-		hmapPrdctGSTPcs.put(PRODUCT_ID,"" + dbltxtgstpcs);
-		hmapPrdctRtAfterTaxPcs.put(PRODUCT_ID,"" + dbltextaftertaxpcs);
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstpcs" + "_" + PRODUCT_ID)).setText("" + dbltxtgstpcs);
-		((TextView) ll_prdct_detal.findViewWithTag("textaftertaxpcs" + "_" + PRODUCT_ID)).setText("" + dbltextaftertaxpcs);
-
-
-//et_ProductAvgPricePerUnit
-		//txt_gst_kg
-
-// ((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? 0:((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString()
-		//String myvalnew=((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString().equals("") ? "0":((EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+PRODUCT_ID)).getText().toString();
-		Double dbltxtgstkg=((Double.parseDouble(mMoney))*Double.parseDouble(hmapProductVatTaxPerventage.get(PRODUCT_ID)))/100;
-		dbltxtgstkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtgstkg));
-		((TextView) ll_prdct_detal.findViewWithTag("txtgstkg" + "_" + PRODUCT_ID)).setText("" + dbltxtgstkg);
-		Double dbltxtrateaftertaxkg=(Double.parseDouble(mMoney)+dbltxtgstkg);
-		dbltxtrateaftertaxkg= Double.parseDouble(new DecimalFormat("##.##").format(dbltxtrateaftertaxkg));
-		hmapPrdctGSTKg.put(PRODUCT_ID,"" + dbltxtgstkg);
-		hmapPrdctRtAfterTaxKG.put(PRODUCT_ID,"" + dbltxtrateaftertaxkg);
-		((TextView) ll_prdct_detal.findViewWithTag("txtrateaftertaxkg" + "_" + PRODUCT_ID)).setText("" + dbltxtrateaftertaxkg);
-
-		if(Double.parseDouble(hmapProductStandardRate.get(PRODUCT_ID))!=Double.parseDouble(myrt)) {
-
-			((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setText("" + DtotalOverallKGSales);
-			//((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).addTextChangedListener(getTextWatcher(((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID))));
-
-			//	((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setFocusable(true);
-			//((EditText) ll_prdct_detal.findViewWithTag("tvRate" + "_" + PRODUCT_ID)).setOnFocusChangeListener(this);
-
-
-
-		}
-
-	}
-
-	public void 	Rate_OrderQtyUnitToKGPerUnit(String unit,String PRODUCT_ID){
-		Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
-		Double kgVolume=(gram * 0.001);
-		Double valueOfKGLitre=kgVolume*Integer.parseInt(unit);
-		valueOfKGLitre= Double.parseDouble(new DecimalFormat("##.##").format(valueOfKGLitre));
-		//((EditText) viewRow.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText(String.valueOf(valueOfKGLitre));
-		if(Double.parseDouble(hmapPrdctOdrQtyKG.get(PRODUCT_ID))!=(valueOfKGLitre)) {
-			hmapPrdctOdrQtyKG.put(PRODUCT_ID, ""+valueOfKGLitre);
-			/*((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("" + valueOfKGLitre);*/
-			if(unit.equals("0"))
-			{
-				((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("");
-				((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setHint("O.Qty/KG");
-			}
-			else {
-				((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("" + valueOfKGLitre);
-			}
-		}
-	}
-	public void 	Rate_PerKGUnitToSingle(String unit,String PRODUCT_ID){
-		Double gram = Double.parseDouble(hmapProductOverAllVolume.get(PRODUCT_ID));
-		Double kilogram = ((gram * 0.001) );
-		Double DtotalOverallKGSales =  kilogram;
-		DtotalOverallKGSales= Double.parseDouble(new DecimalFormat("##.##").format(DtotalOverallKGSales));
-		String kgrate=((EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).getText().toString();
-		if(kgrate.equals(""))
-		{
-			kgrate="0.0";
-		}
-		if(TextUtils.isEmpty(kgrate))
-		{
-			kgrate="0.0";
-		}
-		if(((Double.parseDouble(kgrate)% DtotalOverallKGSales)==0) && (kilogram<=(Double.parseDouble(kgrate)))) {
-
-
-
-			Double orderQtyValue = (Double.parseDouble(kgrate) / DtotalOverallKGSales);
-
-			int valuetQty =orderQtyValue.intValue();
-			if(!hmapPrdctOdrQty.get(PRODUCT_ID).equals(""+valuetQty)) {
-				((EditText)  ll_prdct_detal.findViewWithTag("etOrderQty" + "_" + PRODUCT_ID)).setText(String.valueOf(valuetQty));
-			}
-		}
-		else
-		{
-
-			Double perkilogram =gram * 0.001;
-
-
-			((EditText)  ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setError("Please fill in multiple of "+String.valueOf(perkilogram));
-
-			((EditText)  ll_prdct_detal.findViewWithTag("etKGPerUnilt" + "_" + PRODUCT_ID)).setText("");
-			hmapPrdctOdrQtyKG.put(PRODUCT_ID,"0.0");
-		}
-	}
+    public String fnGetBoxVal(EditText mBox)
+    {
+        String curntProID=mBox.getTag().toString().split(Pattern.quote("_"))[1];
+        String myboxVal="0";
+        if(mBox.getText().toString().length()==1)
+        {
+            if(mBox.getText().toString().equals("."))
+            {
+                myboxVal="0.0";
+                if(mBox.getId()== R.id.et_OrderQty)
+                {
+                    hmapPrdctOdrQtyKG.put(curntProID,"0.0");
+                    hmapPrdctOdrQty.put(curntProID,"0");
+                }
+                if(mBox.getId()== R.id.et_KGPerUnilt)
+                {
+                    hmapPrdctOdrQtyKG.put(curntProID,"0.0");
+                    hmapPrdctOdrQty.put(curntProID,"0");
+                }
+            }
+            else
+            {
+                myboxVal=mBox.getText().toString();
+            }
+        }
+        else
+        {
+            if(mBox.getText().toString().length()==0)
+            {
+                if(mBox.getId()== R.id.et_OrderQty)
+                {
+                    hmapPrdctOdrQtyKG.put(curntProID,"0.0");
+                    hmapPrdctOdrQty.put(curntProID,"0");
+                }
+                if(mBox.getId()== R.id.et_KGPerUnilt)
+                {
+                    hmapPrdctOdrQtyKG.put(curntProID,"0.0");
+                    hmapPrdctOdrQty.put(curntProID,"0");
+                }
+                myboxVal="0";
+            }
+            else {
+                myboxVal = mBox.getText().toString();
+            }
+        }
+        return myboxVal;
+    }
 	public void videoPlayFunctionality(){
 		ImageView videoPlay=(ImageView) findViewById(R.id.videoPlay);
 		videoPlay.setOnClickListener(new OnClickListener() {
@@ -10478,145 +11095,145 @@ public void loadPurchaseProductDefault()
 			//DocPlay.setVisibility(View.GONE);
 		}
 	}
-	protected void open_pop_up()
-	{
-		dialog = new Dialog(OrderReview.this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(R.layout.menu_layout);
-		dialog.getWindow().setBackgroundDrawableResource(
-				android.R.color.transparent);
-		dialog.getWindow().getAttributes().windowAnimations = R.style.side_dialog_animation;
-		WindowManager.LayoutParams parms = dialog.getWindow().getAttributes();
-		parms.gravity = Gravity.TOP | Gravity.LEFT;
-		parms.height=parms.MATCH_PARENT;
-		parms.dimAmount = (float) 0.5;
+    protected void open_pop_up()
+    {
+        dialog = new Dialog(OrderReview.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.menu_layout);
+        dialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.side_dialog_animation;
+        WindowManager.LayoutParams parms = dialog.getWindow().getAttributes();
+        parms.gravity = Gravity.TOP | Gravity.LEFT;
+        parms.height=parms.MATCH_PARENT;
+        parms.dimAmount = (float) 0.5;
 
-		final Button play_video = (Button) dialog.findViewById(R.id.play_video);
-		play_video.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+        final Button play_video = (Button) dialog.findViewById(R.id.play_video);
+        play_video.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-				dbengine.open();
-				String VideoData=      dbengine.getVideoNameByStoreID(storeID,"2");
-				dbengine.close();
-				int flagPlayVideoForStore=0;
-				String Video_Name="0";
-				String VIDEO_PATH="0";
-				String Contentype="0";
-				if(!VideoData.equals("0") && VideoData.contains("^")){
-					Video_Name=   VideoData.toString().split(Pattern.quote("^"))[0];
-					flagPlayVideoForStore=   Integer.parseInt( VideoData.toString().split(Pattern.quote("^"))[1]);
-					Contentype=    VideoData.toString().split(Pattern.quote("^"))[3];
-				}
-
-                /*  VIDEO_PATH= "/sdcard/WhatsApp/Media/WhatsApp Video/VID-20180303-WA0030.mp4";
-                VIDEO_PATH= "/sdcard/VideoLTFOODS/SampleVideo5mb.mp4";*/
-				VIDEO_PATH=   Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/"+Video_Name;
-				if(flagPlayVideoForStore==1 && !(VIDEO_PATH.equals("0")) && Contentype.equals("2")){
-					Uri intentUri ;
-
-					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-						File file = new File(VIDEO_PATH);
-						intentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
-					}
-					else{
-						intentUri = Uri.parse(VIDEO_PATH);
-					}
-
-					if(intentUri!=null) {
-						Intent intent = new Intent(OrderReview.this,VideoPlayerActivityForStore.class);
-						intent.putExtra("FROM","ProductOrderFilterSearch");
-						intent.putExtra("STRINGPATH",VIDEO_PATH);
-						startActivity(intent);
-					}
-					else{
-						Toast.makeText(OrderReview.this, "No video Found", Toast.LENGTH_LONG).show();
-						//passIntentToProductOrderFilter();
-					}
-
-				}
-				else{
-
-					Toast.makeText(OrderReview.this, "No Video Available for this Store", Toast.LENGTH_LONG).show();
-				}
-
-
-			}
-		});
-
-		final   Button open_PDF = (Button) dialog.findViewById(R.id.open_PDF);
-		open_PDF.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view)
-			{
-
-				dbengine.open();
-				String PDFDOC_DATA=      dbengine.getVideoNameByStoreID(storeID,"3");
-				dbengine.close();
-				int flagPlayVideoForStore=0;
-				String Video_Name="0";
-				String VIDEO_PATH="0";
-				String Contentype="0";
-				if(!PDFDOC_DATA.equals("0") && PDFDOC_DATA.contains("^")){
-					Video_Name=   PDFDOC_DATA.toString().split(Pattern.quote("^"))[0];
-					flagPlayVideoForStore=   Integer.parseInt( PDFDOC_DATA.toString().split(Pattern.quote("^"))[1]);
-					Contentype=    PDFDOC_DATA.toString().split(Pattern.quote("^"))[3];
-				}
+                dbengine.open();
+                String VideoData=      dbengine.getVideoNameByStoreID(storeID,"2");
+                dbengine.close();
+                int flagPlayVideoForStore=0;
+                String Video_Name="0";
+                String VIDEO_PATH="0";
+                String Contentype="0";
+                if(!VideoData.equals("0") && VideoData.contains("^")){
+                    Video_Name=   VideoData.toString().split(Pattern.quote("^"))[0];
+                    flagPlayVideoForStore=   Integer.parseInt( VideoData.toString().split(Pattern.quote("^"))[1]);
+                    Contentype=    VideoData.toString().split(Pattern.quote("^"))[3];
+                }
 
                 /*  VIDEO_PATH= "/sdcard/WhatsApp/Media/WhatsApp Video/VID-20180303-WA0030.mp4";
                 VIDEO_PATH= "/sdcard/VideoLTFOODS/SampleVideo5mb.mp4";*/
-				VIDEO_PATH=   Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/"+Video_Name;
-				if(flagPlayVideoForStore==1 && !(VIDEO_PATH.equals("0")) && Contentype.equals("3")){
-					Uri intentUri ;
-					Intent intent = new Intent();
-					intent.setAction(Intent.ACTION_VIEW);
+                VIDEO_PATH=   Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/"+Video_Name;
+                if(flagPlayVideoForStore==1 && !(VIDEO_PATH.equals("0")) && Contentype.equals("2")){
+                    Uri intentUri ;
 
-					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-						intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-						File file = new File(VIDEO_PATH);
-						intentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
-					}
-					else{
-						intentUri = Uri.parse("file://" +VIDEO_PATH);
-					}
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        File file = new File(VIDEO_PATH);
+                        intentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
+                    }
+                    else{
+                        intentUri = Uri.parse(VIDEO_PATH);
+                    }
 
-					if(intentUri!=null) {
-						intent.setDataAndType(intentUri, "application/pdf");
-						long syncTIMESTAMP = System.currentTimeMillis();
-						Date dateobj = new Date(syncTIMESTAMP);
-						SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
-						String ClickedDateTime = df.format(dateobj);
-						try {
-							dbengine.open();
-							dbengine.UpdateFlagVideoIsShownToUser(storeID,"3",ClickedDateTime);
-							dbengine.close();
-							startActivity(intent);
-						}
-						catch (ActivityNotFoundException e) {
+                    if(intentUri!=null) {
+                        Intent intent = new Intent(OrderReview.this,VideoPlayerActivityForStore.class);
+                        intent.putExtra("FROM","ProductOrderFilterSearch");
+                        intent.putExtra("STRINGPATH",VIDEO_PATH);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(OrderReview.this, "No video Found", Toast.LENGTH_LONG).show();
+                        //passIntentToProductOrderFilter();
+                    }
 
-						}
-						//update here
-					}
-					else{
-						Toast.makeText(OrderReview.this, "No Document Found", Toast.LENGTH_LONG).show();
-						//passIntentToProductOrderFilter();
-					}
+                }
+                else{
 
-				}
-				else{
-
-					Toast.makeText(OrderReview.this, "No Document Available for this Store", Toast.LENGTH_LONG).show();
-				}
+                    Toast.makeText(OrderReview.this, "No Video Available for this Store", Toast.LENGTH_LONG).show();
+                }
 
 
-			}
-		});
+            }
+        });
+
+        final   Button open_PDF = (Button) dialog.findViewById(R.id.open_PDF);
+        open_PDF.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+
+                dbengine.open();
+                String PDFDOC_DATA=      dbengine.getVideoNameByStoreID(storeID,"3");
+                dbengine.close();
+                int flagPlayVideoForStore=0;
+                String Video_Name="0";
+                String VIDEO_PATH="0";
+                String Contentype="0";
+                if(!PDFDOC_DATA.equals("0") && PDFDOC_DATA.contains("^")){
+                    Video_Name=   PDFDOC_DATA.toString().split(Pattern.quote("^"))[0];
+                    flagPlayVideoForStore=   Integer.parseInt( PDFDOC_DATA.toString().split(Pattern.quote("^"))[1]);
+                    Contentype=    PDFDOC_DATA.toString().split(Pattern.quote("^"))[3];
+                }
+
+                /*  VIDEO_PATH= "/sdcard/WhatsApp/Media/WhatsApp Video/VID-20180303-WA0030.mp4";
+                VIDEO_PATH= "/sdcard/VideoLTFOODS/SampleVideo5mb.mp4";*/
+                VIDEO_PATH=   Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/"+Video_Name;
+                if(flagPlayVideoForStore==1 && !(VIDEO_PATH.equals("0")) && Contentype.equals("3")){
+                    Uri intentUri ;
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        File file = new File(VIDEO_PATH);
+                        intentUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
+                    }
+                    else{
+                        intentUri = Uri.parse("file://" +VIDEO_PATH);
+                    }
+
+                    if(intentUri!=null) {
+                        intent.setDataAndType(intentUri, "application/pdf");
+                        long syncTIMESTAMP = System.currentTimeMillis();
+                        Date dateobj = new Date(syncTIMESTAMP);
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+                        String ClickedDateTime = df.format(dateobj);
+                        try {
+                            dbengine.open();
+                            dbengine.UpdateFlagVideoIsShownToUser(storeID,"3",ClickedDateTime);
+                            dbengine.close();
+                            startActivity(intent);
+                        }
+                        catch (ActivityNotFoundException e) {
+
+                        }
+                        //update here
+                    }
+                    else{
+                        Toast.makeText(OrderReview.this, "No Document Found", Toast.LENGTH_LONG).show();
+                        //passIntentToProductOrderFilter();
+                    }
+
+                }
+                else{
+
+                    Toast.makeText(OrderReview.this, "No Document Available for this Store", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
 
 
 
 
 
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
-	}
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
 }

@@ -145,7 +145,7 @@ public class DatabaseAssistant
 
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;
-		String sql = "select AttandanceTime,PersonNodeID,PersonNodeType,ReasonID,ReasonDesc,fnLati,fnLongi,fnAccuracy,fnAddress,AllProvidersLocation,flgLocNotFound from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
+		String sql = "select AttandanceTime,PersonNodeID,PersonNodeType,ReasonID,ReasonDesc,Comment,fnLati,fnLongi,fnAccuracy,fnAddress,AllProvidersLocation,flgLocNotFound from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
 		Cursor c = db.rawQuery(sql, new String[0]);
 		if (c.moveToFirst()) {
 			int cols = c.getColumnCount();
@@ -328,9 +328,65 @@ public class DatabaseAssistant
 	<col name="SampleQuantity">0</col>
 	<col name="ProductShortName">Go_Spread_Btl_200gm</col>
 	<col name="ProductPrice">85.96</col>*/
-	
-	
-	private void exportTabletblTransac(final String tableName) throws IOException {
+
+    private void exportTabletblTransac(final String tableName) throws IOException {
+        xmlBuilder.openTable(tableName);
+        //String sql = "select * from " + tableName;
+        String sql = "select IMEIno,RouteID,StoreID,CatID,ProdID,TransDate,Stock,OrderQty,OrderVal,FreeQty,DisVal,SampleQuantity,ProductShortName,(ProductPrice/(1+(TaxRate/100))) AS ProductPrice,TaxRate,TaxValue,OrderIDPDA,flgIsQuoteRateApplied from " + tableName + " where Sstat = 3 and  (OrderQty<>0 OR SampleQuantity<>0 OR Stock<>0 OR FreeQty<>0)";       // chk for flag - DB adapter
+        Cursor c = db.rawQuery(sql, new String[0]);
+        if (c.moveToFirst()) {
+            int cols = c.getColumnCount();
+            do {
+                xmlBuilder.openRow();
+                for (int i = 0; i < cols; i++) {
+                    xmlBuilder.addColumn(c.getColumnName(i), c.getString(i));
+                }
+                xmlBuilder.closeRow();
+            } while (c.moveToNext());
+        }
+        c.close();
+        xmlBuilder.closeTable();
+    }
+
+	/*private void exportTabletblTransac(final String tableName) throws IOException {
+		xmlBuilder.openTable(tableName);
+		//String sql = "select * from " + tableName;
+		String sql = "select IMEIno,RouteID,StoreID,CatID,ProdID,TransDate,Stock,OrderQty,OrderVal,FreeQty,DisVal,SampleQuantity,ProductShortName,(ProductPrice-(ProductPrice*(TaxRate/100))) AS ProductPrice,TaxRate,TaxValue,OrderIDPDA,flgIsQuoteRateApplied from " + tableName + " where Sstat = 3 and  (OrderQty<>0 OR SampleQuantity<>0 OR Stock<>0 OR FreeQty<>0)";    // chk for flag - DB adapter
+		Cursor c = db.rawQuery(sql, new String[0]);
+		if (c.moveToFirst()) {
+			int cols = c.getColumnCount();
+			do {
+				xmlBuilder.openRow();
+				for (int i = 0; i < cols; i++) {
+					xmlBuilder.addColumn(c.getColumnName(i), c.getString(i));
+				}
+				xmlBuilder.closeRow();
+			} while (c.moveToNext());
+		}
+		c.close();
+		xmlBuilder.closeTable();
+	}*/
+
+	/*private void exportTabletblTransac(final String tableName) throws IOException {
+		xmlBuilder.openTable(tableName);
+		//String sql = "select * from " + tableName;
+		String sql = "select IMEIno,RouteID,StoreID,CatID,ProdID,TransDate,Stock,OrderQty,OrderVal,FreeQty,DisVal,SampleQuantity,ProductShortName,ProductPrice-TaxRate AS ProductPrice,TaxRate,TaxValue,OrderIDPDA,flgIsQuoteRateApplied from " + tableName + " where Sstat = 3 and  (OrderQty<>0 OR SampleQuantity<>0 OR Stock<>0 OR FreeQty<>0)";		// chk for flag - DB adapter
+		Cursor c = db.rawQuery(sql, new String[0]);
+		if (c.moveToFirst()) {
+			int cols = c.getColumnCount();
+			do {
+				xmlBuilder.openRow();
+				for (int i = 0; i < cols; i++) {
+					xmlBuilder.addColumn(c.getColumnName(i), c.getString(i));
+				}
+				xmlBuilder.closeRow();
+			} while (c.moveToNext());
+		}
+		c.close();
+		xmlBuilder.closeTable();
+	}*/
+
+/*	private void exportTabletblTransac(final String tableName) throws IOException {
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;			
 		String sql = "select IMEIno,RouteID,StoreID,CatID,ProdID,TransDate,Stock,OrderQty,OrderVal,FreeQty,DisVal,SampleQuantity,ProductShortName,ProductPrice,TaxRate,TaxValue,OrderIDPDA,flgIsQuoteRateApplied from " + tableName + " where Sstat = 3 and  (OrderQty<>0 OR SampleQuantity<>0 OR Stock<>0 OR FreeQty<>0)";		// chk for flag - DB adapter
@@ -348,7 +404,7 @@ public class DatabaseAssistant
 		c.close();
 		xmlBuilder.closeTable();
 	}
-	
+	*/
 	
 	private void exportTableDayStartEndDetails(final String tableName) throws IOException {
 		xmlBuilder.openTable(tableName);

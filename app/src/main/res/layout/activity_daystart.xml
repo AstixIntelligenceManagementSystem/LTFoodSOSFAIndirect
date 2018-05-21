@@ -22,7 +22,8 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/but_DayStart"
@@ -167,32 +168,103 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/ll_containView"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <EditText
-            android:id="@+id/et_otherPleaseSpecify"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-           android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/et_boundary_retrun"
-            android:visibility="gone"/>
-
-        <RadioButton
-            android:id="@+id/cb_NoWorking"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_marginLeft="10dp"
-            android:text="No Working"
-            android:onClick="onRadioButtonClicked"/>
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today's Working"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="#ffff"
+                android:background="@drawable/custom_header_color"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"/>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/ll_Working"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <EditText
+                android:id="@+id/et_otherPleaseSpecify"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/et_boundary_retrun"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not Working"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#ffff"
+                android:background="@drawable/custom_header_color"
+
+                android:layout_marginTop="5dp"/>
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/ll_NoWorking"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"/>
+
+           <EditText
+               android:layout_width="match_parent"
+               android:layout_height="100dp"
+               android:layout_marginTop="10dp"
+               android:id="@+id/commenttext"
+               android:background="@drawable/et_boundary_retrun"
+               android:digits="@string/only_alpha_numeric_new"
+               android:inputType="textMultiLine"
+               android:layout_marginLeft="15dp"
+               android:layout_marginRight="15dp"
+               android:ems="10"
+               android:enabled="true"
+               android:maxLines="10"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/but_Next"
             android:layout_width="wrap_content"

@@ -71,6 +71,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -4926,12 +4927,39 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
             @Override
             public void onClick(View view) {
 
-                Uri intentUri = Uri.parse(hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2]);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                {
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    String filePathName="";
+                    if(hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2].contains("file:")){
+                        filePathName=hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2].replace("file:","");
+                    }
+                    else {
+                        filePathName=hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2];
+
+                    }
+                    File file = new File(filePathName);
+                    Uri intentUri = FileProvider.getUriForFile(getActivity().getBaseContext(), getActivity().getApplicationContext().getPackageName() + ".provider", file);
+                    intent.setDataAndType(intentUri, "image/*");
+                    startActivity(intent);
+
+                }
+                else{
+                    Uri intentUri = Uri.parse(hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2]);
+
+
+                    intent.setDataAndType(intentUri, "image/*");
+                    startActivity(intent);
+                }
+
+               /* Uri intentUri = Uri.parse(hmapImageClkdTempIdData.get(view.getTag().toString()).split(Pattern.quote("~"))[2]);
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setDataAndType(intentUri, "image/*");
-                startActivity(intent);
+                startActivity(intent);*/
 
             }
         });

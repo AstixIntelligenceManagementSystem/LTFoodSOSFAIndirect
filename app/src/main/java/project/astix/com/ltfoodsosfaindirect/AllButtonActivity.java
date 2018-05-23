@@ -97,6 +97,8 @@ import static project.astix.com.ltfoodsosfaindirect.R.id.ll_dsrTracker;
 
 public class AllButtonActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
 
+
+    SharedPreferences sPrefAttandance;
     LinearLayout ll_Parent;
     static int flgJointWorking = 0;
     public String userDate;
@@ -280,6 +282,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
         if(CommonInfo.DayStartClick==2)
         {
+            SharedPreferences.Editor editor1=sPrefAttandance.edit();
+            editor1.clear();
+            editor1.commit();
             CommonInfo.DayStartClick=0;
             finish();
 
@@ -394,7 +399,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_button);
 
-
+        sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
         ll_Parent=(LinearLayout)findViewById(R.id.ll_Parent);
         currDate = new Date();
         currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);

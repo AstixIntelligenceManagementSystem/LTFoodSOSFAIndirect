@@ -2016,13 +2016,13 @@ public class Delivery_Details_Activity extends Activity implements  DatePickerDi
 	 		AlertDialog alert = alertDialogNoConn.create();
 	 		alert.show();
 	 }
-	public void arrowHeaderSelection() {
+	public void arrowHeaderSelection()
+	{
 		delivey_details_parent = (RelativeLayout) findViewById(R.id.delivey_details_parent);
 
 		arrowOfDeleveryInfo = (CheckBox) findViewById(R.id.arrowOfDeleveryInfo);
 
-		arrowOfDeleveryInfo.setButtonDrawable(getResources().getDrawable(
-				R.drawable.checkbox_button_image_for_delivery));
+		arrowOfDeleveryInfo.setButtonDrawable(getResources().getDrawable(R.drawable.checkbox_button_image_for_delivery));
 		arrowOfDeleveryInfo.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -2036,7 +2036,8 @@ public class Delivery_Details_Activity extends Activity implements  DatePickerDi
 					
 				}*/
 			//	else{
-					if (arrowOfDeleveryInfo.isChecked()) {
+					if (arrowOfDeleveryInfo.isChecked())
+					{
 						arrowOfDeleveryInfo.setChecked(true);
 						delivey_details_parent.setVisibility(View.VISIBLE);
 					} else {

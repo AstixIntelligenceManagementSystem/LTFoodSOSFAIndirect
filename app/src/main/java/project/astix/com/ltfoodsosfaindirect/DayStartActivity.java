@@ -290,7 +290,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                     String checkedID = cb.getTag()+"";
                     if(isChecked)
                     {
-                        ReasonText = hmapReasonIdAndDescrForNotWorking_details.get(checkedID);
+                        ReasonText = hmapReasonIdAndDescrForNotWorking_details.get(Integer.parseInt(checkedID.trim()));
                         ReasonId = "" + checkedID;
 
 
@@ -550,8 +550,6 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                         public void onClick(DialogInterface dialog,int which)
                         {
                             dialog.dismiss();
-
-
                         }
                     });
                     alertDialog.show();

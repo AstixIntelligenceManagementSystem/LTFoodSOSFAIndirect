@@ -73,6 +73,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ProductOrderFilterSearch"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
+
+        <activity
             android:name=".LauncherActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
@@ -126,11 +132,6 @@
         </activity>
         -->
 
-        <activity
-            android:name=".ProductOrderFilterSearch"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".DistributorEntryActivity"
             android:configChanges="orientation|keyboardHidden"

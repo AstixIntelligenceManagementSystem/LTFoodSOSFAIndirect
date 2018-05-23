@@ -778,8 +778,9 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 	
 	private static final String DATABASE_CREATE_TABLE_14 = "create table tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null);";
 	
-	private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
-	
+	//private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
+    private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
+
 	private static final String DATABASE_CREATE_TABLE_15 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null,CatOrdr int null);";
 	
 	//private static final String DATABASE_CREATE_TABLE_5 = "create table tblCategoryQuestionInformation (CategoryID text null,ProductID text null, Stock text null,Sstat integer not null,StoreID text not null);";
@@ -16781,7 +16782,10 @@ public void deleteStoreTblsRecordsInCaseCancelOrderInOrderBooking(String StoreID
 
 
         //Cursor cursor = db.rawQuery("SELECT ProductID,CategoryID,ProductShortName,KGLiter ||'^'||ProductRLP||'^'||ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,RetMarginPer,VatTax,ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,StandardRate,StandardRateBeforeTax,StandardTax,0 As Stock  FROM tblProductList order by CategoryID,ProductID",null);
-        Cursor cursor = db.rawQuery("SELECT tblProductList.ProductID,tblProductList.CategoryID,tblProductList.ProductShortName,tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,tblProductSegementMap.RetMarginPer,tblProductSegementMap.VatTax,tblProductSegementMap.ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,tblProductSegementMap.StandardRate,tblProductSegementMap.StandardRateBeforeTax,tblProductSegementMap.StandardTax,0 As Stock,tblProductSegementMap.flgPriceAva,0.00 AS ProductAvgPricePerUnit,tblProductList.KGLiter,0.00 AS OrderQtyPerKG,0.00 AS GSTPcs,0.00 AS GSTKg,0.00 AS RtAfterTaxPcs,0.00 AS RtAfterTaxKG   FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"  order by tblProductList.CategoryID,tblProductList.PrdOrdr",null);
+       // Cursor cursor = db.rawQuery("SELECT tblProductList.ProductID,tblProductList.CategoryID,tblProductList.ProductShortName,tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,tblProductSegementMap.RetMarginPer,tblProductSegementMap.VatTax,tblProductSegementMap.ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,tblProductSegementMap.StandardRate,tblProductSegementMap.StandardRateBeforeTax,tblProductSegementMap.StandardTax,0 As Stock,tblProductSegementMap.flgPriceAva,0.00 AS ProductAvgPricePerUnit,tblProductList.KGLiter,0.00 AS OrderQtyPerKG,0.00 AS GSTPcs,0.00 AS GSTKg,0.00 AS RtAfterTaxPcs,0.00 AS RtAfterTaxKG   FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"  order by tblProductList.CategoryID,tblProductList.PrdOrdr",null);
+
+
+        Cursor cursor = db.rawQuery("SELECT tblProductList.ProductID,tblProductList.CategoryID,tblProductList.ProductShortName,tblProductList.KGLiter ||'^'||tblProductSegementMap.ProductRLP||'^'||tblProductSegementMap.ProductTaxAmount AS ProductVolumeRateTax,'NA/0' As LODQty,0 AS SampleQty,0 AS ProductFreeQty,0 AS ProductOrderQty,0.00 As PrdctDiscount,tblProductSegementMap.RetMarginPer,tblProductSegementMap.VatTax,ifnull(tblProductSegementMap.ProductMRP,0.00) AS ProductMRP,0.00 AS DiscountPercentageGivenOnProduct,0 AS Per,0.00 AS TaxValue,0.00 AS OrderValue,ifnull(tblProductSegementMap.StandardRate,0.0) AS StandardRate,tblProductSegementMap.StandardRateBeforeTax,tblProductSegementMap.StandardTax,0 As Stock,tblProductSegementMap.flgPriceAva,0.00 AS ProductAvgPricePerUnit,tblProductList.KGLiter,0.00 AS OrderQtyPerKG,0.00 AS GSTPcs,0.00 AS GSTKg,0.00 AS RtAfterTaxPcs,0.00 AS RtAfterTaxKG   FROM tblProductList inner join tblProductSegementMap on tblProductList.ProductID=tblProductSegementMap.ProductID Where tblProductSegementMap.BusinessSegmentId="+BusinessSegmentId+"  order by tblProductList.CategoryID,tblProductList.PrdOrdr",null);
 
         //tblProductList.ProductID------------->0
         //tblProductList.CategoryID------------>1
@@ -21205,7 +21209,7 @@ open();
 
             else
             {
-                hmapCatgry.put(0, "No Reason");
+               // hmapCatgry.put(0, "No Reason");
             }
             return hmapCatgry;
         }
@@ -21239,7 +21243,7 @@ open();
 
             else
             {
-                hmapCatgry.put(0, "No Reason");
+               // hmapCatgry.put(0, "No Reason");
             }
             return hmapCatgry;
         }
@@ -23428,7 +23432,7 @@ public int checkCountIntblStoreSalesOrderPaymentDetails(String  StoreId,String O
 			String CompleteBillAddress="";
 			try {
 				
-				cursor= db.rawQuery("SELECT QuestID,AnswerType,AnswerValue,QuestionGroupID FROM tblOutletQuestAnsMstr WHERE  OutletID ='"+ OutletID + "' and QuestionGroupID in (1,3,4) ", null);
+				cursor= db.rawQuery("SELECT QuestID,AnswerType,AnswerValue,QuestionGroupID FROM tblOutletQuestAnsMstr WHERE  OutletID ='"+ OutletID + "' and QuestionGroupID in (6) ", null);
 				if (cursor.getCount() > 0)
 				{
 	               if (cursor.moveToFirst()) 
@@ -23462,6 +23466,17 @@ public int checkCountIntblStoreSalesOrderPaymentDetails(String  StoreId,String O
 	                			  CompleteBillAddress= CompleteBillAddress+", "+DDlStringCity;
 	                		  }
 	                	  }
+                          else if(Integer.parseInt(cursor.getString(3))==6)
+                          {
+                              if(CompleteBillAddress.equals(""))
+                              {
+                                  CompleteBillAddress= cursor.getString(2).toString().trim();
+                              }
+                              else
+                              {
+                                  CompleteBillAddress= CompleteBillAddress+", "+cursor.getString(2).toString().trim();
+                              }
+                          }
 	                	  
 							cursor.moveToNext();
 						}
@@ -23519,7 +23534,7 @@ public int checkCountIntblStoreSalesOrderPaymentDetails(String  StoreId,String O
 			String CompleteDileveryAddress="";
 			try {
 				
-				cursor= db.rawQuery("SELECT QuestID,AnswerType,AnswerValue,QuestionGroupID FROM tblOutletQuestAnsMstr WHERE  OutletID ='"+ OutletID + "' and QuestionGroupID in (5,7,8) ", null);
+				cursor= db.rawQuery("SELECT QuestID,AnswerType,AnswerValue,QuestionGroupID FROM tblOutletQuestAnsMstr WHERE  OutletID ='"+ OutletID + "' and QuestionGroupID in (6) ", null);
 				if (cursor.getCount() > 0)
 				{
 	               if (cursor.moveToFirst()) 
@@ -23553,6 +23568,17 @@ public int checkCountIntblStoreSalesOrderPaymentDetails(String  StoreId,String O
 	                			  CompleteDileveryAddress= CompleteDileveryAddress+", "+DDlStringCity;
 	                		  }
 	                	  }
+                          else if(Integer.parseInt(cursor.getString(3))==6)
+                          {
+                              if(CompleteDileveryAddress.equals(""))
+                              {
+                                  CompleteDileveryAddress= cursor.getString(2).toString().trim();
+                              }
+                              else
+                              {
+                                  CompleteDileveryAddress= CompleteDileveryAddress+", "+cursor.getString(2).toString().trim();
+                              }
+                          }
 	                	  
 							cursor.moveToNext();
 						}
@@ -32067,6 +32093,15 @@ close();
                                          int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgRestart
             ,String CityId,String StateId,String MapAddress,String MapCity,String MapPinCode,String MapState)
     {
+try
+{
+    db.execSQL("DELETE FROM tblAttandanceDetails");
+}
+catch(Exception e)
+{
+
+}
+
         ContentValues initialValues = new ContentValues();
         String aa= fnGetPersonNodeIDAndPersonNodeType();
 

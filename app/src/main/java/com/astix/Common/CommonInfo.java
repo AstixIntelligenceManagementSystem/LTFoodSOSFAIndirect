@@ -11,6 +11,8 @@ public class CommonInfo
 	// Its for Live  Path on 194 server for SFA
 
 
+/*
+
 
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
@@ -43,8 +45,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 64;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.7";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 67;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.8";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -91,6 +93,8 @@ public class CommonInfo
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
+
+*/
 
 
 
@@ -285,7 +289,7 @@ public class CommonInfo
 	// Its for Development  Path on 194 server for SFA
 
 
-       /*public static Uri uriSavedImage_savedInstance=null;
+     /*  public static Uri uriSavedImage_savedInstance=null;
 
 	    public static String userDate="0";
 	    public static String pickerDate="0";
@@ -370,7 +374,8 @@ public class CommonInfo
 
 	// Its for Test Release  Path on 194 server for SFA
 
-	/*public static Uri uriSavedImage_savedInstance=null;
+
+	public static Uri uriSavedImage_savedInstance=null;
 
 	public static String userDate="0";
 	public static String pickerDate="0";
@@ -404,8 +409,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 71;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.11";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 78;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.15";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsTestRelease/DefaultSOSFA.aspx";
@@ -450,6 +455,7 @@ public class CommonInfo
 	public static int SalesmanNodeType=0;
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
-	public static int DayStartClick=0;*/
+	public static int DayStartClick=0;
+
 
 }

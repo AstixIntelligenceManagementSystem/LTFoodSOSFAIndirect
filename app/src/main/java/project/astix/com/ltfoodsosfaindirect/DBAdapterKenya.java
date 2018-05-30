@@ -29918,8 +29918,8 @@ close();
 
     public void fndeleteSbumittedStoreList(int Sstat)
     {
-        //
-        open();
+
+       /* open();
         db.execSQL("DELETE FROM tblPreAddedStores WHERE Sstat="+ Sstat);
         db.execSQL("DELETE FROM tblNewStoreSalesQuotePaymentDetails WHERE Sstat="+ Sstat);
 
@@ -29927,7 +29927,7 @@ close();
 
 
 
-        close();
+        close();*/
     }
 
     public ArrayList<String> getImageDetails(int sStat)
@@ -30045,15 +30045,13 @@ close();
 	{
 		db.execSQL("DELETE FROM tblUserName");
 		db.execSQL("DELETE FROM tblStoreCountDetails");
-		//db.execSQL("DELETE FROM tblPreAddedStores");
+		db.execSQL("DELETE FROM tblPreAddedStores");
 
 		db.execSQL("DELETE FROM tblCoverageMaster");
 		db.execSQL("DELETE FROM tblRouteMasterWithCoverageMapping");
-		// db.execSQL("DELETE FROM tblStoreImageList");
-		// db.execSQL("DELETE FROM tblStorePaymentStageMapping");
+        db.execSQL("DELETE FROM tblNewStoreSalesQuotePaymentDetails WHERE Sstat=4 or Sstat=3");
 
-		// db.execSQL("DELETE FROM tblFSOMaster");
-		// db.execSQL("DELETE FROM tblPreAddedStoresDataDetails");
+        db.execSQL("DELETE FROM tblOutletQuestAnsMstr WHERE Sstat=4 or Sstat=3");
 		db.execSQL("DELETE FROM tblLocationDetails");
 	}
 	public long saveTblUserName(String UserName) {

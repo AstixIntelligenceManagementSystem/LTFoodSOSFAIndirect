@@ -11,8 +11,6 @@ public class CommonInfo
 	// Its for Live  Path on 194 server for SFA
 
 
-/*
-
 
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
@@ -94,7 +92,7 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 
-*/
+
 
 
 
@@ -289,7 +287,7 @@ public class CommonInfo
 	// Its for Development  Path on 194 server for SFA
 
 
-     /*  public static Uri uriSavedImage_savedInstance=null;
+     /*   public static Uri uriSavedImage_savedInstance=null;
 
 	    public static String userDate="0";
 	    public static String pickerDate="0";
@@ -375,7 +373,7 @@ public class CommonInfo
 	// Its for Test Release  Path on 194 server for SFA
 
 
-	public static Uri uriSavedImage_savedInstance=null;
+	/*public static Uri uriSavedImage_savedInstance=null;
 
 	public static String userDate="0";
 	public static String pickerDate="0";
@@ -455,7 +453,7 @@ public class CommonInfo
 	public static int SalesmanNodeType=0;
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
-	public static int DayStartClick=0;
+	public static int DayStartClick=0;*/
 
 
 }

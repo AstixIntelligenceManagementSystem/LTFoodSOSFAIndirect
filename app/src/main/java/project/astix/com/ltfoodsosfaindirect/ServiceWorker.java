@@ -16893,6 +16893,10 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 				// int IsStoreDataCompleteSaved,String PaymentStage,int flgLocationTrackEnabled,String StoreAddress,
 				// String StoreCity,String StorePinCode,String StoreState,int Sstat
 
+				Date pdaDate=new Date();
+				SimpleDateFormat	sdfPDaDate = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+				DateAdded = sdfPDaDate.format(pdaDate).toString().trim();
+
 				Element element = (Element) tblPreAddedStoresNode.item(i);
 
 				if(!element.getElementsByTagName("StoreIDDB").equals(null))
@@ -16943,7 +16947,7 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 						LongCode=xmlParser.getCharacterDataFromElement(line);
 					}
 				}
-				/*if(!element.getElementsByTagName("DateAdded").equals(null))
+				if(!element.getElementsByTagName("DateAdded").equals(null))
 				{
 					NodeList DateAddedNode = element.getElementsByTagName("DateAdded");
 					Element     line = (Element) DateAddedNode.item(0);
@@ -16951,7 +16955,7 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 					{
 						DateAdded=xmlParser.getCharacterDataFromElement(line);
 					}
-				}*/
+				}
 
 				if(!element.getElementsByTagName("CoverageAreaID").equals(null))
 				{
@@ -17091,13 +17095,14 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 					}
 					if(hmapStoreIdSstat.containsKey(StoreID))
 					{
-						if(flgRemap==3)
-						{
-							hmapStoreIdSstat.put(StoreID,"0");
-						}
+
 						if(hmapStoreIdSstat.get(StoreID).equals("3"))
 						{
 							hmapStoreIdSstat.put(StoreID,"4");
+						}
+						if(flgRemap==3)
+						{
+							hmapStoreIdSstat.put(StoreID,"0");
 						}
 
 						Sstat=Integer.parseInt(hmapStoreIdSstat.get(StoreID));
@@ -17113,7 +17118,8 @@ public ServiceWorker getAvailableAndUpdatedVersionOfAppNew(Context ctx,String uu
 							{
 								Sstat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
 							}
-						}}
+						}
+					}
 				}
 
 

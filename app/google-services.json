@@ -1,27 +1,31 @@
 {
   "project_info": {
-    "project_number": "452954507924",
-    "firebase_url": "https://ltfoodsosfaindirect.firebaseio.com",
-    "project_id": "ltfoodsosfaindirect",
-    "storage_bucket": "ltfoodsosfaindirect.appspot.com"
+    "project_number": "1061652036714",
+    "firebase_url": "https://ltfoodsosfaindirect-181207.firebaseio.com",
+    "project_id": "ltfoodsosfaindirect-181207",
+    "storage_bucket": "ltfoodsosfaindirect-181207.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:452954507924:android:46af42fe2777b51b",
+        "mobilesdk_app_id": "1:1061652036714:android:46af42fe2777b51b",
         "android_client_info": {
           "package_name": "project.astix.com.ltfoodsosfaindirect"
         }
       },
       "oauth_client": [
         {
-          "client_id": "452954507924-e3l7m6722ai7r4lfcssvua8l9va3l1js.apps.googleusercontent.com",
+          "client_id": "1061652036714-aib0m6nd1mdd679acikfbc3omdrj8bi1.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1061652036714-aib0m6nd1mdd679acikfbc3omdrj8bi1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCukpBDNOtkQQAPgcLT_bGYoKB6G2FFM0g"
+          "current_key": "AIzaSyBriEre2JSeuiq9JU2jFBcUCojZ4lhtSYg"
         }
       ],
       "services": {

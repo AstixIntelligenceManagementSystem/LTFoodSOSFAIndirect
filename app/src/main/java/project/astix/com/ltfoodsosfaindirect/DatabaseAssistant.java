@@ -135,6 +135,7 @@ public class DatabaseAssistant
 				exportTableAttandance("tblAttandanceDetails");
 
 
+				exportTable("tblCompetitrPrdctPTRPTC");
 
 		String xmlString = xmlBuilder.end();
 		writeToFile(xmlString, exportFileNamePrefix + ".xml");

@@ -515,6 +515,9 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait" ></activity>
 
+        <activity android:name=".CompetitorPrdctPriceActivity"
+
+            android:screenOrientation="portrait"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="project.astix.com.ltfoodsosfaindirect.provider"

@@ -159,627 +159,638 @@ public class ServiceWorker
 			int totalCount = responseBody.getPropertyCount();
 
 			// System.out.println("Kajol 2 :"+totalCount);
-	        String resultString=androidHttpTransport.responseDump;
+			String resultString=androidHttpTransport.responseDump;
 
-	        String name=responseBody.getProperty(0).toString();
+			String name=responseBody.getProperty(0).toString();
 
-	       // System.out.println("Kajol 3 :"+name);
+			// System.out.println("Kajol 3 :"+name);
 
-	        XMLParser xmlParser = new XMLParser();
-	        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	            DocumentBuilder db = dbf.newDocumentBuilder();
-	            InputSource is = new InputSource();
-	            is.setCharacterStream(new StringReader(name));
-	            Document doc = db.parse(is);
+			XMLParser xmlParser = new XMLParser();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(name));
+			Document doc = db.parse(is);
 			System.out.println("shivam4");
 
 
-	        //   dbengine.open();
+			//   dbengine.open();
 
-	            NodeList tblUOMMstrNode = doc.getElementsByTagName("tblStoreListMaster");
-	            for (int i = 0; i < tblUOMMstrNode.getLength(); i++)
-	            {
-	            	String StoreID="0";
-					String StoreName="NA";
-					Double StoreLatitude=0.0;
-					Double StoreLongitude=0.0;
-					String StoreType="0";
-					String LastTransactionDate="NA";
-					String LastVisitDate="NA";
-					int Sstat=0;
-					int IsClose=0;
-					int IsNextDat=0;
-					int StoreRouteID=0;
-					int StoreCatNodeId=0;
-					String PaymentStage="0";
-					int flgHasQuote=0;
-					int flgAllowQuotation=0;
-					int flgSubmitFromQuotation=0;
+			NodeList tblUOMMstrNode = doc.getElementsByTagName("tblStoreListMaster");
+			for (int i = 0; i < tblUOMMstrNode.getLength(); i++)
+			{
+				String StoreID="0";
+				String StoreName="NA";
+				Double StoreLatitude=0.0;
+				Double StoreLongitude=0.0;
+				String StoreType="0";
+				String LastTransactionDate="NA";
+				String LastVisitDate="NA";
+				int Sstat=0;
+				int IsClose=0;
+				int IsNextDat=0;
+				int StoreRouteID=0;
+				int StoreCatNodeId=0;
+				String PaymentStage="0";
+				int flgHasQuote=0;
+				int flgAllowQuotation=0;
+				int flgSubmitFromQuotation=0;
 
-					 String flgGSTCapture="1";
-				     String flgGSTCompliance="0";
-				     String GSTNumber="0";
-				     int RouteNodeType=0;
-				     int flgGSTRecordFromServer=0;
+				String flgGSTCapture="1";
+				String flgGSTCompliance="0";
+				String GSTNumber="0";
+				int RouteNodeType=0;
+				int flgGSTRecordFromServer=0;
 
-					String StoreIDPDAFromServer="NA";
-					int flgOrderType=-1;
+				String StoreIDPDAFromServer="NA";
+				int flgOrderType=-1;
 
-					String OwnerName="NA";
-					String StoreContactNo="0000000000";
-					String StoreCatType="NA";
+				String OwnerName="NA";
+				String StoreContactNo="0000000000";
+				String StoreCatType="NA";
+				String flgCaptureCompetitorPTR="0";
 
-	                Element element = (Element) tblUOMMstrNode.item(i);
-	                if(!element.getElementsByTagName("StoreID").equals(null))
-	                 {
+				Element element = (Element) tblUOMMstrNode.item(i);
+				if(!element.getElementsByTagName("StoreID").equals(null))
+				{
 
-	                 NodeList StoreIDNode = element.getElementsByTagName("StoreID");
-	                 Element     line = (Element) StoreIDNode.item(0);
+					NodeList StoreIDNode = element.getElementsByTagName("StoreID");
+					Element     line = (Element) StoreIDNode.item(0);
 
-		                if(StoreIDNode.getLength()>0)
-		                {
-
-		                	StoreID=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("StoreName").equals(null))
-	                 {
-
-	                 NodeList StoreNameNode = element.getElementsByTagName("StoreName");
-	                 Element     line = (Element) StoreNameNode.item(0);
-
-		                if(StoreNameNode.getLength()>0)
-		                {
-
-		                	StoreName=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-
-	                if(!element.getElementsByTagName("StoreLatitude").equals(null))
-	                 {
-
-	                 NodeList StoreLatitudeNode = element.getElementsByTagName("StoreLatitude");
-	                 Element     line = (Element) StoreLatitudeNode.item(0);
-
-		                if(StoreLatitudeNode.getLength()>0)
-		                {
-
-		                	StoreLatitude=Double.parseDouble(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-
-	                if(!element.getElementsByTagName("StoreLongitude").equals(null))
-	                 {
-
-	                 NodeList StoreLongitudeNode = element.getElementsByTagName("StoreLongitude");
-	                 Element     line = (Element) StoreLongitudeNode.item(0);
-
-		                if(StoreLongitudeNode.getLength()>0)
-		                {
-
-		                	StoreLongitude=Double.parseDouble(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("StoreType").equals(null))
-	                 {
-
-	                 NodeList StoreTypeNode = element.getElementsByTagName("StoreType");
-	                 Element     line = (Element) StoreTypeNode.item(0);
-
-		                if(StoreTypeNode.getLength()>0)
-		                {
-
-		                	StoreType=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("LastTransactionDate").equals(null))
-	                 {
-
-	                 NodeList LastTransactionDateNode = element.getElementsByTagName("LastTransactionDate");
-	                 Element     line = (Element) LastTransactionDateNode.item(0);
-
-		                if(LastTransactionDateNode.getLength()>0)
-		                {
-
-		                	LastTransactionDate=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("LastVisitDate").equals(null))
-	                 {
-
-	                 NodeList LastVisitDateNode = element.getElementsByTagName("LastVisitDate");
-	                 Element     line = (Element) LastVisitDateNode.item(0);
-
-		                if(LastVisitDateNode.getLength()>0)
-		                {
-
-		                	LastVisitDate=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("IsClose").equals(null))
-	                 {
-
-	                 NodeList IsCloseNode = element.getElementsByTagName("IsClose");
-	                 Element     line = (Element) IsCloseNode.item(0);
-
-		                if(IsCloseNode.getLength()>0)
-		                {
-
-		                	IsClose=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-
-	                if(!element.getElementsByTagName("IsNextDat").equals(null))
-	                 {
-
-	                 NodeList IsNextDatNode = element.getElementsByTagName("IsNextDat");
-	                 Element     line = (Element) IsNextDatNode.item(0);
-
-		                if(IsNextDatNode.getLength()>0)
-		                {
-
-		                	IsNextDat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("RouteID").equals(null))
-	                 {
-
-	                 NodeList RouteIDNode = element.getElementsByTagName("RouteID");
-	                 Element     line = (Element) RouteIDNode.item(0);
-
-		                if(RouteIDNode.getLength()>0)
-		                {
-
-		                	StoreRouteID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-
-					if(!element.getElementsByTagName("RouteNodeType").equals(null))
+					if(StoreIDNode.getLength()>0)
 					{
 
-						NodeList RouteNodeTypeNode = element.getElementsByTagName("RouteNodeType");
-						Element     line = (Element) RouteNodeTypeNode.item(0);
-
-						if(RouteNodeTypeNode.getLength()>0)
-						{
-
-							RouteNodeType=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-						}
+						StoreID=xmlParser.getCharacterDataFromElement(line);
 					}
-	                if(!element.getElementsByTagName("StoreCatNodeId").equals(null))
-	                 {
+				}
 
-	                 NodeList StoreCatNodeIdNode = element.getElementsByTagName("StoreCatNodeId");
-	                 Element     line = (Element) StoreCatNodeIdNode.item(0);
+				if(!element.getElementsByTagName("StoreName").equals(null))
+				{
 
-		                if(StoreCatNodeIdNode.getLength()>0)
-		                {
+					NodeList StoreNameNode = element.getElementsByTagName("StoreName");
+					Element     line = (Element) StoreNameNode.item(0);
 
-		                	StoreCatNodeId=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-
-	                if(!element.getElementsByTagName("PaymentStage").equals(null))
-	                 {
-
-	                 NodeList PaymentStageNode = element.getElementsByTagName("PaymentStage");
-	                 Element     line = (Element) PaymentStageNode.item(0);
-
-		                if(PaymentStageNode.getLength()>0)
-		                {
-
-		                	PaymentStage=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-
-
-	                if(hmapStoreIdSstatMarketVisit!=null)
+					if(StoreNameNode.getLength()>0)
 					{
-						if(hmapStoreIdSstatMarketVisit.containsKey(StoreIDPDAFromServer))
-						{
-							StoreID=StoreIDPDAFromServer;
 
-						}
-						if(hmapStoreIdSstatMarketVisit.containsKey(StoreID))
+						StoreName=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+				if(!element.getElementsByTagName("StoreLatitude").equals(null))
+				{
+
+					NodeList StoreLatitudeNode = element.getElementsByTagName("StoreLatitude");
+					Element     line = (Element) StoreLatitudeNode.item(0);
+
+					if(StoreLatitudeNode.getLength()>0)
+					{
+
+						StoreLatitude=Double.parseDouble(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+
+				if(!element.getElementsByTagName("StoreLongitude").equals(null))
+				{
+
+					NodeList StoreLongitudeNode = element.getElementsByTagName("StoreLongitude");
+					Element     line = (Element) StoreLongitudeNode.item(0);
+
+					if(StoreLongitudeNode.getLength()>0)
+					{
+
+						StoreLongitude=Double.parseDouble(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+				if(!element.getElementsByTagName("StoreType").equals(null))
+				{
+
+					NodeList StoreTypeNode = element.getElementsByTagName("StoreType");
+					Element     line = (Element) StoreTypeNode.item(0);
+
+					if(StoreTypeNode.getLength()>0)
+					{
+
+						StoreType=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("LastTransactionDate").equals(null))
+				{
+
+					NodeList LastTransactionDateNode = element.getElementsByTagName("LastTransactionDate");
+					Element     line = (Element) LastTransactionDateNode.item(0);
+
+					if(LastTransactionDateNode.getLength()>0)
+					{
+
+						LastTransactionDate=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("LastVisitDate").equals(null))
+				{
+
+					NodeList LastVisitDateNode = element.getElementsByTagName("LastVisitDate");
+					Element     line = (Element) LastVisitDateNode.item(0);
+
+					if(LastVisitDateNode.getLength()>0)
+					{
+
+						LastVisitDate=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("IsClose").equals(null))
+				{
+
+					NodeList IsCloseNode = element.getElementsByTagName("IsClose");
+					Element     line = (Element) IsCloseNode.item(0);
+
+					if(IsCloseNode.getLength()>0)
+					{
+
+						IsClose=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+
+				if(!element.getElementsByTagName("IsNextDat").equals(null))
+				{
+
+					NodeList IsNextDatNode = element.getElementsByTagName("IsNextDat");
+					Element     line = (Element) IsNextDatNode.item(0);
+
+					if(IsNextDatNode.getLength()>0)
+					{
+
+						IsNextDat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+				if(!element.getElementsByTagName("RouteID").equals(null))
+				{
+
+					NodeList RouteIDNode = element.getElementsByTagName("RouteID");
+					Element     line = (Element) RouteIDNode.item(0);
+
+					if(RouteIDNode.getLength()>0)
+					{
+
+						StoreRouteID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+
+				if(!element.getElementsByTagName("RouteNodeType").equals(null))
+				{
+
+					NodeList RouteNodeTypeNode = element.getElementsByTagName("RouteNodeType");
+					Element     line = (Element) RouteNodeTypeNode.item(0);
+
+					if(RouteNodeTypeNode.getLength()>0)
+					{
+
+						RouteNodeType=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+				if(!element.getElementsByTagName("StoreCatNodeId").equals(null))
+				{
+
+					NodeList StoreCatNodeIdNode = element.getElementsByTagName("StoreCatNodeId");
+					Element     line = (Element) StoreCatNodeIdNode.item(0);
+
+					if(StoreCatNodeIdNode.getLength()>0)
+					{
+
+						StoreCatNodeId=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+
+				if(!element.getElementsByTagName("PaymentStage").equals(null))
+				{
+
+					NodeList PaymentStageNode = element.getElementsByTagName("PaymentStage");
+					Element     line = (Element) PaymentStageNode.item(0);
+
+					if(PaymentStageNode.getLength()>0)
+					{
+
+						PaymentStage=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+				if(hmapStoreIdSstatMarketVisit!=null)
+				{
+					if(hmapStoreIdSstatMarketVisit.containsKey(StoreIDPDAFromServer))
+					{
+						StoreID=StoreIDPDAFromServer;
+
+					}
+					if(hmapStoreIdSstatMarketVisit.containsKey(StoreID))
+					{
+						//new
+						if(hmapStoreIdSstatMarketVisit.get(StoreID).equals("3"))
 						{
-							//new
-							if(hmapStoreIdSstatMarketVisit.get(StoreID).equals("3"))
+							hmapStoreIdSstatMarketVisit.put(StoreID,"4");
+						}
+
+						Sstat=Integer.parseInt(hmapStoreIdSstatMarketVisit.get(StoreID));
+
+						//Sstat=Integer.parseInt(StoreSelection.hmapStoreIdSstat.get(StoreID));
+					}
+					else
+					{
+						if(!element.getElementsByTagName("Sstat").equals(null))
+						{
+							NodeList SstatNode = element.getElementsByTagName("Sstat");
+							Element     line = (Element) SstatNode.item(0);
+
+							if(SstatNode.getLength()>0)
 							{
-								hmapStoreIdSstatMarketVisit.put(StoreID,"4");
+								Sstat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
 							}
-
-							Sstat=Integer.parseInt(hmapStoreIdSstatMarketVisit.get(StoreID));
-
-							//Sstat=Integer.parseInt(StoreSelection.hmapStoreIdSstat.get(StoreID));
-						}
-						else
-						{
-							if(!element.getElementsByTagName("Sstat").equals(null))
-	                    	{
-								NodeList SstatNode = element.getElementsByTagName("Sstat");
-								Element     line = (Element) SstatNode.item(0);
-
-								if(SstatNode.getLength()>0)
-								{
-								  Sstat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-								}
-		                 	}
 						}
 					}
+				}
 
-	                if(!element.getElementsByTagName("flgHasQuote").equals(null))
-	                 {
+				if(!element.getElementsByTagName("flgHasQuote").equals(null))
+				{
 
-	                 NodeList flgHasQuoteNode = element.getElementsByTagName("flgHasQuote");
-	                 Element     line = (Element) flgHasQuoteNode.item(0);
+					NodeList flgHasQuoteNode = element.getElementsByTagName("flgHasQuote");
+					Element     line = (Element) flgHasQuoteNode.item(0);
 
-		                if(flgHasQuoteNode.getLength()>0)
-		                {
-
-		                	flgHasQuote=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-					//flgQuote
-
-	                if(!element.getElementsByTagName("flgAllowQuotation").equals(null))
-	                 {
-
-	                 NodeList flgAllowQuotationNode = element.getElementsByTagName("flgAllowQuotation");
-	                 Element     line = (Element) flgAllowQuotationNode.item(0);
-
-		                if(flgAllowQuotationNode.getLength()>0)
-		                {
-
-		                	flgAllowQuotation=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-
-
-	                if(!element.getElementsByTagName("flgSubmitFromQuotation").equals(null))
-	                 {
-
-	                 NodeList flgSubmitFromQuotationNode = element.getElementsByTagName("flgSubmitFromQuotation");
-	                 Element     line = (Element) flgSubmitFromQuotationNode.item(0);
-
-		                if(flgSubmitFromQuotationNode.getLength()>0)
-		                {
-
-		                	flgSubmitFromQuotation=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
-	                if(!element.getElementsByTagName("flgGSTCapture").equals(null))
-	                 {
-
-	                 NodeList flgGSTCaptureNode = element.getElementsByTagName("flgGSTCapture");
-	                 Element     line = (Element) flgGSTCaptureNode.item(0);
-
-		                if(flgGSTCaptureNode.getLength()>0)
-		                {
-
-		                	flgGSTCapture=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("flgGSTCompliance").equals(null))
-	                 {
-
-	                 NodeList flgGSTComplianceNode = element.getElementsByTagName("flgGSTCompliance");
-	                 Element     line = (Element) flgGSTComplianceNode.item(0);
-
-		                if(flgGSTComplianceNode.getLength()>0)
-		                {
-
-		                	flgGSTCompliance=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-	                if(!element.getElementsByTagName("GSTNumber").equals(null))
-	                 {
-
-	                 NodeList GSTNumberNode = element.getElementsByTagName("GSTNumber");
-	                 Element     line = (Element) GSTNumberNode.item(0);
-
-		                if(GSTNumberNode.getLength()>0)
-		                {
-
-		                	GSTNumber=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-
-					if(!element.getElementsByTagName("StoreIDPDA").equals(null))
+					if(flgHasQuoteNode.getLength()>0)
 					{
 
-						NodeList StoreIDPDANode = element.getElementsByTagName("StoreIDPDA");
-						Element     line = (Element) StoreIDPDANode.item(0);
-
-						if(StoreIDPDANode.getLength()>0)
-						{
-
-							StoreIDPDAFromServer=xmlParser.getCharacterDataFromElement(line);
-						}
+						flgHasQuote=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
 					}
-					if(!element.getElementsByTagName("OwnerName").equals(null))
+				}
+
+				//flgQuote
+
+				if(!element.getElementsByTagName("flgAllowQuotation").equals(null))
+				{
+
+					NodeList flgAllowQuotationNode = element.getElementsByTagName("flgAllowQuotation");
+					Element     line = (Element) flgAllowQuotationNode.item(0);
+
+					if(flgAllowQuotationNode.getLength()>0)
 					{
-						NodeList OwnerNameNode = element.getElementsByTagName("OwnerName");
-						Element     line = (Element) OwnerNameNode.item(0);
-						if(OwnerNameNode.getLength()>0)
-						{
-							OwnerName=XMLParser.getCharacterDataFromElement(line);
-						}
-					}
 
-					if(!element.getElementsByTagName("StoreContactNo").equals(null))
+						flgAllowQuotation=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+
+				if(!element.getElementsByTagName("flgSubmitFromQuotation").equals(null))
+				{
+
+					NodeList flgSubmitFromQuotationNode = element.getElementsByTagName("flgSubmitFromQuotation");
+					Element     line = (Element) flgSubmitFromQuotationNode.item(0);
+
+					if(flgSubmitFromQuotationNode.getLength()>0)
 					{
-						NodeList StoreContactNoNode = element.getElementsByTagName("StoreContactNo");
-						Element     line = (Element) StoreContactNoNode.item(0);
-						if(StoreContactNoNode.getLength()>0)
-						{
-							StoreContactNo =XMLParser.getCharacterDataFromElement(line);
-						}
+
+						flgSubmitFromQuotation=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
 					}
+				}
+				if(!element.getElementsByTagName("flgGSTCapture").equals(null))
+				{
 
+					NodeList flgGSTCaptureNode = element.getElementsByTagName("flgGSTCapture");
+					Element     line = (Element) flgGSTCaptureNode.item(0);
 
-					if(!element.getElementsByTagName("StoreCatType").equals(null))
+					if(flgGSTCaptureNode.getLength()>0)
 					{
-						NodeList StoreCatTypeNode = element.getElementsByTagName("StoreCatType");
-						Element     line = (Element) StoreCatTypeNode.item(0);
-						if(StoreCatTypeNode.getLength()>0)
-						{
-							StoreCatType=XMLParser.getCharacterDataFromElement(line);
-						}
+
+						flgGSTCapture=xmlParser.getCharacterDataFromElement(line);
 					}
+				}
 
+				if(!element.getElementsByTagName("flgGSTCompliance").equals(null))
+				{
 
-					if(flgGSTCompliance.equals("1"))
-		                 {
-		                	 flgGSTRecordFromServer=1;
-		                 }
-		                 if(flgGSTCapture.equals(null))
-		                 {
-		                	 flgGSTCapture="1";
-		                 }
-		                 if(flgGSTCompliance.equals(null))
-		                 {
-		                	 flgGSTCompliance="NA";
-		                 }
-		                 if(GSTNumber.equals(null))
-		                 {
-		                	 GSTNumber="0";
-		                 }
+					NodeList flgGSTComplianceNode = element.getElementsByTagName("flgGSTCompliance");
+					Element     line = (Element) flgGSTComplianceNode.item(0);
 
-
-	                //flgSubmitFromQuotation
-	                //flgAllowQuotation
-					int AutoIdStore=0;
-					AutoIdStore= i +1;
-					String StoreAddress="";
-
-					if(!StoreIDPDAFromServer.equals(StoreID))
+					if(flgGSTComplianceNode.getLength()>0)
 					{
-						dbengine.saveSOAPdataStoreList(StoreID,StoreName,StoreType,StoreLatitude,StoreLongitude,
-								LastVisitDate,LastTransactionDate,dateVAL.toString().trim(), AutoIdStore, Sstat,IsClose,
-								IsNextDat,StoreRouteID,StoreCatNodeId,StoreAddress,PaymentStage,flgHasQuote,flgAllowQuotation,
-								flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,
-								RouteNodeType,flgOrderType,OwnerName,StoreContactNo, StoreCatType);
 
-						System.out.println("STORES....."+StoreID+"^^"+StoreName+"^^"+Sstat);
+						flgGSTCompliance=xmlParser.getCharacterDataFromElement(line);
 					}
-	            }
+				}
+
+				if(!element.getElementsByTagName("GSTNumber").equals(null))
+				{
+
+					NodeList GSTNumberNode = element.getElementsByTagName("GSTNumber");
+					Element     line = (Element) GSTNumberNode.item(0);
+
+					if(GSTNumberNode.getLength()>0)
+					{
+
+						GSTNumber=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("StoreIDPDA").equals(null))
+				{
+
+					NodeList StoreIDPDANode = element.getElementsByTagName("StoreIDPDA");
+					Element     line = (Element) StoreIDPDANode.item(0);
+
+					if(StoreIDPDANode.getLength()>0)
+					{
+
+						StoreIDPDAFromServer=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+				if(!element.getElementsByTagName("OwnerName").equals(null))
+				{
+					NodeList OwnerNameNode = element.getElementsByTagName("OwnerName");
+					Element     line = (Element) OwnerNameNode.item(0);
+					if(OwnerNameNode.getLength()>0)
+					{
+						OwnerName=XMLParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("StoreContactNo").equals(null))
+				{
+					NodeList StoreContactNoNode = element.getElementsByTagName("StoreContactNo");
+					Element     line = (Element) StoreContactNoNode.item(0);
+					if(StoreContactNoNode.getLength()>0)
+					{
+						StoreContactNo =XMLParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+				if(!element.getElementsByTagName("StoreCatType").equals(null))
+				{
+					NodeList StoreCatTypeNode = element.getElementsByTagName("StoreCatType");
+					Element     line = (Element) StoreCatTypeNode.item(0);
+					if(StoreCatTypeNode.getLength()>0)
+					{
+						StoreCatType=XMLParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("flgCompSurvey").equals(null))
+				{
+					NodeList flgCaptureCompetitorPTRNode = element.getElementsByTagName("flgCompSurvey");
+					Element     line = (Element) flgCaptureCompetitorPTRNode.item(0);
+					if(flgCaptureCompetitorPTRNode.getLength()>0)
+					{
+						flgCaptureCompetitorPTR=XMLParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+				if(flgGSTCompliance.equals("1"))
+				{
+					flgGSTRecordFromServer=1;
+				}
+				if(flgGSTCapture.equals(null))
+				{
+					flgGSTCapture="1";
+				}
+				if(flgGSTCompliance.equals(null))
+				{
+					flgGSTCompliance="NA";
+				}
+				if(GSTNumber.equals(null))
+				{
+					GSTNumber="0";
+				}
+
+
+				//flgSubmitFromQuotation
+				//flgAllowQuotation
+				int AutoIdStore=0;
+				AutoIdStore= i +1;
+				String StoreAddress="";
 
+				if(!StoreIDPDAFromServer.equals(StoreID))
+				{
+					dbengine.saveSOAPdataStoreList(StoreID,StoreName,StoreType,StoreLatitude,StoreLongitude,
+							LastVisitDate,LastTransactionDate,dateVAL.toString().trim(), AutoIdStore, Sstat,IsClose,
+							IsNextDat,StoreRouteID,StoreCatNodeId,StoreAddress,PaymentStage,flgHasQuote,flgAllowQuotation,
+							flgSubmitFromQuotation,flgGSTCapture,flgGSTCompliance,GSTNumber,flgGSTRecordFromServer,
+							RouteNodeType,flgOrderType,OwnerName,StoreContactNo, StoreCatType,flgCaptureCompetitorPTR);
 
-	            NodeList tblStoreListWithPaymentAddressMR = doc.getElementsByTagName("tblStoreListWithPaymentAddressMR");
-	            for (int i = 0; i < tblStoreListWithPaymentAddressMR.getLength(); i++)
-	            {
+					System.out.println("STORES....."+StoreID+"^^"+StoreName+"^^"+flgCaptureCompetitorPTR);
+				}
+			}
 
-	            	String StoreID="0";
-					int OutAddTypeID=0;
 
-					String Address="";
-					String AddressDet="Not Available";
-					int OutAddID=0;
+			NodeList tblStoreListWithPaymentAddressMR = doc.getElementsByTagName("tblStoreListWithPaymentAddressMR");
+			for (int i = 0; i < tblStoreListWithPaymentAddressMR.getLength(); i++)
+			{
 
+				String StoreID="0";
+				int OutAddTypeID=0;
 
-	                Element element = (Element) tblStoreListWithPaymentAddressMR.item(i);
+				String Address="";
+				String AddressDet="Not Available";
+				int OutAddID=0;
 
-	                if(!element.getElementsByTagName("StoreID").equals(null))
-	                 {
 
-	                 NodeList StoreIDNode = element.getElementsByTagName("StoreID");
-	                 Element     line = (Element) StoreIDNode.item(0);
+				Element element = (Element) tblStoreListWithPaymentAddressMR.item(i);
 
-		                if(StoreIDNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("StoreID").equals(null))
+				{
 
-		                	StoreID=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList StoreIDNode = element.getElementsByTagName("StoreID");
+					Element     line = (Element) StoreIDNode.item(0);
 
-	                if(!element.getElementsByTagName("OutAddTypeID").equals(null))
-	                 {
+					if(StoreIDNode.getLength()>0)
+					{
 
-	                 NodeList OutAddTypeIDNode = element.getElementsByTagName("OutAddTypeID");
-	                 Element     line = (Element) OutAddTypeIDNode.item(0);
+						StoreID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-		                if(OutAddTypeIDNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("OutAddTypeID").equals(null))
+				{
 
-		                	OutAddTypeID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
+					NodeList OutAddTypeIDNode = element.getElementsByTagName("OutAddTypeID");
+					Element     line = (Element) OutAddTypeIDNode.item(0);
 
-	                if(!element.getElementsByTagName("Address").equals(null))
-	                 {
+					if(OutAddTypeIDNode.getLength()>0)
+					{
 
-	                 NodeList AddressNode = element.getElementsByTagName("Address");
-	                 Element     line = (Element) AddressNode.item(0);
+						OutAddTypeID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
 
-		                if(AddressNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("Address").equals(null))
+				{
 
-		                	Address=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList AddressNode = element.getElementsByTagName("Address");
+					Element     line = (Element) AddressNode.item(0);
 
+					if(AddressNode.getLength()>0)
+					{
 
-	                if(!element.getElementsByTagName("AddressDet").equals(null))
-	                 {
+						Address=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-	                 NodeList AddressDetNode = element.getElementsByTagName("AddressDet");
-	                 Element     line = (Element) AddressDetNode.item(0);
 
-		                if(AddressDetNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("AddressDet").equals(null))
+				{
 
-		                	AddressDet=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList AddressDetNode = element.getElementsByTagName("AddressDet");
+					Element     line = (Element) AddressDetNode.item(0);
 
+					if(AddressDetNode.getLength()>0)
+					{
 
-	                if(!element.getElementsByTagName("OutAddID").equals(null))
-	                 {
+						AddressDet=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-	                 NodeList OutAddIDNode = element.getElementsByTagName("OutAddID");
-	                 Element     line = (Element) OutAddIDNode.item(0);
 
-		                if(OutAddIDNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("OutAddID").equals(null))
+				{
 
-		                	OutAddID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
+					NodeList OutAddIDNode = element.getElementsByTagName("OutAddID");
+					Element     line = (Element) OutAddIDNode.item(0);
 
-	                int AutoIdStore=0;
-					AutoIdStore= i +1;
+					if(OutAddIDNode.getLength()>0)
+					{
 
-					dbengine.saveSOAPdataStoreListAddressMap(StoreID,OutAddTypeID,Address,AddressDet,OutAddID);
-	            }
+						OutAddID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
 
+				int AutoIdStore=0;
+				AutoIdStore= i +1;
 
-	            NodeList tblStoreSomeProdQuotePriceMstr = doc.getElementsByTagName("tblStoreSomeProdQuotePriceMstr");
-	            for (int i = 0; i < tblStoreSomeProdQuotePriceMstr.getLength(); i++)
-	            {
+				dbengine.saveSOAPdataStoreListAddressMap(StoreID,OutAddTypeID,Address,AddressDet,OutAddID);
+			}
 
-	            	String prdId="0";
-	            	String StoreID="0";
-					String QPBT="0";
-					String QPAT="0";
-					String QPTaxAmt="0";
-					int MinDlvryQty=0;
-					String UOMID="0";
 
+			NodeList tblStoreSomeProdQuotePriceMstr = doc.getElementsByTagName("tblStoreSomeProdQuotePriceMstr");
+			for (int i = 0; i < tblStoreSomeProdQuotePriceMstr.getLength(); i++)
+			{
 
-	                Element element = (Element) tblStoreSomeProdQuotePriceMstr.item(i);
+				String prdId="0";
+				String StoreID="0";
+				String QPBT="0";
+				String QPAT="0";
+				String QPTaxAmt="0";
+				int MinDlvryQty=0;
+				String UOMID="0";
 
-	                if(!element.getElementsByTagName("PrdId").equals(null))
-	                 {
 
-	                 NodeList PrdIdNode = element.getElementsByTagName("PrdId");
-	                 Element     line = (Element) PrdIdNode.item(0);
+				Element element = (Element) tblStoreSomeProdQuotePriceMstr.item(i);
 
-		                if(PrdIdNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("PrdId").equals(null))
+				{
 
-		                	prdId=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
-	                if(!element.getElementsByTagName("StoreId").equals(null))
-	                 {
+					NodeList PrdIdNode = element.getElementsByTagName("PrdId");
+					Element     line = (Element) PrdIdNode.item(0);
 
-	                 NodeList StoreIDNode = element.getElementsByTagName("StoreId");
-	                 Element     line = (Element) StoreIDNode.item(0);
+					if(PrdIdNode.getLength()>0)
+					{
 
-		                if(StoreIDNode.getLength()>0)
-		                {
+						prdId=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+				if(!element.getElementsByTagName("StoreId").equals(null))
+				{
 
-		                	StoreID=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList StoreIDNode = element.getElementsByTagName("StoreId");
+					Element     line = (Element) StoreIDNode.item(0);
 
-	                if(!element.getElementsByTagName("QPBT").equals(null))
-	                 {
+					if(StoreIDNode.getLength()>0)
+					{
 
-	                 NodeList QPBTNode = element.getElementsByTagName("QPBT");
-	                 Element     line = (Element) QPBTNode.item(0);
+						StoreID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-		                if(QPBTNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("QPBT").equals(null))
+				{
 
-		                	QPBT=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList QPBTNode = element.getElementsByTagName("QPBT");
+					Element     line = (Element) QPBTNode.item(0);
 
-	                if(!element.getElementsByTagName("QPAT").equals(null))
-	                 {
+					if(QPBTNode.getLength()>0)
+					{
 
-	                 NodeList QPATNode = element.getElementsByTagName("QPAT");
-	                 Element     line = (Element) QPATNode.item(0);
+						QPBT=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-		                if(QPATNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("QPAT").equals(null))
+				{
 
-		                	QPAT=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList QPATNode = element.getElementsByTagName("QPAT");
+					Element     line = (Element) QPATNode.item(0);
 
-	                if(!element.getElementsByTagName("QPTaxAmt").equals(null))
-	                 {
+					if(QPATNode.getLength()>0)
+					{
 
-	                 NodeList QPTaxmtNode = element.getElementsByTagName("QPTaxAmt");
-	                 Element     line = (Element) QPTaxmtNode.item(0);
+						QPAT=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-		                if(QPTaxmtNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("QPTaxAmt").equals(null))
+				{
 
-		                	QPTaxAmt=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList QPTaxmtNode = element.getElementsByTagName("QPTaxAmt");
+					Element     line = (Element) QPTaxmtNode.item(0);
 
+					if(QPTaxmtNode.getLength()>0)
+					{
 
-	                if(!element.getElementsByTagName("MinDlvryQty").equals(null))
-	                 {
+						QPTaxAmt=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-	                 NodeList AddressDetNode = element.getElementsByTagName("MinDlvryQty");
-	                 Element     line = (Element) AddressDetNode.item(0);
 
-		                if(AddressDetNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("MinDlvryQty").equals(null))
+				{
 
-		                	MinDlvryQty=Integer.valueOf(xmlParser.getCharacterDataFromElement(line));
-		                }
-	            	 }
+					NodeList AddressDetNode = element.getElementsByTagName("MinDlvryQty");
+					Element     line = (Element) AddressDetNode.item(0);
 
+					if(AddressDetNode.getLength()>0)
+					{
 
-	                if(!element.getElementsByTagName("UOMID").equals(null))
-	                 {
+						MinDlvryQty=Integer.valueOf(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
 
-	                 NodeList OutAddIDNode = element.getElementsByTagName("UOMID");
-	                 Element     line = (Element) OutAddIDNode.item(0);
 
-		                if(OutAddIDNode.getLength()>0)
-		                {
+				if(!element.getElementsByTagName("UOMID").equals(null))
+				{
 
-		                	UOMID=xmlParser.getCharacterDataFromElement(line);
-		                }
-	            	 }
+					NodeList OutAddIDNode = element.getElementsByTagName("UOMID");
+					Element     line = (Element) OutAddIDNode.item(0);
 
-	                int AutoIdStore=0;
-					AutoIdStore= i +1;
+					if(OutAddIDNode.getLength()>0)
+					{
 
-					dbengine.insertMinDelQty(prdId, StoreID, QPBT, QPTaxAmt, MinDlvryQty, UOMID,QPAT);
-	            }
+						UOMID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				int AutoIdStore=0;
+				AutoIdStore= i +1;
+
+				dbengine.insertMinDelQty(prdId, StoreID, QPBT, QPTaxAmt, MinDlvryQty, UOMID,QPAT);
+			}
 
 
 			dbengine.open();
@@ -937,11 +948,149 @@ public class ServiceWorker
 			}
 
 
-	            setmovie.director = "1";
-				// System.out.println("ServiceWorkerNitish getallStores Completed ");
-				flagExecutedServiceSuccesfully=1;
-				dbengine.close();
-				return setmovie;
+			NodeList tblCompetitorPrdctMstr = doc.getElementsByTagName("tblCompetitorPrdctMstr");
+			for (int i = 0; i < tblCompetitorPrdctMstr.getLength(); i++)
+			{
+
+				String CompetitionProductID="0";
+				String CompetitionProductName="0";
+				String CompetitorBrandID="0";
+				String LTFoodsSimilarBrand="0";
+				int CategoryID =0;
+				int Seq=0;
+				String Category="0";
+				int BusinessUnitId=0;
+				String BusinessUnit="0";
+
+
+				Element element = (Element) tblCompetitorPrdctMstr.item(i);
+
+				if(!element.getElementsByTagName("CompetitionProductID").equals(null))
+				{
+
+					NodeList CompetitionProductIDNode = element.getElementsByTagName("CompetitionProductID");
+					Element     line = (Element) CompetitionProductIDNode.item(0);
+
+					if(CompetitionProductIDNode.getLength()>0)
+					{
+
+						CompetitionProductID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+				if(!element.getElementsByTagName("CompetitionProductName").equals(null))
+				{
+
+					NodeList CompetitionProductNameNode = element.getElementsByTagName("CompetitionProductName");
+					Element     line = (Element) CompetitionProductNameNode.item(0);
+
+					if(CompetitionProductNameNode.getLength()>0)
+					{
+
+						CompetitionProductName=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("CompetitorBrandID").equals(null))
+				{
+
+					NodeList CompetitorBrandIDNode = element.getElementsByTagName("CompetitorBrandID");
+					Element     line = (Element) CompetitorBrandIDNode.item(0);
+
+					if(CompetitorBrandIDNode.getLength()>0)
+					{
+
+						CompetitorBrandID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("LTFoodsSimilarBrand").equals(null))
+				{
+
+					NodeList LTFoodsSimilarBrandNode = element.getElementsByTagName("LTFoodsSimilarBrand");
+					Element     line = (Element) LTFoodsSimilarBrandNode.item(0);
+
+					if(LTFoodsSimilarBrandNode.getLength()>0)
+					{
+
+						LTFoodsSimilarBrand=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("CategoryID").equals(null))
+				{
+
+					NodeList CategoryIDNode = element.getElementsByTagName("CategoryID");
+					Element     line = (Element) CategoryIDNode.item(0);
+
+					if(CategoryIDNode.getLength()>0)
+					{
+
+						CategoryID=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+				if(!element.getElementsByTagName("Seq").equals(null))
+				{
+
+					NodeList SeqNode = element.getElementsByTagName("Seq");
+					Element     line = (Element) SeqNode.item(0);
+
+					if(SeqNode.getLength()>0)
+					{
+
+						Seq=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+
+				if(!element.getElementsByTagName("Category").equals(null))
+				{
+
+					NodeList CategoryNode = element.getElementsByTagName("Category");
+					Element     line = (Element) CategoryNode.item(0);
+
+					if(CategoryNode.getLength()>0)
+					{
+
+						Category=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+				if(!element.getElementsByTagName("BusinessUnitId").equals(null))
+				{
+
+					NodeList BusinessUnitIdNode = element.getElementsByTagName("BusinessUnitId");
+					Element     line = (Element) BusinessUnitIdNode.item(0);
+
+					if(BusinessUnitIdNode.getLength()>0)
+					{
+
+						BusinessUnitId=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+					}
+				}
+				if(!element.getElementsByTagName("BusinessUnit").equals(null))
+				{
+
+					NodeList BusinessUnitNode = element.getElementsByTagName("BusinessUnit");
+					Element     line = (Element) BusinessUnitNode.item(0);
+
+					if(BusinessUnitNode.getLength()>0)
+					{
+
+						BusinessUnit=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+
+				dbengine.insertCmpttrPrdctMstr(CompetitionProductID,CompetitionProductName,CompetitorBrandID,LTFoodsSimilarBrand,CategoryID,Seq,Category,BusinessUnitId,BusinessUnit);
+			}
+
+			setmovie.director = "1";
+			// System.out.println("ServiceWorkerNitish getallStores Completed ");
+			flagExecutedServiceSuccesfully=1;
+			dbengine.close();
+			return setmovie;
 
 		} catch (Exception e) {
 

@@ -130,7 +130,7 @@ public class SplashScreen extends AppCompatActivity
        //  imei="353572080913610"; // stagging
 
       // imei="358674084810068"; // Test Release
-      // imei="867290026163310"; // Dev Release
+       imei="867290026163310"; // Dev Release
 
      //  imei="354010084603910";// Dev For Alok
        //  imei="359473079352536";  // Test Ramesh

@@ -980,7 +980,15 @@ public class SyncMaster extends Activity
 					}
 				else
 				{
-				pDialogGetStores.setMessage("Submitting Order Details...");
+					if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
+					{
+						pDialogGetStores.setMessage("Ending your day visit ...");
+					}
+					else
+					{
+						pDialogGetStores.setMessage("Submitting Order Details...");
+					}
+
 				}
 				pDialogGetStores.setIndeterminate(false);
 				pDialogGetStores.setCancelable(false);
@@ -1636,13 +1644,16 @@ public class SyncMaster extends Activity
 			    if(StoreSelection.flgChangeRouteOrDayEnd==1)
 				{
 				 pDialogGetStores.setMessage("Ending your day visit ...");
+					StoreSelection.flgChangeRouteOrDayEnd=0;
 				}else if(StoreSelection.flgChangeRouteOrDayEnd==2)
 				{
 				 pDialogGetStores.setMessage("Changing the route....");
+					StoreSelection.flgChangeRouteOrDayEnd=0;
 				}
 				else if(StoreSelection.flgChangeRouteOrDayEnd==3)
 				{
 					 pDialogGetStores.setMessage("Submitting Quotation Details...");
+					StoreSelection.flgChangeRouteOrDayEnd=0;
 					}
 				else if(AllButtonActivity.flgJointWorking==1)
 				{
@@ -1657,10 +1668,14 @@ public class SyncMaster extends Activity
 				else if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
 				{
 					pDialogGetStores.setMessage("Ending your day visit ...");
+					AllButtonActivity.flgChangeRouteOrDayEnd=0;
 				}
 				else
 				{
-				pDialogGetStores.setMessage("Submitting Order Details...");
+
+
+						pDialogGetStores.setMessage("Submitting Order Details...");
+
 				}
 				pDialogGetStores.setIndeterminate(false);
 				pDialogGetStores.setCancelable(false);

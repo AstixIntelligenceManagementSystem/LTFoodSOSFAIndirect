@@ -1654,6 +1654,10 @@ public class SyncMaster extends Activity
 					pDialogGetStores.setMessage("Submitting Day Start Details...");
 					DayStartActivity.flgDaySartWorking=0;
 				}
+				else if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
+				{
+					pDialogGetStores.setMessage("Ending your day visit ...");
+				}
 				else
 				{
 				pDialogGetStores.setMessage("Submitting Order Details...");

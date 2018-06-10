@@ -919,7 +919,7 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 			"NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, " +
 			"FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null," +
 			"FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null," +
-            "flgRestart int null,MapAddress text null,MapCity text null,MapPinCode text null,MapState text null,CityId text null,StateId text null,PhoneNo text null,EmailID text null);";
+            "flgRestart int null,MapAddress text null,MapCity text null,MapPinCode text null,MapState text null,CityId text null,StateId text null,PhoneNo text null,EmailID text null,FirstName text null,LastName text null,DOB text null);";   //String FirstName,String LastName, String DOB
 
 	//market visit proceed btn loc fetch
 	private static final String TABLE_tblDsrLocationDetails="tblDsrLocationDetails";
@@ -28781,7 +28781,7 @@ open();
 											  int Sstat,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,
                                               int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgRestart
             ,String CityId,String StateId,String MapAddress,String MapCity,String MapPinCode,String MapState,
-                                              String PhoneNo,String EmailID)
+                                              String PhoneNo,String EmailID,String FirstName,String LastName, String DOB)
 	{
 		ContentValues initialValues = new ContentValues();
 
@@ -28841,6 +28841,11 @@ open();
 
         initialValues.put("PhoneNo", PhoneNo);
         initialValues.put("EmailID", EmailID);
+
+
+        initialValues.put("FirstName", FirstName);
+        initialValues.put("LastName", LastName);
+        initialValues.put("DOB", DOB);
 
 		return db.insert(TABLE_tblDistributorMapping, null, initialValues);
 	}

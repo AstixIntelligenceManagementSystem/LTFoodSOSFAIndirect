@@ -52,6 +52,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astix.Common.CommonInfo;
 import com.google.android.gms.common.ConnectionResult;
@@ -69,6 +70,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,6 +85,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -96,8 +99,16 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 
-public class DistributorMapActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,CategoryCommunicatorCityState
+public class DistributorMapActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,CategoryCommunicatorCityState,com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 {
+
+    Calendar calendar ;
+    int Year, Month, Day ;
+    DatePickerDialog datePickerDialog ;
+    boolean dob_Bool=false;
+    TextView txt_Dob_credential,Text_Dob;
+    boolean credential_dob_Bool=false;
     LinkedHashMap<String,String> hmapCityAgainstState;
     String defaultCity="";
     boolean isSelectedSearch=false;
@@ -262,9 +273,35 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
     LinearLayout ll_refresh;
 
     //new added on 27 march, 2018
-    EditText etPhoneNo,etMail;
-    TextView txt_phone;
+    EditText etPhoneNo,etMail,ed_FirstName,ed_LastName;
+    TextView txt_phone,txt_FirstName,txt_LastName,txt_Dob;
+
+
+
     LinkedHashMap<String,String> hmapDbrContactInfo=new LinkedHashMap<>();
+
+    @Override
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String mon=MONTHS[monthOfYear];
+
+        if(credential_dob_Bool)
+        {
+            txt_Dob_credential.setText(dayOfMonth+"/"+mon+"/"+year);
+        }
+        if(dob_Bool)
+        {
+            Text_Dob.setText(dayOfMonth+"/"+mon+"/"+year);
+        }
+
+        credential_dob_Bool=false;
+        dob_Bool=false;
+
+
+
+    }
+
+
 
     private void getDSRDetail() throws IOException
     {
@@ -317,6 +354,45 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
 
     }
 
+    public void getDateHandling()
+    {
+        Text_Dob= (TextView) findViewById(R.id.Text_Dob);
+        Text_Dob.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dob_Bool=true;
+                calendar = java.util.Calendar.getInstance();
+                Year = calendar.get(Calendar.YEAR) ;
+                Month = calendar.get(Calendar.MONTH);
+                Day = calendar.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = DatePickerDialog.newInstance(DistributorMapActivity.this, Year-24, Month, Day);
+
+                datePickerDialog.setThemeDark(false);
+
+                datePickerDialog.showYearPickerFirst(false);
+
+                Calendar calendarForSetDate = Calendar.getInstance();
+                calendarForSetDate.setTimeInMillis(System.currentTimeMillis());
+
+                // calendar.setTimeInMillis(System.currentTimeMillis()+24*60*60*1000);
+                //YOU can set min or max date using this code
+                // datePickerDialog.setMaxDate(Calendar.getInstance());
+                // datePickerDialog.setMinDate(calendar);
+
+                //  datePickerDialog.setMinDate(calendarForSetDate);
+                calendarForSetDate.set(Year - 18, Month, Day);
+                datePickerDialog.setMaxDate(calendarForSetDate);
+                datePickerDialog.setAccentColor(Color.parseColor("#544f88"));
+
+                datePickerDialog.setTitle(getResources().getString(R.string.txtSELECTDOB));
+                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -360,7 +436,9 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
         helperDb=new DBAdapterKenya(DistributorMapActivity.this);
 
         customHeader();
+
         try {
+            getDateHandling();
             getDSRDetail();
             //report alert
             getDistribtrList();
@@ -674,6 +752,9 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
         etMail= (EditText) viewLoc.findViewById(R.id.etMail);
         etPhoneNo= (EditText) viewLoc.findViewById(R.id.etPhoneNo);
 
+        ed_FirstName= (EditText) findViewById(R.id.ed_FirstName);
+        ed_LastName= (EditText) findViewById(R.id.ed_LastName);
+
         etLocalArea= (EditText) viewLoc.findViewById(R.id.etLocalArea);
 
         etPinCode= (EditText) viewLoc.findViewById(R.id.etPinCode);
@@ -698,6 +779,22 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
 
         SpannableStringBuilder Strtxt_phone=textWithMandatory(txt_phone.getText().toString());
         txt_phone.setText(Strtxt_phone);
+
+
+        txt_FirstName= (TextView) findViewById(R.id.txt_FirstName);
+        SpannableStringBuilder Strtxt_FirstName=textWithMandatory(txt_FirstName.getText().toString());
+        txt_FirstName.setText(Strtxt_FirstName);
+
+        txt_LastName= (TextView) findViewById(R.id.txt_LastName);
+        SpannableStringBuilder Strtxt_LastName=textWithMandatory(txt_LastName.getText().toString());
+        txt_LastName.setText(Strtxt_LastName);
+
+
+        txt_Dob= (TextView) findViewById(R.id.txt_Dob);
+        SpannableStringBuilder Strtxt_Dob=textWithMandatory(txt_Dob.getText().toString());
+        txt_Dob.setText(Strtxt_Dob);
+
+
 
 
     /*    if(!address.equals("NA"))
@@ -2244,39 +2341,20 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
             showAlertForEveryOne("Please Select Distributor.");
             return false;
         }
-       /* else if(flgGSTCapture.equals("1") && rb_gstNo.isChecked()== false && rb_gstYes.isChecked()== false && rb_gstPending.isChecked()== false)
+        else if(TextUtils.isEmpty(ed_FirstName.getText().toString()))
         {
-            showAlertForEveryOne("Please Select Gst Compliance.");
+            showAlertForEveryOne("Please fill First Name.");
             return false;
         }
-        else if(rb_gstYes.isChecked()== true && edit_gstYesVal.getText().toString().trim().equals(null))
+        else if(TextUtils.isEmpty(ed_LastName.getText().toString()))
         {
-            showAlertForEveryOne("Please Fill Gst Compliance Value.");
+            showAlertForEveryOne("Please fill Last name.");
             return false;
         }
-        else if(rb_gstYes.isChecked()== true && edit_gstYesVal.getText().toString().trim().equals("NA"))
+        else if(Text_Dob.getText().toString().trim().equals("Select Date")  )
         {
-            showAlertForEveryOne("Please Fill Gst Compliance Value.");
-            return false;
-        }
-        else if(rb_gstYes.isChecked()== true && edit_gstYesVal.getText().toString().trim().equals("0"))
-        {
-            showAlertForEveryOne("Please Fill Gst Compliance Value.");
-            return false;
-        }
-        else if(rb_gstYes.isChecked()== true && edit_gstYesVal.getText().toString().trim().equals(""))
-        {
-            showAlertForEveryOne("Please Fill Gst Compliance Value.");
-            return false;
-        }
-        else if(rb_gstYes.isChecked()== true && edit_gstYesVal.getText().toString().trim().length()<15)
-        {
-            showAlertForEveryOne("Gst Compliance Value cannot be less then 15 character.");
-            return false;
-        }*/
-        else if(TextUtils.isEmpty(etPhoneNo.getText().toString()))
-        {
-            showAlertForEveryOne("Please fill phone number.");
+            showAlertForEveryOne("Please Select DOB ");
+            //Toast.makeText(getApplicationContext(), "Please Select DOB", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if(etPhoneNo.getText().toString().trim().length()<10)
@@ -2392,9 +2470,17 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
         String val3 = tokens.nextToken().trim();
         String val4 = tokens.nextToken().trim();
         cxz = tokens.nextToken().trim();
+        String imei=null;
+        try
+        {
+            TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            imei = tManager.getDeviceId();
+        }
+        catch (SecurityException e)
+        {
 
-        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tManager.getDeviceId();
+        }
+
         String IMEIid =  imei.substring(9);
 
         cxz = IMEIid +"-"+cxz+"-"+VisitStartTS.replace(" ", "").replace(":", "").trim();
@@ -2554,6 +2640,10 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
             emailID=etMail.getText().toString().trim();
         }
 
+        String FirstName=ed_FirstName.getText().toString().trim();
+        String LastName=ed_LastName.getText().toString().trim();
+        String DOB=Text_Dob.getText().toString().trim();
+
         helperDb.open();
        /* helperDb.savetblDistributorMappingData(UniqueDistribtrMapId,DbrNodeId,DbrNodeType,flgGSTCapture,flgGSTCompliance,
                 GSTNumber,finalAddress,finalPinCode,finalCity,finalState,SOLattitudeFromLauncher,SOLongitudeFromLauncher,
@@ -2573,9 +2663,9 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
                 SOFusedLocationLatitudeWithFirstAttemptFromLauncher,SOFusedLocationLongitudeWithFirstAttemptFromLauncher,
                 SOFusedLocationAccuracyWithFirstAttemptFromLauncher,3,flgLocationServicesOnOff,flgGPSOnOff,
                 flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart, cityID, StateID,
-                MapAddress, MapCity, MapPincode, MapState,phoneNo,emailID);
+                MapAddress, MapCity, MapPincode, MapState,phoneNo,emailID,FirstName,LastName,DOB);
 
-        System.out.println("TEMP SAVE DATA...."+UniqueDistribtrMapId+"--"+DbrNodeId+"--"+DbrNodeType);
+        //System.out.println("TEMP SAVE DATA...."+UniqueDistribtrMapId+"--"+DbrNodeId+"--"+DbrNodeType);
 
         helperDb.close();
         try

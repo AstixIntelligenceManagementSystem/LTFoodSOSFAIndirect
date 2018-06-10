@@ -275,6 +275,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     @Override
     protected void onResume()
     {
+        flgChangeRouteOrDayEnd=0;
         super.onResume();
         if(isDayEndClicked)
         {
@@ -1135,7 +1136,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
             dbengine.close();
 
-            flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
+            flgChangeRouteOrDayEnd=1;
 
             if(isOnline())
             {
@@ -1230,7 +1231,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
         else
         {
-            showAlertForEveryOne("There is no Pending data for upload.");
+            if(isOnline())
+            {
+                DayEndWithoutalert();
+            }
+            else
+            {
+                showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+            }
 
         }
 

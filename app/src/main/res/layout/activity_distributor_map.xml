@@ -248,6 +248,9 @@
                 android:background="@drawable/shadow_with_5dp"
                 android:orientation="vertical">-->
 
+
+
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -256,6 +259,96 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/shadow_with_5dp"
                 android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="First Name"
+                    android:id="@+id/txt_FirstName"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_boundary"
+                    android:id="@+id/ed_FirstName"
+                    android:textColor="#000"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:inputType="textCapWords"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -."
+                    style="@style/CustomEditTextStyle" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="14sp"
+                    android:id="@+id/txt_LastName"
+                    android:text="Last Name"
+                    android:textColor="@color/blue" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_boundary"
+                    android:id="@+id/ed_LastName"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#000"
+                    android:textSize="13sp"
+                    android:inputType="textCapWords"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -."
+                    style="@style/CustomEditTextStyle" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:textSize="14sp"
+                    android:id="@+id/txt_Dob"
+                    android:text="DOB"
+                    android:textColor="@color/blue"
+
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:background="@drawable/edittex_with_white_background"
+
+                    android:id="@+id/Text_Dob"
+                    android:text="Select Date"
+                    android:drawableRight="@drawable/calendar32"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

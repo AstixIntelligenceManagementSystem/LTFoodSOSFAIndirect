@@ -32,7 +32,7 @@ import com.astix.Common.CommonInfo;
 
 public class DBAdapterKenya 
 {
-    SharedPreferences sPref;
+    SharedPreferences sPref,sPrefAttandance;
 	public Cursor cursor;
 	public static final String KEY_PHID = "phID";
 
@@ -5840,6 +5840,18 @@ open();
         SharedPreferences.Editor editor=sPref.edit();
         editor.clear();
         editor.commit();
+
+try {
+    sPrefAttandance=context.getSharedPreferences(CommonInfo.AttandancePreference, context.MODE_PRIVATE);
+    SharedPreferences.Editor editor1=sPrefAttandance.edit();
+    editor1.clear();
+    editor1.commit();
+}
+catch (Exception e)
+{
+
+}
+
 
         db.execSQL("DELETE FROM tblDistributorMapping");
         db.execSQL("DELETE FROM tblDistributorCheckin");

@@ -209,6 +209,7 @@ public class ServiceWorker
 				String StoreContactNo="0000000000";
 				String StoreCatType="NA";
 				String flgCaptureCompetitorPTR="0";
+				String ForDate=dateVAL;
 
 				Element element = (Element) tblUOMMstrNode.item(i);
 				if(!element.getElementsByTagName("StoreID").equals(null))
@@ -221,6 +222,18 @@ public class ServiceWorker
 					{
 
 						StoreID=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+				if(!element.getElementsByTagName("StoreIDPDA").equals(null))
+				{
+
+					NodeList StoreIDPDANode = element.getElementsByTagName("StoreIDPDA");
+					Element     line = (Element) StoreIDPDANode.item(0);
+
+					if(StoreIDPDANode.getLength()>0)
+					{
+
+						StoreIDPDAFromServer=xmlParser.getCharacterDataFromElement(line);
 					}
 				}
 
@@ -384,9 +397,38 @@ public class ServiceWorker
 					}
 				}
 
+				if(StoreSelection.hmapStoreIdSstat!=null)
+				{
+					//StoreIDPDAFromServer
 
+					if(StoreSelection.hmapStoreIdSstat.containsKey(StoreIDPDAFromServer))
+					{
+						StoreID=StoreIDPDAFromServer;
+					}
+					if(StoreSelection.hmapStoreIdSstat.containsKey(StoreID))
+					{
+						Sstat=Integer.parseInt(StoreSelection.hmapStoreIdSstat.get(StoreID));
+						ForDate=StoreSelection.hmapStoreIdForDate.get(StoreID);
+						flgOrderType=Integer.parseInt(StoreSelection.hmapStoreIdflgOrderType.get(StoreID));
+					}
+					else
+					{
+						if(!element.getElementsByTagName("Sstat").equals(null))
+					     {
 
-				if(hmapStoreIdSstatMarketVisit!=null)
+							NodeList SstatNode = element.getElementsByTagName("Sstat");
+							Element     line = (Element) SstatNode.item(0);
+
+							if(SstatNode.getLength()>0)
+							{
+
+								Sstat=Integer.parseInt(xmlParser.getCharacterDataFromElement(line));
+							}
+					    }
+					}
+				}
+
+			/*	if(hmapStoreIdSstatMarketVisit!=null)
 				{
 					if(hmapStoreIdSstatMarketVisit.containsKey(StoreIDPDAFromServer))
 					{
@@ -418,7 +460,7 @@ public class ServiceWorker
 							}
 						}
 					}
-				}
+				}*/
 
 				if(!element.getElementsByTagName("flgHasQuote").equals(null))
 				{
@@ -500,18 +542,7 @@ public class ServiceWorker
 					}
 				}
 
-				if(!element.getElementsByTagName("StoreIDPDA").equals(null))
-				{
 
-					NodeList StoreIDPDANode = element.getElementsByTagName("StoreIDPDA");
-					Element     line = (Element) StoreIDPDANode.item(0);
-
-					if(StoreIDPDANode.getLength()>0)
-					{
-
-						StoreIDPDAFromServer=xmlParser.getCharacterDataFromElement(line);
-					}
-				}
 				if(!element.getElementsByTagName("OwnerName").equals(null))
 				{
 					NodeList OwnerNameNode = element.getElementsByTagName("OwnerName");

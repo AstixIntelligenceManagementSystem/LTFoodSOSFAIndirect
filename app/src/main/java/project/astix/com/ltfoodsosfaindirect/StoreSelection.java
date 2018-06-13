@@ -147,8 +147,10 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 	public TableLayout tl2;
 	RelativeLayout relativeLayout1;
 	int battLevel=0;
-	
+
 	public static HashMap<String, String> hmapStoreIdSstat=new HashMap<String, String>();
+	public static HashMap<String, String> hmapStoreIdForDate=new HashMap<String, String>();
+	public static HashMap<String, String> hmapStoreIdflgOrderType=new HashMap<String, String>();
 	public int flgDayEndOrChangeRoutenew=0;
 	LinkedHashMap<String, String> hmapOutletListForNear=new LinkedHashMap<String, String>();
 	LinkedHashMap<String, String> hmapOutletListForNearUpdated=new LinkedHashMap<String, String>();
@@ -5693,6 +5695,12 @@ public void DayEndWithoutalert()
 					System.out.println("bywww "+mm);
 					if(mm==1)
 					{
+						dbengine.open();
+						hmapStoreIdSstat=dbengine.checkForStoreIdSstat();
+						hmapStoreIdForDate=dbengine.checkForStoreIdForDate();
+						hmapStoreIdflgOrderType=dbengine.checkForStoreIdFlgOrderType();
+
+						dbengine.close();
 						newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID);
 						if(newservice.flagExecutedServiceSuccesfully!=1)
 						{

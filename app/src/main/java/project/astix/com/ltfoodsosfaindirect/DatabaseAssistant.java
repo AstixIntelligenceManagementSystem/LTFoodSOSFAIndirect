@@ -136,6 +136,8 @@ public class DatabaseAssistant
 
 
 				exportTable("tblCompetitrPrdctPTRPTC");
+				exportTable("tableStoreSctnImage");
+				exportTable("tableStoreLtfoodStkCompttrAvlbl");
 
 		String xmlString = xmlBuilder.end();
 		writeToFile(xmlString, exportFileNamePrefix + ".xml");

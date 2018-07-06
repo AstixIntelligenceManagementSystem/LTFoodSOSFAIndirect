@@ -1294,6 +1294,7 @@ public class StorelistActivity extends ActionBarActivity implements LocationList
             int sStat=Integer.parseInt(StoreDetails.split(Pattern.quote("^"))[7]);
             int flgOldNewStore=Integer.parseInt(StoreDetails.split(Pattern.quote("^"))[8]);
             int flgReMap=Integer.parseInt(StoreDetails.split(Pattern.quote("^"))[9]);
+            int flgSelfStoreNode=Integer.parseInt(StoreDetails.split(Pattern.quote("^"))[10]);
             /*String LatCode = StoreDetails.split(Pattern.quote("^"))[1];
             String LongCode = StoreDetails.split(Pattern.quote("^"))[2];
             */

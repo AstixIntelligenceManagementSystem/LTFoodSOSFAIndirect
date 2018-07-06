@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -27,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,6 +57,16 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +75,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -96,8 +111,12 @@ import static project.astix.com.ltfoodsosfaindirect.R.id.ll_distrbtnMap;
 import static project.astix.com.ltfoodsosfaindirect.R.id.ll_dsrTracker;
 
 public class AllButtonActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
+    InputStream inputStream;
 
-
+    public  File fileintialFolder;
+    private File[] listFileFolder;
+    ProgressDialog pDialogGetStoresImage;
+    SharedPreferences sharedPrefForRegistration;
     SharedPreferences sPrefAttandance;
     LinearLayout ll_Parent;
     static int flgJointWorking = 0;
@@ -168,7 +187,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     public SimpleDateFormat currDateFormat;
     public String currSysDate;
 
-    LinearLayout ll_dsrTracker,ll_distrbtnMap,ll_DayEnd,DSMProfiles;
+    LinearLayout ll_dsrTracker,ll_distrbtnMap,ll_DayEnd,DSMProfiles,ll_SoProfile;
     ImageView imgVw_logout;
 
     //report alert
@@ -183,7 +202,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     android.app.AlertDialog GPSONOFFAlert=null;
     public AppLocationService appLocationService;
     public PowerManager pm;
-
+    String ButtonClick="";
     public ProgressDialog pDialog2STANDBY;
 
     private final long startTime = 15000;
@@ -280,15 +299,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         {
             dayEndFunctionalityAfterDialogSummary();
         }
-        if(CommonInfo.DayStartClick==2)
-        {
-            SharedPreferences.Editor editor1=sPrefAttandance.edit();
-            editor1.clear();
-            editor1.commit();
-            CommonInfo.DayStartClick=0;
-            finish();
 
-        }
        /* if(CommonInfo.DayStartClick==1)
         {
             CommonInfo.DayStartClick=0;
@@ -405,7 +416,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 
         userDate = currDateFormat.format(currDate).toString();
-
+        sharedPrefForRegistration=getSharedPreferences("RegistrationValidation", MODE_PRIVATE);
         sharedPref = getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         if(sharedPref.contains("CoverageAreaNodeID"))
         {
@@ -478,6 +489,23 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
             wl.acquire();
+        }
+
+
+        try{
+//if coming from registration sync by dayend redirect to dayend
+            Intent intenFromSync= getIntent();
+            if(intenFromSync!=null){
+                if(intenFromSync.hasExtra("Button")){
+                    ButtonClick= intenFromSync.getStringExtra("Button");
+                    if(ButtonClick.equals("DAYEND")){
+                        AllDayendCode();
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+
         }
     }
 
@@ -612,6 +640,20 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 finish();
             }
         });
+
+        ll_SoProfile = (LinearLayout) findViewById(R.id.ll_SoProfile);
+        ll_SoProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(AllButtonActivity.this,SoRegistrationActivity.class);
+                i.putExtra("IntentFrom", "AllButtonActivity");
+                i.putExtra("Button", "DSMRegistration");
+                startActivity(i);
+                finish();
+            }
+        });
+
+
 
         try {
             getReasonDetail();
@@ -1139,12 +1181,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             if(isOnline())
             {
-                Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
-                syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
-                syncIntent.putExtra("OrigZipFileName", newfullFileName);
-                syncIntent.putExtra("whereTo", whereTo);
-                startActivity(syncIntent);
-                finish();
+                UploadImageFromFolder(0);
+
             }
             else
             {
@@ -1167,8 +1205,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             @Override
             public void onClick(View view)
             {
-                Intent in=new Intent(AllButtonActivity.this,DialogDayEndSummaryActivity.class);
-                startActivity(in);
+                AllDayendCode();
             }
         });
 
@@ -5378,4 +5415,486 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         }
     }
+    public void AllDayendCode(){
+        if(isOnline())
+        {
+
+            if(sharedPrefForRegistration.contains("FlgRegistered") && sharedPrefForRegistration.contains("SubmitOrNot"))
+            {
+                if(sharedPrefForRegistration.getString("FlgRegistered", "").equals("0") && sharedPrefForRegistration.getString("SubmitOrNot", "").equals("0"))
+                {
+                    AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
+                    alertDialogNoConn.setTitle(R.string.genTermNoDataConnection);
+                    alertDialogNoConn.setMessage("Please Update SO Profile Data before Day End");
+                    alertDialogNoConn.setNeutralButton(R.string.txtOk,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    dialog.dismiss();
+
+                                    Intent i=new Intent(AllButtonActivity.this,SoRegistrationActivity.class);
+                                    i.putExtra("IntentFrom", "AllButtonActivity");
+                                    i.putExtra("Button", "DAYEND");
+                                    startActivity(i);
+                                    finish();
+
+
+                                }
+                            });
+                    alertDialogNoConn.setIcon(R.drawable.info_ico);
+                    AlertDialog alert = alertDialogNoConn.create();
+                    alert.show();
+
+                }
+                else
+                {
+                    Intent in=new Intent(AllButtonActivity.this,DialogDayEndSummaryActivity.class);
+                    startActivity(in);
+                }
+
+            }
+            else
+            {
+                Intent in=new Intent(AllButtonActivity.this,DialogDayEndSummaryActivity.class);
+                startActivity(in);
+            }
+        }
+        else{
+            showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+        }
+
+
+    }
+
+
+    public void	UploadImageFromFolder(int flagForWheresendAfterSyncComplete){
+
+        File   fileintial = new File(Environment.getExternalStorageDirectory()
+                + File.separator + CommonInfo.ImagesFolder);
+        String[] imageToBeDeletedFromSdCard=dbengine.deletFromSDCardStoreSctnImage(4);
+        if(!imageToBeDeletedFromSdCard[0].equals("No Data"))
+        {
+            for(int i=0;i<imageToBeDeletedFromSdCard.length;i++)
+            {
+
+                //String file_dj_path = Environment.getExternalStorageDirectory() + "/RSPLSFAImages/"+imageToBeDeletedFromSdCard[i].toString().trim();
+                String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" +imageToBeDeletedFromSdCard[i].toString().trim();
+
+                File fdelete = new File(file_dj_path);
+                if (fdelete.exists())
+                {
+                    if (fdelete.delete())
+                    {
+                        Log.e("-->", "file Deleted :" + file_dj_path);
+                        callBroadCast();
+                    }
+                    else
+                    {
+                        Log.e("-->", "file not Deleted :" + file_dj_path);
+                    }
+                }
+            }
+        }
+
+
+        SyncImageDataFromFolder syncImageFromFolder=new SyncImageDataFromFolder(AllButtonActivity.this,flagForWheresendAfterSyncComplete);
+        syncImageFromFolder.execute();
+
+    }
+
+
+    private class SyncImageDataFromFolder extends AsyncTask<Void, Void, Void>
+    {
+        String[] fp2s;
+        String[] NoOfOutletID;
+        int flagForWheresendAfterSyncComplete;
+
+        public SyncImageDataFromFolder(AllButtonActivity activity,int flagForWheresendAfterSyncComplete)
+        {
+            pDialogGetStoresImage = new ProgressDialog(activity);
+            this.flagForWheresendAfterSyncComplete=flagForWheresendAfterSyncComplete;
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+
+
+            pDialogGetStoresImage.setTitle(getText(R.string.genTermPleaseWaitNew));
+
+            pDialogGetStoresImage.setMessage("Submitting Pending Images...");
+
+            pDialogGetStoresImage.setIndeterminate(false);
+            pDialogGetStoresImage.setCancelable(false);
+            pDialogGetStoresImage.setCanceledOnTouchOutside(false);
+            pDialogGetStoresImage.show();
+
+
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            {
+
+            }
+            else
+            {
+                // Locate the image folder in your SD Card
+                fileintialFolder = new File(Environment.getExternalStorageDirectory()
+                        + File.separator + CommonInfo.ImagesFolder);
+                // Create a new folder if no folder named SDImageTutorial exist
+                fileintialFolder.mkdirs();
+            }
+
+
+            if (fileintialFolder.isDirectory())
+            {
+                listFileFolder = fileintialFolder.listFiles();
+            }
+
+
+
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+
+
+            // Sync POS Images
+
+            try
+            {
+
+                if(listFileFolder!=null && listFileFolder.length>0)
+                {
+                    for(int chkCountstore=0; chkCountstore < listFileFolder.length;chkCountstore++)
+                    {
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                        String image_str= compressImage(listFileFolder[chkCountstore].getAbsolutePath());// BitMapToString(bmp);
+
+
+                        ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
+                        String UploadingImageName=listFileFolder[chkCountstore].getName();
+
+                        try
+                        {
+                            stream.flush();
+                        }
+                        catch (IOException e1)
+                        {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        try
+                        {
+                            stream.close();
+                        }
+                        catch (IOException e1)
+                        {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+
+                        long syncTIMESTAMP = System.currentTimeMillis();
+                        Date datefromat = new Date(syncTIMESTAMP);
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS",Locale.ENGLISH);
+                        String onlyDate=df.format(datefromat);
+
+
+                        nameValuePairs.add(new BasicNameValuePair("image", image_str));
+                        nameValuePairs.add(new BasicNameValuePair("FileName",UploadingImageName));
+                        nameValuePairs.add(new BasicNameValuePair("comment","NA"));
+                        nameValuePairs.add(new BasicNameValuePair("storeID","0"));
+                        nameValuePairs.add(new BasicNameValuePair("date",onlyDate));
+                        nameValuePairs.add(new BasicNameValuePair("routeID","0"));
+
+                        try
+                        {
+
+                            HttpParams httpParams = new BasicHttpParams();
+                            HttpConnectionParams.setSoTimeout(httpParams, 0);
+                            HttpClient httpclient = new DefaultHttpClient(httpParams);
+                            HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+
+
+                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                            HttpResponse response = httpclient.execute(httppost);
+                            String the_string_response = convertResponseToString(response);
+
+                            System.out.println("Sunil Doing Testing Response after sending Image" + the_string_response);
+
+                            //  if(serverResponseCode == 200)
+                            if(the_string_response.equals("Abhinav"))
+                            {
+
+
+                                String file_dj_path = Environment.getExternalStorageDirectory() + "/"+CommonInfo.ImagesFolder+"/"+ UploadingImageName.trim();
+                                File fdelete = new File(file_dj_path);
+                                if (fdelete.exists())
+                                {
+                                    if (fdelete.delete())
+                                    {
+                                        Log.e("-->", "file Deleted :" + file_dj_path);
+                                        callBroadCast();
+                                    }
+                                    else
+                                    {
+                                        Log.e("-->", "file not Deleted :" + file_dj_path);
+                                    }
+                                }
+
+
+                            }
+
+                        }catch(Exception e)
+                        {
+
+
+                        }
+
+
+
+
+
+                    }
+                }
+
+
+            }
+            catch(Exception e)
+            {
+
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onCancelled()
+        {
+            Log.i("SvcMgr", "Service Execution Cancelled");
+        }
+
+        @Override
+        protected void onPostExecute(Void result)
+        {
+            super.onPostExecute(result);
+            if(pDialogGetStoresImage.isShowing() && pDialogGetStoresImage!=null)
+            {
+                pDialogGetStoresImage.dismiss();
+            }
+
+            //  version checkup
+
+
+            Intent syncIntent = new Intent(AllButtonActivity.this, SyncMaster.class);
+            syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
+            syncIntent.putExtra("OrigZipFileName", newfullFileName);
+            syncIntent.putExtra("whereTo", whereTo);
+            startActivity(syncIntent);
+            finish();
+        }
+    }
+    public String compressImage(String imageUri) {
+        String filePath = imageUri;//getRealPathFromURI(imageUri);
+        Bitmap scaledBitmap=null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+//      by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
+//      you try the use the bitmap here, you will get null.
+        options.inJustDecodeBounds = true;
+        Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+
+        int actualHeight = options.outHeight;
+        int actualWidth = options.outWidth;
+
+//      max Height and width values of the compressed image is taken as 816x612
+
+        float maxHeight = 1024.0f;
+        float maxWidth = 768.0f;
+        float imgRatio = actualWidth / actualHeight;
+        float maxRatio = maxWidth / maxHeight;
+
+//      width and height values are set maintaining the aspect ratio of the image
+
+        if (actualHeight > maxHeight || actualWidth > maxWidth) {
+            if (imgRatio < maxRatio) {
+                imgRatio = maxHeight / actualHeight;
+                actualWidth = (int) (imgRatio * actualWidth);
+                actualHeight = (int) maxHeight;
+            } else if (imgRatio > maxRatio) {
+                imgRatio = maxWidth / actualWidth;
+                actualHeight = (int) (imgRatio * actualHeight);
+                actualWidth = (int) maxWidth;
+            } else {
+                actualHeight = (int) maxHeight;
+                actualWidth = (int) maxWidth;
+
+            }
+        }
+
+//      setting inSampleSize value allows to load a scaled down version of the original image
+
+        options.inSampleSize = calculateInSampleSize(options, actualWidth, actualHeight);
+
+//      inJustDecodeBounds set to false to load the actual bitmap
+        options.inJustDecodeBounds = false;
+
+//      this options allow android to claim the bitmap memory if it runs low on memory
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inTempStorage = new byte[768*1024];
+
+        //bmp
+		/*try {
+//          load the bitmap from its path
+
+
+		} catch (OutOfMemoryError exception) {
+			exception.printStackTrace();
+
+		}
+*/
+
+
+		/*if(actualWidth > 768 || h1 > 1024)
+		{
+			bitmap=Bitmap.createScaledBitmap(bitmap,1024,768,true);
+		}
+		else
+		{
+
+			bitmap=Bitmap.createScaledBitmap(bitmap,w1,h1,true);
+		}*/
+        //Bitmap bitmap=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
+        // 	bmp =BitmapFactory.decodeFile(filePath, options);//Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);;//
+
+        try {
+//          load the bitmap from its path
+            bmp = BitmapFactory.decodeFile(filePath, options);
+
+            //bmp=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
+            //scaledBitmap=Bitmap.createBitmap(actualWidth, actualHeight,Bitmap.Config.ARGB_8888);
+            //	bmp=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
+        } catch (OutOfMemoryError exception) {
+            exception.printStackTrace();
+
+        }
+
+        //Bitmap scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight,Bitmap.Config.ARGB_8888);
+        //bmp=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        //scaledBitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG,100, baos);
+
+        byte [] arr=baos.toByteArray();
+        String result= Base64.encodeToString(arr, Base64.DEFAULT);
+        return result;
+
+		/*try {
+//          load the bitmap from its path
+			bmp = BitmapFactory.decodeFile(filePath, options);
+		} catch (OutOfMemoryError exception) {
+			exception.printStackTrace();
+
+		}
+		try {
+			scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight,Bitmap.Config.ARGB_8888);
+		} catch (OutOfMemoryError exception) {
+			exception.printStackTrace();
+		}*/
+
+		/*float ratioX = actualWidth / (float) options.outWidth;
+		float ratioY = actualHeight / (float) options.outHeight;
+		float middleX = actualWidth / 2.0f;
+		float middleY = actualHeight / 2.0f;*/
+
+
+        //return filename;
+
+    }
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;      }
+        final float totalPixels = width * height;
+        final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+            inSampleSize++;
+        }
+
+        return inSampleSize;
+    }
+
+    public String convertResponseToString(HttpResponse response) throws IllegalStateException, IOException
+    {
+
+        String res = "";
+        StringBuffer buffer = new StringBuffer();
+        inputStream = response.getEntity().getContent();
+        int contentLength = (int) response.getEntity().getContentLength(); //getting content length�..
+        //System.out.println("contentLength : " + contentLength);
+        //Toast.makeText(MainActivity.this, "contentLength : " + contentLength, Toast.LENGTH_LONG).show();
+        if (contentLength < 0)
+        {
+        }
+        else
+        {
+            byte[] data = new byte[512];
+            int len = 0;
+            try
+            {
+                while (-1 != (len = inputStream.read(data)) )
+                {
+                    buffer.append(new String(data, 0, len)); //converting to string and appending  to stringbuffer�..
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            try
+            {
+                inputStream.close(); // closing the stream�..
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            res = buffer.toString();     // converting stringbuffer to string�..
+
+            //System.out.println("Result : " + res);
+            //Toast.makeText(MainActivity.this, "Result : " + res, Toast.LENGTH_LONG).show();
+            ////System.out.println("Response => " +  EntityUtils.toString(response.getEntity()));
+        }
+        return res;
+    }
+    public void callBroadCast() {
+        if (Build.VERSION.SDK_INT >= 14) {
+            Log.e("-->", " >= 14");
+            MediaScannerConnection.scanFile(this, new String[]{Environment.getExternalStorageDirectory().toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+
+                public void onScanCompleted(String path, Uri uri) {
+
+                }
+            });
+        } else {
+            Log.e("-->", " < 14");
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
+
+
+
+    }
+
 }

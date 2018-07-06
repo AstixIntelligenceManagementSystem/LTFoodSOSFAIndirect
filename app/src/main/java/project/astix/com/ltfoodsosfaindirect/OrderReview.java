@@ -103,7 +103,8 @@ GoogleApiClient.OnConnectionFailedListener{
     //public TextView tvPreAmtOutstandingVALNew;
 
 	boolean isCmpttrExists=false;
-
+	int isStockAvlbl=0;
+	int isCmpttrAvlbl=0;
 	CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
     Dialog dialog;
 	ImageView	menu;
@@ -581,7 +582,9 @@ GoogleApiClient.OnConnectionFailedListener{
 			  }
 			menu=(ImageView)findViewById(R.id.menu);
 			getDataFromIntent();
+			getStockCompttrAvilable();
 			initializeFields();
+
 			videoPlayFunctionality();
 			PDF_Doc_PlayFunctionality();
 
@@ -887,7 +890,7 @@ public void loadPurchaseProductDefault()
 			//	spinner_product=(TextView) findViewById(R.id.spinner_product);
 			
 			ed_search=(EditText) findViewById(R.id.ed_search);
-			  btn_go=(ImageView) findViewById(R.id.btn_go);
+			btn_go=(ImageView) findViewById(R.id.btn_go);
 			txtVw_schemeApld=(TextView) findViewById(R.id.txtVw_schemeApld);
 			txtVw_schemeApld.setText("");
 			txtVw_schemeApld.setTag("0");
@@ -1488,7 +1491,7 @@ public void loadPurchaseProductDefault()
 			  final Button btn_Submit=(Button) findViewById(R.id.btn_sbmt);
 			  btn_Submit.setTag("0_0");
 
-			if((dbengine.isDataExistCompetitor(storeID)) && (dbengine.isDataForCompetitorCmplsry(storeID)) && (flgOrderType!=0))
+			if((dbengine.isDataExistCompetitor(storeID)) && (dbengine.isDataForCompetitorCmplsry(storeID)) && (flgOrderType!=0) && (dbengine.getCmpttrRetailerAllowed(storeID)==1) &&(isCmpttrAvlbl==1))
 
 			{
 				isCmpttrExists=true;
@@ -1497,6 +1500,10 @@ public void loadPurchaseProductDefault()
 			else
 			{
 				isCmpttrExists=false;
+			}
+			if(flgOrderType==1)
+			{
+				btn_Submit.setText(getString(R.string.lastvisitdetails_next));
 			}
 			  btn_Submit.setOnClickListener(new OnClickListener() {
 			   
@@ -8204,8 +8211,9 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 
 	 if(valBtnClickedFrom==3)//Clicked By Btn Submitt
 	 {
-	     //Send Data for Sync
+		 //Send Data for Sync
 
+		 // Changes By Sunil
 		 if(isCmpttrExists)
 		 {
 			 int Outstat=1;
@@ -8220,10 +8228,31 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 			 storeOrderReviewIntent.putExtra("pickerDate", pickerDate);
 
 
+
 			 //fireBackDetPg.putExtra("rID", routeID);
 			 startActivity(storeOrderReviewIntent);
 			 finish();
 
+		 }
+		 else if(flgOrderType==1)
+		 {
+
+			 int Outstat=1;
+			 TransactionTableDataDeleteAndSaving(Outstat);
+			 InvoiceTableDataDeleteAndSaving(Outstat);
+			 Intent storeOrderReviewIntent=new Intent(OrderReview.this,DisplayItemPics.class);
+			 storeOrderReviewIntent.putExtra("storeID", storeID);
+			 storeOrderReviewIntent.putExtra("SN", SN);
+			 storeOrderReviewIntent.putExtra("bck", 1);
+			 storeOrderReviewIntent.putExtra("imei", imei);
+			 storeOrderReviewIntent.putExtra("userdate", date);
+			 storeOrderReviewIntent.putExtra("pickerDate", pickerDate);
+
+
+
+			 //fireBackDetPg.putExtra("rID", routeID);
+			 startActivity(storeOrderReviewIntent);
+			 finish();
 		 }
 		 else
 		 {
@@ -8253,52 +8282,9 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 					 }
 					 else
 					 {
-								/* dbengine.close();
-
-									// TODO Auto-generated method stub
-									boolean isGPSok = false;
-									isGPSok = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-									 if(!isGPSok)
-							          {
-										showSettingsAlert();
-										isGPSok = false;
-										 return;
-									  }
-
-
-
-							       isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-							       isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-								   location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-								   pm = (PowerManager) getSystemService(POWER_SERVICE);
-								   wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-							                | PowerManager.ACQUIRE_CAUSES_WAKEUP
-							                | PowerManager.ON_AFTER_RELEASE, "INFO");
-							        wl.acquire();
-
-							       pDialog2STANDBY=ProgressDialog.show(ProductList.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
-								   pDialog2STANDBY.setIndeterminate(true);
-
-									pDialog2STANDBY.setCancelable(false);
-									pDialog2STANDBY.show();
-
-									checkSTANDBYAysncTask chkSTANDBY = new checkSTANDBYAysncTask(
-											new standBYtask().execute()); // Thread keeping 1 minute time
-															// watch
-
-									(new Thread(chkSTANDBY)).start();*/
-
-
 
 						 appLocationService=new AppLocationService();
 
-								/* pm = (PowerManager) getSystemService(POWER_SERVICE);
-								 *//*  wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-							                | PowerManager.ACQUIRE_CAUSES_WAKEUP
-							                | PowerManager.ON_AFTER_RELEASE, "INFO");
-							        wl.acquire();*/
 
 
 						 pDialog2STANDBY=ProgressDialog.show(OrderReview.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
@@ -8329,28 +8315,7 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 
 					 }
 
-					 // storeSubmit.setEnabled(false);
-					 //storeSave4Later.setEnabled(false);
-					 //storeSaveContinue4Later.setEnabled(false);
-							/* int Outstat=3;
-							TransactionTableDataDeleteAndSaving(Outstat);
-							InvoiceTableDataDeleteAndSaving(Outstat);
 
-						    long  syncTIMESTAMP = System.currentTimeMillis();
-							Date dateobj = new Date(syncTIMESTAMP);
-							SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-							String StampEndsTime = df.format(dateobj);
-
-
-							dbengine.open();
-							dbengine.UpdateStoreEndVisit(storeID, StampEndsTime);
-							dbengine.UpdateStoreProductAppliedSchemesBenifitsRecords(storeID.trim(),"3");
-
-							dbengine.UpdateStoreFlag(storeID.trim(), 3);
-							//dbengine.deleteStoreRecordFromtblStoreSchemeFreeProQtyOtherDetailsOnceSubmitted(fStoreID);
-							dbengine.close();*/
-
-					 //new FullSyncDataNow().execute();
 
 				 }
 			 });
@@ -8372,10 +8337,9 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 
 
 		 }
-		 // Changes By Sunil 
 
-		    
-		 
+
+
 	 }
 	 if(valBtnClickedFrom==1)//Clicked By Btn Save
 	 {
@@ -11257,4 +11221,15 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
+
+
+	public void getStockCompttrAvilable()
+	{
+		ArrayList<Integer> listStkCmpttr=dbengine.getLTfoodStockCmpttr(storeID);
+		if((listStkCmpttr!=null) && (listStkCmpttr.size()>0))
+		{
+			isStockAvlbl=listStkCmpttr.get(0);
+			isCmpttrAvlbl=listStkCmpttr.get(1);
+		}
+	}
 }

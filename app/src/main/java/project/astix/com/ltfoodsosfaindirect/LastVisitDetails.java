@@ -1446,15 +1446,16 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 					dbengine.UpdateStoreEndVisit(storeID,startTS);
 					dbengine.close();
 					//Intent nxtP4 = new Intent(LastVisitDetails.this,ActualVisitStock.class);
-					Intent nxtP4 = new Intent(LastVisitDetails.this,ActualVisitStock.class);
-					nxtP4.putExtra("storeID", storeID);
-					nxtP4.putExtra("SN", selStoreName);
-					nxtP4.putExtra("imei", imei);
-					nxtP4.putExtra("userdate", date);
-					nxtP4.putExtra("pickerDate", pickerDate);
-					nxtP4.putExtra("flgOrderType", 1);
+					Intent ready4GetLoc = new Intent(LastVisitDetails.this,StockCheckAndCmpttrAvilable.class);
+					//enableGPSifNot();
 
-					startActivity(nxtP4);
+
+					ready4GetLoc.putExtra("storeID", storeID);
+					ready4GetLoc.putExtra("selStoreName", selStoreName);
+					ready4GetLoc.putExtra("imei", imei);
+					ready4GetLoc.putExtra("userDate", date);
+					ready4GetLoc.putExtra("pickerDate", pickerDate);
+					startActivity(ready4GetLoc);
 					finish();
 						/*Intent nxtP4 = new Intent(LastVisitDetails.this,ProductOrderFilterSearch.class);
 						//Intent nxtP4 = new Intent(LastVisitDetails.this,ProductOrderFilterSearch_RecycleView.class);
@@ -1727,7 +1728,7 @@ final Button btn_Cancel=(Button) findViewById(R.id.btn_Cancel);
 		
 		if(flgGSTCapture.equals("1")) 
 		  {
-			ll_gstDetails.setVisibility(View.VISIBLE);
+			ll_gstDetails.setVisibility(View.GONE);
 			     if(flgGSTCompliance.equals("0"))
 			     {
 				      rb_gst_no.setEnabled(true);

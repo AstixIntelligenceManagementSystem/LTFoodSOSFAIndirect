@@ -424,4 +424,10 @@
     <string name="Stock">Stock</string>
 
 
+ <string name="picSctn1">Before Stock Check</string>
+ <string name="picSctn2">After Stock Check</string>
+ <string name="displayItemPic">POSM(Poster/ Dangler/Bunting/ Rack etc)</string>
+
+
+
 </resources>

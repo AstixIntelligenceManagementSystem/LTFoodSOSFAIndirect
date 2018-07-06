@@ -3798,6 +3798,33 @@ public void DayEndWithoutalert()
 	        parms.height=parms.MATCH_PARENT;
 	        parms.dimAmount = (float) 0.5;
 
+		 Button btnDSMWiseReport= (Button) dialog.findViewById(R.id.btnDSMWiseReport);
+		 btnDSMWiseReport.setOnClickListener(new OnClickListener() {
+			 @Override
+			 public void onClick(View v)
+			 {
+				 dialog.dismiss();
+
+				 Intent i=new Intent(StoreSelection.this,WebViewDSMWiseReport.class);
+				 startActivity(i);
+
+			 }
+		 });
+		 final Button btnIncentive = (Button) dialog.findViewById(R.id.btnIncentive);
+		 btnIncentive.setOnClickListener(new OnClickListener() {
+			 @Override
+			 public void onClick(View v) {
+				 Intent intent=new Intent(StoreSelection.this,IncentiveActivity.class);
+				 intent.putExtra("imei", imei);
+				 intent.putExtra("IntentFrom", "StoreSelection");
+				 intent.putExtra("userDate", userDate);
+				 intent.putExtra("pickerDate", fDate);
+				 startActivity(intent);
+				 finish();
+			 }
+		 });
+
+
 		 //account census
 		 final Button butn_census_report = (Button) dialog.findViewById(R.id.butn_census_report);
 		 butn_census_report.setOnClickListener(new View.OnClickListener() {
@@ -6301,6 +6328,9 @@ public void DayEndWithoutalert()
 
 		final RadioButton rb_dataReport= (RadioButton) view.findViewById(R.id.rb_dataReport);
 		final RadioButton rb_onMap= (RadioButton) view.findViewById(R.id.rb_onMap);
+
+
+
 
 
 		Button btn_proceed= (Button) view.findViewById(R.id.btn_proceed);

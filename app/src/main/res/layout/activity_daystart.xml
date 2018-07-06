@@ -108,14 +108,14 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:id="@+id/tv_MapLocationCorrectText"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="Location on map is correct according to you?"/>
         <RadioGroup
             android:id="@+id/rg_yes_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
             <RadioButton
                 android:id="@+id/rb_yes"
                 android:layout_width="wrap_content"

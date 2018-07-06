@@ -65,7 +65,7 @@ public class SplashScreen extends AppCompatActivity
     public int syncFLAG = 0;
     public ProgressDialog pDialogGetStores;
     String serverDateForSPref;
-    SharedPreferences sPref,sPrefAttandance;
+    SharedPreferences sPref,sPrefAttandance,sPrefIncentive;
     public int flgTodaySalesTargetToShow=0;
 
     DBAdapterKenya dbengine = new DBAdapterKenya(this);
@@ -129,17 +129,17 @@ public class SplashScreen extends AppCompatActivity
        // imei="356417061840118"; // Shivani Kesarsa
        //  imei="353572080913610"; // stagging
 
-      // imei="358674084810068"; // Test Release
-      // imei="867290026163310"; // Dev Release
+      //imei="358674084810068"; // Test Release
+       //imei="867290026163310"; // Dev Release
 
-     //  imei="354010084603910";// Dev For Alok
+      //imei="354010084603910";// Dev For Alok
        //  imei="359473079352536";  // Test Ramesh
 
 
         CommonInfo.imei = imei;
         sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
         sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
-
+        sPrefIncentive=getSharedPreferences(CommonInfo.IncentivePreference, MODE_PRIVATE);
         Date date1 = new Date();
         sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         fDate = sdf.format(date1).trim();
@@ -877,7 +877,7 @@ public class SplashScreen extends AppCompatActivity
 
             try
             {
-                for(int mm = 1; mm<11; mm++)
+                for(int mm = 1; mm<12; mm++)
                 {
                     System.out.println("TEST"+mm);
                     if(mm==1)
@@ -1004,6 +1004,20 @@ public class SplashScreen extends AppCompatActivity
                         }
                     }
 
+                    if(mm==11)
+                    {
+                        newservice = newservice.getDsrRegistrationDataWithIMEI(SplashScreen.this,imei);
+                        if(!newservice.director.toString().trim().equals("1"))
+                        {
+                            if(chkFlgForErrorToCloseApp==0)
+                            {
+                                chkFlgForErrorToCloseApp=1;
+                                break;
+                            }
+
+                        }
+                    }
+
                 }
 
 
@@ -1062,18 +1076,27 @@ public class SplashScreen extends AppCompatActivity
                             if(sPref.getString("DatePref", "").equals(serverDateForSPref))
                             {
 
-                                if(!sPrefAttandance.contains("AttandancePref"))
+                                if(!sPrefIncentive.contains("InetivePref"))
                                 {
-                                    callDayStartActivity();
+                                   // callDayStartActivity();
+                                    callIncentiveActivity();
                                 }
                                 else
                                 {
-                                    Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
-                                    intent.putExtra("imei", imei);
-                                    SplashScreen.this.startActivity(intent);
-                                    finish();
-                                }
+                                    if(!sPrefAttandance.contains("AttandancePref"))
+                                    {
 
+
+                                        callDayStartActivity();
+                                    }
+                                    else {
+                                        Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
+                                        intent.putExtra("imei", imei);
+                                        SplashScreen.this.startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                               // callIncentiveActivity();
 
                             }
                             else
@@ -1081,37 +1104,59 @@ public class SplashScreen extends AppCompatActivity
                                 editor.clear();
                                 editor.commit();
                                 sPref.edit().putString("DatePref", serverDateForSPref).commit();
+
                                 SharedPreferences.Editor editor1=sPrefAttandance.edit();
                                 editor1.clear();
                                 editor1.commit();
 
-                                if(!sPrefAttandance.contains("AttandancePref"))
+                                SharedPreferences.Editor editor2=sPrefIncentive.edit();
+                                editor2.clear();
+                                editor2.commit();
+
+                                if(!sPrefIncentive.contains("InetivePref"))
                                 {
-                                    callDayStartActivity();
+                                   // callDayStartActivity();
+                                    callIncentiveActivity();
                                 }
                                 else
                                 {
-                                    Intent i=new Intent(SplashScreen.this,SalesValueTarget.class);
-                                    i.putExtra("IntentFrom", 0);
-                                    startActivity(i);
-                                    finish();
+                                    if(!sPrefAttandance.contains("AttandancePref"))
+                                    {
+                                        callDayStartActivity();
+                                    }
+                                    else {
+                                        Intent i = new Intent(SplashScreen.this, SalesValueTarget.class);
+                                        i.putExtra("IntentFrom", 0);
+                                        startActivity(i);
+                                        finish();
+                                    }
                                 }
+                               // callIncentiveActivity();
                             }
                         }
                         else
                         {
                             sPref.edit().putString("DatePref", serverDateForSPref).commit();
-                            if(!sPrefAttandance.contains("AttandancePref"))
+                            //if(!sPrefAttandance.contains("AttandancePref"))
+                            if(!sPrefIncentive.contains("InetivePref"))
                             {
-                                callDayStartActivity();
+                               // callDayStartActivity();
+                                callIncentiveActivity();
                             }
                             else
                             {
-                                Intent i=new Intent(SplashScreen.this,SalesValueTarget.class);
-                                i.putExtra("IntentFrom", 0);
-                                startActivity(i);
-                                finish();
+                                if(!sPrefAttandance.contains("AttandancePref"))
+                                {
+                                    callDayStartActivity();
+                                }
+                                else {
+                                    Intent i = new Intent(SplashScreen.this, SalesValueTarget.class);
+                                    i.putExtra("IntentFrom", 0);
+                                    startActivity(i);
+                                    finish();
+                                }
                             }
+
                         }
 
                     }
@@ -1136,14 +1181,15 @@ public class SplashScreen extends AppCompatActivity
                         finish();
                     // time in milliseconds (1 second = 1000 milliseconds) until the run() method will be called*/
             }
-
-
-
-
-
         }
     }
-
+public void callIncentiveActivity()
+{
+    Intent i=new Intent(SplashScreen.this,IncentiveActivity.class);
+    i.putExtra("IntentFrom", "SPLASH");
+    startActivity(i);
+    finish();
+}
     public void callDayStartActivity()
     {
         dbengine.open();
@@ -1162,8 +1208,6 @@ public class SplashScreen extends AppCompatActivity
             SplashScreen.this.startActivity(intent);
             finish();
         }
-
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)

@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -65,6 +66,13 @@ import java.util.concurrent.ExecutionException;
 
 public class DayStartActivity extends BaseActivity implements InterfaceClass,OnMapReadyCallback,CompoundButton.OnCheckedChangeListener
 {
+    //refresh
+
+    RadioGroup rg_yes_no;
+    RadioButton rb_yes,rb_no;
+    Button btn_refresh;
+    TextView txt_rfrshCmnt;
+    LinearLayout ll_refresh;
     static int flgDaySartWorking = 0;
     DatabaseAssistant DASFA = new DatabaseAssistant(this);
     public long syncTIMESTAMP;
@@ -433,6 +441,16 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
         sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         fDate = sdf.format(date1).toString().trim();
 
+
+        //refresh
+        refreshCount=0;
+        rg_yes_no= (RadioGroup) findViewById(R.id.rg_yes_no);
+        rb_yes= (RadioButton) findViewById(R.id.rb_yes);
+        rb_no=(RadioButton)findViewById(R.id.rb_no);
+        btn_refresh= (Button) findViewById(R.id.btn_refresh);
+        txt_rfrshCmnt= (TextView) findViewById(R.id.txt_rfrshCmnt);
+        ll_refresh= (LinearLayout) findViewById(R.id.ll_refresh);
+        //refresh end
         ll_start=(LinearLayout)findViewById(R.id.ll_start);
         ll_start.setVisibility(View.VISIBLE);
         ll_startAfterDayEndFirst=(LinearLayout)findViewById(R.id.ll_startAfterDayEndFirst);
@@ -627,15 +645,21 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                            {
 
                            }
-                    dbengine.updatetblAttandanceDetails("33","No Working",ReasonId,ReasonText,commentValue);
-                    syncStartAfterSavindData();
+                           if(isOnline()) {
+                               dbengine.updatetblAttandanceDetails("33", "No Working", ReasonId, ReasonText, commentValue);
+                               syncStartAfterSavindData();
+                           }
+                           else
+                           {
+                               showNoConnAlert();;
+                           }
                 }
 
 
             }
         });
 
-
+        refreshMapWorking();
 
     }
 
@@ -1407,6 +1431,81 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
         {
             e.printStackTrace();
         }
+
+    }
+
+    //refresh
+    void refreshMapWorking()
+    {
+        rg_yes_no.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                if(i!=-1)
+                {
+                    RadioButton radioButtonVal = (RadioButton) radioGroup.findViewById(i);
+                    if(radioButtonVal.getId()==R.id.rb_yes)
+                    {
+                        ll_refresh.setVisibility(View.GONE);
+
+                    }
+                    else if(radioButtonVal.getId()==R.id.rb_no)
+                    {
+                        ll_refresh.setVisibility(View.VISIBLE);
+                    }
+                }
+
+            }
+        });
+
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+
+                boolean isGPSok = false;
+                boolean isNWok=false;
+                isGPSok = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                isNWok = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+                if(!isGPSok && !isNWok)
+                {
+                    try
+                    {
+                        showSettingsAlert();
+                    }
+                    catch(Exception e)
+                    {
+
+                    }
+                    isGPSok = false;
+                    isNWok=false;
+                }
+                else
+                {
+                    manager= getFragmentManager();
+                    mapFrag = (MapFragment)manager.findFragmentById(R.id.map);
+
+                    mapFrag.getView().setVisibility(View.VISIBLE);
+
+                    LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
+                    llaaa.locationRetrievingAndDistanceCalculating(DayStartActivity.this);
+                }
+
+                refreshCount++;
+                if(refreshCount==1)
+                {
+                    txt_rfrshCmnt.setText(getString(R.string.second_msg_for_map));
+                }
+                else if(refreshCount==2)
+                {
+                    txt_rfrshCmnt.setText(getString(R.string.third_msg_for_map));
+                    btn_refresh.setVisibility(View.GONE);
+                }
+                rg_yes_no.clearCheck();
+                ll_refresh.setVisibility(View.GONE);
+
+            }
+        });
 
     }
 }

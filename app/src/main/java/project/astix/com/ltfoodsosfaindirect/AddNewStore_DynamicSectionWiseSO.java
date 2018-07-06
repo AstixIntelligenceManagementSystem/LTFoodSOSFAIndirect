@@ -156,6 +156,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
     public String FusedLocationAccuracyWithFirstAttempt="0";
 
     public int flgOldNewStore=0;
+    public int flgSelfStore=0;
     public String newfullFileName;
     String allValuesOfPaymentStageID="0";
     public String QuestIDForOutChannel="0";
@@ -603,6 +604,8 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
             SOStoreVisitEndTime=arrBasisDetailsAgainstStore.get(13);
             flgOldNewStore=Integer.parseInt(arrBasisDetailsAgainstStore.get(14));
             SOAccuracyFromLauncer=arrBasisDetailsAgainstStore.get(15);
+
+            flgSelfStore=Integer.parseInt(arrBasisDetailsAgainstStore.get(16));
             //  SOLattitudeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[0];
             //SOLongitudeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[1];
             if(SOLattitudeFromLauncher.equals("NA"))
@@ -983,7 +986,12 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                         {
 
                             IsStoreDataCompleteSaved=2;
-                            flgApproveOrRejectOrNoActionOrReVisit=1;
+                            if(flgSelfStore==1) {
+                                flgApproveOrRejectOrNoActionOrReVisit=0;
+                            }
+                            else {
+                                flgApproveOrRejectOrNoActionOrReVisit = 1;
+                            }
                             showSubmitConfirm();
                         }
                     }
@@ -1017,18 +1025,23 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                             txt_Next.setText("Done");
                             if(FLAG_NEW_UPDATE.equals("UPDATE"))
                             {
-                                if(flgOldNewStore==0) {
+                                if(flgSelfStore==1) {
 
-
-                                    if (ll_reject.getVisibility() == View.GONE) {
-                                        ll_reject.setVisibility(View.VISIBLE);
-                                    }
-
-                                    if (ll_revisit.getVisibility() == View.GONE) {
-                                        ll_revisit.setVisibility(View.VISIBLE);
-                                    }
-                                    txt_Next.setText("Approve");
                                 }
+                                else if(flgSelfStore==0) {
+
+                                    if(flgOldNewStore==0) {
+                                        if (ll_reject.getVisibility() == View.GONE) {
+                                            ll_reject.setVisibility(View.VISIBLE);
+                                        }
+
+                                        if (ll_revisit.getVisibility() == View.GONE) {
+                                            ll_revisit.setVisibility(View.VISIBLE);
+                                        }
+                                        txt_Next.setText("Approve");
+                                    }
+                                }
+
                             }
 
 

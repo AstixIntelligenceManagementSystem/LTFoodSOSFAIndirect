@@ -65,12 +65,16 @@
 
         <activity android:name=".DayStartActivity"  />
 
-        <activity android:name=".SplashScreen">
+        <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait">
+
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".ProductOrderFilterSearch"
@@ -479,6 +483,8 @@
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name=".WebViewDSMWiseReport"
+            android:screenOrientation="portrait"/>
 
 
 
@@ -500,6 +506,7 @@
         <activity android:name=".DistributorCheckInForStock"
             android:screenOrientation="portrait"/>
 
+
         <activity android:name=".SyncMstrCheckIN"></activity>
         <activity android:name=".VideoPlayerActivityForStore"
             android:theme="@style/detailActivityTheme" />
@@ -514,10 +521,31 @@
         <activity android:name=".DistributorProfilingActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait" ></activity>
+        <activity android:name=".SoRegistrationActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" ></activity>
 
+        <activity
+            android:name=".SyncRegistrationDetails"
+            android:configChanges="orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait" />
         <activity android:name=".CompetitorPrdctPriceActivity"
 
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".PicClkBfrStock"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PicClkdAfterStock"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DisplayItemPics"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StockCheckAndCmpttrAvilable"
+            android:screenOrientation="portrait"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="project.astix.com.ltfoodsosfaindirect.provider"
@@ -528,5 +556,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
+
 
 </manifest>

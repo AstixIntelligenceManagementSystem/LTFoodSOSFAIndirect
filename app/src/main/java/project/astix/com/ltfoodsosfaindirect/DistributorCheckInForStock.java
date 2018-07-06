@@ -706,7 +706,7 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
     {
         View viewLoc=getLayoutInflater().inflate(R.layout.location_details_layoutso, null);
         ll_locationDetails.addView(viewLoc);
-
+        ll_locationDetails.setVisibility(View.GONE);
         etLocalArea= (EditText) viewLoc.findViewById(R.id.etLocalArea);
 
         etPinCode= (EditText) viewLoc.findViewById(R.id.etPinCode);
@@ -2465,7 +2465,7 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
             showAlertForEveryOne("Gst Compliance Value cannot be less then 15 character.");
             return false;
         }*/
-        else if(TextUtils.isEmpty(etLocalArea.getText().toString()) ||
+        /*else if(TextUtils.isEmpty(etLocalArea.getText().toString()) ||
                 etLocalArea.getText().toString().trim().equals(null) ||
                 etLocalArea.getText().toString().trim().equals("NA")||
                 etLocalArea.getText().toString().trim().equals("0")||
@@ -2491,7 +2491,7 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
         {
             showAlertForEveryOne("Pin Code value cannot be less than 6 digits.");
             return false;
-        }
+        }*/
       /*  else if(TextUtils.isEmpty(etCity.getText().toString()) ||
                 etCity.getText().toString().trim().equals(null) ||
                 etCity.getText().toString().trim().equals("NA")||
@@ -2510,9 +2510,18 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
             showAlertForEveryOne("Please Fill State Value.");
             return false;
         }*/
-        else if(!fnValidateStateCity())
+       /* else if(!fnValidateStateCity())
         {
             return  false;
+        }
+        else
+        {
+            return true;
+        }*/
+
+        else if(!fnValidateStateCity())
+        {
+            return  true;
         }
         else
         {
@@ -2696,8 +2705,8 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
 
         }
 
-        String cityID=hmapCity_details.get(etCity.getText().toString().trim());
-        String StateID=hmapState_details.get(etState.getText().toString().trim());
+        String cityID="0";//hmapCity_details.get(etCity.getText().toString().trim());
+        String StateID="0";//hmapState_details.get(etState.getText().toString().trim());
         String MapAddress=address;
         String MapPincode=pincode;
         String MapCity=city;
@@ -3165,7 +3174,7 @@ if(flagForSyncOrNot==1){
         {
             boolValidateStateCity=true;
         }
-        else if(((etCity.getText().toString()).equalsIgnoreCase("Others")) || ((etCity.getText().toString()).equalsIgnoreCase("Other")))
+       /* else if(((etCity.getText().toString()).equalsIgnoreCase("Others")) || ((etCity.getText().toString()).equalsIgnoreCase("Other")))
         {
             if(TextUtils.isEmpty(etOtherCity.getText().toString().trim()))
             {
@@ -3190,20 +3199,22 @@ if(flagForSyncOrNot==1){
 
 
             }
-        }
+        }*/
         else
         {
 
             if((etCity.getText().toString()).equalsIgnoreCase("Select"))
             {
-                showErrorAlert("Please Select City Name");
-                boolValidateStateCity= false;
+                //showErrorAlert("Please Select City Name");
+                etCity.setText("NA");
+                boolValidateStateCity= true;
 
             }
             else if((etState.getText().toString()).equalsIgnoreCase("Select"))
             {
-                showErrorAlert("Please Select State Name");
-                boolValidateStateCity= false;
+                etState.setText("NA");
+               // showErrorAlert("Please Select State Name");
+                boolValidateStateCity= true;
 
             }
 

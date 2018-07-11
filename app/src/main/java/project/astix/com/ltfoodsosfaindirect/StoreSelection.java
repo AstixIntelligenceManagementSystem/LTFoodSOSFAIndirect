@@ -3827,7 +3827,7 @@ public void DayEndWithoutalert()
 
 		 //account census
 		 final Button butn_census_report = (Button) dialog.findViewById(R.id.butn_census_report);
-		 butn_census_report.setOnClickListener(new View.OnClickListener() {
+		 butn_census_report.setOnClickListener(new OnClickListener() {
 			 @Override
 			 public void onClick(View v) {
 				 Intent intent=new Intent(StoreSelection.this,AddedOutletSummaryReportActivity.class);
@@ -3874,7 +3874,10 @@ public void DayEndWithoutalert()
 				 startActivity(intent);
 				 finish();*/
 				 dialog.dismiss();
-				 openMarketVisitAlert();
+
+					 openMarketVisitAlert();
+
+
 			 }
 		 });
 		 int FlgDSRSO=CommonInfo.FlgDSRSO;
@@ -4433,7 +4436,7 @@ public void DayEndWithoutalert()
 	            public void onClick(DialogInterface dialog, int which) {
 	            // Write your code here to invoke NO event
 	            	dialog.dismiss();
-					finish();
+					//finish();
 	            }
 	        });
 	 
@@ -5530,67 +5533,77 @@ public void DayEndWithoutalert()
 				dialog.dismiss();
 
 
-
-					if(!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSR") && !SelectedDSRValue.equals("No DSR") )
-					{
-
-						String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
-						 slctdCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-						  slctdCoverageAreaNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
-
-						CommonInfo.CoverageAreaNodeID=slctdCoverageAreaNodeID;
-						CommonInfo.CoverageAreaNodeType=slctdCoverageAreaNodeType;
-						CommonInfo.FlgDSRSO=2;
-
-						String DSRPersonNodeIdAndNodeType= dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
-						slctdDSrSalesmanNodeId=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-						 slctdDSrSalesmanNodeType=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
-
-						dbengine.open();
-
-						rID= dbengine.GetActiveRouteIDCrntDSR(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
-						dbengine.close();
-
-
-						if(rID.equals("0"))
+						if(!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSR") && !SelectedDSRValue.equals("No DSR") )
 						{
 
-						}
+							String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
+							slctdCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+							slctdCoverageAreaNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
 
-						if(dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType))
-						{
-                            shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+							CommonInfo.CoverageAreaNodeID=slctdCoverageAreaNodeID;
+							CommonInfo.CoverageAreaNodeType=slctdCoverageAreaNodeType;
+							CommonInfo.FlgDSRSO=2;
 
-                            shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+							String DSRPersonNodeIdAndNodeType= dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
+							slctdDSrSalesmanNodeId=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+							slctdDSrSalesmanNodeType=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
 
-                            flgDataScopeSharedPref(2);
-                            flgDSRSOSharedPref(2);
-							Intent intent=new Intent(StoreSelection.this,StoreSelection.class);
-                            intent.putExtra("imei", imei);
-                            intent.putExtra("userDate", userDate);
-                            intent.putExtra("pickerDate", fDate);
-                            intent.putExtra("rID", rID);
-                            startActivity(intent);
-                            finish();
-						}
-						else
-						{
-							if(dbengine.isDBOpen())
+							dbengine.open();
+
+							rID= dbengine.GetActiveRouteIDCrntDSR(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+							dbengine.close();
+
+
+							if(rID.equals("0"))
 							{
-								dbengine.close();
+
+							}
+
+							if(dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType))
+							{
+								shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+
+								shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+
+								flgDataScopeSharedPref(2);
+								flgDSRSOSharedPref(2);
+								Intent intent=new Intent(StoreSelection.this,StoreSelection.class);
+								intent.putExtra("imei", imei);
+								intent.putExtra("userDate", userDate);
+								intent.putExtra("pickerDate", fDate);
+								intent.putExtra("rID", rID);
+								startActivity(intent);
+								finish();
+							}
+							else
+							{
+								if(dbengine.isDBOpen())
+								{
+									dbengine.close();
+								}
+								if(isOnline())
+								{
+									new GetStoresForDay(StoreSelection.this).execute();
+								}
+								else
+								{
+									showAlertForEveryOne("Please check your internet connection.");
+								}
+
+
 							}
 
 
-							new GetStoresForDay(StoreSelection.this).execute();
+
+						}
+						else
+						{
+							showAlertForEveryOne("Please select DSR to Proceeds.");
 						}
 
 
 
-					}
-					else
-					{
-						showAlertForEveryOne("Please select DSR to Proceeds.");
-					}
+
 
 			}
 		});

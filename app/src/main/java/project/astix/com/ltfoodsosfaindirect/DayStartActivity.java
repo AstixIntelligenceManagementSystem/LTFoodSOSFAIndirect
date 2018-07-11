@@ -532,7 +532,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
 
 
                     LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
-                    llaaa.locationRetrievingAndDistanceCalculating(DayStartActivity.this);
+                    llaaa.locationRetrievingAndDistanceCalculating(DayStartActivity.this,true);
                 }
 
 
@@ -1488,7 +1488,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                     mapFrag.getView().setVisibility(View.VISIBLE);
 
                     LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
-                    llaaa.locationRetrievingAndDistanceCalculating(DayStartActivity.this);
+                    llaaa.locationRetrievingAndDistanceCalculating(DayStartActivity.this,true);
                 }
 
                 refreshCount++;

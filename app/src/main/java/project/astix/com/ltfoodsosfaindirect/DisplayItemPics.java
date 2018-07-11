@@ -407,7 +407,7 @@ public class DisplayItemPics extends AppCompatActivity implements InterfaceClass
                         pDialog2STANDBY.show();*/
 
                         LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
-                        llaaa.locationRetrievingAndDistanceCalculating(DisplayItemPics.this);
+                        llaaa.locationRetrievingAndDistanceCalculating(DisplayItemPics.this,false);
 
 
                     }

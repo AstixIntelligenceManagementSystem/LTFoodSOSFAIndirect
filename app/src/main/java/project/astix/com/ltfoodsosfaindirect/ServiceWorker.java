@@ -3452,6 +3452,7 @@ public class ServiceWorker
 				String flgUPIID="0";
 				String UPIID="0";
 				String SelfieNameURL="0";
+				String EmailId="0";
 
 
 
@@ -3564,6 +3565,13 @@ public class ServiceWorker
 					{
 						SelfieNameURL=xmlParser.getCharacterDataFromElement(line);
 					}}
+				if(!element.getElementsByTagName("EmailId").equals(null)) {
+					NodeList EmailIdNode = element.getElementsByTagName("EmailId");
+					Element	line = (Element) EmailIdNode.item(0);
+					if(EmailIdNode.getLength()>0)
+					{
+						EmailId=xmlParser.getCharacterDataFromElement(line);
+					}}
 
 				if(SelfieNameURL!=null && SelfieName!=null){
 					if((!SelfieNameURL.equals("")) && (!SelfieName.equals("")) && (!SelfieNameURL.equals("0")) && (!SelfieName.equals("0"))){
@@ -3572,7 +3580,7 @@ public class ServiceWorker
 				}
 
 
-				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL);
+				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId);
 
 			}
 
@@ -3733,6 +3741,7 @@ public class ServiceWorker
 				String flgUPIID="0";
 				String UPIID="0";
 				String SelfieNameURL="0";
+				String EmailId="0";
 
 
 
@@ -3846,13 +3855,21 @@ public class ServiceWorker
 						SelfieNameURL=xmlParser.getCharacterDataFromElement(line);
 					}}
 
+				if(!element.getElementsByTagName("EmailId").equals(null)) {
+					NodeList EmailIdNode = element.getElementsByTagName("EmailId");
+					Element	line = (Element) EmailIdNode.item(0);
+					if(EmailIdNode.getLength()>0)
+					{
+						EmailId=xmlParser.getCharacterDataFromElement(line);
+					}}
+
 				if(SelfieNameURL!=null && SelfieName!=null){
 					if((!SelfieNameURL.equals("")) && (!SelfieName.equals("")) && (!SelfieNameURL.equals("0")) && (!SelfieName.equals("0"))){
 						downLoadingSelfieImage(SelfieNameURL,SelfieName);
 					}
 				}
 
-				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL);
+				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId);
 
 			}
 
@@ -17234,6 +17251,7 @@ public class ServiceWorker
 				String SelfieNameURL="0";
 				String LastworkingDate="0";
 				String DistributorName="0";
+				String EmailId="0";
 
 
 
@@ -17400,6 +17418,13 @@ public class ServiceWorker
 						DistributorName=xmlParser.getCharacterDataFromElement(line);
 					}
 				}
+				if(!element.getElementsByTagName("EmailId").equals(null)) {
+					NodeList EmailIdNode = element.getElementsByTagName("EmailId");
+					Element	line = (Element) EmailIdNode.item(0);
+					if(EmailIdNode.getLength()>0)
+					{
+						EmailId=xmlParser.getCharacterDataFromElement(line);
+					}}
 				if(SelfieNameURL!=null && SelfieName!=null){
 					if((!SelfieNameURL.equals("")) && (!SelfieName.equals("")) && (!SelfieNameURL.equals("0")) && (!SelfieName.equals("0"))){
 						downLoadingSelfieImage(SelfieNameURL,SelfieName);
@@ -17407,7 +17432,7 @@ public class ServiceWorker
 				}
 
 
-				dbengine.savetblDsrRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,LastworkingDate,DistributorName);
+				dbengine.savetblDsrRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,LastworkingDate,DistributorName,EmailId);
 
 			}
 

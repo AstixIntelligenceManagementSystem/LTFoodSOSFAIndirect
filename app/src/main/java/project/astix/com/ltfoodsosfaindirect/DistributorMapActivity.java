@@ -2425,7 +2425,9 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
     public boolean validEmailAddress(String emailID)
     {
         Boolean value;
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        //String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
         if (emailID.matches(emailPattern) && emailID.length() > 0)
         {

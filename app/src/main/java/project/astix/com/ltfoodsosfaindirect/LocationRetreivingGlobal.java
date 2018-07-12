@@ -103,13 +103,15 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
     Location mCurrentLocation;
     String mLastUpdateTime;
     Activity activity ;
+    int checkAccuracy=0;
     boolean fetchAdressFlag=true;// if true means fetch address ,if false dont fetch address
-    public void locationRetrievingAndDistanceCalculating(Context context,boolean fetchAdressFlag)
+    public void locationRetrievingAndDistanceCalculating(Context context,boolean fetchAdressFlag,int checkAccuracy)
     {
         activity = (Activity) context;
         locationManager=(LocationManager) context.getSystemService(LOCATION_SERVICE);
         this.context=context;
         this.fetchAdressFlag=fetchAdressFlag;
+        this.checkAccuracy=checkAccuracy;
         appLocationService = new AppLocationService();
 
         pm = (PowerManager) context.getSystemService(POWER_SERVICE);
@@ -221,7 +223,7 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
         public void onTick(long millisUntilFinished) {
            System.out.println("Shivam"+FusedLocationAccuracy);
             if(FusedLocationAccuracy!=null){
-                if(Double.parseDouble(FusedLocationAccuracy)<15 && (!FusedLocationAccuracy.equals("0"))){
+                if(Double.parseDouble(FusedLocationAccuracy)<checkAccuracy && (!FusedLocationAccuracy.equals("0"))){
                     System.out.println("Shivam"+"ontickFInish "+millisUntilFinished+":"+ FusedLocationAccuracy);
 
                   countDownTimer.onFinish();

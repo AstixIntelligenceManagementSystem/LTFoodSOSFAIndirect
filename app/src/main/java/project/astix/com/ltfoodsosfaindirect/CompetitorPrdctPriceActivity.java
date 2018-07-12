@@ -567,7 +567,7 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
 
 
                         LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
-                        llaaa.locationRetrievingAndDistanceCalculating(CompetitorPrdctPriceActivity.this,false);
+                        llaaa.locationRetrievingAndDistanceCalculating(CompetitorPrdctPriceActivity.this,false,50);
 
 
                     }

@@ -463,7 +463,9 @@
         <activity android:name=".AllButtonActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".StorelistActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".AddNewStore_DynamicSectionWiseSO"
             android:screenOrientation="portrait"/>
         <activity android:name=".DetailReportSummaryActivityForAll"

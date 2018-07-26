@@ -456,7 +456,7 @@ public class NewStoreFormSO extends Fragment
             sectionIsShown=sectionToShowOrHide;
 
 
-            alertSaveAndSaveExit("Exit","Please ensure that you have saved data before exiting?",true);
+            alertSaveAndSaveExit("Exit","If you exit ,all your filled data will be lost.",true);
 
         }
         else if(isNextPressed==5)
@@ -7728,7 +7728,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
         // Setting Dialog Message
         alertDialog.setMessage(message);
 
-
+        alertDialog.setCancelable(false);
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("Exit without Save", new DialogInterface.OnClickListener() {
@@ -7756,11 +7756,12 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
         });
 
         // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("Save and Exit", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
                 // User pressed No button. Write Logic Here
-                if(validateNameFilled())
+                dialog.dismiss();
+            /*    if(validateNameFilled())
                 {
 
 
@@ -7814,7 +7815,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
                         helperDb.UpdateStoreReturnphotoFlagSO(AddNewStore_DynamicSectionWiseSO.selStoreID, currentStoreName);
                         helperDb.close();
                     } else {
-						/*String storeCountDeatails=helperDb.getTodatAndTotalStores();
+						*//*String storeCountDeatails=helperDb.getTodatAndTotalStores();
 						int  totaltarget = Integer.parseInt(storeCountDeatails.split(Pattern.quote("^"))[0]);
 						int todayTarget = Integer.parseInt(storeCountDeatails.split(Pattern.quote("^"))[1]);
 						helperDb.fnDeletesaveNewOutletFromOutletMstr(AddNewStore_DynamicSectionWise.selStoreID);
@@ -7825,7 +7826,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
 						helperDb.saveTblStoreCountDetails(String.valueOf(totaltarget),String.valueOf(todayTarget));
 
 						helperDb.saveTblPreAddedStores(AddNewStore_DynamicSectionWise.selStoreID, currentStoreName, AddNewStore_DynamicSectionWise.latitudeToSave, AddNewStore_DynamicSectionWise.longitudeToSave, onlyDateString, 1, 1);
-						helperDb.close();*/
+						helperDb.close();*//*
                     }
                     Toast.makeText(getActivity(), "Data has been completely saved", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), StorelistActivity.class);
@@ -7836,7 +7837,7 @@ public void selectedOption(String optId, String optionVal, EditText editext,List
                 else
                 {
                     Toast.makeText(getActivity(), "Please Fill Name To Save", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
 
             }

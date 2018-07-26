@@ -302,7 +302,7 @@ public class StorelistActivity extends ActionBarActivity implements LocationList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.storelist_activity);
-
+        CommonInfo.flgLTFoodsSOOnlineOffLine=0;
         currDate = new Date();
         currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 

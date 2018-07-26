@@ -100,6 +100,7 @@ import org.json.JSONObject;
 public class StoreSelection extends BaseActivity implements com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener
 {
 
+
 	public int chkFlgForErrorToCloseApp=0;
 	LinkedHashMap<String, String> hmapdsrIdAndDescr_details=new LinkedHashMap<String, String>();
 	String[] drsNames;
@@ -5583,6 +5584,7 @@ public void DayEndWithoutalert()
 								}
 								if(isOnline())
 								{
+
 									new GetStoresForDay(StoreSelection.this).execute();
 								}
 								else

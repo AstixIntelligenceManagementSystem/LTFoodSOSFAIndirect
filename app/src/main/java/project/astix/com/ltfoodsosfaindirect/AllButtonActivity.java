@@ -562,9 +562,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             public void onClick(DialogInterface dialog,int which)
             {
 
-                CommonInfo.AnyVisit=0;
+         /*       CommonInfo.AnyVisit=0;
 
-               /* File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+               *//* File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
                 if (!OrderXMLFolder.exists())
                 {
                     OrderXMLFolder.mkdirs();
@@ -589,7 +589,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
 
                 File del2 = new File(Environment.getExternalStorageDirectory(),  CommonInfo.TextFileFolder);
-                deleteNon_EmptyDir(del2);*/
+                deleteNon_EmptyDir(del2);*//*
             try {
                 dbengine.deleteViewAddedStore();
                 dbengine.deletetblStoreList();
@@ -600,7 +600,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
 
 
-
+*/
                 dialog.dismiss();
                 finishAffinity();
             }
@@ -1115,6 +1115,16 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         SyncNow();
 
+        if(isOnline())
+        {
+            UploadImageFromFolder(0);
+
+        }
+        else
+        {
+            showNoConnAlert();
+        }
+
     }
 
 
@@ -1179,15 +1189,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
 
-            if(isOnline())
-            {
-                UploadImageFromFolder(0);
 
-            }
-            else
-            {
-                showNoConnAlert();
-            }
 
         }
         catch (IOException e)
@@ -4572,6 +4574,15 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             Log.i("bgTasker", "bgTasker Execution cycle completed");
             pDialog2.dismiss();
+            if(isOnline())
+            {
+                UploadImageFromFolder(0);
+
+            }
+            else
+            {
+                showNoConnAlert();
+            }
             whatTask = 0;
 
         }
@@ -4808,7 +4819,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     System.out.println("bywww "+mm);
                     if(mm==1)
                     {
-                        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID);
+                        newservice = newservice.getProductListLastVisitStockOrOrderMstr(getApplicationContext(), fDate, imei, rID);
                         if(newservice.flagExecutedServiceSuccesfully!=1)
                         {
                             serviceException=true;
@@ -5102,13 +5113,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                     if(mm==39)
                     {
-
-                        newservice = newservice.getProductListLastVisitStockOrOrderMstr(getApplicationContext(), fDate, imei, rID);
+                        newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID);
                         if(newservice.flagExecutedServiceSuccesfully!=1)
                         {
                             serviceException=true;
                             break;
                         }
+
+
                     }
 
                 }

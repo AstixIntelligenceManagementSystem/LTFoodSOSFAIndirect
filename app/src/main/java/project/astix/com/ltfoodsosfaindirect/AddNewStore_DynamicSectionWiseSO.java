@@ -115,6 +115,8 @@ import java.util.regex.Pattern;
 public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,SearchListCommunicator,OnMapReadyCallback,CategoryCommunicatorCityState
 {
 
+    public ProgressDialog pDialog2STANDBYabhi;
+    Thread myThread;
     public static int flgLocationServicesOnOff=0;
     public static int flgGPSOnOff=0;
     public static int flgNetworkOnOff=0;
@@ -418,6 +420,13 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newstoredynamicsectionwise_so);
+
+        disableAllCheckBox("Loading Data");
+
+    }
+
+    public void  addviewsinBackground()
+    {
         prvsStoreId="";
         flgStoreVisitMode= CommonInfo.flgLTFoodsSOOnlineOffLine;
         refreshCount=0;
@@ -479,7 +488,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
             RouteNodeID=Integer.parseInt(extras.getStringExtra("RouteNodeID"));
             StoreCategoryType=    extras.getStringExtra("StoreCategoryType");
             StoreSectionCount=Integer.parseInt(extras.getStringExtra("StoreSectionCount"));
-      storeNameToShow=StoreName;
+            storeNameToShow=StoreName;
         }
         else
         {
@@ -1158,8 +1167,6 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
 
             }
         }
-
-
     }
     public void hideSoftKeyboard(View view){
         InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -3303,41 +3310,45 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        boolean isGPSokCheckInResume = false;
-        boolean isNWokCheckInResume=false;
-        isGPSokCheckInResume = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNWokCheckInResume = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if(CommonInfo.flgLTFoodsSOOnlineOffLine==1)
+        if(locationManager!=null)
         {
-            if(!isGPSokCheckInResume && !isNWokCheckInResume)
+            boolean isGPSokCheckInResume = false;
+            boolean isNWokCheckInResume=false;
+            isGPSokCheckInResume = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isNWokCheckInResume = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if(CommonInfo.flgLTFoodsSOOnlineOffLine==1)
             {
-                try
+                if(!isGPSokCheckInResume && !isNWokCheckInResume)
                 {
-                    showSettingsAlert();
+                    try
+                    {
+                        showSettingsAlert();
+                    }
+                    catch(Exception e)
+                    {
+
+                    }
+                    isGPSokCheckInResume = false;
+                    isNWokCheckInResume=false;
                 }
-                catch(Exception e)
+                else
                 {
 
+
+                    if(countSubmitClicked==2)
+                    {
+
+                        locationRetrievingAndDistanceCalculating();
+                        countSubmitClicked++;
+
+
+                    }
+
+
+
                 }
-                isGPSokCheckInResume = false;
-                isNWokCheckInResume=false;
             }
-            else
-            {
 
-
-                if(countSubmitClicked==1)
-                {
-
-                    locationRetrievingAndDistanceCalculating();
-                    countSubmitClicked++;
-
-
-                }
-
-
-
-            }
         }
 
     }
@@ -3579,6 +3590,111 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
             }
         }
 
+    }
+
+
+    public void disableAllCheckBox(String message)
+    {
+
+        pDialog2STANDBYabhi=ProgressDialog.show(AddNewStore_DynamicSectionWiseSO.this,getText(R.string.genTermPleaseWaitNew) ,message, false,true);
+        myThread = new Thread(myRunnable);
+        myThread.setPriority(Thread.MAX_PRIORITY);
+        myThread.start();
+
+
+    }
+    Runnable myRunnable = new Runnable(){
+
+        @Override
+        public void run() {
+
+            runOnUiThread(new Runnable(){
+
+                @Override
+                public void run() {
+
+
+                    new CountDownTimer(2000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                            if(pDialog2STANDBYabhi != null && pDialog2STANDBYabhi.isShowing())
+                            {
+                                pDialog2STANDBYabhi.setCancelable(false);
+
+                            }
+                        }
+
+                        public void onFinish() {
+
+                            new IAmABackgroundTask().execute();
+
+                        }
+                    }.start();
+
+
+
+
+
+
+
+                }
+
+            });
+
+        }
+    };
+
+    class IAmABackgroundTask extends
+            AsyncTask<String, Integer, Boolean> {
+
+
+        @SuppressWarnings("static-access")
+        @Override
+        protected void onPreExecute() {
+            addviewsinBackground();
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+
+            fnAbhinav(1000);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+
+            return true;
+
+        }
+
+    }
+
+    public void countUp(int start)
+    {
+
+        if(pDialog2STANDBYabhi != null && pDialog2STANDBYabhi.isShowing())
+        {
+
+            pDialog2STANDBYabhi.setTitle("My Name Abhinav");
+            pDialog2STANDBYabhi.setCancelable(true);
+            pDialog2STANDBYabhi.cancel();
+            pDialog2STANDBYabhi.dismiss();
+
+        }
+
+        else
+        {
+            countUp(start + 1);
+        }
+    }
+
+
+    public void fnAbhinav(int mytimeval)
+    {
+        countUp(1);
     }
 }
 

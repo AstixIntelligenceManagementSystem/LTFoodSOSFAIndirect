@@ -224,7 +224,7 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
            System.out.println("Shivam"+FusedLocationAccuracy);
             if(FusedLocationAccuracy!=null){
                 if(Double.parseDouble(FusedLocationAccuracy)<checkAccuracy && (!FusedLocationAccuracy.equals("0"))){
-                    System.out.println("Shivam"+"ontickFInish "+millisUntilFinished+":"+ FusedLocationAccuracy);
+                    //System.out.println("Shivam"+"ontickFInish "+millisUntilFinished+":"+ FusedLocationAccuracy);
 
                   countDownTimer.onFinish();
                    countDownTimer.cancel();

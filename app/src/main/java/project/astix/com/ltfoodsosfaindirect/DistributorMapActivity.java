@@ -107,7 +107,8 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
     int Year, Month, Day ;
     DatePickerDialog datePickerDialog ;
     boolean dob_Bool=false;
-    TextView txt_Dob_credential,Text_Dob;
+    boolean dom_Bool=false;
+    TextView txt_Dob_credential,Text_Dob,Text_mrgAnnvrsry;
     boolean credential_dob_Bool=false;
     LinkedHashMap<String,String> hmapCityAgainstState;
     String defaultCity="";
@@ -293,9 +294,14 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
         {
             Text_Dob.setText(dayOfMonth+"/"+mon+"/"+year);
         }
+        if(dom_Bool)
+        {
+            Text_mrgAnnvrsry.setText(dayOfMonth+"/"+mon+"/"+year);
+        }
 
         credential_dob_Bool=false;
         dob_Bool=false;
+        dom_Bool=false;
 
 
 
@@ -357,6 +363,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
     public void getDateHandling()
     {
         Text_Dob= (TextView) findViewById(R.id.Text_Dob);
+        Text_mrgAnnvrsry= (TextView) findViewById(R.id.Text_mrgAnnvrsry);
         Text_Dob.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -383,6 +390,42 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
 
                 //  datePickerDialog.setMinDate(calendarForSetDate);
                 calendarForSetDate.set(Year - 18, Month, Day);
+                datePickerDialog.setMaxDate(calendarForSetDate);
+                datePickerDialog.setAccentColor(Color.parseColor("#544f88"));
+
+                datePickerDialog.setTitle(getResources().getString(R.string.txtSELECTDOB));
+                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+
+            }
+        });
+
+
+        Text_mrgAnnvrsry.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dom_Bool=true;
+                calendar = java.util.Calendar.getInstance();
+                Year = calendar.get(Calendar.YEAR) ;
+                Month = calendar.get(Calendar.MONTH);
+                Day = calendar.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = DatePickerDialog.newInstance(DistributorMapActivity.this, Year, Month, Day);
+
+                datePickerDialog.setThemeDark(false);
+
+                datePickerDialog.showYearPickerFirst(false);
+
+                Calendar calendarForSetDate = Calendar.getInstance();
+                calendarForSetDate.setTimeInMillis(System.currentTimeMillis());
+
+                // calendar.setTimeInMillis(System.currentTimeMillis()+24*60*60*1000);
+                //YOU can set min or max date using this code
+                // datePickerDialog.setMaxDate(Calendar.getInstance());
+                // datePickerDialog.setMinDate(calendar);
+
+                //  datePickerDialog.setMinDate(calendarForSetDate);
+                calendarForSetDate.set(Year, Month, Day);
                 datePickerDialog.setMaxDate(calendarForSetDate);
                 datePickerDialog.setAccentColor(Color.parseColor("#544f88"));
 
@@ -2645,6 +2688,11 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
         String FirstName=ed_FirstName.getText().toString().trim();
         String LastName=ed_LastName.getText().toString().trim();
         String DOB=Text_Dob.getText().toString().trim();
+        String DOM="";
+        if(!Text_mrgAnnvrsry.getText().toString().trim().equals("Select Date"))
+        {
+            DOM=Text_mrgAnnvrsry.getText().toString().trim();
+        }
 
         helperDb.open();
        /* helperDb.savetblDistributorMappingData(UniqueDistribtrMapId,DbrNodeId,DbrNodeType,flgGSTCapture,flgGSTCompliance,
@@ -2665,7 +2713,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
                 SOFusedLocationLatitudeWithFirstAttemptFromLauncher,SOFusedLocationLongitudeWithFirstAttemptFromLauncher,
                 SOFusedLocationAccuracyWithFirstAttemptFromLauncher,3,flgLocationServicesOnOff,flgGPSOnOff,
                 flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart, cityID, StateID,
-                MapAddress, MapCity, MapPincode, MapState,phoneNo,emailID,FirstName,LastName,DOB);
+                MapAddress, MapCity, MapPincode, MapState,phoneNo,emailID,FirstName,LastName,DOB,DOM);
 
         //System.out.println("TEMP SAVE DATA...."+UniqueDistribtrMapId+"--"+DbrNodeId+"--"+DbrNodeType);
 
@@ -2785,6 +2833,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
                     Intent syncIntent = new Intent(DistributorMapActivity.this, SyncMasterDistributor.class);
                     syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
                     syncIntent.putExtra("OrigZipFileName", newfullFileName);
+                    syncIntent.putExtra("whereTo", "Regular");
                     syncIntent.putExtra("whereTo", "Regular");
                     startActivity(syncIntent);
                     finish();

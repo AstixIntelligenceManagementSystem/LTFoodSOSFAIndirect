@@ -27,6 +27,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.astix.Common.CommonInfo;
 
@@ -957,7 +958,7 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 			"NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, " +
 			"FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null," +
 			"FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null," +
-            "flgRestart int null,MapAddress text null,MapCity text null,MapPinCode text null,MapState text null,CityId text null,StateId text null,PhoneNo text null,EmailID text null,FirstName text null,LastName text null,DOB text null);";
+            "flgRestart int null,MapAddress text null,MapCity text null,MapPinCode text null,MapState text null,CityId text null,StateId text null,PhoneNo text null,EmailID text null,FirstName text null,LastName text null,DOB text null,DOM text null);";
 
 	//market visit proceed btn loc fetch
 	private static final String TABLE_tblDsrLocationDetails="tblDsrLocationDetails";
@@ -5937,10 +5938,11 @@ catch (Exception e)
         {
             StoreSelection.hmapStoreIdflgOrderType.clear();
         }
+//tblFeedbackCompetitrMstr
 
-        db.execSQL("DELETE FROM tableStoreSctnImage");
 
         db.execSQL("DELETE FROM tblCompetitrPrdctPTRPTC");
+        db.execSQL("DELETE FROM tableStoreSctnImage");
 
         db.execSQL("DELETE FROM tblCompetitrPrdctMstr");
 
@@ -6109,7 +6111,10 @@ catch (Exception e)
           {e.printStackTrace();}
           finally {
           }*/
-       db.execSQL("DELETE FROM tblStoreList where ISNewStore<>1");
+
+             // db.execSQL("DELETE FROM tblStoreList where ISNewStore<>1");
+
+
           db.execSQL("DELETE FROM tblCompetitrPrdctMstr");
 	  }
 	 
@@ -14677,75 +14682,83 @@ public void deleteStoreTblsRecordsInCaseCancelOrderInOrderBooking(String StoreID
 		/*String rID=GetActiveRouteID();
 		String RouteNodeType=FetchRouteType(rID);*/
 
+        Cursor cur=db.rawQuery("Select StoreName from tblStoreList where StoreID='"+StoreID.trim()+"'",null);
+		if(cur.getCount()>0)
+        {
+            return 0;
+        }
+        else
+        {
+            initialValues.put("StoreID", StoreID.trim());
+            initialValues.put("StoreType", StoreType.trim());
+            initialValues.put("StoreName", StoreName.trim());
+            initialValues.put("StoreLatitude", StoreLatitude);
+            initialValues.put("StoreLongitude", StoreLongitude);
+            initialValues.put("LastVisitDate", LastVisitDate.trim());
+            initialValues.put("LastTransactionDate", LastTransactionDate.trim());
+            initialValues.put("Sstat", Sstat);
 
-		initialValues.put("StoreID", StoreID.trim());
-		initialValues.put("StoreType", StoreType.trim());
-		initialValues.put("StoreName", StoreName.trim());
-		initialValues.put("StoreLatitude", StoreLatitude);
-		initialValues.put("StoreLongitude", StoreLongitude);
-		initialValues.put("LastVisitDate", LastVisitDate.trim());
-		initialValues.put("LastTransactionDate", LastTransactionDate.trim());
-		initialValues.put("Sstat", Sstat);
-		
-		initialValues.put("ForDate", ForDate.trim());
-		initialValues.put("ActualLatitude", "0");
-		initialValues.put("ActualLongitude", "0");
-		initialValues.put("VisitStartTS", "0");
-		initialValues.put("VisitEndTS", "0");
-		initialValues.put("AutoIdStore", AutoIdStore);
-		initialValues.put("LocProvider", "0");
-		initialValues.put("Accuracy", "0");
-		initialValues.put("BateryLeftStatus", "0");
-		initialValues.put("StoreClose", StoreClose);
-		initialValues.put("StoreNextDay", StoreNextDay);
-		
-		initialValues.put("chainID", 1);
-		initialValues.put("ISNewStore", 0);
-		initialValues.put("StoreRouteID", StoreRouteID);
-		initialValues.put("RouteNodeType", RouteNodeType);
-		initialValues.put("StoreCatNodeId", StoreCatNodeId);
-		initialValues.put("IsNewStoreDataCompleteSaved", 0);
-		initialValues.put("flgFromWhereSubmitStatus", 0);
-		initialValues.put("StoreAddress", StoreAddress);
-		
-		initialValues.put("PaymentStage", PaymentStage);
-		
-		initialValues.put("flgHasQuote", flgHasQuote);
-		initialValues.put("flgAllowQuotation", flgAllowQuotation);
-		initialValues.put("flgSubmitFromQuotation", flgSubmitFromQuotation);
-		
-		 initialValues.put("flgGSTCapture", flgGSTCapture);
-	     initialValues.put("flgGSTCompliance", flgGSTCompliance);
-	     initialValues.put("GSTNumber", GSTNumber);
-	     initialValues.put("flgGSTRecordFromServer", flgGSTRecordFromServer);
-		 initialValues.put("DistanceNear", 1000);
+            initialValues.put("ForDate", ForDate.trim());
+            initialValues.put("ActualLatitude", "0");
+            initialValues.put("ActualLongitude", "0");
+            initialValues.put("VisitStartTS", "0");
+            initialValues.put("VisitEndTS", "0");
+            initialValues.put("AutoIdStore", AutoIdStore);
+            initialValues.put("LocProvider", "0");
+            initialValues.put("Accuracy", "0");
+            initialValues.put("BateryLeftStatus", "0");
+            initialValues.put("StoreClose", StoreClose);
+            initialValues.put("StoreNextDay", StoreNextDay);
 
+            initialValues.put("chainID", 1);
+            initialValues.put("ISNewStore", 0);
+            initialValues.put("StoreRouteID", StoreRouteID);
+            initialValues.put("RouteNodeType", RouteNodeType);
+            initialValues.put("StoreCatNodeId", StoreCatNodeId);
+            initialValues.put("IsNewStoreDataCompleteSaved", 0);
+            initialValues.put("flgFromWhereSubmitStatus", 0);
+            initialValues.put("StoreAddress", StoreAddress);
 
+            initialValues.put("PaymentStage", PaymentStage);
 
-		initialValues.put("flgLocationServicesOnOff", 0);
-		initialValues.put("flgGPSOnOff", 0);
-		initialValues.put("flgNetworkOnOff", 0);
-		initialValues.put("flgFusedOnOff", 0);
-		initialValues.put("flgInternetOnOffWhileLocationTracking", 0);
-		initialValues.put("flgRestart", 0);
+            initialValues.put("flgHasQuote", flgHasQuote);
+            initialValues.put("flgAllowQuotation", flgAllowQuotation);
+            initialValues.put("flgSubmitFromQuotation", flgSubmitFromQuotation);
 
-		initialValues.put("flgStoreOrder", (flgIfStoreHasRecords+1));
+            initialValues.put("flgGSTCapture", flgGSTCapture);
+            initialValues.put("flgGSTCompliance", flgGSTCompliance);
+            initialValues.put("GSTNumber", GSTNumber);
+            initialValues.put("flgGSTRecordFromServer", flgGSTRecordFromServer);
+            initialValues.put("DistanceNear", 1000);
 
 
-		initialValues.put("StoreCity", "NA");
-		initialValues.put("StorePinCode", "NA");
-		initialValues.put("StoreState", "NA");
 
-		initialValues.put("CoverageAreaNodeID", CommonInfo.CoverageAreaNodeID);
-		initialValues.put("CoverageAreaNodeType", CommonInfo.CoverageAreaNodeType);
-		initialValues.put("FlgDSRSO", CommonInfo.FlgDSRSO);
-        initialValues.put("flgOrderType", flgOrderType);
+            initialValues.put("flgLocationServicesOnOff", 0);
+            initialValues.put("flgGPSOnOff", 0);
+            initialValues.put("flgNetworkOnOff", 0);
+            initialValues.put("flgFusedOnOff", 0);
+            initialValues.put("flgInternetOnOffWhileLocationTracking", 0);
+            initialValues.put("flgRestart", 0);
 
-        initialValues.put("OwnerName", OwnerName.trim());
-        initialValues.put("StoreContactNo", StoreContactNo.trim());
-        initialValues.put("StoreCatType", StoreCatType);
-        initialValues.put("flgCaptureCompetitorPTR", Integer.parseInt(flgCaptureCompetitorPTR));
-		return db.insert(DATABASE_TABLE_MAIN13, null, initialValues);
+            initialValues.put("flgStoreOrder", (flgIfStoreHasRecords+1));
+
+
+            initialValues.put("StoreCity", "NA");
+            initialValues.put("StorePinCode", "NA");
+            initialValues.put("StoreState", "NA");
+
+            initialValues.put("CoverageAreaNodeID", CommonInfo.CoverageAreaNodeID);
+            initialValues.put("CoverageAreaNodeType", CommonInfo.CoverageAreaNodeType);
+            initialValues.put("FlgDSRSO", CommonInfo.FlgDSRSO);
+            initialValues.put("flgOrderType", flgOrderType);
+
+            initialValues.put("OwnerName", OwnerName.trim());
+            initialValues.put("StoreContactNo", StoreContactNo.trim());
+            initialValues.put("StoreCatType", StoreCatType);
+            initialValues.put("flgCaptureCompetitorPTR", Integer.parseInt(flgCaptureCompetitorPTR));
+            return db.insert(DATABASE_TABLE_MAIN13, null, initialValues);
+        }
+
 	}
 	
 	// (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null);";
@@ -29125,7 +29138,7 @@ open();
 											  int Sstat,int flgLocationServicesOnOff,int flgGPSOnOff,int flgNetworkOnOff,
                                               int flgFusedOnOff,int flgInternetOnOffWhileLocationTracking,int flgRestart
             ,String CityId,String StateId,String MapAddress,String MapCity,String MapPinCode,String MapState,
-                                              String PhoneNo,String EmailID,String FirstName,String LastName, String DOB)
+                                              String PhoneNo,String EmailID,String FirstName,String LastName, String DOB,String DOM)
 	{
 		ContentValues initialValues = new ContentValues();
 
@@ -29189,6 +29202,7 @@ open();
         initialValues.put("FirstName", FirstName);
                initialValues.put("LastName", LastName);
                initialValues.put("DOB", DOB);
+        initialValues.put("DOM", DOM);
 
 		return db.insert(TABLE_tblDistributorMapping, null, initialValues);
 	}
@@ -32411,7 +32425,13 @@ close();
                 if (cursor.moveToFirst())
                 {
                     for (int i = 0; i <= (cursor.getCount() - 1); i++) {
-                        hmapQuestionMstr.put("DSRDETAILS",(String) cursor.getString(0).toString()+"^"+(String) cursor.getString(1).toString()+"^"+(String) cursor.getString(2).toString()+"^"+(String) cursor.getString(3).toString()+"^"+(String) cursor.getString(4).toString()+"^"+(String) cursor.getString(5).toString()+"^"+(String) cursor.getString(6).toString()+"^"+(String) cursor.getString(7).toString()+"^"+(String) cursor.getString(8).toString()+"^"+(String) cursor.getString(9).toString()+"^"+(String) cursor.getString(10).toString()+"^"+(String) cursor.getString(11).toString()+"^"+(String) cursor.getString(12).toString()+"^"+(String) cursor.getString(13).toString()+"^"+(String) cursor.getString(14).toString()+"^"+(String) cursor.getString(15).toString());
+                        String emailID="0";
+                        if((String) cursor.getString(15).toString()!=null){
+                            if(!((String) cursor.getString(15).toString()).equals("")){
+                                emailID=(String) cursor.getString(15).toString();
+                            }
+                        }
+                        hmapQuestionMstr.put("DSRDETAILS",(String) cursor.getString(0).toString()+"^"+(String) cursor.getString(1).toString()+"^"+(String) cursor.getString(2).toString()+"^"+(String) cursor.getString(3).toString()+"^"+(String) cursor.getString(4).toString()+"^"+(String) cursor.getString(5).toString()+"^"+(String) cursor.getString(6).toString()+"^"+(String) cursor.getString(7).toString()+"^"+(String) cursor.getString(8).toString()+"^"+(String) cursor.getString(9).toString()+"^"+(String) cursor.getString(10).toString()+"^"+(String) cursor.getString(11).toString()+"^"+(String) cursor.getString(12).toString()+"^"+(String) cursor.getString(13).toString()+"^"+(String) cursor.getString(14).toString()+"^"+emailID);
                         //    System.out.println("QuestID:"+(String)cursor.getString(0).toString()+"QuestCode:"+(String) cursor.getString(1).toString()+"QuestDesc:"+(String) cursor.getString(2).toString()+"QuestType:"+(String) cursor.getString(3).toString()+"AnsControlType:"+(String) cursor.getString(4).toString()+"AnsControlInputTypeID:"+(String) cursor.getString(5).toString()+"AnsControlInputTypeMaxLength:"+(String) cursor.getString(6).toString()+"AnsMustRequiredFlg:"+(String) cursor.getString(7).toString()+"QuestBundleFlg:"+(String) cursor.getString(8).toString()+"ApplicationTypeID:"+(String) cursor.getString(9).toString()+"Sequence:"+(String) cursor.getString(10).toString());
                         cursor.moveToNext();
                     }
@@ -32956,7 +32976,14 @@ catch(Exception e)
                 if (cursor.moveToFirst())
                 {
                     for (int i = 0; i <= (cursor.getCount() - 1); i++) {
-                        hmapQuestionMstr.put("DSRDETAILS",(String) cursor.getString(0).toString()+"^"+(String) cursor.getString(1).toString()+"^"+(String) cursor.getString(2).toString()+"^"+(String) cursor.getString(3).toString()+"^"+(String) cursor.getString(4).toString()+"^"+(String) cursor.getString(5).toString()+"^"+(String) cursor.getString(6).toString()+"^"+(String) cursor.getString(7).toString()+"^"+(String) cursor.getString(8).toString()+"^"+(String) cursor.getString(9).toString()+"^"+(String) cursor.getString(10).toString()+"^"+(String) cursor.getString(11).toString()+"^"+(String) cursor.getString(12).toString()+"^"+(String) cursor.getString(13).toString());
+
+                           String emailID="0";
+                        if((String) cursor.getString(13).toString()!=null){
+                            if(!((String) cursor.getString(13).toString()).equals("")){
+                                emailID=(String) cursor.getString(13).toString();
+                            }
+                        }
+                        hmapQuestionMstr.put("DSRDETAILS",(String) cursor.getString(0).toString()+"^"+(String) cursor.getString(1).toString()+"^"+(String) cursor.getString(2).toString()+"^"+(String) cursor.getString(3).toString()+"^"+(String) cursor.getString(4).toString()+"^"+(String) cursor.getString(5).toString()+"^"+(String) cursor.getString(6).toString()+"^"+(String) cursor.getString(7).toString()+"^"+(String) cursor.getString(8).toString()+"^"+(String) cursor.getString(9).toString()+"^"+(String) cursor.getString(10).toString()+"^"+(String) cursor.getString(11).toString()+"^"+(String) cursor.getString(12).toString()+"^"+emailID);
                         //    System.out.println("QuestID:"+(String)cursor.getString(0).toString()+"QuestCode:"+(String) cursor.getString(1).toString()+"QuestDesc:"+(String) cursor.getString(2).toString()+"QuestType:"+(String) cursor.getString(3).toString()+"AnsControlType:"+(String) cursor.getString(4).toString()+"AnsControlInputTypeID:"+(String) cursor.getString(5).toString()+"AnsControlInputTypeMaxLength:"+(String) cursor.getString(6).toString()+"AnsMustRequiredFlg:"+(String) cursor.getString(7).toString()+"QuestBundleFlg:"+(String) cursor.getString(8).toString()+"ApplicationTypeID:"+(String) cursor.getString(9).toString()+"Sequence:"+(String) cursor.getString(10).toString());
                         cursor.moveToNext();
                     }

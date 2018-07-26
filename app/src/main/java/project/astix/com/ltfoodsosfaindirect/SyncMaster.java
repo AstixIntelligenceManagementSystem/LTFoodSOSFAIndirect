@@ -2287,7 +2287,6 @@ public class SyncMaster extends Activity
 
 			            		if(whereTo.contentEquals("11"))
 								{
-
 									Date pdaDate=new Date();
 									SimpleDateFormat	sdfPDaDate = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 									String getPDADate = sdfPDaDate.format(pdaDate).toString().trim();

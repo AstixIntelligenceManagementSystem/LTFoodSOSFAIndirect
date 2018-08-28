@@ -133,7 +133,7 @@ public class SplashScreen extends AppCompatActivity
       // imei="867290026163310"; // Dev Release
 
      // imei="354010084603910";// Dev For Alok
-         //imei="359473079352536";  // Test Ramesh
+      //   imei="359473079352536";  // Test Ramesh
 
 
         CommonInfo.imei = imei;
@@ -889,7 +889,7 @@ public class SplashScreen extends AppCompatActivity
                             {
                                 chkFlgForErrorToCloseApp=1;
                                 Toast.makeText(getApplicationContext(),"Routes are not Available for this Phone",Toast.LENGTH_SHORT).show();
-
+                                break;
                             }
 
                         }
@@ -909,6 +909,7 @@ public class SplashScreen extends AppCompatActivity
                             if(chkFlgForErrorToCloseApp==0)
                             {
                                 chkFlgForErrorToCloseApp=1;
+                                break;
                             }
 
                         }
@@ -931,6 +932,7 @@ public class SplashScreen extends AppCompatActivity
                                 if(chkFlgForErrorToCloseApp==0)
                                 {
                                     chkFlgForErrorToCloseApp=1;
+                                    break;
                                 }
 
                             }

@@ -1055,7 +1055,11 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
                                 {}
                                 else
                                 {
-                                    locationRetreivingAndSetToMap();
+                                    if(DbrArray.size()>2)
+                                    {
+                                        locationRetreivingAndSetToMap();
+                                    }
+
                                 }
                             }
                         }

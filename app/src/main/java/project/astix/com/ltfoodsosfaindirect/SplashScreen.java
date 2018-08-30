@@ -133,7 +133,7 @@ public class SplashScreen extends AppCompatActivity
       // imei="867290026163310"; // Dev Release
 
      // imei="354010084603910";// Dev For Alok
-      //   imei="359473079352536";  // Test Ramesh
+        // imei="359473079352536";  // Test Ramesh
 
 
         CommonInfo.imei = imei;
@@ -877,7 +877,7 @@ public class SplashScreen extends AppCompatActivity
 
             try
             {
-                for(int mm = 1; mm<12; mm++)
+                for(int mm = 1; mm<13; mm++)
                 {
                     System.out.println("TEST"+mm);
                     if(mm==1)
@@ -903,7 +903,7 @@ public class SplashScreen extends AppCompatActivity
                     {
                         int DatabaseVersion=CommonInfo.DATABASE_VERSIONID;
                         int ApplicationID=CommonInfo.Application_TypeID;
-                        newservice = newservice.callfnSingleCallAllWebService(getApplicationContext(),ApplicationID,imei);
+                        newservice = newservice.callfnSingleCallAllWebServiceSO(getApplicationContext(),ApplicationID,imei);
                         if(!newservice.director.toString().trim().equals("1"))
                         {
                             if(chkFlgForErrorToCloseApp==0)
@@ -1019,6 +1019,20 @@ public class SplashScreen extends AppCompatActivity
 
                         }
                     }
+                    if(mm==12)
+                    {
+                        //callReturnProductReason
+                        /*newservice = newservice.callReturnProductReason(getApplicationContext(),CommonInfo.Application_TypeID,imei);
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
+                                break;
+                            }
+
+                        }*/
+
+                    }
+
 
                 }
 

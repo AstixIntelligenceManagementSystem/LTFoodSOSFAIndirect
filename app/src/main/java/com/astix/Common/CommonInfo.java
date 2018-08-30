@@ -11,6 +11,7 @@ public class CommonInfo
 	// Its for Live  Path on 194 server for SFA
 
 
+/*
 
 
 	public static File imageF_savedInstance=null;
@@ -96,6 +97,8 @@ public class CommonInfo
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
+	 public static String activityFrom="AllButtonActivity";
+*/
 
 
 
@@ -196,17 +199,13 @@ public class CommonInfo
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
-
+ public static String activityFrom="AllButtonActivity";
 */
 
 
 
 
-
-// Its for Test  Path on 194 server for SFA
-
 /*
-
 
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
@@ -287,10 +286,15 @@ public class CommonInfo
 	public static int flgDataScope=0;
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
+
+	public static final String IncentivePreference="LTFoodsIncentivePreference";
+	public static String VideoFolder="VideoLTFOODS";
+	 public static String activityFrom="AllButtonActivity";
+
 */
 
 
-
+// Its for Test  Path on 194 server for SFA
 
 
 
@@ -383,7 +387,7 @@ public class CommonInfo
         public static int flgNewStoreORStoreValidation=0;
 	    public static int DayStartClick=0;
 		public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_dev/Mobile/frmDSMWiseReportCard.aspx?imei=";
-
+ public static String activityFrom="AllButtonActivity";
 */
 
 
@@ -392,7 +396,6 @@ public class CommonInfo
 
 
 
-/*
 
 
 	public static Uri uriSavedImage_savedInstance=null;
@@ -481,6 +484,5 @@ public class CommonInfo
 	public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_testrelease/Mobile/frmDSMWiseReportCard.aspx?imei=";
 
 
-*/
 
 }

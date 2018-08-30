@@ -1,13 +1,14 @@
 <resources>
 
-    <string name="app_name">GTSOFieldOperations</string>
+    <!--<string name="app_name">GTSOFieldOperations</string>-->
      <!--<string name="app_name">GTSOFieldOperations Staging</string>-->
     <!--  <string name="app_name">GTSOFieldOperations Test</string>-->
-    <!--<string name="app_name">GTSOFieldOperations Test Release</string>-->
+    <string name="app_name">GTSOFieldOperations Test Release</string>
     <!--<string name="app_name">GTSOFieldOperations Dev</string>-->
-
+    <string name="SubmittingExeImgMsg">Submitting Execution Image…</string>
   <!-- <string name="app_name">GTSOFieldOperations Test Release</string>-->
-
+    <string name="invoiceNumber">./- abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</string>
+    <string name="NoPendingDataMsg">There is no Pending data for upload</string>
     <string name="Summary">Summary</string>
     <string name="SalesPersonName">Store Owner Name :</string>
     <string name="SalesPersonContact">Store Owner Contact :</string>
@@ -168,7 +169,7 @@
     <string name="battAlertErrMsg"><small>Your device is low on battery. \nPlease Charge your device\'s battery to Continue.</small></string>
     <string name="syncAlertOKMsg"><small>Order submission was successful.</small></string>
     <string name="syncAlertStoreQuotationOKMsg"><small>Store Quotation submission was successful</small></string>
-    <string name="syncAlertInvoiceOKMsg"><small>Delivery details submitted!</small></string>
+    <string name="syncAlertInvoiceOKMsg"><small>Details submitted!</small></string>
     <string name="submitConfirmAlert"><small>Store Order details will be Synced! \nDo you want to Submit Order Details?</small></string>
     <string name="returnsConfirmAlert"><small>Store Stock Data will be Saved! \nDo you want to make Returns?</small></string>
     <string name="returnsConfirmAlert2"><small>No Stock was taken! \nDo you want to Continue ?</small></string>

@@ -45,6 +45,17 @@
                 android:text="Home"
                 android:textColor="#000000"
                 android:textSize="14sp" />
+            <Button
+                android:id="@+id/uploadPendingData"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/alert_text_background"
+                android:drawableRight="@drawable/ic_right2"
+                android:gravity="left|center_vertical"
+                android:text="Upload Pending Data"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:visibility="visible" />
 
 
             <Button

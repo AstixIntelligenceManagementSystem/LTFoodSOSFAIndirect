@@ -176,7 +176,7 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 	ImageView img_side_popUp;
 	int closeList = 0;
 	int whatTask = 0;
-	String whereTo = "11";
+	String whereTo = "Regular";
 
 	ArrayList mSelectedItems = new ArrayList();
 
@@ -588,12 +588,10 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 					{
 						dbengine.updateStoreQuoteSubmitFlgInStoreMstrInChangeRouteCase(stIDneeded, 0);
 					}
-
-					
 				}
 				dbengine.close();
 	
-				flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
+				flgChangeRouteOrDayEnd=5;//valDayEndOrChangeRoute;
 				
 				Intent syncIntent = new Intent(StoreSelection.this, SyncMaster.class);
 				//syncIntent.putExtra("xmlPathForSync",Environment.getExternalStorageDirectory() + "/TJUKIndirectSFAxml/" + newfullFileName + ".xml");
@@ -3492,6 +3490,7 @@ public void DayEndWithoutalert()
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+
 		if(dbengine.isDBOpen())
 		{
 			dbengine.close();
@@ -3679,7 +3678,7 @@ public void DayEndWithoutalert()
 				//newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
 				dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
-				for(int mm = 1; mm<5; mm++)
+				for(int mm = 1; mm<6; mm++)
 				{
 					if(mm==1)
 					{
@@ -3727,6 +3726,19 @@ public void DayEndWithoutalert()
 							}
 
 						}
+
+					}
+					if(mm==5)
+					{
+						//callReturnProductReason
+						/*newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
+						if (!newservice.director.toString().trim().equals("1")) {
+							if (chkFlgForErrorToCloseApp == 0) {
+								chkFlgForErrorToCloseApp = 1;
+								break;
+							}
+
+						}*/
 
 					}
 
@@ -3811,6 +3823,18 @@ public void DayEndWithoutalert()
 
 			 }
 		 });
+
+		 final Button btnuploadPendingData = (Button) dialog.findViewById(R.id.uploadPendingData);
+		 btnuploadPendingData.setOnClickListener(new OnClickListener()
+		 {
+			 @Override
+			 public void onClick(View v)
+			 {
+				 dialog.dismiss();
+				 uploadPendingData();
+
+			 }
+		 });
 		 final Button btnIncentive = (Button) dialog.findViewById(R.id.btnIncentive);
 		 btnIncentive.setOnClickListener(new OnClickListener() {
 			 @Override
@@ -3833,6 +3857,7 @@ public void DayEndWithoutalert()
 			 public void onClick(View v) {
 				 Intent intent=new Intent(StoreSelection.this,AddedOutletSummaryReportActivity.class);
 				 startActivity(intent);
+
 			 }
 		 });
 
@@ -4185,7 +4210,453 @@ public void DayEndWithoutalert()
 	     dialog.setCanceledOnTouchOutside(true);
 	        dialog.show();
 	    }
-	 
+
+	public static String[] checkNumberOfFiles(File dir)
+	{
+		int NoOfFiles=0;
+		String [] Totalfiles = null;
+
+		if (dir.isDirectory())
+		{
+			String[] children = dir.list();
+			NoOfFiles=children.length;
+			Totalfiles=new String[children.length];
+
+			for (int i=0; i<children.length; i++)
+			{
+				Totalfiles[i]=children[i];
+			}
+		}
+		return Totalfiles;
+	}
+	void uploadPendingData()
+	{
+
+		File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+
+		// check number of files in folder
+		final String [] AllFilesNameNotSync= checkNumberOfFiles(del);
+
+		String xmlfileNames = dbengine.fnGetXMLFileAll("3");
+		// String xmlfileNamesStrMap=dbengineSo.fnGetXMLFile("3");
+
+		dbengine.open();
+		String[] SaveStoreList = dbengine.SaveStoreList();
+		dbengine.close();
+		if(xmlfileNames.length()>0 || SaveStoreList.length != 0)
+		{
+			if(isOnline())
+			{
+
+				dbengine.open();
+				StoreList2Procs = dbengine.ProcessStoreReq();
+				if (StoreList2Procs.length != 0)
+				{
+					midPart();
+					UploadPendingDataCustomAlert(1);
+					dbengine.close();
+
+				} else if (dbengine.GetLeftStoresChk() == true)
+				{
+					UploadDataOnBtnClick();
+					dbengine.close();
+				}
+				else
+				{
+					fnUploadPeningDataWithoutalert();
+				}
+
+			}
+			else
+			{
+				showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
+			}
+		}
+		else
+		{
+			showAlertSingleButtonInfo(getResources().getString(R.string.NoPendingDataMsg));
+		}
+	}
+
+	public void UploadPendingDataCustomAlert(int flagWhichButtonClicked)
+	{
+		final Dialog dialog = new Dialog(StoreSelection.this,R.style.AlertDialogDayEndTheme);
+
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.day_end_custom_alert);
+			/*if(flagWhichButtonClicked==1)
+			{
+				dialog.setTitle(R.string.genTermSelectStoresPendingToCompleteDayEnd);
+			}
+			else if(flagWhichButtonClicked==2)
+			{
+				dialog.setTitle(R.string.genTermSelectStoresPendingToCompleteChangeRoute);
+			}*/
+		dialog.setTitle("Following Orders are Not Submitted as Yet. Please select the partial Orders for Submission from the list.");
+		TextView txtVw_header=(TextView) dialog.findViewById(R.id.txtVw_header);
+		txtVw_header.setText("Following Orders are Not Submitted as Yet.Select Pening Orders for Submission.");
+
+		LinearLayout ll_product_not_submitted=(LinearLayout) dialog.findViewById(R.id.ll_product_not_submitted);
+		mSelectedItems.clear();
+		final String[] stNames4List = new String[stNames.size()];
+		checks=new boolean[stNames.size()];
+		stNames.toArray(stNames4List);
+
+		for(int cntPendingList=0;cntPendingList<stNames4List.length;cntPendingList++)
+		{
+			LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			final View viewAlertProduct=inflater.inflate(R.layout.day_end_alrt,null);
+			final TextView txtVw_product_name=(TextView) viewAlertProduct.findViewById(R.id.txtVw_product_name);
+			txtVw_product_name.setText(stNames4List[cntPendingList]);
+			txtVw_product_name.setTextColor(this.getResources().getColor(R.color.green_submitted));
+			final ImageView img_to_be_submit=(ImageView) viewAlertProduct.findViewById(R.id.img_to_be_submit);
+			img_to_be_submit.setTag(cntPendingList);
+
+			final ImageView img_to_be_cancel=(ImageView) viewAlertProduct.findViewById(R.id.img_to_be_cancel);
+			img_to_be_cancel.setTag(cntPendingList);
+			img_to_be_submit.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+
+					if(!checks[Integer.valueOf(img_to_be_submit.getTag().toString())])
+					{
+						img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_hover) );
+						img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_normal) );
+						txtVw_product_name.setTextColor(getResources().getColor(R.color.green_submitted));
+						mSelectedItems.add(stNames4List[Integer.valueOf(img_to_be_submit.getTag().toString())]);
+						checks[Integer.valueOf(img_to_be_submit.getTag().toString())]=true;
+					}
+
+
+				}
+			});
+
+			img_to_be_cancel.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (mSelectedItems.contains(stNames4List[Integer.valueOf(img_to_be_cancel.getTag().toString())]))
+					{
+						if(checks[Integer.valueOf(img_to_be_cancel.getTag().toString())])
+						{
+
+							img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_normal) );
+							img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_hover) );
+							txtVw_product_name.setTextColor(Color.RED);
+							mSelectedItems.remove(stNames4List[Integer.valueOf(img_to_be_cancel.getTag().toString())]);
+							checks[Integer.valueOf(img_to_be_cancel.getTag().toString())]=false;
+						}
+
+					}
+
+				}
+			});
+			mSelectedItems.add(stNames4List[cntPendingList]);
+			checks[cntPendingList]=true;
+			ll_product_not_submitted.addView(viewAlertProduct);
+		}
+
+
+		Button btnSubmit=(Button) dialog.findViewById(R.id.btnSubmit);
+		Button btn_cancel_Back=(Button) dialog.findViewById(R.id.btn_cancel_Back);
+		btnSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mSelectedItems.size() == 0) {
+
+					UploadDataOnBtnClick();
+
+
+				}
+
+				else {
+
+					int countOfOrderNonSelected=0;
+					for(int countForFalse=0;countForFalse<checks.length;countForFalse++)
+					{
+						if(checks[countForFalse]==false)
+						{
+							countOfOrderNonSelected++;
+						}
+
+					}
+					if(countOfOrderNonSelected>0)
+					{
+						confirmationForSubmission(String.valueOf(countOfOrderNonSelected));
+					}
+
+					else
+					{
+
+
+						whatTask = 2;
+						// -- Route Info Exec()
+						try {
+
+							new bgTaskerForPendingUploadData().execute().get();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							//System.out.println(e);
+						} catch (ExecutionException e) {
+							e.printStackTrace();
+							//System.out.println(e);
+						}
+						// --
+					}
+
+				}
+
+			}
+		});
+
+		btn_cancel_Back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				valDayEndOrChangeRoute=0;
+				dialog.dismiss();
+			}
+		});
+
+		dialog.setCanceledOnTouchOutside(false);
+
+
+		dialog.show();
+
+
+
+
+	}
+
+
+	private class bgTaskerForPendingUploadData extends AsyncTask<Void, Void, Void> {
+
+
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			try {
+
+				dbengine.open();
+				String rID=dbengine.GetActiveRouteID();
+				//dbengine.UpdateTblDayStartEndDetails(Integer.parseInt(rID), valDayEndOrChangeRoute);
+				dbengine.close();
+
+				if (whatTask == 2)
+				{
+					whatTask = 0;
+
+					dbengine.open();
+					// dbengine.fnTruncateTblSelectedStoreIDinChangeRouteCase();
+					for (int nosSelected = 0; nosSelected <= mSelectedItems.size() - 1; nosSelected++)
+					{
+						String valSN = (String) mSelectedItems.get(nosSelected);
+						int valID = stNames.indexOf(valSN);
+						String stIDneeded = stIDs.get(valID);
+
+
+
+						dbengine.UpdateStoreFlagAtDayEndOrChangeRoute(stIDneeded, 3);
+
+						dbengine.UpdateStoreReturnphotoFlag(stIDneeded.trim(), 3);
+						dbengine.insertTblSelectedStoreIDinChangeRouteCase(stIDneeded);
+						dbengine.updateflgFromWhereSubmitStatusAgainstStore(stIDneeded, 1);
+						if(dbengine.fnchkIfStoreHasInvoiceEntry(stIDneeded)==1)
+						{
+							dbengine.updateStoreQuoteSubmitFlgInStoreMstrInChangeRouteCase(stIDneeded, 0);
+						}
+					}
+					// dbengine.ProcessStoreReq();
+					dbengine.close();
+
+					pDialog2.dismiss();
+					dbengine.open();
+
+					//dbengine.updateActiveRoute(rID, 0);
+					dbengine.close();
+					// sync here
+
+
+					SyncNow();
+
+
+				}else if (whatTask == 3) {
+					// sync rest
+					whatTask = 0;
+
+					pDialog2.dismiss();
+					//dbengine.open();
+					//String rID=dbengine.GetActiveRouteID();
+					//dbengine.updateActiveRoute(rID, 0);
+					//dbengine.close();
+					// sync here
+					SyncNow();
+					/*
+					 * dbengine.open(); dbengine.reCreateDB(); dbengine.close();
+					 */
+				}else if (whatTask == 1) {
+					// clear all
+					whatTask = 0;
+
+					SyncNow();
+
+				}/*else if (whatTask == 0)
+				{
+					try {
+						new FullSyncDataNow().execute().get();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}*/
+
+
+			} catch (Exception e) {
+				Log.i("bgTasker", "bgTasker Execution Failed!", e);
+
+			}
+
+			finally {
+
+				Log.i("bgTasker", "bgTasker Execution Completed...");
+
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute()
+		{
+			super.onPreExecute();
+
+			pDialog2 = ProgressDialog.show(StoreSelection.this,getText(R.string.PleaseWaitMsg),getText(R.string.genTermProcessingRequest), true);
+			pDialog2.setIndeterminate(true);
+			pDialog2.setCancelable(false);
+			pDialog2.show();
+
+		}
+
+		@Override
+		protected void onCancelled() {
+			Log.i("bgTasker", "bgTasker Execution Cancelled");
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+
+			Log.i("bgTasker", "bgTasker Execution cycle completed");
+			pDialog2.dismiss();
+			whatTask = 0;
+
+		}
+	}
+
+	public void UploadDataOnBtnClick()
+	{
+
+
+		AlertDialog.Builder alertDialogSubmitConfirm = new AlertDialog.Builder(StoreSelection.this);
+
+		LayoutInflater inflater = getLayoutInflater();
+		View view=inflater.inflate(R.layout.titlebar, null);
+		alertDialogSubmitConfirm.setCustomTitle(view);
+		TextView title_txt = (TextView) view.findViewById(R.id.title_txt);
+		title_txt.setText(getText(R.string.PleaseConformMsg));
+
+
+		View view1=inflater.inflate(R.layout.custom_alert_dialog, null);
+		view1.setBackgroundColor(Color.parseColor("#1D2E3C"));
+		TextView msg_txt = (TextView) view1.findViewById(R.id.msg_txt);
+		msg_txt.setText("Are you sure to Upload Pending Visits and Order data?");
+		alertDialogSubmitConfirm.setView(view1);
+		alertDialogSubmitConfirm.setInverseBackgroundForced(true);
+
+
+
+		alertDialogSubmitConfirm.setNeutralButton(R.string.AlertDialogYesButton,new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+
+				dbengine.open();
+
+				if (dbengine.GetLeftStoresChk() == true)
+				{
+					dbengine.close();
+
+					whatTask = 3;
+
+					try
+					{
+						new bgTaskerForPendingUploadData().execute().get();
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+
+					}
+
+				}
+				else
+				{
+
+
+					try
+					{
+						dbengine.close();
+						whatTask = 1;
+						new bgTaskerForPendingUploadData().execute().get();
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+
+					}
+
+
+				}
+
+			}
+		});
+
+		alertDialogSubmitConfirm.setNegativeButton(R.string.AlertDialogNoButton,new DialogInterface.OnClickListener()
+		{
+
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				dialog.dismiss();
+			}
+		});
+
+		alertDialogSubmitConfirm.setIcon(R.drawable.info_ico);
+		AlertDialog alert = alertDialogSubmitConfirm.create();
+		alert.show();
+
+	}
+
+
+	public void fnUploadPeningDataWithoutalert()
+	{
+
+
+		SyncNow();
+
+	}
 	 public void dayEndCustomAlert(int flagWhichButtonClicked)
 	 {
 		 final Dialog dialog = new Dialog(StoreSelection.this,R.style.AlertDialogDayEndTheme);

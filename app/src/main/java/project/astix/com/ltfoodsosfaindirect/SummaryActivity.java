@@ -813,7 +813,7 @@ public class SummaryActivity extends BaseActivity {
                 //newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
 
-                for (int mm = 1; mm < 5; mm++) {
+                for (int mm = 1; mm < 6; mm++) {
                     if (mm == 2) {
                         //(Context ctx,String uuid,String CurDate,int DatabaseVersion,int ApplicationID)
                         newservice = newservice.getStoreAllDetails(getApplicationContext(), imei, fDate, DatabaseVersion, ApplicationID);
@@ -828,7 +828,7 @@ public class SummaryActivity extends BaseActivity {
 
                     }
                     if (mm == 3) {
-                        newservice = newservice.callfnSingleCallAllWebService(getApplicationContext(), ApplicationID, imei);
+                        newservice = newservice.callfnSingleCallAllWebServiceSO(getApplicationContext(), ApplicationID, imei);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
                                 chkFlgForErrorToCloseApp = 1;
@@ -847,6 +847,19 @@ public class SummaryActivity extends BaseActivity {
                             }
 
                         }
+
+                    }
+                    if(mm==5)
+                    {
+                        //callReturnProductReason
+                      /*  newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
+                                break;
+                            }
+
+                        }*/
 
                     }
                     if(mm==1)

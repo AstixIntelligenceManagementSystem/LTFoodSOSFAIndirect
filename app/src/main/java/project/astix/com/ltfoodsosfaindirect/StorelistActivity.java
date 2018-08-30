@@ -2765,7 +2765,7 @@ if(CommonInfo.flgLTFoodsSOOnlineOffLine==0)
 
                 dbEngineSO.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
 
-                for(int mm = 1; mm<5; mm++)
+                for(int mm = 1; mm<6; mm++)
                 {
                     if(mm==2)
                     {
@@ -2803,6 +2803,19 @@ if(CommonInfo.flgLTFoodsSOOnlineOffLine==0)
                             }
 
                         }
+
+                    }
+                    if(mm==5)
+                    {
+                        //callReturnProductReason
+                      /*  newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
+                                break;
+                            }
+
+                        }*/
 
                     }
                     if(mm==1)

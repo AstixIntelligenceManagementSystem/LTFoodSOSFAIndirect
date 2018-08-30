@@ -583,6 +583,10 @@ public class SyncMaster extends Activity
 		{
 			alertDialogSyncOK.setMessage(getText(R.string.syncAlertStoreQuotationOKMsg));
 		}
+		else if(StoreSelection.flgChangeRouteOrDayEnd==4)
+		{
+			alertDialogSyncOK.setMessage("New Store Submission was successful.");
+		}
 		else
 		{
 			alertDialogSyncOK.setMessage(getText(R.string.syncAlertOKMsg));
@@ -661,7 +665,7 @@ public class SyncMaster extends Activity
 
 
 								dbengine.open();
-								if(StoreSelection.flgChangeRouteOrDayEnd==1 || StoreSelection.flgChangeRouteOrDayEnd==2)
+								if(StoreSelection.flgChangeRouteOrDayEnd==1 || StoreSelection.flgChangeRouteOrDayEnd==2 || AllButtonActivity.flgChangeRouteOrDayEnd==1)
 								{
 									dbengine.reTruncateRouteTbl();
 									//db.reTruncateRouteMstrTbl();
@@ -988,6 +992,14 @@ public class SyncMaster extends Activity
 				{
 					 pDialogGetStores.setMessage("Submitting Quotation Details...");
 					}
+				else if(StoreSelection.flgChangeRouteOrDayEnd==4)
+				{
+					pDialogGetStores.setMessage("Submitting Added Store Information...");
+				}
+				else if(StoreSelection.flgChangeRouteOrDayEnd==5)
+				{
+					pDialogGetStores.setMessage("Uploading Pending Data...");
+				}
 				else
 				{
 					if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
@@ -1937,42 +1949,34 @@ public class SyncMaster extends Activity
 				}
 
 			    pDialogGetStores.setTitle(getText(R.string.genTermPleaseWaitNew));
-			    if(StoreSelection.flgChangeRouteOrDayEnd==1)
-				{
-				 pDialogGetStores.setMessage("Ending your day visit ...");
-					StoreSelection.flgChangeRouteOrDayEnd=0;
-				}else if(StoreSelection.flgChangeRouteOrDayEnd==2)
-				{
-				 pDialogGetStores.setMessage("Changing the route....");
-					StoreSelection.flgChangeRouteOrDayEnd=0;
-				}
-				else if(StoreSelection.flgChangeRouteOrDayEnd==3)
-				{
-					 pDialogGetStores.setMessage("Submitting Quotation Details...");
-					StoreSelection.flgChangeRouteOrDayEnd=0;
-					}
-				else if(AllButtonActivity.flgJointWorking==1)
-				{
-					pDialogGetStores.setMessage("Submitting Joint Working Details...");
-					AllButtonActivity.flgJointWorking=0;
-				}
-				else if(DayStartActivity.flgDaySartWorking==1)
-				{
-					pDialogGetStores.setMessage("Submitting Day Start Details...");
-					DayStartActivity.flgDaySartWorking=0;
-				}
-				else if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
-				{
-					pDialogGetStores.setMessage("Ending your day visit ...");
-					AllButtonActivity.flgChangeRouteOrDayEnd=0;
-				}
-				else
-				{
-
-
-						pDialogGetStores.setMessage("Submitting Order Details...");
-
-				}
+			  if(StoreSelection.flgChangeRouteOrDayEnd==1)
+			  {
+				  pDialogGetStores.setMessage("Ending your day visit ...");
+			  }
+			  else if(StoreSelection.flgChangeRouteOrDayEnd==2)
+			  {
+				  pDialogGetStores.setMessage("Changing the route....");
+			  }
+			  else if(StoreSelection.flgChangeRouteOrDayEnd==3)
+			  {
+				  pDialogGetStores.setMessage("Submitting Quotation Details...");
+			  }
+			  else if(StoreSelection.flgChangeRouteOrDayEnd==4)
+			  {
+				  pDialogGetStores.setMessage("Submitting Added Store Information...");
+			  }
+			  else if(StoreSelection.flgChangeRouteOrDayEnd==5)
+			  {
+				  pDialogGetStores.setMessage("Uploading Pending Data...");
+			  }
+			  else if(AllButtonActivity.flgChangeRouteOrDayEnd==1)
+			  {
+				  pDialogGetStores.setMessage("Ending your day visit ...");
+			  }
+			  else
+			  {
+				  pDialogGetStores.setMessage("Submitting Order Details...");
+			  }
 				pDialogGetStores.setIndeterminate(false);
 				pDialogGetStores.setCancelable(false);
 				pDialogGetStores.setCanceledOnTouchOutside(false);

@@ -2824,7 +2824,7 @@ public class ServiceWorker
 	}
 
 
-	public ServiceWorker callfnSingleCallAllWebService(Context ctx,int ApplicationID,String uuid)
+	public ServiceWorker callReturnProductReason(Context ctx,int ApplicationID,String uuid)
 	{
 		this.context = ctx;
 		DBAdapterKenya dbengine = new DBAdapterKenya(context);
@@ -19345,6 +19345,54 @@ public class ServiceWorker
 				dbengine.savetblPDAQuestOptionValuesDependentMstr(DepQstId, DepAnswValId, QstId, AnswValId, OptDescr, Sequence, GrpQuestID, GrpDepQuestID);
 
 			}
+
+			NodeList tblOrderCancelReasons = doc.getElementsByTagName("tblOrderCancelReasons");
+			for (int i = 0; i < tblOrderCancelReasons.getLength(); i++)
+			{
+
+				String reasonCodeId="0";
+
+				String reasonDescr="N/A";
+
+
+
+				Element element = (Element) tblOrderCancelReasons.item(i);
+
+				if(!element.getElementsByTagName("ReasonCodeID").equals(null))
+				{
+
+					NodeList ReasonCodeIDNode = element.getElementsByTagName("ReasonCodeID");
+					Element     line = (Element) ReasonCodeIDNode.item(0);
+
+					if(ReasonCodeIDNode.getLength()>0)
+					{
+
+						reasonCodeId=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+
+				if(!element.getElementsByTagName("ReasonDescr").equals(null))
+				{
+
+					NodeList ReasonDescrNode = element.getElementsByTagName("ReasonDescr");
+					Element     line = (Element) ReasonDescrNode.item(0);
+
+					if(ReasonDescrNode.getLength()>0)
+					{
+
+						reasonDescr=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+
+
+				dbengine.insertReasonCanclOrder(reasonCodeId,reasonDescr);
+			}
 			setmovie.director = "1";
 			dbengine.close();
 			return setmovie;
@@ -20417,6 +20465,149 @@ public class ServiceWorker
 		}
 		catch (Exception e){
 
+		}
+
+	}
+
+	public ServiceWorker getCancelReasonsExecution(Context ctx, String fdate,String rId,String uuid)
+	{
+		this.context = ctx;
+		DBAdapterKenya dbengine = new DBAdapterKenya(context);
+		dbengine.open();
+
+		final String SOAP_ACTION = "http://tempuri.org/GetCancelReasonsExecution";
+		final String METHOD_NAME = "GetCancelReasonsExecution";
+		final String NAMESPACE = "http://tempuri.org/";
+		final String URL = UrlForWebService;
+
+		SoapObject table = null; // Contains table of dataset that returned
+		// through SoapObject
+		SoapObject client = null; // Its the client petition to the web service
+		SoapObject tableRow = null; // Contains row of table
+		SoapObject responseBody = null; // Contains XML content of dataset
+
+		//SoapObject param
+		HttpTransportSE transport = null; // That call webservice
+		SoapSerializationEnvelope sse = null;
+
+		sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		sse.addMapping(NAMESPACE, "ServiceWorker", this.getClass());
+		// Note if class name isn't "ABC_CLASS_NAME" ,you must change
+		sse.dotNet = true; // if WebService written .Net is result=true
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(
+				URL,timeout);
+
+
+		ServiceWorker setmovie = new ServiceWorker();
+		try {
+			client = new SoapObject(NAMESPACE, METHOD_NAME);
+
+			//////// System.out.println("soap obj date: "+ dateVAL);
+
+
+			//client.addProperty("bydate", dateVAL.toString());
+			client.addProperty("bydate", fdate.toString());
+			client.addProperty("IMEINo", uuid.toString());
+			client.addProperty("rID", rId.toString());
+
+
+			//////// System.out.println("SRVC WRKR - dateVAL.toString(): "+dateVAL.toString());
+			////// System.out.println("SRVC WRKR - uuid.toString(): "+uuid.toString());
+			////// System.out.println("Arjun Calling category webservice 1");
+			sse.setOutputSoapObject(client);
+			sse.bodyOut = client;
+			androidHttpTransport.call(SOAP_ACTION, sse);
+
+			// This step: get file XML
+			responseBody = (SoapObject)sse.bodyIn;
+
+
+			int totalCount = responseBody.getPropertyCount();
+
+			// System.out.println("Kajol 2 :"+totalCount);
+			String resultString=androidHttpTransport.responseDump;
+
+			String name=responseBody.getProperty(0).toString();
+
+			// System.out.println("Kajol 3 :"+name);
+
+			XMLParser xmlParser = new XMLParser();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(name));
+			Document doc = db.parse(is);
+
+
+			//   dbengine.open();
+
+
+			dbengine.delTblReasonOrderCncl();
+
+
+
+			NodeList tblOrderCancelReasons = doc.getElementsByTagName("tblOrderCancelReasons");
+			for (int i = 0; i < tblOrderCancelReasons.getLength(); i++)
+			{
+
+				String reasonCodeId="0";
+
+				String reasonDescr="N/A";
+
+
+
+				Element element = (Element) tblOrderCancelReasons.item(i);
+
+				if(!element.getElementsByTagName("ReasonCodeID").equals(null))
+				{
+
+					NodeList ReasonCodeIDNode = element.getElementsByTagName("ReasonCodeID");
+					Element     line = (Element) ReasonCodeIDNode.item(0);
+
+					if(ReasonCodeIDNode.getLength()>0)
+					{
+
+						reasonCodeId=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+
+				if(!element.getElementsByTagName("ReasonDescr").equals(null))
+				{
+
+					NodeList ReasonDescrNode = element.getElementsByTagName("ReasonDescr");
+					Element     line = (Element) ReasonDescrNode.item(0);
+
+					if(ReasonDescrNode.getLength()>0)
+					{
+
+						reasonDescr=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
+
+
+
+
+
+				dbengine.insertReasonCanclOrder(reasonCodeId,reasonDescr);
+			}
+
+
+			setmovie.director = "1";
+			flagExecutedServiceSuccesfully=3;
+			// System.out.println("ServiceWorkerNitish getCategory Inside");
+			return setmovie;
+
+		} catch (Exception e) {
+
+			// System.out.println("Aman Exception occur in GetCategoryMstr :"+e.toString());
+			setmovie.director = e.toString();
+			setmovie.movie_name = e.toString();
+			flagExecutedServiceSuccesfully=0;
+			dbengine.close();
+			return setmovie;
 		}
 
 	}

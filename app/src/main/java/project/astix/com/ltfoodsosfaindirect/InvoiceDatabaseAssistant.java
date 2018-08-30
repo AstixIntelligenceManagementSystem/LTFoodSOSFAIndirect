@@ -2,26 +2,27 @@ package project.astix.com.ltfoodsosfaindirect;
 
 
 //import java.io.BufferedOutputStream;
-import java.io.File;
-//import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
-
-//import android.content.Context;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-//import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-//import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
 import com.astix.Common.CommonInfo;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+
+//import java.io.FileNotFoundException;
+//import android.content.Context;
+//import android.database.sqlite.SQLiteOpenHelper;
+//import android.provider.SyncStateContract.Constants;
 
 public class InvoiceDatabaseAssistant 
   {
@@ -114,7 +115,7 @@ public class InvoiceDatabaseAssistant
 				exportTable("tblInvoiceButtonTransac");
 			}
 			
-			
+			exportExecutionImages("tblExecutionImages");
 			
 		}
 		String xmlString = xmlBuilder.end();
@@ -141,13 +142,17 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 	String cStoreID="";
 	String CommonData="0";
 		 String CancelRemarks="";
+	String CancelReasonId="";
+	String InvNumber="";
+	String InvDate="";
+	String LineValue="";
 	xmlBuilder.openTable(tableName);
 	for(int j=0;j<OrderListing.length;j++)
 	{
 		//xmlBuilder.openRow();
 		totalSendString="";
 		
-		String sql = "select IMEIno,StoreID,TransDate,OrderID,ProdID,ProductPrice,DelQty,FreeQty,DiscountVal,additionalDiscount,flgCancel,CancelRemarks from " + tableName + " where OrderID='"+OrderListing[j]+"' and Sstat=9";		// chk for flag - DB adapter
+		String sql = "select IMEIno,StoreID,TransDate,OrderID,ProdID,ProductPrice,DelQty,FreeQty,DiscountVal,additionalDiscount,flgCancel,CancelRemarks,CancelReasonId,InvNumber,InvDate,LineValue from " + tableName + " where OrderID='"+OrderListing[j]+"' and Sstat=9";		// chk for flag - DB adapter
 		System.out.println("Invoice Submit Order ID :"+OrderListing[j]);
 		Cursor c = db.rawQuery(sql, new String[0]);
 	
@@ -163,6 +168,10 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 				TransDate=c.getString(2);
 				additionalDiscount=c.getString(9);
 				CancelRemarks=c.getString(11);
+				CancelReasonId=c.getString(12);
+				InvNumber=c.getString(13);
+				InvDate=c.getString(14);
+
 				if(canflag==0)
 				{
 					if(Integer.parseInt(c.getString(6))==0 && Integer.parseInt(c.getString(7))==0 && (Double.parseDouble(c.getString(8))==0.0 || Double.parseDouble(c.getString(8))==0))
@@ -176,11 +185,11 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 					{
 						if(totalSendString.equals(""))
 						{
-							totalSendString=c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8);
+							totalSendString=c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8)+"^"+c.getString(15);
 						}
 						else
 						{
-						totalSendString+="^|"+c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8);
+						totalSendString+="^|"+c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8)+"^"+c.getString(15);
 						}
 					}
 				}
@@ -209,6 +218,11 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 					xmlBuilder.addColumn("additionalDiscount", additionalDiscount);
 					xmlBuilder.addColumn("flgCancel", ""+canflag);
 					xmlBuilder.addColumn("CancelRemarks", ""+CancelRemarks);
+					xmlBuilder.addColumn("CancelReasonId", ""+CancelReasonId);
+					xmlBuilder.addColumn("InvNumber", InvNumber);
+					xmlBuilder.addColumn("InvDate", InvDate);
+
+
 					xmlBuilder.closeRow();	
 					
 				
@@ -236,7 +250,7 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 		 String CommonData="0";
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;			
-		String sql = "select IMEIno,StoreID,TransDate,OrderID,flgCancel,CancelRemarks from " + tableName + " where Sstat = 7";		// chk for flag - DB adapter
+		String sql = "select IMEIno,StoreID,TransDate,OrderID,flgCancel,CancelRemarks,InvNumber,InvDate from " + tableName + " where Sstat = 7";		// chk for flag - DB adapter
 		//db.execSQL("Update tblInvoiceButtonTransac Set Sstat=4 where Sstat=7");
 		
 		
@@ -293,6 +307,9 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 				xmlBuilder.addColumn("additionalDiscount", "0");
 				xmlBuilder.addColumn("flgCancel", c.getString(4));
 				xmlBuilder.addColumn("CancelRemarks", c.getString(5));
+				xmlBuilder.addColumn("InvNumber", c.getString(6));
+
+
 				
 				
 				
@@ -368,9 +385,9 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 		 String CommonData="0";
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;			
-		String sql = "select IMEIno,StoreID,TransDate,OrderID,ProdID,ProductPrice,DelQty,FreeQty,DiscountVal,additionalDiscount,flgCancel,CancelRemarks from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
+		String sql = "select IMEIno,StoreID,TransDate,OrderID,ProdID,ProductPrice,DelQty,FreeQty,DiscountVal,additionalDiscount,flgCancel,CancelRemarks,InvNumber,InvDate,LineValue from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
 		Cursor c = db.rawQuery(sql, new String[0]);
-		db.execSQL("Update tblInvoiceButtonTransac Set Sstat=4 where Sstat=4");
+		db.execSQL("Update tblInvoiceButtonTransac Set Sstat=4 where Sstat=3");
 		//System.out.println("Jai Surya Testing sql :"+sql);
 		//System.out.println("Jai Surya Testing c.getCount() :"+c.getCount());
 		int noRecords=c.getCount();
@@ -416,11 +433,16 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 							xmlBuilder.addColumn("additionalDiscount", c.getString(9));
 							xmlBuilder.addColumn("flgCancel", c.getString(10));
 							xmlBuilder.addColumn("CancelRemarks", c.getString(11));
+							xmlBuilder.addColumn("InvNumber", c.getString(12));
+							xmlBuilder.addColumn("InvDate", c.getString(13));
+
+
+
 							xmlBuilder.closeRow();	
 							totalSendString="";
 						}
 						
-						totalSendString=totalSendString+""+c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8);
+						totalSendString=totalSendString+""+c.getString(4)+"^"+c.getString(5)+"^"+c.getString(6)+"^"+c.getString(7)+"^"+c.getString(8)+"^"+c.getString(14);
 						
 						}
 						
@@ -452,6 +474,11 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 					xmlBuilder.addColumn("additionalDiscount", c.getString(9));
 					xmlBuilder.addColumn("flgCancel", c.getString(10));
 					xmlBuilder.addColumn("CancelRemarks", c.getString(11));
+					xmlBuilder.addColumn("InvNumber", c.getString(12));
+					xmlBuilder.addColumn("InvDate", c.getString(13));
+
+
+					//LineValue
 					xmlBuilder.closeRow();	
 					
 				}
@@ -472,7 +499,33 @@ private void exportTableConformInvoice(final String tableName,String[] OrderList
 		c.close();
 		xmlBuilder.closeTable();
 	}
-	
+	  private void exportExecutionImages(final String tableName) throws IOException {
+
+
+
+		  String sql = "select * from " + tableName + " where Sstat = 3";		// chk for flag - DB adapter
+		  Cursor c = db.rawQuery(sql, new String[0]);
+
+
+
+
+		  xmlBuilder.openTable(tableName);
+
+		  if (c.moveToFirst()) {
+			  int cols = c.getColumnCount();
+			  do {
+				  xmlBuilder.openRow();
+				  for (int i = 0; i < cols; i++) {
+					  xmlBuilder.addColumn(c.getColumnName(i), c.getString(i));
+				  }
+				  xmlBuilder.closeRow();
+			  } while (c.moveToNext());
+		  }
+		  c.close();
+		  xmlBuilder.closeTable();
+
+			  }
+
 	private void exportTableStoreList(final String tableName) throws IOException {
 		xmlBuilder.openTable(tableName);
 		//String sql = "select * from " + tableName;	

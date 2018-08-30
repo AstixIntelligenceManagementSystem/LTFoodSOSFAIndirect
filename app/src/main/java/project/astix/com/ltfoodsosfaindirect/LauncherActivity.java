@@ -2156,7 +2156,7 @@ private void downloadapk()
 			HashMap<String,String> hmapInvoiceOrderIDandStatus=new HashMap<String, String>();
 			 hmapInvoiceOrderIDandStatus=dbengine.fetchHmapInvoiceOrderIDandStatus();
 			
-			for(int mm = 1; mm < 5  ; mm++)
+			for(int mm = 1; mm < 6  ; mm++)
 			{
 				if(mm==1)
 				{
@@ -2199,6 +2199,21 @@ private void downloadapk()
 					{
 					newservice = newservice.getCategory(getApplicationContext(), imei);
 					}
+				}
+				if(mm==5)
+				{
+
+					newservice = newservice.getCancelReasonsExecution(getApplicationContext(), fDate, rID, imei);
+
+					if(!newservice.director.toString().trim().equals("1"))
+					{
+						if(chkFlgForErrorToCloseApp==0)
+						{
+							chkFlgForErrorToCloseApp=1;
+						}
+
+					}
+
 				}
 				/*if(mm==5)
 				{  

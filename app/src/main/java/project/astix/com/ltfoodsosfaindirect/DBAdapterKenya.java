@@ -42,6 +42,14 @@ public class DBAdapterKenya
 	private boolean isDBOpenflag = false;
 
 
+    private static final String DATABASE_TABLE_REASON_ORDER_CANCEL = "tblReasonOrderCncl";
+    private static final String DATABASE_CREATE_REASON_ORDER_CANCEL = "create table tblReasonOrderCncl (ReasonCodeID text null,ReasonDescr text null);";
+
+    //execution image table
+    private static final String DATABASE_TABLE_tblExecutionImages = "tblExecutionImages";
+    private static final String DATABASE_CREATE_TABLE_tblExecutionImages= "create table tblExecutionImages (OrderID text null,StoreID text null, ImageName integer not null, ImagePath integer not null,Sstat integer not null,InvNumber text null,InvDate text null);";
+
+
     private static final String TABLE_STORE_STOCK_CMPTTR_AVLBL = "tableStoreLtfoodStkCompttrAvlbl";
     private static final String DATABASE_CREATE_TABLE_STOCK_CMPTTR_AVLBL = "create table tableStoreLtfoodStkCompttrAvlbl(StoreID text null,flgLtfoodsStkAvlbl integer null,flgCompttrAvlbl integer null,flgStockRetailerAllowed integer null,flgCmpttrRetailerAllowed integer null,Sstat integer null);";
 
@@ -903,12 +911,11 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 		
 	private static final String DATABASE_CREATE_TABLE_113 = "create table tblInvoiceButtonStoreProductwiseOrder (StoreID text null," +
 				" ProductID text null,OrderQty text null,ProductPrice text null,InvoiceForDate text null,OrderID text null,CatID text null,Freeqty int null,TotLineDiscVal real null);";
-		
-	private static final String DATABASE_CREATE_TABLE_114 = "create table tblInvoiceButtonTransac (IMEIno text not null, " +
-				"TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, " +
-				"DelQty integer not null,FreeQty integer not null,Sstat integer not null,ProductShortName text null, ProductPrice real null," +
-				"RouteID int null,OrderID text  null,CatID text null,flgCancel int null,DiscountVal real null,additionalDiscount text null,CancelRemarks text null);";
-		
+
+    private static final String DATABASE_CREATE_TABLE_114 = "create table tblInvoiceButtonTransac (IMEIno text not null, " +
+            "TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, " +
+            "DelQty integer not null,FreeQty integer not null,Sstat integer not null,ProductShortName text null, ProductPrice real null," +
+            "RouteID int null,OrderID text  null,CatID text null,flgCancel int null,DiscountVal real null,additionalDiscount text null,CancelRemarks text null,CancelReasonId text null,InvNumber text null,InvDate text null,LineValue text null);";
 		//private static final String DATABASE_CREATE_TABLE_115 = "create table tblPdaDate (PdaDate text null);";
 		
 		
@@ -1020,7 +1027,8 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 			
 			try
 			{
-
+                db.execSQL(DATABASE_CREATE_REASON_ORDER_CANCEL);
+                db.execSQL(DATABASE_CREATE_TABLE_tblExecutionImages);
                 db.execSQL(DATABASE_CREATE_TABLE_STOCK_CMPTTR_AVLBL);
 
                 db.execSQL(DATABASE_CREATE_TABLE_STORE_SECTIONIMAGE);
@@ -1289,6 +1297,8 @@ private static final String DATABASE_TABLE_MAIN101 = "tblFirstOrderDetailsOnLast
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			try 
 			{
+                db.execSQL("DROP TABLE IF EXISTS tblReasonOrderCncl");
+                db.execSQL("DROP TABLE IF EXISTS tblExecutionImages");
                 db.execSQL("DROP TABLE IF EXISTS tableStoreLtfoodStkCompttrAvlbl");
                 db.execSQL("DROP TABLE IF EXISTS tableStoreLtfoodStkCompttrAvlbl");
 
@@ -4714,46 +4724,49 @@ open();
 	            }
 	           
 	     }
-		
-	  
-	
-	public long saveInvoiceButtonStoreTransac(String IMEIno, String TransDate,
-			String StoreID, String ProdID,String ProductShortName,Double ProductRate,int OrderQty,
-			int DelQty, int FreeQty,String OrderID,String CatID,String Sstat,int flgCancel,Double DiscountVal,String RutID
-			,String additionalDiscount,String CancelRemarks) {
-		
-		
-		ContentValues initialValues = new ContentValues();
-		
-		initialValues.put("IMEIno", IMEIno.trim());
-		initialValues.put("TransDate", TransDate.trim());
-		initialValues.put("StoreID", StoreID.trim());
-		initialValues.put("ProdID", ProdID.trim());
-		initialValues.put("ProductShortName", ProductShortName.trim());
-		initialValues.put("ProductPrice", ProductRate);
-		initialValues.put("OrderQty", OrderQty);
-		initialValues.put("DelQty", DelQty);
-		initialValues.put("FreeQty", FreeQty);
-		
 
-		initialValues.put("Sstat", Sstat.trim());
-		
-		initialValues.put("RouteID", Integer.parseInt(RutID));
-		initialValues.put("OrderID", OrderID.trim());
-		initialValues.put("CatID", CatID.trim());
-		initialValues.put("flgCancel", flgCancel);
-		initialValues.put("DiscountVal", DiscountVal);
-		initialValues.put("additionalDiscount", additionalDiscount);
-		initialValues.put("CancelRemarks", CancelRemarks);
 
-		//initialValues.put("CancelRemarks", CancelRemarks);
-		
-		//initialValues.put(Key_DisplayUnit, DisplayUnit);
-		
-		////// // System.out.println("inserting saveStoreTransac records..");
 
-		return db.insert(DATABASE_TABLE_MAIN114, null, initialValues);
-	}
+    public long saveInvoiceButtonStoreTransac(String IMEIno, String TransDate,
+                                              String StoreID, String ProdID,String ProductShortName,Double ProductRate,int OrderQty,
+                                              int DelQty, int FreeQty,String OrderID,String CatID,String Sstat,int flgCancel,Double DiscountVal,String RutID
+            ,String additionalDiscount,String CancelRemarks,String cancelReasonId,String InvNumber,String InvDate,String LineValue) {
+
+
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put("IMEIno", IMEIno.trim());
+        initialValues.put("TransDate", TransDate.trim());
+        initialValues.put("StoreID", StoreID.trim());
+        initialValues.put("ProdID", ProdID.trim());
+        initialValues.put("ProductShortName", ProductShortName.trim());
+        initialValues.put("ProductPrice", ProductRate);
+        initialValues.put("OrderQty", OrderQty);
+        initialValues.put("DelQty", DelQty);
+        initialValues.put("FreeQty", FreeQty);
+
+
+        initialValues.put("Sstat", Sstat.trim());
+
+        initialValues.put("RouteID", Integer.parseInt(RutID));
+        initialValues.put("OrderID", OrderID.trim());
+        initialValues.put("CatID", CatID.trim());
+        initialValues.put("flgCancel", flgCancel);
+        initialValues.put("DiscountVal", DiscountVal);
+        initialValues.put("additionalDiscount", additionalDiscount);
+        initialValues.put("CancelRemarks", CancelRemarks);
+        initialValues.put("CancelReasonId", cancelReasonId);
+        initialValues.put("InvNumber", InvNumber);
+        initialValues.put("InvDate", InvDate);
+        initialValues.put("LineValue", LineValue);
+        //initialValues.put("CancelRemarks", CancelRemarks);
+
+        //initialValues.put(Key_DisplayUnit, DisplayUnit);
+
+        ////// // System.out.println("inserting saveStoreTransac records..");
+
+        return db.insert(DATABASE_TABLE_MAIN114, null, initialValues);
+    }
 	
 	public String[] ProcessCancelStoreReq() 
 	{
@@ -5007,33 +5020,35 @@ open();
 			}
 
 		}
-		
-		public void UpdatetblInvoiceButtonTransac(String sID, int flag2set,int flgCancel,String OrderID,String strReason)
-		{
 
-			try
-			 {
+    public void UpdatetblInvoiceButtonTransac(String sID, int flag2set,int flgCancel,String OrderID,String strReason,String idSelectedRsn)
+    {
 
-				
-				
-				final ContentValues values = new ContentValues();
-				values.put("Sstat", flag2set);
-				values.put("flgCancel", flgCancel);
+        try
+        {
 
-				 values.put("CancelRemarks", strReason);
-	           int affected1 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
-				
-				
-			
-				
-				
-			 }
-			catch (Exception ex)
-			{
-				Log.e(TAG, ex.toString());
-			}
 
-		}
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", flag2set);
+            values.put("flgCancel", flgCancel);
+
+            values.put("CancelRemarks", strReason);
+            values.put("CancelReasonId", idSelectedRsn);
+
+            int affected1 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
+
+
+
+
+
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+
+    }
 		
 		
 		public void deleteInvoiceRelatedTableEtrySavedData(String sID,String OrderID)
@@ -6039,6 +6054,7 @@ catch (Exception e)
         db.execSQL("DELETE FROM  tblFeedbackCompetitr");
         db.execSQL("DELETE FROM  tblCompetitrPrdctPTRPTC");
         db.execSQL("DELETE FROM  tblCompetitrPrdctMstr");
+        db.execSQL("DELETE FROM tblExecutionImages");
 		Log.w(TAG, "Table re-creation completed..");
 	}
 	
@@ -18935,50 +18951,51 @@ close();
 		      
 		      
 		     }
-		     
-		     public void UpdateCancelStoreFlag(HashMap<String, String> hmapConfirmCancel,int isCancelConfirm,String reason)
-       {
+
+    public void UpdateCancelStoreFlag(HashMap<String, String> hmapConfirmCancel,int isCancelConfirm,String reason,String idSelectedRsn)
+    {
         open();
-      
-         {
-         for(Map.Entry<String, String> dataEntry : hmapConfirmCancel.entrySet()){
-          
-         // // System.out.println("Update tblInvoiceButtonTransac Set flgCancel='"+isCancelConfirm+"' and Sstat="+dataEntry.getValue()+" WHERE OrderID='"+dataEntry.getKey()+"'");
-           // db.execSQL("Update tblInvoiceButtonTransac Set flgCancel='"+isCancelConfirm+"' and Sstat="+dataEntry.getValue()+" WHERE OrderID='"+dataEntry.getKey()+"'");
-         
-      final ContentValues values = new ContentValues();
-      if(Integer.parseInt(dataEntry.getValue())==10)
-      {
-       values.put("Sstat", 9);
-      }
-      else
-      {
-      values.put("Sstat", dataEntry.getValue());
-      }
-      values.put("flgCancel", isCancelConfirm);
+
+        {
+            for(Map.Entry<String, String> dataEntry : hmapConfirmCancel.entrySet()){
+
+                // // System.out.println("Update tblInvoiceButtonTransac Set flgCancel='"+isCancelConfirm+"' and Sstat="+dataEntry.getValue()+" WHERE OrderID='"+dataEntry.getKey()+"'");
+                // db.execSQL("Update tblInvoiceButtonTransac Set flgCancel='"+isCancelConfirm+"' and Sstat="+dataEntry.getValue()+" WHERE OrderID='"+dataEntry.getKey()+"'");
+
+                final ContentValues values = new ContentValues();
+                if(Integer.parseInt(dataEntry.getValue())==10)
+                {
+                    values.put("Sstat", 9);
+                }
+                else
+                {
+                    values.put("Sstat", dataEntry.getValue());
+                }
+                values.put("flgCancel", isCancelConfirm);
 
 
 
-               ////// System.out.println("Updating Status for Store ID: " + sID);
-      //int affected = db.update("tblInvoiceButtonStoreMstr", values, "StoreID=? AND RouteId=? AND DistId=? AND InvoiceForDate=?",new String[] { sID,RouteId,DistId,Invdate });
-      
-      int affected = db.update("tblInvoiceButtonStoreMstr", values, "OrderID=?",new String[] { dataEntry.getKey() });
-			 values.put("CancelRemarks", reason);
-      int affected2 = db.update("tblInvoiceButtonTransac", values, "OrderID=?",new String[] { dataEntry.getKey() });
-      
-      //int affected2 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
-      //int affected1 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
-      
+                ////// System.out.println("Updating Status for Store ID: " + sID);
+                //int affected = db.update("tblInvoiceButtonStoreMstr", values, "StoreID=? AND RouteId=? AND DistId=? AND InvoiceForDate=?",new String[] { sID,RouteId,DistId,Invdate });
+
+                int affected = db.update("tblInvoiceButtonStoreMstr", values, "OrderID=?",new String[] { dataEntry.getKey() });
+                values.put("CancelRemarks", reason);
+                values.put("CancelReasonId", idSelectedRsn);
+                int affected2 = db.update("tblInvoiceButtonTransac", values, "OrderID=?",new String[] { dataEntry.getKey() });
+
+                //int affected2 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
+                //int affected1 = db.update("tblInvoiceButtonTransac", values, "StoreID=? AND OrderID=?",new String[] { sID,OrderID });
+
             }
-        
-       //  9,1
 
-     close();
-         
-         }
-       
+            //  9,1
 
-       }
+            close();
+
+        }
+
+
+    }
 
        public int fnChckIfRemaksAgainstOrder(String OrderID)
 	   {
@@ -33909,6 +33926,269 @@ catch(Exception e)
 
         //Log.w(TAG, "UpdateStoreActualLatLongi added..");
         return imageNameToBeDeleted;
+    }
+
+
+    public void insertExecutionImagesTable(String StoreID,String OrderID,String ImageName,String ImagePath,int Sstat,String InvNumber,String InvDate)
+    {
+        // "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
+        ContentValues values=new ContentValues();
+
+        values.put("StoreID", StoreID);
+        values.put("OrderID", OrderID);
+        values.put("ImageName", ImageName);
+        values.put("ImagePath", ImagePath);
+        values.put("Sstat", Sstat);
+        values.put("InvNumber", InvNumber);
+        values.put("InvDate", InvDate);
+
+
+        db.insert(DATABASE_TABLE_tblExecutionImages, null, values);
+    }
+    public LinkedHashMap<String,String> fnGetImageDataFrom_tblExecutionImages(String StoreID,String OrderID)
+    {
+        LinkedHashMap<String,String> hashMapImages=new LinkedHashMap<String,String>();
+        open();
+        Cursor cursor=null;
+
+        try {
+            cursor = db.rawQuery("SELECT  ImageName, ImagePath FROM  tblExecutionImages where StoreID='"+ StoreID +"' And OrderID='"+ OrderID +"'", null);
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++) {
+                        hashMapImages.put(cursor.getString(0),cursor.getString(1));
+                        cursor.moveToNext();
+                    }
+                }
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        finally {
+            if(cursor!=null) {
+                cursor.close();
+            }
+            close();
+            return hashMapImages;
+        }
+    }
+
+    public void deletetblExecutionImages(String StoreID,String OrderID)
+    {
+        // db.execSQL("DELETE FROM tblStoreEdit where StoreID='"+StoreID+"'");
+        db.execSQL("DELETE FROM tblExecutionImages where StoreID='"+StoreID+"' And OrderID='"+OrderID+"' ");
+
+    }
+
+    public LinkedHashMap<String,String> getReasonToCancel()
+    {
+        LinkedHashMap<String,String> hmapRsnForCncl=new LinkedHashMap<String,String>();
+
+        open();
+        try
+        {
+            Cursor cur=db.rawQuery("Select * from tblReasonOrderCncl",null);
+            if(cur.getCount()>0)
+            {
+                if(cur.moveToFirst())
+                {
+                    for(int i=0;i<cur.getCount();i++)
+                    {
+                        if(i==0)
+                        {
+                            hmapRsnForCncl.put("Select Reason","0");
+                        }
+
+                        hmapRsnForCncl.put(cur.getString(1),cur.getString(0));
+                        cur.moveToNext();
+                    }
+                }
+            }
+            else
+            {
+                hmapRsnForCncl.put("0","Select Reason");
+            }
+        }catch(Exception e)
+        {
+
+        } finally
+        {
+            close();
+            return hmapRsnForCncl;
+        }
+
+    }
+
+    public void UpdatetblExecutionImages(int flag2set)
+    {
+        open();
+        try
+        {
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", flag2set);
+
+            // int affected2 = db.update("tblExecutionImages", values,"Sstat=? And StoreID='"+StoreID+"' And OrderID='"+OrderID+"'", new String[] { "3" });
+            int affected2 = db.update("tblExecutionImages", values,"Sstat=? ", new String[] { "3" });
+
+
+
+
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+        close();
+
+    }
+    public void updatetblExecutionImages(String PhotoName)
+    {
+
+        try
+        {
+            open();
+            System.out.println("Sunil Doing Testing Response after sending Image inside BD" + PhotoName);
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", 4);
+            ////tableStoreSctnImage(StoreID text null,imageName text null,imagePath text null,ImageClicktime text null,flgSectionPic text null,Sstat integer null);";
+            int affected3 = db.update("tblExecutionImages", values, "ImageName=?",new String[] { PhotoName });
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+        finally
+        {
+            close();
+        }
+
+
+    }
+    public String[] getAllStoreIdOftblExecutionImages()
+    {
+
+        int SnamecolumnIndex1 = 0;
+
+
+        Cursor cursor = db.rawQuery("SELECT DISTINCT(StoreID) FROM tblExecutionImages where Sstat=5 ", null);
+        //Cursor cursor = db.rawQuery("SELECT StoreID FROM tblStoreMaterialPhotoDetail", null);
+        try
+        {
+            String StoreName[] = new String[cursor.getCount()];
+            if(cursor.getCount()>0)
+            {
+                if (cursor.moveToFirst())
+                {
+                    for (int i = 0; i <= (cursor.getCount() - 1); i++)
+                    {
+                        StoreName[i] = (String) cursor.getString(SnamecolumnIndex1).toString();
+                        cursor.moveToNext();
+                    }
+                }
+
+            }
+
+            return StoreName;
+        }
+        finally
+        {
+            cursor.close();
+        }
+
+    }
+    public int getImageCOunt(String StoreID) {
+
+        int ScodecolumnIndex = 0;
+
+        Cursor cursor = db.rawQuery("SELECT Count(StoreID) FROM tblExecutionImages where StoreID='" + StoreID + "'", null);
+        try {
+            int strProdStockQty = 0;
+            if (cursor.moveToFirst()) {
+
+                for (int i = 0; i <= (cursor.getCount() - 1); i++) {
+                    if (!cursor.isNull(ScodecolumnIndex)) {
+                        strProdStockQty = Integer.parseInt(cursor.getString(ScodecolumnIndex).toString());
+                        cursor.moveToNext();
+                    }
+
+                }
+            }
+            return strProdStockQty;
+        } finally {
+            cursor.close();
+        }
+    }
+    public String[] getImgsCount(String StoreID)
+    {
+
+        int SnamecolumnIndex1 = 0;
+
+        Cursor cursor = db.rawQuery("SELECT ImageName FROM tblExecutionImages WHERE StoreID ='"+ StoreID + "'", null);
+        try {
+
+            String StoreName[] = new String[cursor.getCount()];
+
+            if (cursor.moveToFirst()) {
+
+                for (int i = 0; i <= (cursor.getCount() - 1); i++) {
+
+                    StoreName[i] = (String) cursor.getString(SnamecolumnIndex1)
+                            .toString();
+
+                    cursor.moveToNext();
+                }
+            }
+            return StoreName;
+        } finally {
+            cursor.close();
+        }
+
+    }
+    public void updateExecutionImageRecordsSyncd()
+    {
+
+        try
+        {
+
+
+            final ContentValues values = new ContentValues();
+            values.put("Sstat", "4");
+									/*int affected = db.update("tblUserLoginMstr", values, "Sstat=?",
+											new String[] { "3" });*/
+
+            int affected5 = db.update("tblExecutionImages", values, "Sstat=?",
+                    new String[] { "5" });
+
+
+
+
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, ex.toString());
+        }
+
+    }
+
+    public void delTblReasonOrderCncl()
+    {
+        //open();
+        db.execSQL("DELETE FROM tblReasonOrderCncl");
+        //close();
+    }
+    public void insertReasonCanclOrder(String reasonCodeId, String reasonDescr)
+    {
+        open();
+        ContentValues values=new ContentValues();
+        values.put("ReasonCodeID",reasonCodeId);
+        values.put("ReasonDescr",reasonDescr);
+        db.insert(DATABASE_TABLE_REASON_ORDER_CANCEL,null,values);
+        close();
     }
 }
 

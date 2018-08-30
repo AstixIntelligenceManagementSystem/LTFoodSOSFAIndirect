@@ -709,7 +709,7 @@ public void intializeFields(){
                 //newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
                 dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
-                for(int mm = 1; mm<5; mm++)
+                for(int mm = 1; mm<6; mm++)
                 {
                     if(mm==1)
                     {
@@ -757,6 +757,19 @@ public void intializeFields(){
                             }
 
                         }
+
+                    }
+                    if(mm==6)
+                    {
+                        //callReturnProductReason
+                      /*  newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
+                                break;
+                            }
+
+                        }*/
 
                     }
 

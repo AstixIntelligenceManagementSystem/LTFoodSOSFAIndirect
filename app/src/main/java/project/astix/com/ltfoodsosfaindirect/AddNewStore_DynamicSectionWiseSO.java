@@ -115,6 +115,7 @@ import java.util.regex.Pattern;
 public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,SearchListCommunicator,OnMapReadyCallback,CategoryCommunicatorCityState
 {
 
+    public static String activityFrom="";
     public ProgressDialog pDialog2STANDBYabhi;
     Thread myThread;
     public static int flgLocationServicesOnOff=0;
@@ -3047,6 +3048,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
 
                 if(isOnline())
                 {
+                    StoreSelection.flgChangeRouteOrDayEnd=4;
                     Intent syncIntent = new Intent(AddNewStore_DynamicSectionWiseSO.this, SyncMasterSO.class);
                     syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
                     syncIntent.putExtra("OrigZipFileName", newfullFileName);
@@ -3060,10 +3062,36 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 {
 
 
-                    Intent intent = new Intent(AddNewStore_DynamicSectionWiseSO.this, StorelistActivity.class);
-                    intent.putExtra("FROM", "AddNewStore_DynamicSectionWiseSO");
-                    startActivity(intent);
-                    finish();
+
+                    if(activityFrom.equals("StoreSelection"))
+                    {
+                        Intent ide=new Intent(AddNewStore_DynamicSectionWiseSO.this,StoreSelection.class);
+                        ide.putExtra("userDate", date_value);
+                        ide.putExtra("pickerDate", pickerDate);
+                        ide.putExtra("imei", imei);
+                        ide.putExtra("rID", rID);
+                        AddNewStore_DynamicSectionWiseSO.this.startActivity(ide);
+                        finish();
+
+                    }
+
+                    else if(activityFrom.equals("AllButtonActivity"))
+                    {
+
+                        Intent ide=new Intent(AddNewStore_DynamicSectionWiseSO.this,AllButtonActivity.class);
+                        ide.putExtra("userDate", date_value);
+                        ide.putExtra("pickerDate", pickerDate);
+                        ide.putExtra("imei", imei);
+                        ide.putExtra("rID", rID);
+                        AddNewStore_DynamicSectionWiseSO.this.startActivity(ide);
+                        finish();
+                    }
+                    else {
+                        Intent intent = new Intent(AddNewStore_DynamicSectionWiseSO.this, StorelistActivity.class);
+                        intent.putExtra("FROM", "AddNewStore_DynamicSectionWiseSO");
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 
 

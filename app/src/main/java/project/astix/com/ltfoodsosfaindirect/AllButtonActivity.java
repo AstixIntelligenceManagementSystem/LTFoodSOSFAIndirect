@@ -295,8 +295,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     protected void onResume()
     {
         super.onResume();
+        flgChangeRouteOrDayEnd=0;
         if(isDayEndClicked)
         {
+            flgChangeRouteOrDayEnd=1;
             dayEndFunctionalityAfterDialogSummary();
         }
 
@@ -670,7 +672,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             public void onClick(View v)
             {
 
-                File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+                /*File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
                 if (!OrderXMLFolder.exists())
                 {
                     OrderXMLFolder.mkdirs();
@@ -700,10 +702,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     showAlertForEveryOne("Please Day End Before Logging Out.");
                 }
               else
-                {
+                {*/
                     dialogLogout();
 
-                }
+               // }
                 /*else if(AllFilesNameNotSync.length>0)
                 {
                     showAlertForEveryOne("Please Day End Before Logging Out.");
@@ -3698,7 +3700,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 HashMap<String,String> hmapInvoiceOrderIDandStatus=new HashMap<String, String>();
                 hmapInvoiceOrderIDandStatus=dbengine.fetchHmapInvoiceOrderIDandStatus();
 
-                for(int mm = 1; mm < 5  ; mm++)
+                for(int mm = 1; mm < 6  ; mm++)
                 {
                     if(mm==1)
                     {
@@ -3744,7 +3746,21 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
 
 
+                    if(mm==5)
+                    {
 
+                        newservice = newservice.getCancelReasonsExecution(getApplicationContext(), fDate, rID, imei);
+
+                        if(!newservice.director.toString().trim().equals("1"))
+                        {
+                            if(chkFlgForErrorToCloseApp==0)
+                            {
+                                chkFlgForErrorToCloseApp=1;
+                            }
+
+                        }
+
+                    }
                 }
 
 
@@ -3777,7 +3793,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             {
                 pDialogGetInvoiceForDay.dismiss();
             }
-
+            ll_execution.setEnabled(true);
             Intent storeIntent = new Intent(AllButtonActivity.this, InvoiceStoreSelection.class);
             storeIntent.putExtra("imei", imei);
             storeIntent.putExtra("userDate", currSysDate);
@@ -3845,7 +3861,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 //newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
                 dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
-                for(int mm = 1; mm<5; mm++)
+                for(int mm = 1; mm<6; mm++)
                 {
                     if(mm==1)
                     {
@@ -3873,6 +3889,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                     if(mm==3)
                     {
+                        //callReturnProductReason
                         newservice = newservice.callfnSingleCallAllWebServiceSO(getApplicationContext(),ApplicationID,imei);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
@@ -3892,6 +3909,19 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                                 break;
                             }
                         }
+                    }
+                    if(mm==5)
+                    {
+                        //callReturnProductReason
+                     /*   newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
+                                break;
+                            }
+
+                        }*/
+
                     }
                 }
             } catch (Exception e) {
@@ -5428,6 +5458,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
     }
     public void AllDayendCode(){
+        flgChangeRouteOrDayEnd=1;
         if(isOnline())
         {
 

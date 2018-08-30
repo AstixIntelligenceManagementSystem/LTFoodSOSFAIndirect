@@ -19346,52 +19346,48 @@ public class ServiceWorker
 
 			}
 
-			NodeList tblOrderCancelReasons = doc.getElementsByTagName("tblOrderCancelReasons");
-			for (int i = 0; i < tblOrderCancelReasons.getLength(); i++)
+
+			NodeList tblGetPDARsnRtrnMstr = doc.getElementsByTagName("tblGetReturnsReasonForPDAMstr");
+			for (int i = 0; i < tblGetPDARsnRtrnMstr.getLength(); i++)
 			{
 
-				String reasonCodeId="0";
 
-				String reasonDescr="N/A";
+				String stockStatusId="0";
+				String stockStatus="0";
 
 
 
-				Element element = (Element) tblOrderCancelReasons.item(i);
 
-				if(!element.getElementsByTagName("ReasonCodeID").equals(null))
+
+
+
+
+				Element element = (Element) tblGetPDARsnRtrnMstr.item(i);
+
+
+
+				if(!element.getElementsByTagName("StockStatusId").equals(null))
 				{
-
-					NodeList ReasonCodeIDNode = element.getElementsByTagName("ReasonCodeID");
-					Element     line = (Element) ReasonCodeIDNode.item(0);
-
-					if(ReasonCodeIDNode.getLength()>0)
+					NodeList QuestionIDNode = element.getElementsByTagName("StockStatusId");
+					Element      line = (Element) QuestionIDNode.item(0);
+					if(QuestionIDNode.getLength()>0)
 					{
+						stockStatusId=xmlParser.getCharacterDataFromElement(line);
+					}
+				}
 
-						reasonCodeId=xmlParser.getCharacterDataFromElement(line);
+				if(!element.getElementsByTagName("StockStatus").equals(null))
+				{
+					NodeList OptionIDNode = element.getElementsByTagName("StockStatus");
+					Element      line = (Element) OptionIDNode.item(0);
+					if(OptionIDNode.getLength()>0)
+					{
+						stockStatus=xmlParser.getCharacterDataFromElement(line);
 					}
 				}
 
 
-
-
-				if(!element.getElementsByTagName("ReasonDescr").equals(null))
-				{
-
-					NodeList ReasonDescrNode = element.getElementsByTagName("ReasonDescr");
-					Element     line = (Element) ReasonDescrNode.item(0);
-
-					if(ReasonDescrNode.getLength()>0)
-					{
-
-						reasonDescr=xmlParser.getCharacterDataFromElement(line);
-					}
-				}
-
-
-
-
-
-				dbengine.insertReasonCanclOrder(reasonCodeId,reasonDescr);
+				dbengine.fnInsertTBLReturnRsn(stockStatusId,stockStatus);
 			}
 			setmovie.director = "1";
 			dbengine.close();

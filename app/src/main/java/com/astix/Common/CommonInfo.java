@@ -11,7 +11,6 @@ public class CommonInfo
 	// Its for Live  Path on 194 server for SFA
 
 
-/*
 
 
 	public static File imageF_savedInstance=null;
@@ -47,8 +46,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 77;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.12";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 81;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.13";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -98,7 +97,6 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 	 public static String activityFrom="AllButtonActivity";
-*/
 
 
 
@@ -394,6 +392,7 @@ public class CommonInfo
 
 	// Its for Test Release  Path on 194 server for SFA
 
+/*
 
 
 
@@ -483,6 +482,7 @@ public class CommonInfo
 	public static int DayStartClick=0;
 	public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_testrelease/Mobile/frmDSMWiseReportCard.aspx?imei=";
 
+*/
 
 
 }

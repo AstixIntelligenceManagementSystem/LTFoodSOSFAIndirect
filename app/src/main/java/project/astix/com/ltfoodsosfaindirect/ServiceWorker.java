@@ -2476,12 +2476,12 @@ public class ServiceWorker
 			dbengine.Delete_tblRouteMasterAndDistributorMstr();
 
 			NodeList tblRouteListMasterNode = doc.getElementsByTagName("tblRouteListMaster");
-			if(tblRouteListMasterNode.getLength()<1)
+			/*if(tblRouteListMasterNode.getLength()<1)
 			{
 				dbengine.close();
 				setmovie.director = "0";
 				return setmovie;
-			}
+			}*/
 			for (int i = 0; i < tblRouteListMasterNode.getLength(); i++)
 			{
 				String stID = "NA";

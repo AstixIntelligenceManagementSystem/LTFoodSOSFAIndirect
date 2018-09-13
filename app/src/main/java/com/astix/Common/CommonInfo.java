@@ -13,6 +13,7 @@ public class CommonInfo
 
 
 
+
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
 	public static String clickedTagPhoto_savedInstance=null;
@@ -46,8 +47,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 81;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.13";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 82;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.14";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -97,6 +98,7 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 	 public static String activityFrom="AllButtonActivity";
+
 
 
 
@@ -200,10 +202,11 @@ public class CommonInfo
  public static String activityFrom="AllButtonActivity";
 */
 
-
+// Its for Test  Path on 194 server for SFA
 
 
 /*
+
 
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
@@ -236,8 +239,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 50;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.5";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 54;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.6";   // put this field value based on value in table on the server
 
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
@@ -262,7 +265,7 @@ public class CommonInfo
 	public static String TextFileFolder="LTACETextFile";
 	public static String InvoiceXMLFolder="LTACEInvoiceXml";
 	public static String FinalLatLngJsonFile="LTACESFAFinalLatLngJson";
-
+	public static String ImagesFolderServer="LTACESFAImagesServer";
 	public static String DistStockXMLFolder="LTACEDistStockXml";
 
 	public static String AppLatLngJsonFile="LTACESFALatLngJson";
@@ -288,11 +291,13 @@ public class CommonInfo
 	public static final String IncentivePreference="LTFoodsIncentivePreference";
 	public static String VideoFolder="VideoLTFOODS";
 	 public static String activityFrom="AllButtonActivity";
+	public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_rest/Mobile/frmDSMWiseReportCard.aspx?imei=";
+
 
 */
 
 
-// Its for Test  Path on 194 server for SFA
+
 
 
 

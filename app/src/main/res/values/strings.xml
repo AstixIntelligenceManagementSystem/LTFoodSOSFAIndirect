@@ -2,7 +2,7 @@
 
     <string name="app_name">GTSOFieldOperations</string>
      <!--<string name="app_name">GTSOFieldOperations Staging</string>-->
-    <!--  <string name="app_name">GTSOFieldOperations Test</string>-->
+     <!-- <string name="app_name">GTSOFieldOperations Test</string>-->
   <!--  <string name="app_name">GTSOFieldOperations Test Release</string>-->
     <!--<string name="app_name">GTSOFieldOperations Dev</string>-->
     <string name="SubmittingExeImgMsg">Submitting Execution Image…</string>

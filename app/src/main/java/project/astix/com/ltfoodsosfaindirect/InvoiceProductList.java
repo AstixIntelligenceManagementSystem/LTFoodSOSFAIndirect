@@ -986,13 +986,15 @@ public class InvoiceProductList  extends Activity implements OnItemSelectedListe
 				dbengine.UpdateProductCancelStoreFlag(TagOrderID,0);
 				dbengine.open();
 				dbengine.deletetblExecutionImages(TagStoreID,TagOrderID);
-
-				for(Map.Entry<String, String> entry:hashMapImages.entrySet())
-				{
-					String imageName= entry.getKey().trim();
-					String imagePath= entry.getValue().trim();
-					dbengine.insertExecutionImagesTable(TagStoreID,TagOrderID,imageName,imagePath,3,InvNumber,InvDate);
+				if((hashMapImages!=null) && (hashMapImages.size()>0)){
+					for(Map.Entry<String, String> entry:hashMapImages.entrySet())
+					{
+						String imageName= entry.getKey().trim();
+						String imagePath= entry.getValue().trim();
+						dbengine.insertExecutionImagesTable(TagStoreID,TagOrderID,imageName,imagePath,3,InvNumber,InvDate);
+					}
 				}
+
 				dbengine.close();
 
 
@@ -2005,12 +2007,13 @@ public class InvoiceProductList  extends Activity implements OnItemSelectedListe
 		}
 	}
 	public boolean Validation(){
-		if((btn_clickImage.getVisibility()==View.VISIBLE) && (ll_ParentOfImages.getChildCount()==0)){
+		/*if((btn_clickImage.getVisibility()==View.VISIBLE) && (ll_ParentOfImages.getChildCount()==0)){
 			// Toast.makeText(getApplicationContext(),"Please Click at least one Image",Toast.LENGTH_SHORT).show();
 			AlertCommonInfo("Please Click at least one Image");
 			return false;
-		}
-		else  if(Et_invoiceNo.getText().toString().trim().equals("")){
+		}*/
+		//else  if(Et_invoiceNo.getText().toString().trim().equals("")){
+			  if(Et_invoiceNo.getText().toString().trim().equals("")){
 			//Toast.makeText(getApplicationContext(),"Please Enter invoice number",Toast.LENGTH_SHORT).show();
 			AlertCommonInfo("Please Enter invoice number");
 			return false;

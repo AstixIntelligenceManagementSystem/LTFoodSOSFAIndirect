@@ -992,7 +992,9 @@ public void loadPurchaseProductDefault()
                         getOrderData(ProductIdOnClickedEdit);
 
                     }
+
                     orderBookingTotalCalc();
+					fnSaveFilledDataToDatabase(1);
 					// TODO Auto-generated method stub
 					Intent AmtCollectIntent = new Intent(OrderReview.this, Delivery_Details_Activity.class);
 					AmtCollectIntent.putExtra("storeID", storeID);
@@ -2976,7 +2978,7 @@ public void loadPurchaseProductDefault()
 		final TextView tv_Orderval=(TextView) viewProduct.findViewById(R.id.tv_Orderval);
 		tv_Orderval.setTag("tvOrderVal"+"_"+productIdDynamic);
 
-		EditText tv_FreeQty=(EditText) viewProduct.findViewById(R.id.tv_FreeQty);
+		final EditText tv_FreeQty=(EditText) viewProduct.findViewById(R.id.tv_FreeQty);
 		tv_FreeQty.setTag("tvFreeQty"+"_"+productIdDynamic);
 
 		TextView tv_DisVal=(TextView) viewProduct.findViewById(R.id.tv_DisVal);
@@ -3015,6 +3017,34 @@ public void loadPurchaseProductDefault()
 			et_ProductMRP.setHint("MRP");
 		}
 
+		tv_FreeQty.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+				String getPIDTag=tv_FreeQty.getTag().toString().split("_")[1].toString();
+				if(!TextUtils.isEmpty(tv_FreeQty.getText().toString().trim()))
+				{
+					hmapPrdctFreeQty.put(getPIDTag,tv_FreeQty.getText().toString().trim());
+				}
+				else
+				{
+					if((hmapPrdctFreeQty!=null) && (hmapPrdctFreeQty.containsKey(getPIDTag)))
+					{
+						hmapPrdctFreeQty.put(getPIDTag,"0");
+					}
+				}
+			}
+		});
 
 		if(Double.parseDouble(hmapProductIDAvgPricePerUnit.get(productIdDynamic))>0.0)
 		{
@@ -3232,10 +3262,11 @@ public void loadPurchaseProductDefault()
 
 		et_OrderQty.setOnFocusChangeListener(this);
 		et_KGPerUnilt.setOnFocusChangeListener(this);
+		tv_FreeQty.setOnFocusChangeListener(this);
 
 		//nitika
 		et_Stock.setOnFocusChangeListener(this);
-
+        tv_FreeQty.setOnClickListener(this);
 		et_Stock.setOnClickListener(this);
 		et_OrderQty.setOnClickListener(this);
 		//tv_Orderval.setOnClickListener(this);
@@ -3276,6 +3307,14 @@ public void loadPurchaseProductDefault()
 				et_OrderQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
 				et_OrderQty.setTypeface(null, Typeface.BOLD);
 			}
+			if(tv_FreeQty!=null)
+			{
+				tv_FreeQty.setEnabled(true);
+				//et_OrderQty.addTextChangedListener(getTextWatcher(et_OrderQty));
+				//nitika
+				tv_FreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+				tv_FreeQty.setTypeface(null, Typeface.BOLD);
+			}
 			if(et_ProductAvgPricePerUnit!=null){
 				et_ProductAvgPricePerUnit.setEnabled(false);
 				et_ProductAvgPricePerUnit.setBackgroundResource(R.drawable.edit_text_bg_gst_disable);
@@ -3304,6 +3343,13 @@ public void loadPurchaseProductDefault()
 
 				et_OrderQty.setTypeface(null, Typeface.NORMAL);
 
+			}
+			if(tv_FreeQty!=null)
+			{
+				tv_FreeQty.setEnabled(true);
+
+				tv_FreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+				tv_FreeQty.setTypeface(null, Typeface.BOLD);
 			}
 			if(et_ProductAvgPricePerUnit!=null){
 				et_ProductAvgPricePerUnit.setEnabled(true);
@@ -4782,6 +4828,14 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 					{
 						isbtnExceptionVisible=1;
 					}
+
+				}
+
+				if(v.getId()== R.id.tv_FreeQty)
+				{
+
+					mCustomKeyboardNumWithoutDecimal.registerEditText(edtBox);
+					mCustomKeyboardNumWithoutDecimal.showCustomKeyboard(v);
 
 				}
 
@@ -6452,6 +6506,13 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 
 				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
 			}
+			if(v.getId()== R.id.tv_FreeQty)
+			{
+
+				mCustomKeyboardNumWithoutDecimal.registerEditText(edtBox);
+				mCustomKeyboardNumWithoutDecimal.showCustomKeyboard(v);
+
+			}
 			if(v.getId()==R.id.et_KGPerUnilt)
 			{
 				mCustomKeyboardNum.registerEditText(edtBox);
@@ -7328,8 +7389,13 @@ public void 	Rate_Pcs_to_Kg_Conversion(String rate_in_pcs,String PRODUCT_ID){
 
 			if(hmapPrdctOdrQty.containsKey(ProductID))
 			{
-				((TextView)(vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
-				TotalFreeQTY=TotalFreeQTY+Integer.parseInt(hmapPrdctFreeQty.get(ProductID));
+				if(hmapPrdctFreeQty!=null && hmapPrdctFreeQty.containsKey(ProductID))
+				{
+					((TextView)(vRow).findViewById(R.id.tv_FreeQty)).setText(hmapPrdctFreeQty.get(ProductID).toString());
+					TotalFreeQTY=TotalFreeQTY+Integer.parseInt(hmapPrdctFreeQty.get(ProductID).toString());
+				}
+
+
 				hmapProductTaxValue.put(ProductID, "0.00");
 				hmapMinDlvrQtyQPTaxAmount.put(ProductID, "0.00");
 				((TextView)(vRow).findViewById(R.id.tv_Orderval)).setText("0.00");

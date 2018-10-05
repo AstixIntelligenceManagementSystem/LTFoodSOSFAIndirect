@@ -14,6 +14,7 @@ public class CommonInfo
 
 
 
+
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
 	public static String clickedTagPhoto_savedInstance=null;
@@ -47,8 +48,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 82;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.14";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 84;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.15";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -98,6 +99,7 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 	 public static String activityFrom="AllButtonActivity";
+
 
 
 
@@ -205,6 +207,7 @@ public class CommonInfo
 // Its for Test  Path on 194 server for SFA
 
 
+
 /*
 
 
@@ -239,8 +242,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 54;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.6";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 57;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.7";   // put this field value based on value in table on the server
 
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
@@ -301,7 +304,9 @@ public class CommonInfo
 
 
 
+
 	// Its for Development  Path on 194 server for SFA
+
 
 
 /*
@@ -391,6 +396,7 @@ public class CommonInfo
 	    public static int DayStartClick=0;
 		public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_dev/Mobile/frmDSMWiseReportCard.aspx?imei=";
  public static String activityFrom="AllButtonActivity";
+
 */
 
 

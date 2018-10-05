@@ -132,8 +132,8 @@ public class SplashScreen extends AppCompatActivity
       //imei="358674084810068"; // Test Release
       // imei="867290026163310"; // Dev Release
 
-     // imei="354010084603910";// Dev For Alok
-        // imei="359473079352536";  // Test Ramesh
+    //imei="354010084603910";// Dev For Alok
+      //  imei="359473079352536";  // Test Ramesh
 
 
         CommonInfo.imei = imei;
@@ -387,8 +387,8 @@ public class SplashScreen extends AppCompatActivity
                 dbengine.close();
                 if(check==1)
                 {
-                    showNewVersionAvailableAlert();
-                }
+                showNewVersionAvailableAlert();
+            }
                 else
                 {
                     dbengine.open();
@@ -884,7 +884,7 @@ public class SplashScreen extends AppCompatActivity
                     {
                         getRouteservice = getRouteservice.getAvailbRoutes(getApplicationContext(), imei,fDate,RegistrationID,flgTodaySalesTargetToShow);
 
-                        if(!getRouteservice.director.toString().trim().equals("1")){
+                      /*  if(!getRouteservice.director.toString().trim().equals("1")){
                             if(chkFlgForErrorToCloseApp==0)
                             {
                                 chkFlgForErrorToCloseApp=1;
@@ -892,7 +892,7 @@ public class SplashScreen extends AppCompatActivity
                                 break;
                             }
 
-                        }
+                        }*/
                     }
                     if(mm==2)
                     {
@@ -1022,7 +1022,7 @@ public class SplashScreen extends AppCompatActivity
                     if(mm==12)
                     {
                         //callReturnProductReason
-                        /*newservice = newservice.callReturnProductReason(getApplicationContext(),CommonInfo.Application_TypeID,imei);
+                     /*   newservice = newservice.callReturnProductReason(getApplicationContext(),CommonInfo.Application_TypeID,imei);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
                                 chkFlgForErrorToCloseApp = 1;

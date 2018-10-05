@@ -1910,6 +1910,26 @@ if(CommonInfo.flgLTFoodsSOOnlineOffLine==0)
 
                     }
                 }
+                else
+                {
+                    String StoreCategoryType=dbEngineSO.getChannelGroupIdOptIdForAddingStore();
+                    int StoreSectionCount=dbEngineSO.getsectionCountWhileAddingStore();
+                    Intent intent=new Intent(StorelistActivity.this,AddNewStore_DynamicSectionWiseSO.class);
+                    intent.putExtra("FLAG_NEW_UPDATE","NEW");
+
+
+                    intent.putExtra("CoverageAreaID", ""+0);
+                    intent.putExtra("RouteNodeID", ""+0);
+                    intent.putExtra("StoreCategoryType", StoreCategoryType);
+                    intent.putExtra("StoreSectionCount", ""+StoreSectionCount);
+                    if(pDialog2STANDBY.isShowing())
+                    {
+                        pDialog2STANDBY.dismiss();
+                    }
+
+                    StorelistActivity.this.startActivity(intent);
+                    finish();
+                }
 
                 //send direct to dynamic page-------------------------
                /* Intent intent=new Intent(StorelistActivity.this,AddNewStore_DynamicSectionWise.class);
@@ -1963,6 +1983,26 @@ if(CommonInfo.flgLTFoodsSOOnlineOffLine==0)
                         pDialog2STANDBY.dismiss();
                     }
 
+                    if(flgAddButtonCliked==1)
+                    {
+                        String StoreCategoryType=dbEngineSO.getChannelGroupIdOptIdForAddingStore();
+                        int StoreSectionCount=dbEngineSO.getsectionCountWhileAddingStore();
+                        Intent intent=new Intent(StorelistActivity.this,AddNewStore_DynamicSectionWiseSO.class);
+                        intent.putExtra("FLAG_NEW_UPDATE","NEW");
+
+
+                        intent.putExtra("CoverageAreaID", ""+0);
+                        intent.putExtra("RouteNodeID", ""+0);
+                        intent.putExtra("StoreCategoryType", StoreCategoryType);
+                        intent.putExtra("StoreSectionCount", ""+StoreSectionCount);
+                        if(pDialog2STANDBY.isShowing())
+                        {
+                            pDialog2STANDBY.dismiss();
+                        }
+
+                        StorelistActivity.this.startActivity(intent);
+                        finish();
+                    }
                     //send to addstore Dynamic page direct-----------------------------
                    /* Intent intent=new Intent(LauncherActivity.this,AddNewStore_DynamicSectionWise.class);
                     intent.putExtra("FLAG_NEW_UPDATE","NEW");

@@ -1998,6 +1998,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                             finish();
                         }*/
 
+
                         String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
                         slctdCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
                         slctdCoverageAreaNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);

@@ -963,6 +963,7 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 			{
 				String ProductID=entry.getKey().toString().trim();
 				EditText etOrderQtyDisOrEnbl= (EditText) ll_prdct_detal.findViewWithTag("etOrderQty"+"_"+ProductID);
+				EditText etFreeQty= (EditText) ll_prdct_detal.findViewWithTag("tvFreeQty"+"_"+ProductID);
 				EditText et_ProductAvgPricePerUnitDisOrEnbl= (EditText) ll_prdct_detal.findViewWithTag("etProductAvgPricePerUnit"+"_"+ProductID);
 				EditText et_KGPerUniltDisOrEnbl= (EditText) ll_prdct_detal.findViewWithTag("etKGPerUnilt"+"_"+ProductID);
 				EditText txtVwRateDisOrEnbl= (EditText) ll_prdct_detal.findViewWithTag("tvRate"+"_"+ProductID);
@@ -985,6 +986,12 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 
 
 
+					}
+					if(etFreeQty!=null)
+					{
+						etFreeQty.setEnabled(true);
+						etFreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+						etFreeQty.setTypeface(null, Typeface.BOLD);
 					}
 					if(et_ProductAvgPricePerUnitDisOrEnbl!=null){
 						et_ProductAvgPricePerUnitDisOrEnbl.setEnabled(false);
@@ -1015,6 +1022,12 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 
 						etOrderQtyDisOrEnbl.setTypeface(null, Typeface.NORMAL);
 
+					}
+					if(etFreeQty!=null)
+					{
+						etFreeQty.setEnabled(true);
+						etFreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+						etFreeQty.setTypeface(null, Typeface.BOLD);
 					}
 					if(et_ProductAvgPricePerUnitDisOrEnbl!=null){
 						et_ProductAvgPricePerUnitDisOrEnbl.addTextChangedListener(getTextWatcher(et_ProductAvgPricePerUnitDisOrEnbl));
@@ -3889,7 +3902,7 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 		TextView tv_Orderval=(TextView) viewProduct.findViewById(R.id.tv_Orderval);
 		tv_Orderval.setTag("tvOrderVal"+"_"+productIdDynamic);
 
-		EditText tv_FreeQty=(EditText) viewProduct.findViewById(R.id.tv_FreeQty);
+		final EditText tv_FreeQty=(EditText) viewProduct.findViewById(R.id.tv_FreeQty);
 		tv_FreeQty.setTag("tvFreeQty"+"_"+productIdDynamic);
 
 		TextView tv_DisVal=(TextView) viewProduct.findViewById(R.id.tv_DisVal);
@@ -3915,6 +3928,34 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 			et_ProductAvgPricePerUnit.setBackgroundResource(R.drawable.edit_text_bg_gst);
 		}
 
+		tv_FreeQty.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+				String getPIDTag=tv_FreeQty.getTag().toString().split("_")[1].toString();
+				if(!TextUtils.isEmpty(tv_FreeQty.getText().toString()))
+				{
+					hmapPrdctFreeQty.put(getPIDTag,tv_FreeQty.getText().toString());
+				}
+				else
+				{
+					if((hmapPrdctFreeQty!=null) && (hmapPrdctFreeQty.containsKey(getPIDTag)))
+					{
+						hmapPrdctFreeQty.put(getPIDTag,"0");
+					}
+				}
+			}
+		});
 
 		Double rateValBeforeTaxMRP=Double.parseDouble(new DecimalFormat("##.##").format(Double.valueOf(hmapProductMRP.get(productIdDynamic))));
 
@@ -4048,12 +4089,14 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 
 
 		et_OrderQty.setOnFocusChangeListener(this);
+		tv_FreeQty.setOnFocusChangeListener(this);
 		et_KGPerUnilt.setOnFocusChangeListener(this);
 
         //nitika
         et_Stock.setOnFocusChangeListener(this);
 
 		et_Stock.setOnClickListener(this);
+		tv_FreeQty.setOnClickListener(this);
 		et_OrderQty.setOnClickListener(this);
 		//tv_Orderval.setOnClickListener(this);
 		et_SampleQTY.setOnClickListener(this);
@@ -4099,6 +4142,12 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 				et_OrderQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
 				et_OrderQty.setTypeface(null, Typeface.BOLD);
 			}
+			if(tv_FreeQty!=null)
+			{
+				tv_FreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+				tv_FreeQty.setEnabled(true);
+				tv_FreeQty.setTypeface(null, Typeface.BOLD);
+			}
 			if(et_ProductAvgPricePerUnit!=null){
 				et_ProductAvgPricePerUnit.setEnabled(false);
 				et_ProductAvgPricePerUnit.setBackgroundResource(R.drawable.edit_text_bg_gst_disable);
@@ -4127,6 +4176,12 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 
 				et_OrderQty.setTypeface(null, Typeface.NORMAL);
 
+			}
+			if(tv_FreeQty!=null)
+			{
+				tv_FreeQty.setBackgroundResource(R.drawable.edit_text_bg_red_white);
+				tv_FreeQty.setEnabled(true);
+				tv_FreeQty.setTypeface(null, Typeface.BOLD);
 			}
 			if(et_ProductAvgPricePerUnit!=null){
 				et_ProductAvgPricePerUnit.setEnabled(true);
@@ -4220,7 +4275,14 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 				viewCurrentBoxValue=edtBox.getText().toString().trim();
 			//	edtBox.setOnFocusChangeListener(this);
 
-				//edtBox.addTextChangedListener(getTextWatcher(edtBox));
+				//edtBox.addTexcttChangedListener(getTextWatcher(edtBox));
+			}
+			if(v.getId()== R.id.tv_FreeQty)
+			{
+
+				mCustomKeyboardNumWithoutDecimal.registerEditText(edtBox);
+				mCustomKeyboardNumWithoutDecimal.showCustomKeyboard(v);
+
 			}
 			if(v.getId()==R.id.et_KGPerUnilt)
 			{
@@ -5174,6 +5236,14 @@ CustomKeyboard mCustomKeyboardNum,mCustomKeyboardNumWithoutDecimal;
 					{
 						isbtnExceptionVisible=1;
 					}
+
+				}
+
+				if(v.getId()== R.id.tv_FreeQty)
+				{
+
+					mCustomKeyboardNumWithoutDecimal.registerEditText(edtBox);
+					mCustomKeyboardNumWithoutDecimal.showCustomKeyboard(v);
 
 				}
 

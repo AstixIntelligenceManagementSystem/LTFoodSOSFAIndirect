@@ -6010,7 +6010,7 @@ catch (Exception e)
 		db.execSQL("DELETE FROM tblLODOnLastSalesSummary");
 		
 		
-		//db.execSQL("DELETE FROM tblInvoiceButtonStoreMstr");
+		db.execSQL("DELETE FROM tblInvoiceButtonStoreMstr");
 		db.execSQL("DELETE FROM tblInvoiceButtonProductMstr");
 		//db.execSQL("DELETE FROM tblInvoiceButtonStoreProductwiseOrder");
 		//db.execSQL("DELETE FROM tblInvoiceButtonTransac");

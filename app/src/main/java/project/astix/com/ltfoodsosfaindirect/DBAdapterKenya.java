@@ -26005,7 +26005,12 @@ public  LinkedHashMap<String,String> fngetAllOptionForQuestionID(int QuestID)
 			return StoresData;
 		}
 	}
-
+    public void fndeleteOldAddressDetailsofVisitedStore(String StoreID)
+    {
+        open();
+        db.execSQL("DELETE FROM tblLatLongDetails where  StoreID='"+StoreID+"'");
+        close();
+    }
 	public long  saveLatLngToTxtFile(String StoreID, String fnLati, String fnLongi,
 									 String fnAccuracy, String fnAccurateProvider,
 									 String GpsLat, String GpsLong, String GpsAccuracy,

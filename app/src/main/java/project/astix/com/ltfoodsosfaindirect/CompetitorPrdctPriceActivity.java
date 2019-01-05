@@ -67,7 +67,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CompetitorPrdctPriceActivity extends AppCompatActivity implements InterfaceClass,MinMaxValidationCompttr{
-
+    public static int flgRestart=0;
+    public static int flgStoreOrder=0;
     LinkedHashMap<String,String> hmapPrdctunitInGram;
     LinkedHashMap<String,String> hmapPrdctMinMax;
     Button btn_submit;
@@ -620,10 +621,10 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
                 FusedAddress,AllProvidersLocation,GpsAddress,NetwAddress,FusedAddress,FusedLocationLatitudeWithFirstAttempt
                 ,FusedLocationLongitudeWithFirstAttempt,FusedLocationAccuracyWithFirstAttempt);
         dbengine.open();
-        dbengine.UpdateStoreActualLatLongi(storeID, String.valueOf(fnLati), String.valueOf(fnLongi), "" + finalAccuracy, fnAccurateProvider, flgLocationServicesOnOffOrderReview, flgGPSOnOffOrderReview, flgNetworkOnOffOrderReview, flgFusedOnOffOrderReview, flgInternetOnOffWhileLocationTrackingOrderReview, flgRestartOrderReview, flgStoreOrderOrderReview);
-
+        dbengine.UpdateStoreActualLatLongi(storeID,String.valueOf(fnLati), String.valueOf(fnLongi), "" + finalAccuracy,fnAccurateProvider,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder);
 
         dbengine.close();
+
         if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(finalAccuracy)))
         {
 
@@ -1108,7 +1109,7 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
     }
 
     public void UpdateLocationAndProductAllData() {
-        checkHighAccuracyLocationMode(CompetitorPrdctPriceActivity.this);
+       // checkHighAccuracyLocationMode(CompetitorPrdctPriceActivity.this);
        /* dbengine.open();
         dbengine.UpdateStoreActualLatLongi(storeID, String.valueOf(fnLati), String.valueOf(fnLongi), "" + fnAccuracy, fnAccurateProvider, flgLocationServicesOnOffOrderReview, flgGPSOnOffOrderReview, flgNetworkOnOffOrderReview, flgFusedOnOffOrderReview, flgInternetOnOffWhileLocationTrackingOrderReview, flgRestartOrderReview, flgStoreOrderOrderReview);
 

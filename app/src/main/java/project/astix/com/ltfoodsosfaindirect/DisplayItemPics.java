@@ -69,7 +69,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class DisplayItemPics extends AppCompatActivity implements InterfaceClass{
-
+    public static int flgRestart=0;
+    public static int flgStoreOrder=0;
     Button btn_submit;
     int isStockAvlbl=0;
     int isCmpttrAvlbl=0;
@@ -460,8 +461,7 @@ public class DisplayItemPics extends AppCompatActivity implements InterfaceClass
                 FusedAddress,AllProvidersLocation,GpsAddress,NetwAddress,FusedAddress,FusedLocationLatitudeWithFirstAttempt
                 ,FusedLocationLongitudeWithFirstAttempt,FusedLocationAccuracyWithFirstAttempt);
         dbengine.open();
-        dbengine.UpdateStoreActualLatLongi(storeID, String.valueOf(fnLati), String.valueOf(fnLongi), "" + finalAccuracy, fnAccurateProvider, flgLocationServicesOnOffOrderReview, flgGPSOnOffOrderReview, flgNetworkOnOffOrderReview, flgFusedOnOffOrderReview, flgInternetOnOffWhileLocationTrackingOrderReview, flgRestartOrderReview, flgStoreOrderOrderReview);
-
+        dbengine.UpdateStoreActualLatLongi(storeID,String.valueOf(fnLati), String.valueOf(fnLongi), "" + finalAccuracy,fnAccurateProvider,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder);
 
         dbengine.close();
         if(!checkLastFinalLoctionIsRepeated(String.valueOf(fnLati), String.valueOf(fnLongi), String.valueOf(finalAccuracy)))
@@ -861,7 +861,7 @@ public class DisplayItemPics extends AppCompatActivity implements InterfaceClass
     }
 
     public void UpdateLocationAndProductAllData() {
-        checkHighAccuracyLocationMode(DisplayItemPics.this);
+        //checkHighAccuracyLocationMode(DisplayItemPics.this);
        /* dbengine.open();
         dbengine.UpdateStoreActualLatLongi(storeID, String.valueOf(fnLati), String.valueOf(fnLongi), "" + fnAccuracy, fnAccurateProvider, flgLocationServicesOnOffOrderReview, flgGPSOnOffOrderReview, flgNetworkOnOffOrderReview, flgFusedOnOffOrderReview, flgInternetOnOffWhileLocationTrackingOrderReview, flgRestartOrderReview, flgStoreOrderOrderReview);
 

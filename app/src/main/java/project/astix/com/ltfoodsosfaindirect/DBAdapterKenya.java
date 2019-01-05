@@ -14032,7 +14032,7 @@ public void deleteStoreTblsRecordsInCaseCancelOrderInOrderBooking(String StoreID
 			String ActualLatitude, String ActualLongitude, String Accuracy,
 			String LocProvider, int flgLocationServicesOnOff, int flgGPSOnOff, int flgNetworkOnOff, int flgFusedOnOff, int flgInternetOnOffWhileLocationTracking, int flgRestart, int flgStoreOrder)
 	{
-		open();
+
 		final ContentValues values = new ContentValues();
 		values.put("ActualLatitude", ActualLatitude);
 		values.put("ActualLongitude", ActualLongitude);
@@ -14049,7 +14049,7 @@ public void deleteStoreTblsRecordsInCaseCancelOrderInOrderBooking(String StoreID
 
 
 		int affected = db.update("tblStoreList", values, "StoreID=?",new String[] { StoreID });
-		close();
+
 		Log.w(TAG, "affected records: " + affected);
 
 		Log.w(TAG, "UpdateStoreActualLatLongi added..");

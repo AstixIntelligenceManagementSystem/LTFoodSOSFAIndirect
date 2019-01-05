@@ -127,9 +127,9 @@ public class SplashScreen extends AppCompatActivity
       //  imei="867290026163310";  // Live user
 
        // imei="356417061840118"; // Shivani Kesarsa
-       //  imei="353572080913610"; // stagging
+        // imei="353572080913610"; // stagging
 
-      //imei="358674084810068"; // Test Release
+   //   imei="358674084810068"; // Test Release
       // imei="867290026163310"; // Dev Release
 
     //imei="354010084603910";// Dev For Alok

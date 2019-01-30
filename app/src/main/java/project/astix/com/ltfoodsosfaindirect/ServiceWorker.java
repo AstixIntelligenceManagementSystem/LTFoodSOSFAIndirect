@@ -45,10 +45,8 @@ import android.os.Environment;
 
 import com.astix.Common.CommonInfo;
 
-
 public class ServiceWorker
 {
-
 	public int chkTblStoreListContainsRow=1;
 	private Context context;
 
@@ -3459,7 +3457,7 @@ public class ServiceWorker
 				String UPIID="0";
 				String SelfieNameURL="0";
 				String EmailId="0";
-
+				String AadhaarNumber="0";
 
 
 
@@ -3584,9 +3582,15 @@ public class ServiceWorker
 						downLoadingSelfieImage(SelfieNameURL,SelfieName);
 					}
 				}
+				if(!element.getElementsByTagName("AadhaarNumber").equals(null)) {
+					NodeList AadhaarNumberNode = element.getElementsByTagName("AadhaarNumber");
+					Element	line = (Element) AadhaarNumberNode.item(0);
+					if(AadhaarNumberNode.getLength()>0)
+					{
+						AadhaarNumber=xmlParser.getCharacterDataFromElement(line);
+					}}
 
-
-				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId);
+				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId,AadhaarNumber);
 
 			}
 
@@ -3751,7 +3755,7 @@ public class ServiceWorker
 
 
 
-
+				String AadhaarNumber="0";
 
 
 
@@ -3875,7 +3879,14 @@ public class ServiceWorker
 					}
 				}
 
-				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId);
+				if(!element.getElementsByTagName("AadhaarNumber").equals(null)) {
+					NodeList AadhaarNumberNode = element.getElementsByTagName("AadhaarNumber");
+					Element	line = (Element) AadhaarNumberNode.item(0);
+					if(AadhaarNumberNode.getLength()>0)
+					{
+						AadhaarNumber=xmlParser.getCharacterDataFromElement(line);
+					}}
+				dbengine.savetblSoRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB_string,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,EmailId,AadhaarNumber);
 
 			}
 
@@ -15152,221 +15163,188 @@ public class ServiceWorker
 
 		}
 
-		public ServiceWorker getCallspToGetReasonMasterForNoVisit(Context ctx, String dateVAL, String uuid)
-		{
-			this.context = ctx;
+	public ServiceWorker getCallspToGetReasonMasterForNoVisit(Context ctx, String dateVAL, String uuid) {
+		this.context = ctx;
 
-			DBAdapterKenya dbengine = new DBAdapterKenya(context);
-			dbengine.open();
+		DBAdapterKenya dbengine = new DBAdapterKenya(context);
+		dbengine.open();
 
-			final String SOAP_ACTION = "http://tempuri.org/CallspToGetReasonMasterForNoVisit";
-			final String METHOD_NAME = "CallspToGetReasonMasterForNoVisit";
-			final String NAMESPACE = "http://tempuri.org/";
-			final String URL = UrlForWebService;
-
+		final String SOAP_ACTION = "http://tempuri.org/CallspToGetReasonMasterForNoVisit";
+		final String METHOD_NAME = "CallspToGetReasonMasterForNoVisit";
+		final String NAMESPACE = "http://tempuri.org/";
+		final String URL = UrlForWebService;
 
 
-			SoapObject table = null; // Contains table of dataset that returned
-										// through SoapObject
-			SoapObject client = null; // Its the client petition to the web service
-			SoapObject tableRow = null; // Contains row of table
-			SoapObject responseBody = null; // Contains XML content of dataset
+		SoapObject table = null; // Contains table of dataset that returned
+		// through SoapObject
+		SoapObject client = null; // Its the client petition to the web service
+		SoapObject tableRow = null; // Contains row of table
+		SoapObject responseBody = null; // Contains XML content of dataset
 
-			//SoapObject param
-			HttpTransportSE transport = null; // That call webservice
-			SoapSerializationEnvelope sse = null;
+		//SoapObject param
+		HttpTransportSE transport = null; // That call webservice
+		SoapSerializationEnvelope sse = null;
 
 
+		sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		sse.addMapping(NAMESPACE, "ServiceWorker", this.getClass());
+		// Note if class name isn't "movie" ,you must change
+		sse.dotNet = true; // if WebService written .Net is result=true
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(
+				URL, timeout);
 
-			sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-			sse.addMapping(NAMESPACE, "ServiceWorker", this.getClass());
-			// Note if class name isn't "movie" ,you must change
-			sse.dotNet = true; // if WebService written .Net is result=true
-			HttpTransportSE androidHttpTransport = new HttpTransportSE(
-					URL,timeout);
+		ServiceWorker setmovie = new ServiceWorker();
+		try {
+			client = new SoapObject(NAMESPACE, METHOD_NAME);
 
-			ServiceWorker setmovie = new ServiceWorker();
-			try {
-				client = new SoapObject(NAMESPACE, METHOD_NAME);
+			client.addProperty("IMEINo", uuid.toString());
+			client.addProperty("bydate", dateVAL.toString());
 
-				client.addProperty("IMEINo", uuid.toString());
-				client.addProperty("bydate", dateVAL.toString());
-
-				//client.addProperty("CityId", 1);
+			//client.addProperty("CityId", 1);
 
 			sse.setOutputSoapObject(client);
-				sse.bodyOut = client;
-				androidHttpTransport.call(SOAP_ACTION, sse);
+			sse.bodyOut = client;
+			androidHttpTransport.call(SOAP_ACTION, sse);
 
-				// This step: get file XML
-				responseBody = (SoapObject) sse.getResponse();
-				//// System.out.println("TradeChannel  a8 :"+responseBody);
-				  SoapObject soDiffg = (SoapObject) responseBody.getProperty("diffgram");
+			// This step: get file XML
+			responseBody = (SoapObject) sse.getResponse();
+			//// System.out.println("TradeChannel  a8 :"+responseBody);
+			SoapObject soDiffg = (SoapObject) responseBody.getProperty("diffgram");
 
-		            if(soDiffg.hasProperty("NewDataSet"))
-		            {
-		            	// remove information XML,only retrieved results that returned
-		    			responseBody = (SoapObject) responseBody.getProperty(1);
+			if (soDiffg.hasProperty("NewDataSet")) {
+				// remove information XML,only retrieved results that returned
+				responseBody = (SoapObject) responseBody.getProperty(1);
 
-		    			// get information XMl of tables that is returned
-		    			table = (SoapObject) responseBody.getProperty(0);
-		            }
-		            else
-		            {
+				// get information XMl of tables that is returned
+				table = (SoapObject) responseBody.getProperty(0);
+			} else {
 
-		            }
-
-
-
-
-
-
-				int chkTblTradeChannelContainsRow=0;
-
-				 if(soDiffg.hasProperty("NewDataSet"))
-		            {
-					 chkTblTradeChannelContainsRow=1;
-					 dbengine.deletetblNoVisitReasonMaster();
-		            }
-
-
-				if(chkTblTradeChannelContainsRow==1)
-				{
-					int AutoIdStore=0;
-					if( table.getPropertyCount()>1)
-					{
-						for(int i = 0; i <= table.getPropertyCount() -1 ; i++)
-						{
-
-						  	tableRow = (SoapObject) table.getProperty(i);
-
-							String ReasonId="0";
-							String ReasonDescr="NA";
-							int FlgToShowTextBox=0;
-							int flgSOApplicable=0;
-							int flgDSRApplicable=0;
-							int flgNoVisitOption=0;
-							int SeqNo=0;
-
-
-							if (tableRow.hasProperty("ReasonId") )
-							{
-								if (tableRow.getProperty("ReasonId").toString().isEmpty() )
-								{
-									ReasonId="0";
-								}
-								else
-								{
-									ReasonId = tableRow.getProperty("ReasonId").toString().trim();
-									//TradeChannelID=Integer.parseInt(abc);
-								}
-							}
-							if (tableRow.hasProperty("ReasonDescr") )
-							{
-								if (tableRow.getProperty("ReasonDescr").toString().isEmpty() )
-								{
-									ReasonDescr="NA";
-								}
-								else
-								{
-									ReasonDescr = tableRow.getProperty("ReasonDescr").toString().trim();
-								}
-							}
-							if (tableRow.hasProperty("FlgToShowTextBox") )
-						{
-							if (tableRow.getProperty("FlgToShowTextBox").toString().isEmpty() )
-							{
-								FlgToShowTextBox=0;
-							}
-							else
-							{
-								String abc = tableRow.getProperty("FlgToShowTextBox").toString().trim();
-								FlgToShowTextBox=Integer.parseInt(abc);
-							}
-						}
-							if (tableRow.hasProperty("flgSOApplicable") )
-							{
-								if (tableRow.getProperty("flgSOApplicable").toString().isEmpty() )
-								{
-									flgSOApplicable=0;
-								}
-								else
-								{
-									flgSOApplicable=Integer.parseInt(tableRow.getProperty("flgSOApplicable").toString().trim());
-								}
-							}
-							if (tableRow.hasProperty("flgDSRApplicable") )
-							{
-								if (tableRow.getProperty("flgDSRApplicable").toString().isEmpty() )
-								{
-									flgDSRApplicable=0;
-								}
-								else
-								{
-									String abc = tableRow.getProperty("flgDSRApplicable").toString().trim();
-									flgDSRApplicable=Integer.parseInt(abc);
-								}
-							}
-							if (tableRow.hasProperty("flgNoVisitOption") )
-							{
-								if (tableRow.getProperty("flgNoVisitOption").toString().isEmpty() )
-								{
-									flgNoVisitOption=0;
-								}
-								else
-								{
-									String abc = tableRow.getProperty("flgNoVisitOption").toString().trim();
-									flgNoVisitOption=Integer.parseInt(abc);
-								}
-							}
-							if (tableRow.hasProperty("SeqNo") )
-							{
-								if (tableRow.getProperty("SeqNo").toString().isEmpty() )
-								{
-									SeqNo=0;
-								}
-								else
-								{
-									String abc = tableRow.getProperty("SeqNo").toString().trim();
-									SeqNo=Integer.parseInt(abc);
-								}
-							}
-
-
-							AutoIdStore= i +1;
-
-
-							dbengine.savetblNoVisitReasonMaster(AutoIdStore,ReasonId,ReasonDescr,FlgToShowTextBox,flgSOApplicable,flgDSRApplicable,flgNoVisitOption,SeqNo);
-
-
-
-						}
-					}
-
-				}
-
-
-				dbengine.close();		// #4
-
-				setmovie.director = "1";
-				flagExecutedServiceSuccesfully=38;
-				return setmovie;
-	//return counts;
-			} catch (Exception e)
-			{
-
-				// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
-				setmovie.director = e.toString();
-				setmovie.movie_name = e.toString();
-				flagExecutedServiceSuccesfully=0;
-				dbengine.close();
-				return setmovie;
 			}
 
+
+			int chkTblTradeChannelContainsRow = 0;
+
+			if (soDiffg.hasProperty("NewDataSet")) {
+				chkTblTradeChannelContainsRow = 1;
+				dbengine.deletetblNoVisitReasonMaster();
+			}
+
+
+			if (chkTblTradeChannelContainsRow == 1) {
+				int AutoIdStore = 0;
+				if (table.getPropertyCount() > 1) {
+					for (int i = 0; i <= table.getPropertyCount() - 1; i++) {
+
+						tableRow = (SoapObject) table.getProperty(i);
+
+						String ReasonId = "0";
+						String ReasonDescr = "NA";
+						int FlgToShowTextBox = 0;
+						int flgSOApplicable = 0;
+						int flgDSRApplicable = 0;
+						int flgNoVisitOption = 0;
+						int SeqNo = 0;
+						int flgDelayedReason = 0;
+
+
+						if (tableRow.hasProperty("ReasonId")) {
+							if (tableRow.getProperty("ReasonId").toString().isEmpty()) {
+								ReasonId = "0";
+							} else {
+								ReasonId = tableRow.getProperty("ReasonId").toString().trim();
+								//TradeChannelID=Integer.parseInt(abc);
+							}
+						}
+						if (tableRow.hasProperty("ReasonDescr")) {
+							if (tableRow.getProperty("ReasonDescr").toString().isEmpty()) {
+								ReasonDescr = "NA";
+							} else {
+								ReasonDescr = tableRow.getProperty("ReasonDescr").toString().trim();
+							}
+						}
+						if (tableRow.hasProperty("FlgToShowTextBox")) {
+							if (tableRow.getProperty("FlgToShowTextBox").toString().isEmpty()) {
+								FlgToShowTextBox = 0;
+							} else {
+								String abc = tableRow.getProperty("FlgToShowTextBox").toString().trim();
+								FlgToShowTextBox = Integer.parseInt(abc);
+							}
+						}
+						if (tableRow.hasProperty("flgSOApplicable")) {
+							if (tableRow.getProperty("flgSOApplicable").toString().isEmpty()) {
+								flgSOApplicable = 0;
+							} else {
+								flgSOApplicable = Integer.parseInt(tableRow.getProperty("flgSOApplicable").toString().trim());
+							}
+						}
+						if (tableRow.hasProperty("flgDSRApplicable")) {
+							if (tableRow.getProperty("flgDSRApplicable").toString().isEmpty()) {
+								flgDSRApplicable = 0;
+							} else {
+								String abc = tableRow.getProperty("flgDSRApplicable").toString().trim();
+								flgDSRApplicable = Integer.parseInt(abc);
+							}
+						}
+						if (tableRow.hasProperty("flgNoVisitOption")) {
+							if (tableRow.getProperty("flgNoVisitOption").toString().isEmpty()) {
+								flgNoVisitOption = 0;
+							} else {
+								String abc = tableRow.getProperty("flgNoVisitOption").toString().trim();
+								flgNoVisitOption = Integer.parseInt(abc);
+							}
+						}
+						if (tableRow.hasProperty("SeqNo")) {
+							if (tableRow.getProperty("SeqNo").toString().isEmpty()) {
+								SeqNo = 0;
+							} else {
+								String abc = tableRow.getProperty("SeqNo").toString().trim();
+								SeqNo = Integer.parseInt(abc);
+							}
+						}
+						if (tableRow.hasProperty("flgDelayedReason")) {
+							if (tableRow.getProperty("flgDelayedReason").toString().isEmpty()) {
+								flgDelayedReason = 0;
+							} else {
+								String abc = tableRow.getProperty("flgDelayedReason").toString().trim();
+								flgDelayedReason = Integer.parseInt(abc);
+							}
+						}
+
+
+						AutoIdStore = i + 1;
+
+
+						//dbengine.savetblNoVisitReasonMaster(AutoIdStore,ReasonId,ReasonDescr,FlgToShowTextBox);
+						dbengine.savetblNoVisitReasonMaster(AutoIdStore, ReasonId, ReasonDescr, FlgToShowTextBox, flgSOApplicable, flgDSRApplicable, flgNoVisitOption, SeqNo, flgDelayedReason);
+
+
+					}
+				}
+
+			}
+
+
+			dbengine.close();        // #4
+
+			setmovie.director = "1";
+			flagExecutedServiceSuccesfully = 38;
+			return setmovie;
+			//return counts;
+		} catch (Exception e) {
+
+			// System.out.println("Arjun getStoreTypeMstr: 2 "+e.toString());
+			setmovie.director = e.toString();
+			setmovie.movie_name = e.toString();
+			flagExecutedServiceSuccesfully = 0;
+			dbengine.close();
+			return setmovie;
 		}
 
+	}
 
-		public ServiceWorker getCallspSaveReasonForNoVisit(Context ctx, String dateVAL, String uuid,String ReasonId,String ReasonText)
+
+
+	public ServiceWorker getCallspSaveReasonForNoVisit(Context ctx, String dateVAL, String uuid,String ReasonId,String ReasonText)
 		{
 			this.context = ctx;
 
@@ -17258,7 +17236,7 @@ public class ServiceWorker
 				String LastworkingDate="0";
 				String DistributorName="0";
 				String EmailId="0";
-
+				String AadhaarNumber="0";
 
 
 
@@ -17436,9 +17414,15 @@ public class ServiceWorker
 						downLoadingSelfieImage(SelfieNameURL,SelfieName);
 					}
 				}
+				if(!element.getElementsByTagName("AadhaarNumber").equals(null)) {
+					NodeList AadhaarNumberNode = element.getElementsByTagName("AadhaarNumber");
+					Element	line = (Element) AadhaarNumberNode.item(0);
+					if(AadhaarNumberNode.getLength()>0)
+					{
+						AadhaarNumber=xmlParser.getCharacterDataFromElement(line);
+					}}
 
-
-				dbengine.savetblDsrRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,LastworkingDate,DistributorName,EmailId);
+				dbengine.savetblDsrRegDetails(PersonNodeId,PersonNodeType,Name,ContactNo,DOB,SelfieName,SignImgName,BankAccountnumber,BankID,IFSCCode,flgUPIID,UPIID,SelfieNameURL,LastworkingDate,DistributorName,EmailId,AadhaarNumber);
 
 			}
 
@@ -20606,5 +20590,103 @@ public class ServiceWorker
 			return setmovie;
 		}
 
+	}
+	public String getCurrentDateTime(String uuid,int DatabaseVersion,int ApplicationID)
+	{
+
+
+		String serverTime="";
+		decimalFormat.applyPattern(pattern);
+
+		int chkTblStoreListContainsRow=1;
+		StringReader read;
+		InputSource inputstream;
+		final String SOAP_ACTION = "http://tempuri.org/GetServerTime";
+		final String METHOD_NAME = "GetServerTime";
+		//final String METHOD_NAME = "GetIMEIVersionDetailStatusNewTest";
+		final String NAMESPACE = "http://tempuri.org/";
+		final String URL = UrlForWebService;
+
+		SoapObject table = null; // Contains table of dataset that returned
+
+		SoapObject client = null; // Its the client petition to the web service
+		SoapObject tableRow = null; // Contains row of table
+		SoapObject responseBody = null; // Contains XML content of dataset
+
+		HttpTransportSE transport = null; // That call webservice
+		SoapSerializationEnvelope sse = null;
+
+		sse = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+		sse.dotNet = true;
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL,timeout);
+
+		ServiceWorker setmovie = new ServiceWorker();
+
+		try
+		{
+			client = new SoapObject(NAMESPACE, METHOD_NAME);
+			client.addProperty("uuid", uuid.toString());
+			client.addProperty("DatabaseVersion", DatabaseVersion);
+			client.addProperty("ApplicationID", ApplicationID);
+
+			sse.setOutputSoapObject(client);
+			sse.bodyOut = client;
+			androidHttpTransport.call(SOAP_ACTION, sse);
+			responseBody = (SoapObject)sse.bodyIn;
+			int totalCount = responseBody.getPropertyCount();
+
+			String resultString=androidHttpTransport.responseDump;
+
+			String name=responseBody.getProperty(0).toString();
+
+			XMLParser xmlParser = new XMLParser();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(name));
+			Document doc = db.parse(is);
+
+
+
+
+
+
+
+
+
+
+			NodeList tblBloodGroupNode = doc.getElementsByTagName("tblServerTime");
+
+
+
+
+			Element element = (Element) tblBloodGroupNode.item(0);
+
+			NodeList BloddGroupsNode = element.getElementsByTagName("ServerTime");
+			Element line = (Element) BloddGroupsNode.item(0);
+			if(BloddGroupsNode.getLength()>0)
+			{
+				serverTime=xmlParser.getCharacterDataFromElement(line);
+			}
+
+
+
+
+
+
+
+
+
+
+			return serverTime;
+		}
+		catch (Exception e)
+		{
+
+
+
+			return serverTime;
+		}
 	}
 }

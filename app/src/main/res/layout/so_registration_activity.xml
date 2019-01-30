@@ -413,6 +413,40 @@
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:text="Aadhaar No."
+                            android:textColor="#cf6f16"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/ed_aadhaar_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edittex_with_white_background"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="12"
+                            android:padding="2dp"
+                            android:textColor="#000"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:orientation="horizontal"

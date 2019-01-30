@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="project.astix.com.ltfoodsosfaindirect">
 
-    <uses-sdk android:minSdkVersion="14" />
-
     <!-- GCM Permissions - End here -->
     <uses-permission android:name="android.permission.VIBRATE" />
 

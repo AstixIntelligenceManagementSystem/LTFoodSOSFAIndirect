@@ -1,17 +1,6 @@
 package project.astix.com.ltfoodsosfaindirect;
 
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,25 +24,32 @@ import android.widget.TextView;
 
 import com.astix.Common.CommonInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-public class IncentiveActivity extends Activity
-{
+
+public class IncentiveActivity extends Activity {
     public String fDate;
     public SimpleDateFormat sdf;
     LinkedHashMap<String, String> hmapBankDetails;
-    public int flgToShowBankDetails=0;
+    public int flgToShowBankDetails = 0;
     SharedPreferences sPrefIncentive;//sPrefAttandance
-    DBAdapterKenya dbengine=new DBAdapterKenya(IncentiveActivity.this);
-    public TextView txt_earnedpoints,text_header;
-    public LinearLayout ll_Parent,ll_BankDetails;
+    DBAdapterKenya dbengine = new DBAdapterKenya(IncentiveActivity.this);
+    public TextView txt_earnedpoints, text_header;
+    public LinearLayout ll_Parent, ll_BankDetails;
     ProgressDialog pDialogGetStores;
-    public String Total_Earning="NA",DisplayMsg="NA";
-    public TextView txt_total_earned,txt_display_msg;
+    public String Total_Earning = "NA", DisplayMsg = "NA";
+    public TextView txt_total_earned, txt_display_msg;
     public LinearLayout ll_txt_display_msg;
-    public String imei,pickerDate,userDate;
+    public String imei, pickerDate, userDate;
     LayoutInflater inflater;
-    LinearLayout  ll_incentiveTblDataParent;
-    public ImageView imgVw_next,imgVw_back;
+    LinearLayout ll_incentiveTblDataParent;
+    public ImageView imgVw_next, imgVw_back;
     ArrayList<LinkedHashMap<String, ArrayList<String>>> list_IncentiveMstrData;
     ArrayList<Object> arrLstObjct;
 
@@ -62,25 +57,21 @@ public class IncentiveActivity extends Activity
     LinkedHashMap<String, ArrayList<String>> HmapSecondaryIncIdTypeNameCount;
     LinkedHashMap<String, ArrayList<String>> HmapIncIdColumnNameAndData;
     LinkedHashMap<String, ArrayList<String>> HmapIncPastDetailColData;
+    String FROM = "";
 
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
-        if(keyCode==KeyEvent.KEYCODE_BACK)
-        {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             return true;
         }
-        if(keyCode==KeyEvent.KEYCODE_HOME)
-        {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
             // finish();
             return true;
         }
-        if(keyCode==KeyEvent.KEYCODE_MENU)
-        {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             return true;
         }
-        if(keyCode==KeyEvent.KEYCODE_SEARCH)
-        {
+        if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             return true;
         }
 
@@ -88,56 +79,49 @@ public class IncentiveActivity extends Activity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_incentive);
 
 
-        ll_Parent=(LinearLayout) findViewById(R.id.ll_Parent);
-        txt_total_earned=(TextView) findViewById(R.id.txt_total_earned);
+        ll_Parent = (LinearLayout) findViewById(R.id.ll_Parent);
+        txt_total_earned = (TextView) findViewById(R.id.txt_total_earned);
 
-        ll_txt_display_msg=(LinearLayout) findViewById(R.id.ll_txt_display_msg);
-        txt_display_msg=(TextView) findViewById(R.id.txt_display_msg);
-        ll_BankDetails=(LinearLayout)  findViewById(R.id.ll_BankDetails);
-        imgVw_next=(ImageView) findViewById(R.id.imgVw_next);
-        imgVw_back=(ImageView) findViewById(R.id.imgVw_back);
-        Intent intent=getIntent();
-        String  FROM= intent.getStringExtra("IntentFrom");
+        ll_txt_display_msg = (LinearLayout) findViewById(R.id.ll_txt_display_msg);
+        txt_display_msg = (TextView) findViewById(R.id.txt_display_msg);
+        ll_BankDetails = (LinearLayout) findViewById(R.id.ll_BankDetails);
+        imgVw_next = (ImageView) findViewById(R.id.imgVw_next);
+        imgVw_back = (ImageView) findViewById(R.id.imgVw_back);
+        Intent intent = getIntent();
+        FROM = intent.getStringExtra("IntentFrom");
 
-        if(FROM.equals("StoreSelection"))
-        {
+        if (FROM.equals("StoreSelection")) {
             imei = intent.getStringExtra("imei").trim();
             pickerDate = intent.getStringExtra("pickerDate").trim();
             userDate = intent.getStringExtra("userDate");
         }
-        GetIncentiveData getData=new GetIncentiveData(IncentiveActivity.this);
+        GetIncentiveData getData = new GetIncentiveData(IncentiveActivity.this);
         getData.execute();
-       // sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
-        sPrefIncentive=getSharedPreferences(CommonInfo.IncentivePreference, MODE_PRIVATE);
-        Date date1=new Date();
+        // sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
+        sPrefIncentive = getSharedPreferences(CommonInfo.IncentivePreference, MODE_PRIVATE);
+        Date date1 = new Date();
         sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         fDate = sdf.format(date1).toString().trim();
 
-        SharedPreferences.Editor editor1=sPrefIncentive.edit();
+        SharedPreferences.Editor editor1 = sPrefIncentive.edit();
         editor1.clear();
         editor1.commit();
         sPrefIncentive.edit().putString("InetivePref", fDate).commit();
 
 
-
-        if(FROM.equals("SPLASH"))
-        {
-
+        if (FROM.equals("SPLASH")) {
 
 
             imgVw_back.setVisibility(View.GONE);
-            imgVw_next.setOnClickListener(new OnClickListener()
-            {
+            imgVw_next.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                   // Intent i=new Intent(IncentiveActivity.this,AllButtonActivity.class);
+                public void onClick(View v) {
+                    // Intent i=new Intent(IncentiveActivity.this,AllButtonActivity.class);
 /*
                     Intent i=new Intent(IncentiveActivity.this,DayStartActivity.class);
                     startActivity(i);
@@ -145,16 +129,12 @@ public class IncentiveActivity extends Activity
                     callDayStartActivity();
                 }
             });
-        }
-        else
-        {
+        } else {
             imgVw_next.setVisibility(View.GONE);
-            imgVw_back.setOnClickListener(new OnClickListener()
-            {
+            imgVw_back.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    Intent i=new Intent(IncentiveActivity.this,StoreSelection.class);
+                public void onClick(View v) {
+                    Intent i = new Intent(IncentiveActivity.this, StoreSelection.class);
                     i.putExtra("imei", imei);
                     i.putExtra("userDate", userDate);
                     i.putExtra("pickerDate", pickerDate);
@@ -165,95 +145,115 @@ public class IncentiveActivity extends Activity
         }
 
 
-
-
     }
-    public void callDayStartActivity()
-    {
+
+    public void callDayStartActivity() {
         /*Intent intent=new Intent(this,DayStartActivity.class);
         startActivity(intent);
         finish();*/
-        dbengine.open();
-        int flgPersonTodaysAtt=dbengine.FetchflgPersonTodaysAtt();
-        dbengine.close();
-        if(flgPersonTodaysAtt==0)
-        {
-            Intent intent=new Intent(this,DayStartActivity.class);
+
+           /* Intent intent=new Intent(this,DayStartActivity.class);
             startActivity(intent);
             finish();
         }
         else
-        {
+        {*/
+        if (FROM.equals("SPLASH")) {
+            if (imei == null) {
+                imei = CommonInfo.imei;
+            }
+
+
+            DayStartActivity.flgDistributorSelectedFromDropdown = 1;
+            String DistributorNodeIDTypeFromAttendanceTable = dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
+
+            int chkDistributorStockTakeMustOrNot = dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]), Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]));
+
+
+            if (chkDistributorStockTakeMustOrNot == 0
+                    && Integer.valueOf(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]) != 0
+                    && Integer.valueOf(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]) != 0) {
+
+                Intent i = new Intent(IncentiveActivity.this, DistributorEntryActivity.class);
+                i.putExtra("DistributorName", DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[2]);
+                i.putExtra("imei", CommonInfo.imei);
+                i.putExtra("fDate", fDate);
+                i.putExtra("IntentFrom", 0);
+                startActivity(i);
+                finish();
+
+            } else {
+                Intent intent = new Intent(IncentiveActivity.this, AllButtonActivity.class);
+                intent.putExtra("imei", imei);
+                IncentiveActivity.this.startActivity(intent);
+                finish();
+            }
+        } else {
             Intent intent = new Intent(IncentiveActivity.this, AllButtonActivity.class);
             intent.putExtra("imei", imei);
             IncentiveActivity.this.startActivity(intent);
             finish();
         }
+        // }
     }
-    void getDataFromDatabase()
-    {
-        arrLstObjct=dbengine.fetchIncentiveData();
-        if(arrLstObjct.size()>0) {
+
+    void getDataFromDatabase() {
+        arrLstObjct = dbengine.fetchIncentiveData();
+        if (arrLstObjct.size() > 0) {
             list_IncentiveMstrData = (ArrayList<LinkedHashMap<String, ArrayList<String>>>) arrLstObjct.get(0);
             HmapIncIdTypeNameCount = list_IncentiveMstrData.get(0);//Master Data
-            HmapSecondaryIncIdTypeNameCount=list_IncentiveMstrData.get(1);//Secondary Master Data
+            HmapSecondaryIncIdTypeNameCount = list_IncentiveMstrData.get(1);//Secondary Master Data
             HmapIncIdColumnNameAndData = list_IncentiveMstrData.get(2);//Secondary Data Columns and Their Rows
             HmapIncPastDetailColData = list_IncentiveMstrData.get(3);
 
 
             Total_Earning = (String) arrLstObjct.get(1);
             DisplayMsg = (String) arrLstObjct.get(2);
-            flgToShowBankDetails=Integer.parseInt((String)arrLstObjct.get(3));
-            hmapBankDetails=(LinkedHashMap) arrLstObjct.get(4);
+            flgToShowBankDetails = Integer.parseInt((String) arrLstObjct.get(3));
+            hmapBankDetails = (LinkedHashMap) arrLstObjct.get(4);
         }
     }
 
-    void layoutCreation()
-    {
+    void layoutCreation() {
 
 
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(HmapIncIdTypeNameCount!=null){
-            for (Map.Entry<String, ArrayList<String>> entry:HmapIncIdTypeNameCount.entrySet()){
+        if (HmapIncIdTypeNameCount != null) {
+            for (Map.Entry<String, ArrayList<String>> entry : HmapIncIdTypeNameCount.entrySet()) {
                 View view = inflater.inflate(R.layout.parent_header, null);
 
-                String IncId=entry.getKey().toString().trim();
+                String IncId = entry.getKey().toString().trim();
 
-                String Inc_Name=entry.getValue().get(1); //arraylist index1
-                String Inc_Earning=entry.getValue().get(4);    //arraylist index4
-                String Inc_flgAchieved=entry.getValue().get(3).toString().trim();
-                text_header=(TextView) view.findViewById(R.id.text_header); //Incentive name text view
+                String Inc_Name = entry.getValue().get(1); //arraylist index1
+                String Inc_Earning = entry.getValue().get(4);    //arraylist index4
+                String Inc_flgAchieved = entry.getValue().get(3).toString().trim();
+                text_header = (TextView) view.findViewById(R.id.text_header); //Incentive name text view
                 text_header.setText(Inc_Name);
-                txt_earnedpoints=(TextView) view.findViewById(R.id.txt_earnedpoints);
-                txt_earnedpoints.setText("Incentive Earned\n"+Inc_Earning);
+                txt_earnedpoints = (TextView) view.findViewById(R.id.txt_earnedpoints);
+                txt_earnedpoints.setText("Incentive Earned\n" + Inc_Earning);
 
-                if(Inc_flgAchieved.equals("0"))
-                {
+                if (Inc_flgAchieved.equals("0")) {
                     text_header.setBackgroundColor(getResources().getColor(R.color.incentivegrey));
                     txt_earnedpoints.setBackgroundColor(getResources().getColor(R.color.incentivegrey));
                 }
 
-                if(Inc_flgAchieved.equals("1"))
-                {
+                if (Inc_flgAchieved.equals("1")) {
                     text_header.setBackgroundColor(getResources().getColor(R.color.incentaiveRed));
                     txt_earnedpoints.setBackgroundColor(getResources().getColor(R.color.incentaiveRed));
                 }
-                if(Inc_flgAchieved.equals("2"))
-                {
+                if (Inc_flgAchieved.equals("2")) {
                     text_header.setBackgroundColor(getResources().getColor(R.color.incentaiveLightOrange));
                     txt_earnedpoints.setBackgroundColor(getResources().getColor(R.color.incentaiveLightOrange));
                 }
-                if(Inc_flgAchieved.equals("3"))
-                {
+                if (Inc_flgAchieved.equals("3")) {
                     text_header.setBackgroundColor(getResources().getColor(R.color.incentaiveLightGreen));
                     txt_earnedpoints.setBackgroundColor(getResources().getColor(R.color.incentaiveLightGreen));
                 }
-                if(Inc_flgAchieved.equals("4"))
-                {
+                if (Inc_flgAchieved.equals("4")) {
                     text_header.setBackgroundColor(getResources().getColor(R.color.incentaiveDeepGreen));
                     txt_earnedpoints.setBackgroundColor(getResources().getColor(R.color.incentaiveDeepGreen));
                 }
-                final CheckBox img_Openlayout=(CheckBox) view.findViewById(R.id.img_Openlayout);
+                final CheckBox img_Openlayout = (CheckBox) view.findViewById(R.id.img_Openlayout);
                 img_Openlayout.setButtonDrawable(getResources().getDrawable(
                         R.drawable.checkbox_button_image_for_delivery));
                 img_Openlayout.setOnClickListener(new OnClickListener() {
@@ -269,12 +269,12 @@ public class IncentiveActivity extends Activity
                     }
                 });
 
-                ll_incentiveTblDataParent=  (LinearLayout) view.findViewById(R.id.ll_incentiveTblDataParent);
-                LinearLayout ll_hdr=(LinearLayout) view.findViewById(R.id.ll_hdr);
+                ll_incentiveTblDataParent = (LinearLayout) view.findViewById(R.id.ll_incentiveTblDataParent);
+                LinearLayout ll_hdr = (LinearLayout) view.findViewById(R.id.ll_hdr);
                 //-------------Creating inner     Tables ------------------------------
                 createInnerTable(IncId);
                 //----if only one record is there then show the first table data by checkbox enable true
-                if(!(HmapIncIdTypeNameCount.size()>1)){
+                if (!(HmapIncIdTypeNameCount.size() > 1)) {
                     img_Openlayout.setChecked(true);
                     ll_incentiveTblDataParent.setVisibility(View.VISIBLE);
                 }
@@ -284,23 +284,18 @@ public class IncentiveActivity extends Activity
         }
 
 
-        if(TextUtils.isEmpty(DisplayMsg) || DisplayMsg.equals("0") || DisplayMsg.equals(""))
-        {
+        if (TextUtils.isEmpty(DisplayMsg) || DisplayMsg.equals("0") || DisplayMsg.equals("")) {
             txt_display_msg.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             txt_display_msg.setText(DisplayMsg);
         }
-        txt_total_earned.setText("Total Incentive Earned : "+Total_Earning);
+        txt_total_earned.setText("Total Incentive Earned : " + Total_Earning);
     }
 
-    void createIncentiveTables(ArrayList<String> list_ColumnNameData,int Inc_ColumnCount,LinearLayout ll_incentiveTblShow, String tbl_header,String Inc_Type)
-    {
-        if(Inc_ColumnCount != 0)
-        {
-            View v1=new View(IncentiveActivity.this);
-            v1.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,3));
+    void createIncentiveTables(ArrayList<String> list_ColumnNameData, int Inc_ColumnCount, LinearLayout ll_incentiveTblShow, String tbl_header, String Inc_Type) {
+        if (Inc_ColumnCount != 0) {
+            View v1 = new View(IncentiveActivity.this);
+            v1.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
             ll_incentiveTblShow.addView(v1);
 
             TextView txt_header = new TextView(this);
@@ -311,30 +306,24 @@ public class IncentiveActivity extends Activity
             txt_header.setTextSize(12);
             txt_header.setGravity(Gravity.CENTER);
             txt_header.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            txt_header.setPadding(1, 5,1, 5);
-            if(Inc_Type.equals("1"))
-            {
-                if(txt_header.getText().toString().trim().equals("Current Month"))
-                {
+            txt_header.setPadding(1, 5, 1, 5);
+            if (Inc_Type.equals("1")) {
+                if (txt_header.getText().toString().trim().equals("Current Month")) {
 
-                }
-                else
-                {
+                } else {
                     // ll_incentiveTblShow.addView(txt_header);
                 }
-            }
-            else
-            {
+            } else {
                 //  ll_incentiveTblShow.addView(txt_header);
             }
             //   ll_incentiveTblShow.setVisibility(View.GONE);
             // ll_incentiveTblShow.addView(txt_header);
 
-            for(int j=0;j<list_ColumnNameData.size();j++) //list_ColumnNameData contains column name on index 0 and data on index 1,2..
+            for (int j = 0; j < list_ColumnNameData.size(); j++) //list_ColumnNameData contains column name on index 0 and data on index 1,2..
             {
-                if(j == 0) // Column headers
+                if (j == 0) // Column headers
                 {
-                    if(Inc_ColumnCount == 1) // if only single column is to be shown then text view is created
+                    if (Inc_ColumnCount == 1) // if only single column is to be shown then text view is created
                     {
                         TextView companyTV = new TextView(this);
                         companyTV.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -344,26 +333,25 @@ public class IncentiveActivity extends Activity
                         companyTV.setTextSize(12);
                         companyTV.setGravity(Gravity.CENTER);
                         companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                        companyTV.setPadding(1, 5,1, 5);
+                        companyTV.setPadding(1, 5, 1, 5);
 
                         ll_incentiveTblShow.addView(companyTV);
 
-                    }
-                    else if(Inc_ColumnCount != 1) // if more then one columns are to be shown then linear layout is made
+                    } else if (Inc_ColumnCount != 1) // if more then one columns are to be shown then linear layout is made
                     {
                         LinearLayout ll = new LinearLayout(this);
-                        LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         ll.setLayoutParams(lp1);
                         ll.setOrientation(LinearLayout.HORIZONTAL);
                         ll.setPadding(0, 3, 0, 3);
 
                         ll.setBackgroundResource(R.drawable.border_header_part_incentiv);
 
-                        for(int i=0;i<Inc_ColumnCount;i++) //check column count to create textviews inside linear layout
+                        for (int i = 0; i < Inc_ColumnCount; i++) //check column count to create textviews inside linear layout
                         {
                             TextView companyTV = new TextView(this);
-                            LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT);
-                            lp.weight=1;
+                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            lp.weight = 1;
                             companyTV.setGravity(Gravity.CENTER);
                             companyTV.setLayoutParams(lp);
                             companyTV.setTextSize(12);
@@ -381,12 +369,10 @@ public class IncentiveActivity extends Activity
 
                 }
 
-                if(j != 0) //for table rows
+                if (j != 0) //for table rows
                 {
-                    if(Inc_ColumnCount != 0)
-                    {
-                        if(Inc_ColumnCount == 1)
-                        {
+                    if (Inc_ColumnCount != 0) {
+                        if (Inc_ColumnCount == 1) {
                             TextView companyTV = new TextView(this);
                             companyTV.setBackgroundResource(R.drawable.inc_tbl_singlerow_bckgrnd);
                             companyTV.setText(list_ColumnNameData.get(j).toString().trim());
@@ -397,28 +383,22 @@ public class IncentiveActivity extends Activity
 
                             ll_incentiveTblShow.addView(companyTV);
 
-                        }
-                        else if(Inc_ColumnCount != 1)
-                        {
+                        } else if (Inc_ColumnCount != 1) {
                             LinearLayout ll = new LinearLayout(this);
                             ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                             ll.setBackgroundResource(R.drawable.inc_tbl_data_bckgrnd);
                             ll.setOrientation(LinearLayout.HORIZONTAL);
 
-                            for(int i=0;i<Inc_ColumnCount;i++)
-                            {
+                            for (int i = 0; i < Inc_ColumnCount; i++) {
                                 TextView companyTV = new TextView(this);
-                                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
-                                lp.weight=1;
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+                                lp.weight = 1;
                                 companyTV.setGravity(Gravity.CENTER);
                                 companyTV.setLayoutParams(lp);
                                 companyTV.setTextSize(11);
-                                if(list_ColumnNameData.get(j).toString().split(Pattern.quote("^"))[i].equals("NA"))
-                                {
+                                if (list_ColumnNameData.get(j).toString().split(Pattern.quote("^"))[i].equals("NA")) {
                                     companyTV.setText("");
-                                }
-                                else
-                                {
+                                } else {
                                     companyTV.setText(list_ColumnNameData.get(j).toString().split(Pattern.quote("^"))[i]);
                                 }
                                 //companyTV.setTextSize(11);
@@ -434,22 +414,19 @@ public class IncentiveActivity extends Activity
                     }
                 }
             }
-            View v2=new View(IncentiveActivity.this);
-            v2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,3));
+            View v2 = new View(IncentiveActivity.this);
+            v2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 3));
             ll_incentiveTblShow.addView(v2);
         }
     }
 
-    class GetIncentiveData extends AsyncTask<Void, Void, Void>
-    {
-        public GetIncentiveData(IncentiveActivity activity)
-        {
+    class GetIncentiveData extends AsyncTask<Void, Void, Void> {
+        public GetIncentiveData(IncentiveActivity activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
             pDialogGetStores.setTitle("Please wait...");
@@ -462,169 +439,146 @@ public class IncentiveActivity extends Activity
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
-            try
-            {
+        protected Void doInBackground(Void... params) {
+            try {
                 getDataFromDatabase();
+            } catch (Exception e) {
+            } finally {
             }
-            catch (Exception e)
-            {}
-            finally
-            {}
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            if(arrLstObjct.size()>0)
-            {
+            if (arrLstObjct.size() > 0) {
                 txt_total_earned.setVisibility(View.VISIBLE);
                 ll_txt_display_msg.setVisibility(View.VISIBLE);
                 layoutCreation();
-            }
-            else
-            {
+            } else {
                 txt_total_earned.setVisibility(View.INVISIBLE);
                 ll_txt_display_msg.setVisibility(View.INVISIBLE);
             }
 
-            if(pDialogGetStores.isShowing())
-            {
+            if (pDialogGetStores.isShowing()) {
                 pDialogGetStores.dismiss();
             }
         }
     }
-    public void createInnerTable(String IncId){
+
+    public void createInnerTable(String IncId) {
 
         // final View ll_incentiveTblDataParentd=ll_incentiveTblDataParent;
 
-        for(Map.Entry<String, ArrayList<String>> entry:HmapSecondaryIncIdTypeNameCount.entrySet()) //Hmap(IncID, {Type, Inc Name, ColumnCount})
+        for (Map.Entry<String, ArrayList<String>> entry : HmapSecondaryIncIdTypeNameCount.entrySet()) //Hmap(IncID, {Type, Inc Name, ColumnCount})
         {
 
             View view = inflater.inflate(R.layout.inflate_incentive_header, null);
 
-            String IncIdkey=entry.getKey().toString().trim().split(Pattern.quote("^"))[0];
-            if(IncIdkey.equals(IncId)){
-                String Inc_IncSlabId=entry.getValue().get(0);
-                String Inc_Type=entry.getValue().get(1);
-                String Inc_Name=entry.getValue().get(2).toString().trim();
-                int Inc_ColumnCount=Integer.parseInt(entry.getValue().get(3));
-                String Inc_flgAchieved=entry.getValue().get(4).toString().trim();
-                String Inc_Earning=entry.getValue().get(5).toString().trim();
-                int Inc_PastDetailColCount=Integer.parseInt(entry.getValue().get(6).toString().trim());
+            String IncIdkey = entry.getKey().toString().trim().split(Pattern.quote("^"))[0];
+            if (IncIdkey.equals(IncId)) {
+                String Inc_IncSlabId = entry.getValue().get(0);
+                String Inc_Type = entry.getValue().get(1);
+                String Inc_Name = entry.getValue().get(2).toString().trim();
+                int Inc_ColumnCount = Integer.parseInt(entry.getValue().get(3));
+                String Inc_flgAchieved = entry.getValue().get(4).toString().trim();
+                String Inc_Earning = entry.getValue().get(5).toString().trim();
+                int Inc_PastDetailColCount = Integer.parseInt(entry.getValue().get(6).toString().trim());
 
-                ArrayList<String> list_ColumnNameData=HmapIncIdColumnNameAndData.get(Inc_IncSlabId); //list_ColumnNameData[0]= column names
+                ArrayList<String> list_ColumnNameData = HmapIncIdColumnNameAndData.get(Inc_IncSlabId); //list_ColumnNameData[0]= column names
                 //list_ColumnNameData[1,2...]= column data
-                ArrayList<String> list_IncPastDetailColData=new ArrayList<String>();
-                if(HmapIncPastDetailColData.containsKey(Inc_IncSlabId))
-                {
-                    list_IncPastDetailColData=HmapIncPastDetailColData.get(Inc_IncSlabId);
+                ArrayList<String> list_IncPastDetailColData = new ArrayList<String>();
+                if (HmapIncPastDetailColData.containsKey(Inc_IncSlabId)) {
+                    list_IncPastDetailColData = HmapIncPastDetailColData.get(Inc_IncSlabId);
                 }
-                ImageView incentiveiconStatus=(ImageView) view.findViewById(R.id.incentiveiconStatus);
+                ImageView incentiveiconStatus = (ImageView) view.findViewById(R.id.incentiveiconStatus);
 
-                TextView text_header=(TextView) view.findViewById(R.id.text_header); //Incentive name text view
+                TextView text_header = (TextView) view.findViewById(R.id.text_header); //Incentive name text view
                 text_header.setText(Inc_Name);
 
-                LinearLayout ll_earnedPtAndImg=(LinearLayout) view.findViewById(R.id.ll_earnedPtAndImg);
+                LinearLayout ll_earnedPtAndImg = (LinearLayout) view.findViewById(R.id.ll_earnedPtAndImg);
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#FFEEBB"));
 
-                final TextView txt_earnedpoints=(TextView) view.findViewById(R.id.txt_earnedpoints);
-                txt_earnedpoints.setText("Incentive Earned\n"+Inc_Earning);
+                final TextView txt_earnedpoints = (TextView) view.findViewById(R.id.txt_earnedpoints);
+                txt_earnedpoints.setText("Incentive Earned\n" + Inc_Earning);
 
-                LinearLayout ll_hdr=(LinearLayout) view.findViewById(R.id.ll_hdr);
-                ll_hdr.setTag(Inc_IncSlabId+"_"+Inc_Name+"_false");
+                LinearLayout ll_hdr = (LinearLayout) view.findViewById(R.id.ll_hdr);
+                ll_hdr.setTag(Inc_IncSlabId + "_" + Inc_Name + "_false");
                 //incentiveiconStatus.setImageResource(R.drawable.like_enable);
-                if(Inc_flgAchieved.equals("0"))
-                {
+                if (Inc_flgAchieved.equals("0")) {
             /*    ll_hdr.setBackgroundColor(Color.parseColor("#5A9310"));
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#437500"));*/
                     incentiveiconStatus.setImageResource(R.drawable.notapplicable_icon);
                 }
-                if(Inc_flgAchieved.equals("1"))
-                {
+                if (Inc_flgAchieved.equals("1")) {
             /*    ll_hdr.setBackgroundColor(Color.parseColor("#5A9310"));
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#437500"));*/
                     incentiveiconStatus.setImageResource(R.drawable.red_icon);
-                }
-                else if(Inc_flgAchieved.equals("2"))
-                {
+                } else if (Inc_flgAchieved.equals("2")) {
                /* ll_hdr.setBackgroundColor(Color.parseColor("#FFB400"));
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#CE9100"));*/
                     incentiveiconStatus.setImageResource(R.drawable.yellow_icon);
                     //dislike_enable
-                }
-                else if(Inc_flgAchieved.equals("3"))
-                {
+                } else if (Inc_flgAchieved.equals("3")) {
               /*  ll_hdr.setBackgroundColor(Color.parseColor("#FFB400"));
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#CE9100"));*/
                     incentiveiconStatus.setImageResource(R.drawable.lightgreen_icon);
                     //dislike_enable
-                }
-                else if(Inc_flgAchieved.equals("4"))
-                {
+                } else if (Inc_flgAchieved.equals("4")) {
               /*  ll_hdr.setBackgroundColor(Color.parseColor("#FFB400"));
                 ll_earnedPtAndImg.setBackgroundColor(Color.parseColor("#CE9100"));*/
                     incentiveiconStatus.setImageResource(R.drawable.green_icon);
                     //dislike_enable
                 }
 
-                final LinearLayout ll_incentiveTblData=(LinearLayout) view.findViewById(R.id.ll_incentiveTblData); //layout for visibility
+                final LinearLayout ll_incentiveTblData = (LinearLayout) view.findViewById(R.id.ll_incentiveTblData); //layout for visibility
                 ll_incentiveTblData.setTag(Inc_IncSlabId);
 
-                final LinearLayout ll_incentiveTblShow=(LinearLayout) view.findViewById(R.id.ll_incentiveTblShow);
+                final LinearLayout ll_incentiveTblShow = (LinearLayout) view.findViewById(R.id.ll_incentiveTblShow);
 
-                final ImageView img_Openlayout=(ImageView) view.findViewById(R.id.img_Openlayout);
+                final ImageView img_Openlayout = (ImageView) view.findViewById(R.id.img_Openlayout);
 
-                ll_hdr.setOnClickListener(new OnClickListener()
-                {
+                ll_hdr.setOnClickListener(new OnClickListener() {
                     @Override
-                    public void onClick(View arg0)
-                    {
-                        String tag=arg0.getTag().toString().trim().split(Pattern.quote("_"))[0]; //tag= Inc Id
-                        String tagName=arg0.getTag().toString().trim().split(Pattern.quote("_"))[1]; //tag= Inc Id
-                        String strExpandOrNot=arg0.getTag().toString().trim().split(Pattern.quote("_"))[2]; //tag= Inc Id
-                        boolean isExpand=Boolean.parseBoolean(strExpandOrNot);
+                    public void onClick(View arg0) {
+                        String tag = arg0.getTag().toString().trim().split(Pattern.quote("_"))[0]; //tag= Inc Id
+                        String tagName = arg0.getTag().toString().trim().split(Pattern.quote("_"))[1]; //tag= Inc Id
+                        String strExpandOrNot = arg0.getTag().toString().trim().split(Pattern.quote("_"))[2]; //tag= Inc Id
+                        boolean isExpand = Boolean.parseBoolean(strExpandOrNot);
                         //to expand layout
-                        if(isExpand)
-                        {
-                            arg0.setTag(tag+"_"+tagName+"_"+"false");
-                            LinearLayout ll_main=(LinearLayout) ll_incentiveTblDataParent.findViewWithTag(tag);
+                        if (isExpand) {
+                            arg0.setTag(tag + "_" + tagName + "_" + "false");
+                            LinearLayout ll_main = (LinearLayout) ll_incentiveTblDataParent.findViewWithTag(tag);
                             ll_main.setVisibility(View.GONE);
                             img_Openlayout.setImageResource(R.drawable.expand_arrow);
 
 
                         }
                         //to collapse layout
-                        else
-                        {
-                            arg0.setTag(tag+"_"+tagName+"_"+"true");
-                            LinearLayout ll_main=(LinearLayout) ll_incentiveTblDataParent.findViewWithTag(tag);
+                        else {
+                            arg0.setTag(tag + "_" + tagName + "_" + "true");
+                            LinearLayout ll_main = (LinearLayout) ll_incentiveTblDataParent.findViewWithTag(tag);
                             ll_main.setVisibility(View.VISIBLE);
                             img_Openlayout.setImageResource(R.drawable.collapse_arrow);
                         }
                     }
                 });
 
-                createIncentiveTables(list_IncPastDetailColData,Inc_PastDetailColCount,ll_incentiveTblShow,"Acheivement/s",Inc_Type);
+                createIncentiveTables(list_IncPastDetailColData, Inc_PastDetailColCount, ll_incentiveTblShow, "Acheivement/s", Inc_Type);
 
-                createIncentiveTables(list_ColumnNameData,Inc_ColumnCount,ll_incentiveTblShow,"Current Month",Inc_Type);
+                createIncentiveTables(list_ColumnNameData, Inc_ColumnCount, ll_incentiveTblShow, "Current Month", Inc_Type);
 
                 ll_incentiveTblDataParent.addView(view);
             }
 
         }
-        if(flgToShowBankDetails==1)
-        {
+        if (flgToShowBankDetails == 1) {
             createIncentiveBankDetails();
             ll_BankDetails.setVisibility(View.VISIBLE);
         }
-        if(flgToShowBankDetails==0)
-        {
+        if (flgToShowBankDetails == 0) {
             ll_BankDetails.setVisibility(View.GONE);
         }
 
@@ -632,16 +586,15 @@ public class IncentiveActivity extends Activity
     }
 
 
-    public void createIncentiveBankDetails()
-    {
-        for(Map.Entry<String,String> entry:hmapBankDetails.entrySet()) //Hmap(IncID, {Type, Inc Name, ColumnCount})
+    public void createIncentiveBankDetails() {
+        for (Map.Entry<String, String> entry : hmapBankDetails.entrySet()) //Hmap(IncID, {Type, Inc Name, ColumnCount})
         {
 
             View view = inflater.inflate(R.layout.incentive_bank_details, null);
-            TextView BankColumn =(TextView) view.findViewById(R.id.BankColumn);
-            TextView BankValue =(TextView) view.findViewById(R.id.BankValue);
+            TextView BankColumn = (TextView) view.findViewById(R.id.BankColumn);
+            TextView BankValue = (TextView) view.findViewById(R.id.BankValue);
             BankColumn.setText(entry.getKey().toString());
-            BankValue.setText(": "+entry.getValue().toString());
+            BankValue.setText(": " + entry.getValue().toString());
             ll_BankDetails.addView(view);
 
 

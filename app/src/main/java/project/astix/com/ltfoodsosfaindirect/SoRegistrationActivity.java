@@ -87,7 +87,8 @@ import java.util.regex.Pattern;
 
 public class SoRegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     View viewStoreLocDetail;
-
+    public String userDate;
+    public String fDate;
     LinearLayout ll_ImageToSet;
     EditText ET_mobile_credential,ET_firstname,ET_lastname ,ET_contact_no,ed_EmailID;
     public int chkFlgForErrorToCloseApp=0;
@@ -160,7 +161,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
     Calendar calendar ;
     int Year, Month, Day ;
     DatePickerDialog datePickerDialog ;
-    EditText ed_Name,ed_AccNo,ed_ifsc,ed_UPIID,ed_ContactNo;
+    EditText ed_Name,ed_AccNo,ed_ifsc,ed_UPIID,ed_ContactNo,ed_aadhaar_no;
     LinkedHashMap<String, String> hashmapBank;
     View convertView;
     ListView listDominantBrand;
@@ -228,6 +229,17 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
         }
         sharedPrefForRegistration=getSharedPreferences("RegistrationValidation", MODE_PRIVATE);
         profile_image=(ImageView)findViewById(R.id.profile_image);
+
+        Date currDate = new Date();
+        SimpleDateFormat currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+
+        userDate = currDateFormat.format(currDate).toString();
+        if(fDate==null)
+        {
+            Date date1 = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            fDate = sdf.format(date1).toString().trim();
+        }
         getDataFromDataBase();
         LinearLayoutInitialize();
         TextViewInitialize();
@@ -846,7 +858,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
         btn_view.setTag("SelfieCamera");
         LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         btn_view.setLayoutParams(layoutParams1);
-        btn_view.setBackground(getResources().getDrawable(R.drawable.btn_calender_background));;
+        btn_view.setBackground(getResources().getDrawable(R.drawable.btn_calender_background));
         btn_view.setText("Click Selfie");
         // imagButtonTag=tagValue.split(Pattern.quote("^"))[0].toString();
         btn_view.setTextColor(Color.WHITE);
@@ -1457,6 +1469,16 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
             Toast.makeText(getApplicationContext(), "Please Enter Valid Contact No.", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        else if(ed_aadhaar_no.getText().toString().trim().equals("") ||  (ed_aadhaar_no.getText().toString().length()!=12))
+        {
+            //showAlertForEveryOne(getResources().getString(R.string.txtValidateUpdatePhoto));
+            Toast.makeText(getApplicationContext(), "Please Enter Valid Aadhaar No.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //ed_aadhaar_no
+        //AadhaarNumber
         else if((!ed_EmailID.getText().toString().trim().equals("")) && (!mail.matches(emailPattern) ))
         {
 
@@ -1645,6 +1667,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
 
             try
             {
+
                 if(isOnline())
                 {
                     Intent syncIntent = new Intent(SoRegistrationActivity.this, SyncRegistrationDetails.class);
@@ -1660,17 +1683,62 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
                     finish();
                 }
                 else {
-                    Intent i;
+                   /* Intent i;
                     if(FROM.equals("SPLASH")){
-                        i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                         i=new Intent(RegistrationActivity.this,AllButtonActivity.class);
                     }
                     else{
-                        i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                        i=new Intent(RegistrationActivity.this,AllButtonActivity.class);
                     }
 
                     i.putExtra("IntentFrom", 0);
                     startActivity(i);
-                    finish();
+                    finish();*/
+
+                    if(FROM.equals("DAYEND"))
+                    {
+                        Intent trans2storeList = new Intent(SoRegistrationActivity.this, StoreSelection.class);
+                        trans2storeList.putExtra("imei", imei);
+                        trans2storeList.putExtra("userDate", userDate);
+                        trans2storeList.putExtra("pickerDate", fDate);
+
+                        startActivity(trans2storeList);
+                        finish();
+                    }
+                    else if(FROM.equals("AllButtonActivity")){
+                        Intent trans2storeList = new Intent(SoRegistrationActivity.this, AllButtonActivity.class);
+                        trans2storeList.putExtra("imei", imei);
+                        trans2storeList.putExtra("userDate", userDate);
+                        trans2storeList.putExtra("pickerDate", fDate);
+
+                        startActivity(trans2storeList);
+                        finish();
+                    }
+                    else
+                    {
+                        if(!sPrefAttandance.contains("AttandancePref"))
+                        {
+                            callDayStartActivity();
+
+                        }
+                        else{
+                            Intent i=new Intent(SoRegistrationActivity.this,SalesValueTarget.class);
+                            i.putExtra("IntentFrom", 0);
+                            startActivity(i);
+                            finish();
+                          /*  Intent trans2storeList = new Intent(SoRegistrationActivity.this, AllButtonActivity.class);
+                            trans2storeList.putExtra("imei", imei);
+                            trans2storeList.putExtra("userDate", userDate);
+                            trans2storeList.putExtra("pickerDate", fDate);
+
+                            startActivity(trans2storeList);
+                            finish();*/
+                        }
+          /* Intent i=new Intent(DSR_Registration.this,SalesValueTarget.class);
+           i.putExtra("IntentFrom", 0);
+           startActivity(i);
+           finish();*/
+                    }
                 }
 
 
@@ -1849,16 +1917,28 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
         text_Daystart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i;
-                if(FROM.equals("SPLASH")){
-                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+//                Intent i;
+//                if(FROM.equals("SPLASH")){
+//                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+//                }
+//                else{
+//                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+//                }
+//                i.putExtra("IntentFrom", 0);
+//                startActivity(i);
+//                finish();
+
+                if(!sPrefAttandance.contains("AttandancePref"))
+                {
+                    callDayStartActivity();
+
                 }
-                else{
-                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                else {
+                    Intent i = new Intent(SoRegistrationActivity.this, SalesValueTarget.class);
+                    i.putExtra("IntentFrom", 0);
+                    startActivity(i);
+                    finish();
                 }
-                i.putExtra("IntentFrom", 0);
-                startActivity(i);
-                finish();
 
             }
         });
@@ -1935,6 +2015,30 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
 
 
     }
+
+    public void callDayStartActivity()
+    {
+        dbengine.open();
+        int flgPersonTodaysAtt=dbengine.FetchflgPersonTodaysAtt();
+        dbengine.close();
+
+        if(flgPersonTodaysAtt==0)
+        {
+            Intent intent=new Intent(SoRegistrationActivity.this,DayStartActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            Intent intent = new Intent(SoRegistrationActivity.this, AllButtonActivity.class);
+            intent.putExtra("imei", imei);
+            SoRegistrationActivity.this.startActivity(intent);
+            finish();
+        }
+
+
+    }
+
     public void LinearLayoutInitialize()
     {
 
@@ -1982,17 +2086,18 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
             @Override
             public void onClick(View v) {
 
-                Intent i;
                 if(FROM.equals("SPLASH")){
-                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                    Intent in = new Intent(SoRegistrationActivity.this, SoRegistrationActivity.class);
+                    in.putExtra("IntentFrom", "SPLASH");
+                    startActivity(in);
+                    finish();
                 }
                 else{
-                    i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                    Intent i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                    i.putExtra("IntentFrom", 0);
+                    startActivity(i);
+                    finish();
                 }
-
-                i.putExtra("IntentFrom", 0);
-                startActivity(i);
-                finish();
 
             }
         });
@@ -2046,11 +2151,16 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
                     String UPIID_string="NA";
                     String PersonNodeId_string=userNodeIdGlobal;
                     String PersonNodeType_string=userNodetypeGlobal;
-
+String AadhaarNumber_String="NA";
                     NAME_String=ed_Name.getText().toString().trim();
                     ContactNo_string=ed_ContactNo.getText().toString().trim();
                     if(!ed_EmailID.getText().toString().trim().equals("")){
                         EmailID_string=ed_EmailID.getText().toString().trim();
+                    }
+
+
+                    if(!ed_aadhaar_no.getText().toString().trim().equals("")){
+                        AadhaarNumber_String=ed_aadhaar_no.getText().toString().trim();
                     }
 
                     DOB_string=Text_Dob.getText().toString().trim();
@@ -2072,17 +2182,78 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
                     //-------*******************************************************
                     dbengine.open();
                     // dbengine.deletetblRegistrationDetail();
-                    dbengine.inserttblProfilePhotoSignDetail(RecordId,photoClickedDateTime,globalImageName,globalImagePath,SignName_string,SignPath_string,NAME_String,ContactNo_string,DOB_string,AccNO_string,BankID,IFSC_string,UPI_ID_YesNO,UPIID_string,IMEI_string,PersonNodeId_string,PersonNodeType_string,EmailID_string);
+                    dbengine.inserttblProfilePhotoSignDetail(RecordId,photoClickedDateTime,globalImageName,globalImagePath,SignName_string,SignPath_string,NAME_String,ContactNo_string,DOB_string,AccNO_string,BankID,IFSC_string,UPI_ID_YesNO,UPIID_string,IMEI_string,PersonNodeId_string,PersonNodeType_string,EmailID_string,AadhaarNumber_String);
                     //  int count=    dbengine.CheckDataInRegistration();
 
                     dbengine.Delete_tblDsrRegDetails();
 
-                    dbengine.savetblSoRegDetails(PersonNodeId_string,PersonNodeType_string,NAME_String,ContactNo_string,DOB_string,globalImageName,SignName_string,AccNO_string,BankID,IFSC_string,UPI_ID_YesNO,UPIID_string, SelfieNameURL,EmailID_string);
+                    dbengine.savetblSoRegDetails(PersonNodeId_string,PersonNodeType_string,NAME_String,ContactNo_string,DOB_string,globalImageName,SignName_string,AccNO_string,BankID,IFSC_string,UPI_ID_YesNO,UPIID_string, SelfieNameURL,EmailID_string,AadhaarNumber_String);
                     dbengine.close();
 
 
-                    FullSyncDataNow task = new FullSyncDataNow(SoRegistrationActivity.this);
-                    task.execute();
+                    String serverDateForSPref;
+                    dbengine.open();
+                    serverDateForSPref=	dbengine.fnGetServerDate();
+                    dbengine.close();
+                    SharedPreferences sPref;
+
+                    sPref=getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
+
+
+                    SharedPreferences.Editor editor=sPref.edit();
+                    editor.clear();
+                    editor.commit();
+                    sPref.edit().putString("DatePref", serverDateForSPref).commit();
+                   /* FullSyncDataNow task = new FullSyncDataNow(RegistrationActivity.this);
+                    task.execute();*/
+
+                    if(FROM.equals("DAYEND"))
+                    {
+                        Intent trans2storeList = new Intent(SoRegistrationActivity.this, StoreSelection.class);
+                        trans2storeList.putExtra("imei", imei);
+                        trans2storeList.putExtra("userDate", userDate);
+                        trans2storeList.putExtra("pickerDate", fDate);
+
+                        startActivity(trans2storeList);
+                        finish();
+                    }
+                    else if(FROM.equals("AllButtonActivity")){
+                       /* Intent trans2storeList = new Intent(RegistrationActivity.this, AllButtonActivity.class);
+                        trans2storeList.putExtra("imei", imei);
+                        trans2storeList.putExtra("userDate", userDate);
+                        trans2storeList.putExtra("pickerDate", fDate);
+
+                        startActivity(trans2storeList);
+                        finish();*/
+                        FullSyncDataNow task = new FullSyncDataNow(SoRegistrationActivity.this);
+                        task.execute();
+                    }
+                    else
+                    {
+                        if(!sPrefAttandance.contains("AttandancePref"))
+                        {
+                            callDayStartActivity();
+
+                        }
+                        else{
+                            Intent i=new Intent(SoRegistrationActivity.this,SalesValueTarget.class);
+                            i.putExtra("IntentFrom", 0);
+                            startActivity(i);
+                            finish();
+                           /* Intent trans2storeList = new Intent(SoRegistrationActivity.this, AllButtonActivity.class);
+                            trans2storeList.putExtra("imei", imei);
+                            trans2storeList.putExtra("userDate", userDate);
+                            trans2storeList.putExtra("pickerDate", fDate);
+
+                            startActivity(trans2storeList);
+                            finish();*/
+                        }
+          /* Intent i=new Intent(DSR_Registration.this,SalesValueTarget.class);
+           i.putExtra("IntentFrom", 0);
+           startActivity(i);
+           finish();*/
+                    }
+
                     //-------*******************************************************
 
                 }
@@ -2177,6 +2348,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
         ed_UPIID=(EditText) findViewById(R.id.ed_UPIID);
         ed_ContactNo=(EditText) findViewById(R.id.ed_ContactNo);
         ed_EmailID=(EditText) findViewById(R.id.ed_EmailID);
+        ed_aadhaar_no=(EditText) findViewById(R.id.ed_aadhaar_no);
 
 
     }
@@ -2321,10 +2493,27 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
                         {
                             dialog.dismiss();
 
-                            Intent i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                          /*  Intent i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
                             i.putExtra("IntentFrom", 0);
                             startActivity(i);
-                            finish();
+                            finish();*/
+
+                            if(!sPrefAttandance.contains("AttandancePref"))
+                            {
+                                callDayStartActivity();
+
+                            }
+                            else{
+                                Intent i=new Intent(SoRegistrationActivity.this,SalesValueTarget.class);
+                                i.putExtra("IntentFrom", 0);
+                                startActivity(i);
+                                finish();
+                              /*  Intent i=new Intent(SoRegistrationActivity.this,AllButtonActivity.class);
+                                i.putExtra("IntentFrom", 0);
+                                startActivity(i);
+                                finish();*/
+                            }
+
 
                         }
                     });
@@ -2381,6 +2570,8 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
             userNodetypeGlobal=   DSR_All_DATA.split(Pattern.quote("^"))[11];
             SelfieNameURL=   DSR_All_DATA.split(Pattern.quote("^"))[12];
             String EmailIDString=   DSR_All_DATA.split(Pattern.quote("^"))[13];
+            String AadhaarNumber=   DSR_All_DATA.split(Pattern.quote("^"))[14];
+            //
 
             if(!Name.equals("0")){
                 ed_Name.setText(Name);
@@ -2394,6 +2585,11 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
                 ed_EmailID.setText(EmailIDString);
                // ed_EmailID.setEnabled(false);//Gaurav sir told to always enable it
             }
+            if(!(AadhaarNumber.equals("0")) && (!AadhaarNumber.equals("NA"))){
+                ed_aadhaar_no.setText(AadhaarNumber);
+                // ed_EmailID.setEnabled(false);//Gaurav sir told to always enable it
+            }
+            //ed_aadhaar_no
             if(!DOB.equals("0")){
                 Text_Dob.setText(DOB);
                 Text_Dob.setEnabled(false);
@@ -2424,7 +2620,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
 
             }
 
-
+//AadhaarNumber
 
 
 

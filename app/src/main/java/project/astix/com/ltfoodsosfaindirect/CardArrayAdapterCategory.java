@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardArrayAdapterCategory extends BaseAdapter{
+public class CardArrayAdapterCategory extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
@@ -23,8 +23,7 @@ public class CardArrayAdapterCategory extends BaseAdapter{
 	private List<String> listStore = null;
 
 
-
-;
+	;
 	private ArrayList<String> listStoreOrigin;
 
 
@@ -34,34 +33,31 @@ public class CardArrayAdapterCategory extends BaseAdapter{
 	String previousSlctdCtgry;
 	Dialog listDialog;
 	TextView textView;
-	public CardArrayAdapterCategory(Context context, List<String> listStore, Dialog listDialog,String previousSlctdCtgry)
-	{
-		this.context=context;
-		this.previousSlctdCtgry=previousSlctdCtgry;
-		inflater=LayoutInflater.from(context);
-		this.listStore=listStore;
-		this.listDialog=listDialog;
-		this.textView=textView;
+	int flgCompanyCompetitorProducts = 0;
 
-		this.listStoreOrigin=new ArrayList<String>();
-		
+	public CardArrayAdapterCategory(Context context, List<String> listStore, Dialog listDialog, String previousSlctdCtgry, int flgCompanyCompetitorProducts) {
+		this.context = context;
+		this.previousSlctdCtgry = previousSlctdCtgry;
+		inflater = LayoutInflater.from(context);
+		this.listStore = listStore;
+		this.listDialog = listDialog;
+		this.textView = textView;
+		this.flgCompanyCompetitorProducts = flgCompanyCompetitorProducts;
 
-		
-		
+		this.listStoreOrigin = new ArrayList<String>();
+
 
 		this.listStoreOrigin.addAll(this.listStore);
-	
 
 
-		
 	}
 
-	public class ViewHolder
-	{
+	public class ViewHolder {
 		TextView txt_store;
-	
+
 		LinearLayout ll_listChild;
 	}
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -83,56 +79,47 @@ public class CardArrayAdapterCategory extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
-		if(convertView==null)
-		{
-			holder=new ViewHolder();
-			convertView=inflater.inflate(R.layout.custom_listview, null);
-			
-			holder.txt_store=(TextView) convertView.findViewById(R.id.txt_store);
-			
-			
-			holder.ll_listChild=(LinearLayout) convertView.findViewById(R.id.ll_listChild);
+		if (convertView == null) {
+			holder = new ViewHolder();
+			convertView = inflater.inflate(R.layout.custom_listview, null);
+
+			holder.txt_store = (TextView) convertView.findViewById(R.id.txt_store);
 
 
-			communicator=(CategoryCommunicator) context;
+			holder.ll_listChild = (LinearLayout) convertView.findViewById(R.id.ll_listChild);
+
+
+			communicator = (CategoryCommunicator) context;
 			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
-		else
-		{
-			holder=(ViewHolder) convertView.getTag();
-		}
-		
+
 
 		holder.txt_store.setText(listStore.get(position));
-		if(!TextUtils.isEmpty(previousSlctdCtgry))
-		{
-			if(previousSlctdCtgry.equals(listStore.get(position)))
-			{
+		if (!TextUtils.isEmpty(previousSlctdCtgry)) {
+			if (previousSlctdCtgry.equals(listStore.get(position))) {
 				holder.ll_listChild.setBackground(context.getResources().getDrawable(R.drawable.card_state_pressed));
-			}
-			else
-			{
+			} else {
 				holder.ll_listChild.setBackground(context.getResources().getDrawable(R.drawable.card_background_selector));
 			}
-		}
-		else
-		{
+		} else {
 			holder.ll_listChild.setBackground(context.getResources().getDrawable(R.drawable.card_background_selector));
 		}
 
 		holder.ll_listChild.setTag(listStore.get(position));
-		
+
 		holder.ll_listChild.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 
-				communicator.selectedOption(v.getTag().toString().trim(),listDialog);
-				
+				communicator.selectedOption(v.getTag().toString().trim(), listDialog, flgCompanyCompetitorProducts);
+
 			}
 		});
-		
-		
+
+
 		return convertView;
 	}
 

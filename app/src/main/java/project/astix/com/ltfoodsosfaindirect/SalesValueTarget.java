@@ -65,7 +65,8 @@ public class SalesValueTarget extends Activity {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i=new Intent(SalesValueTarget.this,AllButtonActivity.class);
+                    Intent i=new Intent(SalesValueTarget.this,IncentiveActivity.class);
+                    i.putExtra("IntentFrom", "SPLASH");
                     startActivity(i);
                     finish();
 

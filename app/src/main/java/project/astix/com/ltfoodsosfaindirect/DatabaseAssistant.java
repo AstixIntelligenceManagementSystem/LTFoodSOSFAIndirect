@@ -132,8 +132,8 @@ public class DatabaseAssistant
 			exportTable("tblDsrLocationDetails");
 				exportTable("tblFeedbackCompetitr");
 				exportVideoTable("tblContentStoreWise");
-				exportTableAttandance("tblAttandanceDetails");
-
+				//exportTableAttandance("tblAttandanceDetails");
+				exportTable("tblAttandanceDetails");
 
 				exportTable("tblCompetitrPrdctPTRPTC");
 				exportTable("tableStoreSctnImage");

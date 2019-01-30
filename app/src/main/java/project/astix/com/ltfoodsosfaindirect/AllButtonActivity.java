@@ -408,7 +408,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void
+    onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_button);
 
@@ -1872,18 +1873,42 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     CommonInfo.FlgDSRSO=1;
 
                     shardPrefForCoverageArea(0,0);
-                    if(rID.equals("0"))
+                    if(dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType))
                     {
+                        shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
 
+                        shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+
+                        flgDataScopeSharedPref(1);
+                        flgDSRSOSharedPref(1);
+                        Intent intent=new Intent(AllButtonActivity.this,StoreSelection.class);
+                        intent.putExtra("imei", imei);
+                        intent.putExtra("userDate", userDate);
+                        intent.putExtra("pickerDate", fDate);
+                        intent.putExtra("rID", rID);
+                        startActivity(intent);
+                        finish();
                     }
-                    int chkDistributorDataExistsOrNot=0;
+                    else
+                    {
+                        if(dbengine.isDBOpen())
+                        {
+                            dbengine.close();
+                        }
+
+
+                        new GetStoresForDay(AllButtonActivity.this).execute();
+                    }
+
+
+                    /*int chkDistributorDataExistsOrNot=0;
                     int chkDistributorStockTakeMustOrNot=0;
                     if(SelectedDistributorValue.equals("") || SelectedDistributorValue.equals("Select Distributor") || SelectedDistributorValue.equals("No Distributor") )
                     {
                         showAlertForEveryOne("Please select Distributor name first then click on proceed");
                     }
-
-                    else if(!SelectedDistributorValue.equals("") && !SelectedDistributorValue.equals("Select Distributor") && !SelectedDistributorValue.equals("No Distributor") )
+*/
+                    /*else if(!SelectedDistributorValue.equals("") && !SelectedDistributorValue.equals("Select Distributor") && !SelectedDistributorValue.equals("No Distributor") )
                     {
                         String DistributorIDNodeType=hmapDistrbtrList.get(SelectedDistributorValue);
                         chkDistributorDataExistsOrNot=dbengine.countDataIntblDistributorCheckIn(Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[0]),Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[1]),0);
@@ -1931,7 +1956,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
                         }
-                    }
+                    }*/
 
 
                 }
@@ -2111,7 +2136,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             {
                 if(rb_myVisit.isChecked())
                 {
-                    spinner_ddlDistributorWorkingWith.setVisibility(View.VISIBLE);
+                    spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
                     rb_dsrVisit.setChecked(false);
                     rb_jointWorking.setChecked(false);
                     spinner_dsrVisit.setVisibility(View.GONE);
@@ -2121,7 +2146,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,DbrArray);
                     adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_ddlDistributorWorkingWith.setAdapter(adapterCategory);
-                    spinner_ddlDistributorWorkingWith.setVisibility(View.VISIBLE);
+                    spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
 
                     spinner_ddlDistributorWorkingWith.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                     {
@@ -2478,13 +2503,15 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             if(fnAccurateProvider.equals(""))
             {
 
+
+
+                dbengine.open();
+
                 String PersonNodeIDAndPersonNodeType=dbengine.FetchPersonNodeIDAndPersonNodeType(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
 
                 String userName=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0];
                 String ContactNo=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1];
 
-
-                dbengine.open();
                 dbengine.deleteDsrLocationDetails(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
 
                 dbengine.savetblDsrLocationData(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)),PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0],PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1],"NA","NA","NA","NA","NA", "NA", "NA","NA",

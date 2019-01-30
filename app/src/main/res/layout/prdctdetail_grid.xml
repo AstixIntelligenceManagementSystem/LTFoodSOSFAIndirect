@@ -8,7 +8,7 @@
    <project.astix.com.ltfoodsosfaindirect.ExpandableHeightGridView
         android:id="@+id/expandable_gridview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
 
         android:layout_below="@+id/btn_camera"
         android:numColumns="3"

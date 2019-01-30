@@ -38,6 +38,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -982,7 +983,11 @@ public class SyncMaster extends Activity
 
 			    pDialogGetStores.setTitle(getText(R.string.genTermPleaseWaitNew));
 			  //  pDialogGetStores.setMessage("Uploading Data...");
-			    if(StoreSelection.flgChangeRouteOrDayEnd==1)
+			  if(whereTo.contentEquals("DayStart"))
+				  {
+					  pDialogGetStores.setMessage("Submitting Day Start Details ...");
+				  }
+			   else if(StoreSelection.flgChangeRouteOrDayEnd==1)
 				{
 				 pDialogGetStores.setMessage("Ending your day visit ...");
 				}else if(StoreSelection.flgChangeRouteOrDayEnd==2)
@@ -1949,7 +1954,11 @@ public class SyncMaster extends Activity
 				}
 
 			    pDialogGetStores.setTitle(getText(R.string.genTermPleaseWaitNew));
-			  if(StoreSelection.flgChangeRouteOrDayEnd==1)
+			  if(whereTo.contentEquals("DayStart"))
+			  {
+				  pDialogGetStores.setMessage("Submitting your day start details...");
+			  }
+			  else if(StoreSelection.flgChangeRouteOrDayEnd==1)
 			  {
 				  pDialogGetStores.setMessage("Ending your day visit ...");
 			  }
@@ -2338,10 +2347,27 @@ public class SyncMaster extends Activity
 								}
 								else if(whereTo.contentEquals("DayStart"))
 								{
-									Intent intent=new Intent(SyncMaster.this,SoRegistrationActivity.class);
+
+									/*Intent intent=new Intent(SyncMaster.this,SoRegistrationActivity.class);
 									intent.putExtra("IntentFrom", "SPLASH");
 									startActivity(intent);
-									finish();;
+									finish();;*/
+									if(CommonInfo.DayStartClick==2)
+									{
+										CommonInfo.DayStartClick=0;
+										SharedPreferences sPrefAttandance;
+										sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
+										SharedPreferences.Editor editor=sPrefAttandance.edit();
+										editor.clear();
+										editor.commit();
+finishAffinity();
+									}
+									else {
+										Intent i = new Intent(SyncMaster.this, SalesValueTarget.class);
+										i.putExtra("IntentFrom", 0);
+										startActivity(i);
+										finish();
+									}
 
 								}
 			            		else

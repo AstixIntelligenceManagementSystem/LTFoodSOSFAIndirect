@@ -59,10 +59,10 @@
                     android:id="@+id/ll_marketVisit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="12dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -90,18 +90,18 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#BDBDBD" />
 
                 <LinearLayout
                     android:id="@+id/ll_execution"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="12dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -161,10 +161,10 @@
                     android:id="@+id/ll_storeVal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -192,8 +192,8 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#BDBDBD" />
 
 
@@ -201,10 +201,10 @@
                     android:id="@+id/ll_distrbtrStock"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="12dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -264,10 +264,10 @@
                     android:id="@+id/ll_dsrTracker"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="12dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -295,18 +295,18 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#BDBDBD" />
 
                 <LinearLayout
                     android:id="@+id/ll_reports"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -365,10 +365,10 @@
                     android:id="@+id/ll_distrbtnMap"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -397,18 +397,18 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#BDBDBD" />
 
                 <LinearLayout
                     android:id="@+id/DSMProfiles"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -470,10 +470,10 @@
                     android:id="@+id/ll_noVisit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -500,14 +500,15 @@
                     </TextView>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/ll_SoProfile"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -533,22 +534,22 @@
                     </TextView>
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    android:background="#BDBDBD"
-                     />
+                    android:layout_marginBottom="8dp"
+                    android:background="#BDBDBD" />
 
                 <LinearLayout
                     android:id="@+id/ll_DayEnd"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -577,8 +578,8 @@
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#BDBDBD"
                     android:visibility="gone" />
 

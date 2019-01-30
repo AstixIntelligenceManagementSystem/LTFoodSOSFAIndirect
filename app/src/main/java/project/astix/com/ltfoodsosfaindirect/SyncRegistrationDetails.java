@@ -143,9 +143,44 @@ public class SyncRegistrationDetails extends Activity
                     }
 
 
-                    Intent submitStoreIntent;
+                    Intent submitStoreIntent=null;
                     if(FROM.equals("SPLASH")){
-                        submitStoreIntent=new Intent(SyncRegistrationDetails.this,AllButtonActivity.class);
+
+
+
+                        if(DayStartActivity.flgDistributorSelectedFromDropdown==1) {
+
+
+                                Date date1 = new Date();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+                            String fDate = sdf.format(date1).toString().trim();
+
+
+                            String DistributorNodeIDTypeFromAttendanceTable=dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
+
+
+
+
+                           int chkDistributorStockTakeMustOrNot=dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]),Integer.parseInt( DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]));
+
+
+                                if(chkDistributorStockTakeMustOrNot==0){
+                                    submitStoreIntent=new Intent(SyncRegistrationDetails.this,DistributorEntryActivity.class);
+                                    //Intent i=new Intent(DistributorCheckInForStock.this,DistributorEntryActivity.class);
+                                    submitStoreIntent.putExtra("DistributorName",  DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[2]);
+                                    submitStoreIntent.putExtra("imei", CommonInfo.imei);
+                                    submitStoreIntent.putExtra("fDate", fDate);
+                                }
+                                else{
+                                    submitStoreIntent=new Intent(SyncRegistrationDetails.this,AllButtonActivity.class);
+                                }
+
+                        }
+                        else
+                        {
+                            submitStoreIntent=new Intent(SyncRegistrationDetails.this,AllButtonActivity.class);
+                        }
+
                     }
                     else{
                         submitStoreIntent=new Intent(SyncRegistrationDetails.this,AllButtonActivity.class);

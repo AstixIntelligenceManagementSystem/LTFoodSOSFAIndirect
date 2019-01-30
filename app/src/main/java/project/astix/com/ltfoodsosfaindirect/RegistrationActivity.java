@@ -156,7 +156,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     Calendar calendar ;
     int Year, Month, Day ;
     DatePickerDialog datePickerDialog ;
-    EditText ed_Name,ed_AccNo,ed_ifsc,ed_UPIID,ed_ContactNo,ed_EmailID;
+    EditText ed_Name,ed_AccNo,ed_ifsc,ed_UPIID,ed_ContactNo,ed_EmailID,ed_aadhaar_no;
     LinkedHashMap<String, String> hashmapBank;
     View convertView;
     ListView listDominantBrand;
@@ -1372,6 +1372,12 @@ if(Totalfiles.length>0) {
             //showAlertForEveryOne(getResources().getString(R.string.txtValidateUpdatePhoto));
             Toast.makeText(getApplicationContext(), "Please Enter Valid Contact No.", Toast.LENGTH_SHORT).show();
             return false;
+        }//ed_aadhaar_no
+        else if(ed_aadhaar_no.getText().toString().trim().equals("") ||  (ed_aadhaar_no.getText().toString().length()!=12))
+        {
+            //showAlertForEveryOne(getResources().getString(R.string.txtValidateUpdatePhoto));
+            Toast.makeText(getApplicationContext(), "Please Enter Valid Aadhaar No.", Toast.LENGTH_SHORT).show();
+            return false;
         }
         else if(!(ed_EmailID.getText().toString().trim().equals("")) && (!mail.matches(emailPattern)))
         {
@@ -2081,6 +2087,7 @@ if(Totalfiles.length>0) {
         ed_UPIID=(EditText) findViewById(R.id.ed_UPIID);
         ed_ContactNo=(EditText) findViewById(R.id.ed_ContactNo);
         ed_EmailID=(EditText) findViewById(R.id.ed_EmailID);
+        ed_aadhaar_no=(EditText) findViewById(R.id.ed_aadhaar_no);
 
     }
     public void  RadioButtonInitialization(){
@@ -2286,7 +2293,7 @@ if(Totalfiles.length>0) {
         String    lastWorkDate=   DSR_All_DATA.split(Pattern.quote("^"))[13];
             String   distributrName=   DSR_All_DATA.split(Pattern.quote("^"))[14];
             String EmailIDString=   DSR_All_DATA.split(Pattern.quote("^"))[15];
-
+String AadhaarString=   DSR_All_DATA.split(Pattern.quote("^"))[16];
             if(!Name.equals("0")){
                 ed_Name.setText(Name);
                 ed_Name.setEnabled(false);
@@ -2300,6 +2307,11 @@ if(Totalfiles.length>0) {
                 ed_EmailID.setText(EmailIDString);
                 ed_EmailID.setEnabled(false);
             }
+            if(!(AadhaarString.equals("0")) && (!AadhaarString.equals("NA"))){
+                ed_aadhaar_no.setText(AadhaarString);
+                ed_aadhaar_no.setEnabled(false);
+            }
+            //AadhaarString
             ed_EmailID.setEnabled(false);
             if(!DOB.equals("0")){
                 Text_Dob.setText(DOB);

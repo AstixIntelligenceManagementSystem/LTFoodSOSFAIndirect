@@ -3677,7 +3677,7 @@ public void DayEndWithoutalert()
 				int ApplicationID = dbengine.Application_TypeID;
 				//newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
-				dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
+
 				for(int mm = 1; mm<6; mm++)
 				{
 					if(mm==1)

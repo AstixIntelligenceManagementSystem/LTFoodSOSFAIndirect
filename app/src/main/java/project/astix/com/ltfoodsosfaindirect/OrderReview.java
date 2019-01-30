@@ -1260,37 +1260,6 @@ public void loadPurchaseProductDefault()
 					//}
 				   else
 				   {
-					  /* appLocationService=new AppLocationService();
-
-					   pm = (PowerManager) getSystemService(POWER_SERVICE);
-					   wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-							   | PowerManager.ACQUIRE_CAUSES_WAKEUP
-							   | PowerManager.ON_AFTER_RELEASE, "INFO");
-					   wl.acquire();
-
-
-					   pDialog2STANDBY=ProgressDialog.show(OrderReview.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
-					   pDialog2STANDBY.setIndeterminate(true);
-
-					   pDialog2STANDBY.setCancelable(false);
-					   pDialog2STANDBY.show();
-
-					   if(isGooglePlayServicesAvailable()) {
-						   createLocationRequest();
-
-						   mGoogleApiClient = new GoogleApiClient.Builder(OrderReview.this)
-								   .addApi(LocationServices.API)
-								   .addConnectionCallbacks(OrderReview.this)
-								   .addOnConnectionFailedListener(OrderReview.this)
-								   .build();
-						   mGoogleApiClient.connect();
-					   }
-					   //startService(new Intent(DynamicActivity.this, AppLocationService.class));
-					   startService(new Intent(OrderReview.this, AppLocationService.class));
-					   Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
-					   Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
-					   countDownTimer2 = new CoundownClass2(startTime, interval);
-					   countDownTimer2.start();*/
 				   }
 				   
 				  
@@ -1415,75 +1384,6 @@ public void loadPurchaseProductDefault()
 					}
 				   else
 				   {
-
-					   /*dbengine.close();
-						// TODO Auto-generated method stub
-						boolean isGPSok = false;
-						isGPSok = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-						
-						 if(!isGPSok)
-				          {
-							showSettingsAlert();
-							isGPSok = false;
-							 return;
-						  }
-						
-						
-				       isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-				       isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-					   location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-						
-					   pm = (PowerManager) getSystemService(POWER_SERVICE);
-					   wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-				                | PowerManager.ACQUIRE_CAUSES_WAKEUP
-				                | PowerManager.ON_AFTER_RELEASE, "INFO");
-				        wl.acquire();
-				        
-				       pDialog2STANDBY=ProgressDialog.show(ProductList.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
-					   pDialog2STANDBY.setIndeterminate(true);
-						
-						pDialog2STANDBY.setCancelable(false);
-						pDialog2STANDBY.show();
-						
-						checkSTANDBYAysncTask chkSTANDBY = new checkSTANDBYAysncTask(
-								new standBYtask().execute()); // Thread keeping 1 minute time
-												// watch
-						
-						(new Thread(chkSTANDBY)).start();
-				      
-						
-					*/
-					  /* appLocationService=new AppLocationService();
-						 
-						*//* pm = (PowerManager) getSystemService(POWER_SERVICE);
-						   wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-					                | PowerManager.ACQUIRE_CAUSES_WAKEUP
-					                | PowerManager.ON_AFTER_RELEASE, "INFO");
-					        wl.acquire();*//*
-					       
-					        
-					        pDialog2STANDBY=ProgressDialog.show(OrderReview.this,getText(R.string.genTermPleaseWaitNew) ,getText(R.string.genTermRetrivingLocation), true);
-							   pDialog2STANDBY.setIndeterminate(true);
-								
-								pDialog2STANDBY.setCancelable(false);
-								pDialog2STANDBY.show();
-								
-						if(isGooglePlayServicesAvailable()) {
-							 createLocationRequest();
-							 
-							 mGoogleApiClient = new GoogleApiClient.Builder(OrderReview.this)
-						     .addApi(LocationServices.API)
-						     .addConnectionCallbacks(OrderReview.this)
-						     .addOnConnectionFailedListener(OrderReview.this)
-						     .build();
-							 mGoogleApiClient.connect();
-					      }
-						//startService(new Intent(DynamicActivity.this, AppLocationService.class));
-						startService(new Intent(OrderReview.this, AppLocationService.class));
-						Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
-						Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
-						 countDownTimer2 = new CoundownClass2(startTime, interval);
-				         countDownTimer2.start();*/
 
 					   LocationRetreivingGlobal llaaa=new LocationRetreivingGlobal();
 					   llaaa.locationRetrievingAndDistanceCalculating(OrderReview.this,false,50);

@@ -2083,53 +2083,7 @@ public class Delivery_Details_Activity extends Activity implements  DatePickerDi
 		RequiredDeliveryDate.setText(dayOfMonth + "-" + mon + "-" + year);
 		
 	}
-	@Override
-	public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute,
-			int second) {
-		 String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
-	        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-	        String secondString = second < 10 ? "0"+second : ""+second;
-	        String time = " "+hourString+":"+minuteString;
-	        String _24HourTime = "22:15";
-	        String _12HourFormatetime="";
-	        _24HourTime=time;
-	           SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-	           SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a",Locale.ENGLISH);
-	           try {
-				java.util.Date _24HourDt = _24HourSDF.parse(_24HourTime);
-				   System.out.println("SOMU24"+_24HourDt);
-				   System.out.println("SOMU12"+_12HourSDF.format(_24HourDt));
-				   _12HourFormatetime=_12HourSDF.format(_24HourDt);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	           
-	           
-	        if(DeliveryTimeImg_From_boolean){
-	        	 Delivery_Time_From.setText(_12HourFormatetime);
-	        	 DeliveryTimeImg_From_boolean=false;
-	        	 
-	        }
-	        if(DeliveryTimeImg_To_boolean){
-	        	Delivery_Time_To.setText(_12HourFormatetime);
-	        	 DeliveryTimeImg_To_boolean=false;
-	        	 
-	        }
-	        if(DoNotDeliverTimeImg_From_boolean){
-	        	DoNotDeliverTime_From.setText(_12HourFormatetime);
-	        	DoNotDeliverTimeImg_From_boolean=false;
-	        	 
-	        }
-	        if(DoNotDeliverTimeImg_To_boolean){
-	        	DoNotDeliverTime_To.setText(_12HourFormatetime);
-	        	DoNotDeliverTimeImg_To_boolean=false;
-	        	 
-	        }
-	       
-	       
-		
-	}
+
 	
 	public boolean validateDelivery_Location_Spinner()
 	{
@@ -2177,4 +2131,48 @@ alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
 alertDialog.show();
 	}
 
+
+	@Override
+	public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+		String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
+		String minuteString = minute < 10 ? "0"+minute : ""+minute;
+		String secondString = second < 10 ? "0"+second : ""+second;
+		String time = " "+hourString+":"+minuteString;
+		String _24HourTime = "22:15";
+		String _12HourFormatetime="";
+		_24HourTime=time;
+		SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+		SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a",Locale.ENGLISH);
+		try {
+			java.util.Date _24HourDt = _24HourSDF.parse(_24HourTime);
+			System.out.println("SOMU24"+_24HourDt);
+			System.out.println("SOMU12"+_12HourSDF.format(_24HourDt));
+			_12HourFormatetime=_12HourSDF.format(_24HourDt);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		if(DeliveryTimeImg_From_boolean){
+			Delivery_Time_From.setText(_12HourFormatetime);
+			DeliveryTimeImg_From_boolean=false;
+
+		}
+		if(DeliveryTimeImg_To_boolean){
+			Delivery_Time_To.setText(_12HourFormatetime);
+			DeliveryTimeImg_To_boolean=false;
+
+		}
+		if(DoNotDeliverTimeImg_From_boolean){
+			DoNotDeliverTime_From.setText(_12HourFormatetime);
+			DoNotDeliverTimeImg_From_boolean=false;
+
+		}
+		if(DoNotDeliverTimeImg_To_boolean){
+			DoNotDeliverTime_To.setText(_12HourFormatetime);
+			DoNotDeliverTimeImg_To_boolean=false;
+
+		}
+	}
 }

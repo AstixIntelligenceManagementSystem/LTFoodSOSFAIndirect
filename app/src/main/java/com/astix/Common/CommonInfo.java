@@ -49,8 +49,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 91;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.18";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 97;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.19";   // put this field value based on value in table on the server
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
 	public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsLive/DefaultSOSFA.aspx";
@@ -100,8 +100,6 @@ public class CommonInfo
 	public static int flgNewStoreORStoreValidation=0;
 	public static int DayStartClick=0;
 	 public static String activityFrom="AllButtonActivity";
-
-
 
 
 
@@ -211,8 +209,8 @@ public class CommonInfo
 
 
 
-
 /*
+
 
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
@@ -245,8 +243,8 @@ public class CommonInfo
 
 	public static int AnyVisit = 0;
 
-	public static int DATABASE_VERSIONID = 66;      // put this field value based on value in table on the server
-	public static String AppVersionID = "1.11";   // put this field value based on value in table on the server
+	public static int DATABASE_VERSIONID = 68;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.12";   // put this field value based on value in table on the server
 
 	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
@@ -299,9 +297,9 @@ public class CommonInfo
 	 public static String activityFrom="AllButtonActivity";
 	public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_rest/Mobile/frmDSMWiseReportCard.aspx?imei=";
 
-
-
 */
+
+
 
 
 
@@ -310,97 +308,94 @@ public class CommonInfo
 	// Its for Development  Path on 194 server for SFA
 
 
-
 /*
+	public static Uri uriSavedImage_savedInstance = null;
+
+	public static String userDate = "0";
+	public static String pickerDate = "0";
+
+	public static String imei = "";
+	public static String SalesQuoteId = "BLANK";
+	public static String quatationFlag = "";
+	public static String fileContent = "";
+	public static File imageF_savedInstance = null;
+	public static String imageName_savedInstance = null;
+	public static String clickedTagPhoto_savedInstance = null;
+	public static String prcID = "NULL";
+	public static String newQuottionID = "NULL";
+	public static String globalValueOfPaymentStage = "0" + "_" + "0" + "_" + "0";
+
+	public static String WebManageDSRUrl = "http://103.20.212.194/LTACE_Dev/pda/frmIMEImanagement.aspx";
+	public static String WebPageUrl = "http://103.20.212.194/ltace_dev/Mobile/frmRouteTracking.aspx";
+
+	public static String WebPageUrlDataReport = "http://103.20.212.194/ltace_dev/Mobile/fnSalesmanWiseSummaryRpt.aspx";
+
+	public static String WebServicePath = "http://103.20.212.194/WebServiceAndroidLTFoodsDevelopment/Service.asmx";
+	public static String VersionDownloadPath = "http://103.20.212.194/downloads/";
+	//public static String VersionDownloadAPKName="LTACESOSFADev.apk";
+	public static String VersionDownloadAPKName = "GTSOFieldOperationsDev.apk";
+	//public static String VersionDownloadAPKName="LTACESOSFADev.apk"; // this name change according to varun sir mail
 
 
-       public static Uri uriSavedImage_savedInstance=null;
+	public static String DATABASE_NAME = "DbSFAApp";
+	public static String DATABASE_NAME_SO = "DbSOSFAApp";
 
-	    public static String userDate="0";
-	    public static String pickerDate="0";
+	public static int AnyVisit = 0;
 
-	    public static String imei="";
-	    public static String SalesQuoteId="BLANK";
-	    public static String quatationFlag="";
-	    public static String fileContent="";
-	    public static File imageF_savedInstance=null;
-	    public static String imageName_savedInstance=null;
-	    public static String clickedTagPhoto_savedInstance=null;
-	    public static String prcID="NULL";
-	    public static String newQuottionID="NULL";
-	    public static String globalValueOfPaymentStage="0"+"_"+"0"+"_"+"0";
+	public static int DATABASE_VERSIONID = 25;      // put this field value based on value in table on the server
+	public static String AppVersionID = "1.2";   // put this field value based on value in table on the server
+	public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
 
-        public static String WebManageDSRUrl="http://103.20.212.194/LTACE_Dev/pda/frmIMEImanagement.aspx";
-	    public static String WebPageUrl="http://103.20.212.194/ltace_dev/Mobile/frmRouteTracking.aspx";
+	public static String OrderSyncPath = "http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSOSFA.aspx";
 
-	    public static String WebPageUrlDataReport="http://103.20.212.194/ltace_dev/Mobile/fnSalesmanWiseSummaryRpt.aspx";
+	public static String OrderSyncPathDistributorMap = "http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSODistributorMapping.aspx";
+	public static String ImageSyncPath = "http://103.20.212.194/ReadXML_LTFoodsImagesDevelopment/Default.aspx";
 
-	    public static String WebServicePath="http://103.20.212.194/WebServiceAndroidLTFoodsDevelopment/Service.asmx";
-	    public static String VersionDownloadPath="http://103.20.212.194/downloads/";
-		//public static String VersionDownloadAPKName="LTACESOSFADev.apk";
-		public static String VersionDownloadAPKName="GTSOFieldOperationsDev.apk";
-	   //public static String VersionDownloadAPKName="LTACESOSFADev.apk"; // this name change according to varun sir mail
+	public static String OrderTextSyncPath = "http://103.20.212.194/ReadTxtFileForLTFoodsDevelopment/default.aspx";
 
+	public static String InvoiceSyncPath = "http://103.20.212.194/ReadXML_LTFoodInvoiceDevelopment/Default.aspx";
 
-		public static String DATABASE_NAME = "DbSFAApp";
-	    public static String DATABASE_NAME_SO = "DbSOSFAApp";
+	public static String DistributorSyncPath = "http://103.20.212.194/ReadXML_LTFoodsSFADistributionDevelopment/Default.aspx";
 
-		public static int AnyVisit = 0;
+	public static String URLImageLinkToViewStoreOverWebProtal = "http://103.20.212.194/ltace/Reports/frmPDAImgsDev.aspx";
 
-		public static int DATABASE_VERSIONID = 25;      // put this field value based on value in table on the server
-		public static String AppVersionID = "1.2";   // put this field value based on value in table on the server
-		public static int Application_TypeID = 4; //1=Parag Store Mapping,2=Parag SFA Indirect,3=Parag SFA Direct
+	public static String OrderSyncPathSO = "http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSO.aspx";
 
-		public static String OrderSyncPath="http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSOSFA.aspx";
+	public static String OrderXMLFolder = "LTACESFAXml";
+	public static String ImagesFolder = "LTACESFAImages";
+	public static String ImagesFolderServer = "LTACESFAImagesServer";
+	public static String VideoFolder = "VideoLTFOODS";
+	public static String TextFileFolder = "LTACETextFile";
+	public static String InvoiceXMLFolder = "LTACEInvoiceXml";
+	public static String FinalLatLngJsonFile = "LTACESFAFinalLatLngJson";
 
-	    public static String OrderSyncPathDistributorMap="http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSODistributorMapping.aspx";
-		public static String ImageSyncPath="http://103.20.212.194/ReadXML_LTFoodsImagesDevelopment/Default.aspx";
+	public static String DistStockXMLFolder = "LTACEDistStockXml";
 
-		public static String OrderTextSyncPath="http://103.20.212.194/ReadTxtFileForLTFoodsDevelopment/default.aspx";
+	public static String AppLatLngJsonFile = "LTACESFALatLngJson";
 
-		public static String InvoiceSyncPath="http://103.20.212.194/ReadXML_LTFoodInvoiceDevelopment/Default.aspx";
+	public static int DistanceRange = 3000;
+	public static String SalesPersonTodaysTargetMsg = "";
+	public static String CompetitorImagesFolder = ".CompetitorSFAImages";
+	public static final String Preference = "LTFoodsPrefrence";
+	public static final String AttandancePreference = "LTFoodsAttandancePreference";
+	public static final String IncentivePreference = "LTFoodsIncentivePreference";
+	public static final String DistributorXMLFolder = "LTFoodsDistributorXMLFolder";
+	public static int flgAllRoutesData = 1;
+	public static int flgLTFoodsSOOnlineOffLine = 0;
+	public static int CoverageAreaNodeID = 0;
+	public static int CoverageAreaNodeType = 0;
+	public static int FlgDSRSO = 0;
 
-	    public static String DistributorSyncPath="http://103.20.212.194/ReadXML_LTFoodsSFADistributionDevelopment/Default.aspx";
+	public static int SalesmanNodeId = 0;
+	public static int SalesmanNodeType = 0;
+	public static int flgDataScope = 0;
+	public static int flgNewStoreORStoreValidation = 0;
+	public static int DayStartClick = 0;
+	public static String WebPageUrlDSMWiseReport = "http://103.20.212.194/ltace_dev/Mobile/frmDSMWiseReportCard.aspx?imei=";
+	public static String activityFrom = "AllButtonActivity";
 
-	    public static String URLImageLinkToViewStoreOverWebProtal="http://103.20.212.194/ltace/Reports/frmPDAImgsDev.aspx";
-
-	    public static String OrderSyncPathSO="http://103.20.212.194/ReadXML_LTFoodsDevelopment/DefaultSO.aspx";
-
-		public static String OrderXMLFolder="LTACESFAXml";
-		public static String ImagesFolder="LTACESFAImages";
-	    public static String ImagesFolderServer="LTACESFAImagesServer";
-	    public static String VideoFolder="VideoLTFOODS";
-	    public static String TextFileFolder="LTACETextFile";
-	    public static String InvoiceXMLFolder="LTACEInvoiceXml";
-		public static String FinalLatLngJsonFile="LTACESFAFinalLatLngJson";
-
-        public static String DistStockXMLFolder="LTACEDistStockXml";
-
-		public static String AppLatLngJsonFile="LTACESFALatLngJson";
-
-		public static int DistanceRange=3000;
-	    public static String SalesPersonTodaysTargetMsg="";
-	public static String CompetitorImagesFolder=".CompetitorSFAImages";
-	    public static final String Preference="LTFoodsPrefrence";
-    	public static final String AttandancePreference="LTFoodsAttandancePreference";
-	    public static final String IncentivePreference="LTFoodsIncentivePreference";
-	    public static final String DistributorXMLFolder="LTFoodsDistributorXMLFolder";
-		public static int flgAllRoutesData=1;
-    	public static int flgLTFoodsSOOnlineOffLine=0;
-	    public static int CoverageAreaNodeID=0;
-	    public static int CoverageAreaNodeType=0;
-	    public static int FlgDSRSO=0;
-
-	    public static int SalesmanNodeId=0;
-	    public static int SalesmanNodeType=0;
-	    public static int flgDataScope=0;
-        public static int flgNewStoreORStoreValidation=0;
-	    public static int DayStartClick=0;
-		public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_dev/Mobile/frmDSMWiseReportCard.aspx?imei=";
- public static String activityFrom="AllButtonActivity";
 
 */
-
 
 
 	// Its for Test Release  Path on 194 server for SFA
@@ -408,8 +403,8 @@ public class CommonInfo
 
 
 
-/*
 
+/*
 	public static Uri uriSavedImage_savedInstance=null;
 
 	public static String userDate="0";
@@ -495,7 +490,7 @@ public class CommonInfo
 	public static int DayStartClick=0;
 	public static String WebPageUrlDSMWiseReport="http://103.20.212.194/ltace_testrelease/Mobile/frmDSMWiseReportCard.aspx?imei=";
 
-
 */
+
 
 }

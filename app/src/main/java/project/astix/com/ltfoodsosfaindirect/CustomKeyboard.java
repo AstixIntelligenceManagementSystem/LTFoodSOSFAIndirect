@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-class CustomKeyboard {
+public class CustomKeyboard {
 
       private KeyboardView mKeyboardView,mKeyboardViewNum,mKeyboardViewNumWithoutDecimal;
       private Activity mHostActivity;

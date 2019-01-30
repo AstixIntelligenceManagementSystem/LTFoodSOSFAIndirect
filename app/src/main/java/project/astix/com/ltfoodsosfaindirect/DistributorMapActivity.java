@@ -2838,7 +2838,6 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
                     syncIntent.putExtra("xmlPathForSync", Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + newfullFileName + ".xml");
                     syncIntent.putExtra("OrigZipFileName", newfullFileName);
                     syncIntent.putExtra("whereTo", "Regular");
-                    syncIntent.putExtra("whereTo", "Regular");
                     startActivity(syncIntent);
                     finish();
                 }

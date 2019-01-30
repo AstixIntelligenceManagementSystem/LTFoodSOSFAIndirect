@@ -1052,7 +1052,7 @@ private void downloadapk()
             	 dbengine.open();
 		      serviceException=false;
 		         dbengine.maintainPDADate();
-		         dbengine.dropRoutesTBL();
+		         dbengine.reTruncateRouteTbl();
 		         dbengine.reCreateDB();
 		         
 		         dbengine.close();

@@ -927,6 +927,7 @@ public class SyncMstrCheckIN extends Activity
                     else
                     {
 */
+
                     Intent submitStoreIntent = new Intent(SyncMstrCheckIN.this, AllButtonActivity.class);
                     startActivity(submitStoreIntent);
                     finish();

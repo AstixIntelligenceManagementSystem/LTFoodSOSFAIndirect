@@ -105,7 +105,7 @@ public class StoreAndSKUWiseSummaryReport_ByTabForAll extends Activity
 
             // Screen handling while hiding ActionBar icon.
             actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setIcon(R.drawable.ic_back);
+            actionBar.setIcon(R.drawable.back_button_image);
 
             // Screen handling while hiding Actionbar title.
             actionBar.setTitle(" Store & SKU Summary");

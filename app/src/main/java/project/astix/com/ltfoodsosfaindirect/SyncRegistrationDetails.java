@@ -156,18 +156,25 @@ public class SyncRegistrationDetails extends Activity
                             String fDate = sdf.format(date1).toString().trim();
 
 
-                            String DistributorNodeIDTypeFromAttendanceTable=dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
+                            String DistributorNodeIDType="0^0^0";
+                            if(DayStartActivity.flgDistributorSelectedFromDropdown==1)
+                            {
+                                DistributorNodeIDType = DayStartActivity.DistributorId_GlobalDistributorNodeType_Global;
+                            }
+                            else
+                            {
+                                DistributorNodeIDType = dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
+                            }
 
 
+                            int chkDistributorStockTakeMustOrNot = dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDType.split(Pattern.quote("^"))[0]), Integer.parseInt(DistributorNodeIDType.split(Pattern.quote("^"))[1]));
 
-
-                           int chkDistributorStockTakeMustOrNot=dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]),Integer.parseInt( DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]));
 
 
                                 if(chkDistributorStockTakeMustOrNot==0){
                                     submitStoreIntent=new Intent(SyncRegistrationDetails.this,DistributorEntryActivity.class);
                                     //Intent i=new Intent(DistributorCheckInForStock.this,DistributorEntryActivity.class);
-                                    submitStoreIntent.putExtra("DistributorName",  DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[2]);
+                                    submitStoreIntent.putExtra("DistributorName",  DistributorNodeIDType.split(Pattern.quote("^"))[2]);
                                     submitStoreIntent.putExtra("imei", CommonInfo.imei);
                                     submitStoreIntent.putExtra("fDate", fDate);
                                 }

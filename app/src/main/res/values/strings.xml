@@ -2,7 +2,7 @@
 
     <string name="app_name">GTSOFieldOperations</string>
      <!--<string name="app_name">GTSOFieldOperations Staging</string>-->
-  <!-- <string name="app_name">GTSOFieldOperations Test</string>-->
+   <!--<string name="app_name">GTSOFieldOperations Test</string>-->
   <!--  <string name="app_name">GTSOFieldOperations Test Release</string>-->
     <!--<string name="app_name">GTSOFieldOperations Dev</string>-->
     <string name="SubmittingExeImgMsg">Submitting Execution Image…</string>
@@ -461,4 +461,6 @@
     <string name="txtRetry">Retry</string>
 
     <string name="syncDataAlertOKMsg"><small>Data submission was successful</small></string>
+    <string name="section_2_product_name">Section 2 \t\t\t\t Product Name</string>
+    <string name="section_1_product_name">Section 1 \t\t\t\t Product Name</string>
 </resources>

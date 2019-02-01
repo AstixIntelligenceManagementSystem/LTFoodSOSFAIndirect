@@ -7,7 +7,7 @@
 
    <project.astix.com.ltfoodsosfaindirect.ExpandableHeightGridView
         android:id="@+id/expandable_gridview"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
 
         android:layout_below="@+id/btn_camera"
@@ -16,7 +16,7 @@
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
         android:gravity="center"
-        android:stretchMode="columnWidth"/>
+       android:stretchMode="columnWidth"/>
 
 
 

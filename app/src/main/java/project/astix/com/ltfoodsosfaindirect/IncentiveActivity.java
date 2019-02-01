@@ -163,19 +163,26 @@ public class IncentiveActivity extends Activity {
                 imei = CommonInfo.imei;
             }
 
+            String DistributorNodeIDType="0^0^0";
+            if(DayStartActivity.flgDistributorSelectedFromDropdown==1)
+            {
+                DistributorNodeIDType = DayStartActivity.DistributorId_GlobalDistributorNodeType_Global;
+            }
+            else
+            {
+                DistributorNodeIDType = dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
+            }
 
-            DayStartActivity.flgDistributorSelectedFromDropdown = 1;
-            String DistributorNodeIDTypeFromAttendanceTable = dbengine.fetch_DistributorNodeIDTypeFromAttendanceTable();
 
-            int chkDistributorStockTakeMustOrNot = dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]), Integer.parseInt(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]));
+            int chkDistributorStockTakeMustOrNot = dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorNodeIDType.split(Pattern.quote("^"))[0]), Integer.parseInt(DistributorNodeIDType.split(Pattern.quote("^"))[1]));
 
 
             if (chkDistributorStockTakeMustOrNot == 0
-                    && Integer.valueOf(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[0]) != 0
-                    && Integer.valueOf(DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[1]) != 0) {
+                    && Integer.valueOf(DistributorNodeIDType.split(Pattern.quote("^"))[0]) != 0
+                    && Integer.valueOf(DistributorNodeIDType.split(Pattern.quote("^"))[1]) != 0) {
 
                 Intent i = new Intent(IncentiveActivity.this, DistributorEntryActivity.class);
-                i.putExtra("DistributorName", DistributorNodeIDTypeFromAttendanceTable.split(Pattern.quote("^"))[2]);
+                i.putExtra("DistributorName", DistributorNodeIDType.split(Pattern.quote("^"))[2]);
                 i.putExtra("imei", CommonInfo.imei);
                 i.putExtra("fDate", fDate);
                 i.putExtra("IntentFrom", 0);

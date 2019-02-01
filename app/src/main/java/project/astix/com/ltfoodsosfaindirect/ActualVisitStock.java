@@ -259,7 +259,7 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
                     passIntentToProductOrderFilter();
                 } else {
                     //showAlertForEveryOne("It's compulsory to fill atleast one stock as you have mentioned Ltfoods Stock available.");
-                    showAlertForEveryOne("It's compulsory to fill  stock as you have mentioned Ltfoods Stock available.");
+                    showAlertForEveryOne("It's compulsory to fill stocks of the Section 1.");
                 }
             }
         });
@@ -311,7 +311,7 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
         }
 
 
-        if (hmapFetchPDASavedDataForFilteredData != null && hmapFetchPDASavedDataForFilteredData.size() > 0) {
+      /*  if (hmapFetchPDASavedDataForFilteredData != null && hmapFetchPDASavedDataForFilteredData.size() > 0) {
             for (Map.Entry<String, ActualVisitProductInfo> entry : hmapFetchPDASavedDataForFilteredData.entrySet()) {
                 ActualVisitProductInfo visitProductInfo = entry.getValue();
                 if (!TextUtils.isEmpty(visitProductInfo.getStock())) {
@@ -321,8 +321,7 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
                     }
                 }
             }
-        }
-
+        }*/
         return stockFilledPrprly;
     }
 

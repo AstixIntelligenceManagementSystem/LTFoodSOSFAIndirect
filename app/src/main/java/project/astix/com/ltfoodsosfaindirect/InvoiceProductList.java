@@ -476,7 +476,7 @@ public class InvoiceProductList  extends Activity implements OnItemSelectedListe
 				//final LinearLayout row = (TableRow)inflater.inflate(R.layout.invoice_table_row, tl2 , false);
 				final   View row=getLayoutInflater().inflate(R.layout.row_invoice_product,null);
 				row.setTag(CATIDFomProduct[current]);
-
+				//row.setTag(ProductID[current]);
 				row.setVisibility(View.VISIBLE);
 				//TextView tv1 = (TextView)row.findViewById(R.id.tvProd);
 				TextView tv1 = (TextView)row.findViewById(R.id.tv_product);

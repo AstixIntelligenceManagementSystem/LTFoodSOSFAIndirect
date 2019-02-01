@@ -117,6 +117,7 @@ public class SalesValueTarget extends Activity {
             if(intentFrom==0)
             {
                 Intent i=new Intent(SalesValueTarget.this,IncentiveActivity.class);
+                i.putExtra("IntentFrom", "SPLASH");
                 startActivity(i);
                 finish();
             }

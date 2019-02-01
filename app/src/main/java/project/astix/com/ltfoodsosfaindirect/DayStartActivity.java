@@ -149,6 +149,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
 
     String[] listLocationWrkng={"Select Working Location","At Distributor Location","Market/Other Location"};
     String DistributorName_Global="Select Distributor";
+    public static String  DistributorId_GlobalDistributorNodeType_Global="0^0^0";
     String DistributorId_Global="0";
     String DistributorNodeType_Global="0";
     private Button btn_refresh;
@@ -799,6 +800,7 @@ public class DayStartActivity extends BaseActivity implements InterfaceClass,OnM
                     String   Distribtor_Detail=dbengine.fetchDistributorIdByName(text);
                     DistributorId_Global=Distribtor_Detail.split(Pattern.quote("^"))[0];
                     DistributorNodeType_Global=Distribtor_Detail.split(Pattern.quote("^"))[1];
+                    DistributorId_GlobalDistributorNodeType_Global=DistributorId_Global+"^"+DistributorNodeType_Global+"^"+DistributorName_Global;
                 }
             }
 

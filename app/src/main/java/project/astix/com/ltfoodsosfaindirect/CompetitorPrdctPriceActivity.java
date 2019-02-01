@@ -328,10 +328,11 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
                             View view_PrdctGrid= inflater1.inflate(R.layout.prdctdetail_grid, null);
                             ExpandableHeightGridView expandableHeightGridView= (ExpandableHeightGridView) view_PrdctGrid.findViewById(R.id.expandable_gridview);
                             expandableHeightGridView.setExpanded(true);
+
                             PTRProductAdapter  adapterImage = new PTRProductAdapter(this,listPrdct,hmapPrdctImgPath,hmapCmpttrPrdctPTR);
 
                             expandableHeightGridView.setAdapter(adapterImage);
-
+                           // expandableHeightGridView.measure(100,100);
                             ll_prdctDetail.addView(view_PrdctGrid);
                         }
 

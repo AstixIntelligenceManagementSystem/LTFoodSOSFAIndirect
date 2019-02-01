@@ -113,7 +113,7 @@ public class SplashScreen extends AppCompatActivity {
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();
 
-        //  imei="867290026163310";  // Live user
+        //  imei="352672074232463";  // Live user
 
         // imei="356417061840118"; // Shivani Kesarsa
         // imei="353572080913610"; // stagging
@@ -126,7 +126,7 @@ public class SplashScreen extends AppCompatActivity {
 
       //  imei = "867290026163310";//for development
 
-      //  imei="352801088236109";
+       // imei="352801088236109";
 
         CommonInfo.imei = imei;
         sPref = getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);

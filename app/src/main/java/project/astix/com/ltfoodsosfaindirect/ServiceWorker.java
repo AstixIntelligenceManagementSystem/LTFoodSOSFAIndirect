@@ -12469,9 +12469,9 @@ public class ServiceWorker
 					String Lvl="0";
 					String StockQty="0";
 
-					String AvgRate="NA";
-					String OrderQty="NA";
-					String FreeQty="NA";
+					String AvgRate="0";
+					String OrderQty="0";
+					String FreeQty="0";
 
 					if (tableRow.hasProperty("Store"))
 					{
@@ -13569,9 +13569,9 @@ public class ServiceWorker
 					String TaxValue="0";
 					String ValAfterTax="0";
 					String Lvl="0";
-					String AvgRate="NA";
-					String OrderQty="NA";
-					String FreeQty="NA";
+					String AvgRate="0";
+					String OrderQty="0";
+					String FreeQty="0";
 
 					if (tableRow.hasProperty("Store"))
 					{

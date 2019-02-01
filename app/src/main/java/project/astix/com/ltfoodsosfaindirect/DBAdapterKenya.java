@@ -1890,16 +1890,19 @@ public class DBAdapterKenya
 
         Cursor cursor = db.rawQuery("SELECT *  FROM tblStoreWiseDaySummary", null);
         try {
-            String allData[] = new String[cursor.getCount()];
+            String   allData[] =  new String[cursor.getCount()];
+            if(cursor.getCount()>0){
             if (cursor.moveToFirst()) {
 
                 for (int i = 0; i < cursor.getCount(); i++) {
 
                     allData[i] = (String) cursor.getString(0).toString().trim() + "^" + (String) cursor.getString(1).toString().trim() + "^" + (String) cursor.getString(2).toString().trim() + "^" + (String) cursor.getString(3).toString().trim() + "^" + (String) cursor.getString(4).toString().trim() + "^" + (String) cursor.getString(5).toString().trim() + "^" + (String) cursor.getString(6).toString().trim() + "^" + (String) cursor.getString(7).toString().trim() + "^" + (String) cursor.getString(8).toString().trim() + "^" + (String) cursor.getString(9).toString().trim() + "^" + (String) cursor.getString(10).toString().trim() + "^" + (String) cursor.getString(11).toString().trim();
                     //// System.out.println("Value inserting 232 fetching :"+allData[i]);
+                    Log.d(TAG, allData[i]);
                     cursor.moveToNext();
                     // cursor.close();
                 }
+            }
 
             }
             ////// System.out.println("value  of new store is in DBadapter"+ScodecolumnIndex);
@@ -27619,9 +27622,9 @@ public class DBAdapterKenya
             if (cursorE2.getCount() > 0) {
                 if (cursorE2.moveToFirst()) {
 
-
+                    chkI = Integer.parseInt(cursorE2.getString(0).toString());
                 }
-                chkI = Integer.parseInt(cursorE2.getString(0).toString());
+
 
             }
 
@@ -30372,7 +30375,7 @@ public class DBAdapterKenya
 
     public String fetch_DistributorNodeIDTypeFromAttendanceTable() {
         open();
-        String DistributorNodeIDTypeFromAttendanceTable ="0^0";
+        String DistributorNodeIDTypeFromAttendanceTable ="0^0^0";
         Cursor cursor = db.rawQuery("SELECT DistributorId,DistributorNodeType,DistributorName FROM tblAttandanceDetails", null);// and flgDelayedReason=1
         try {
             if (cursor.getCount() > 0) {
@@ -30391,6 +30394,28 @@ public class DBAdapterKenya
         }
     }
 
+
+    public int FetchflgUserAuthenticatedAndRegistered() {
+        int SnamecolumnIndex1 = 0;
+        int flgUserAuthenticatedAndRegistered = 0;
+open();
+        Cursor cursor = db.rawQuery("SELECT ifnull(flgUserAuthenticated,0) AS flgUserAuthenticated,ifnull(FlgRegistered,0) AS FlgRegistered from tblUserAuthenticationMstr", null);
+        try {
+            if (cursor.getCount()>0) {
+                if (cursor.moveToFirst()) {
+                    if(Integer.parseInt((String) cursor.getString(0).toString())==1 && Integer.parseInt((String) cursor.getString(1).toString())==1)
+                    flgUserAuthenticatedAndRegistered = 1;
+                }
+            }
+            return flgUserAuthenticatedAndRegistered;
+        } finally {
+            if(cursor!=null) {
+                cursor.close();
+            }
+            close();
+        }
+
+    }
 
 }
 

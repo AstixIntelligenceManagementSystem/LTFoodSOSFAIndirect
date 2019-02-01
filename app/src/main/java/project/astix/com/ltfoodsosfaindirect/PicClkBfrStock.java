@@ -184,7 +184,19 @@ public class PicClkBfrStock extends AppCompatActivity implements DeletePic {
                     }
                 } else {
                     dbengine.updateStockRetailerAllowed(storeID, 0);
-                    if (isCmpttrAvlbl == 1) {
+                    Intent nxtP4 = new Intent(PicClkBfrStock.this, ActualVisitStock.class);
+
+                    nxtP4.putExtra("storeID", storeID);
+                    nxtP4.putExtra("SN", selStoreName);
+                    nxtP4.putExtra("imei", imei);
+                    nxtP4.putExtra("userdate", date);
+                    nxtP4.putExtra("pickerDate", pickerDate);
+                    nxtP4.putExtra("flgOrderType", 1);
+                    nxtP4.putExtra("isStockAvlbl", isStockAvlbl);
+                    nxtP4.putExtra("isCmpttrAvlbl", isCmpttrAvlbl);
+                    startActivity(nxtP4);
+                    finish();
+                    /*if (isCmpttrAvlbl == 1) {
                         Intent nxtP4 = new Intent(PicClkBfrStock.this, FeedbackCompetitorActivity.class);
                         //Intent nxtP4 = new Intent(LastVisitDetails.this,ProductOrderFilterSearch_RecycleView.class);
                         nxtP4.putExtra("storeID", storeID);
@@ -199,7 +211,7 @@ public class PicClkBfrStock extends AppCompatActivity implements DeletePic {
                         finish();
                     } else {
                         VideoPageOpenOrProductOrderPageOpen();
-                    }
+                    }*/
                 }
 
 

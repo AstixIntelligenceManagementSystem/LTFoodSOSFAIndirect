@@ -11,11 +11,6 @@ public class CommonInfo
 	// Its for Live  Path on 194 server for SFA
 
 
-
-
-
-
-
 	public static File imageF_savedInstance=null;
 	public static String imageName_savedInstance=null;
 	public static String clickedTagPhoto_savedInstance=null;

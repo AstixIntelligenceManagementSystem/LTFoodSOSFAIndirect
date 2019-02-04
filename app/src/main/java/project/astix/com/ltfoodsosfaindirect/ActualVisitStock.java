@@ -105,12 +105,12 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
     public void initializeallViews() {
         divider = findViewById(R.id.divider);
         defaultProductRV = (RecyclerView) findViewById(R.id.default_products_recycler_view);
-        RecyclerView.LayoutManager layoutManagerForDefaultRV = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManagerForDefaultRV = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         defaultProductRV.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         defaultProductRV.setLayoutManager(layoutManagerForDefaultRV);
 
         filteredProductRV = (RecyclerView) findViewById(R.id.filtered_products_recycler_view);
-        RecyclerView.LayoutManager layoutManagerForFilteredRV = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManagerForFilteredRV = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         filteredProductRV.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         filteredProductRV.setLayoutManager(layoutManagerForFilteredRV);
 
@@ -287,23 +287,19 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
         boolean stockFilledPrprly = true;
 
 
-
-
         if (defaultProductInfoArrayList != null && !defaultProductInfoArrayList.isEmpty()) {
             for (ActualVisitProductInfo visitProductInfo : defaultProductInfoArrayList) {
                 if (hmapFetchPDASavedDataForDefaultData.containsKey(visitProductInfo.getProductId())) {
-                    if (!TextUtils.isEmpty(visitProductInfo.getStock() ) && !visitProductInfo.getStock().equals("")) {
+                    if (!TextUtils.isEmpty(visitProductInfo.getStock()) && !visitProductInfo.getStock().equals("")) {
                         if (Integer.parseInt(visitProductInfo.getStock()) < 0) {
                             stockFilledPrprly = false;
                             return stockFilledPrprly;
                         }
-                    }
-                    else {
+                    } else {
                         stockFilledPrprly = false;
                         return stockFilledPrprly;
                     }
-                }
-                else {
+                } else {
                     stockFilledPrprly = false;
                     return stockFilledPrprly;
                 }
@@ -808,9 +804,8 @@ public class ActualVisitStock extends Activity implements CategoryCommunicator, 
                 for (ActualVisitProductInfo visitProductInfo : defaultProductInfoArrayList) {
                     if (hmapFetchPDASavedDataForDefaultData.containsKey(visitProductInfo.getProductId())) {
                         visitProductInfo.setStock(hmapFetchPDASavedDataForDefaultData.get(visitProductInfo.getProductId()).getStock());
-                    }
-                    else {
-                       // hmapFetchPDASavedDataForDefaultData.put(visitProductInfo.getProductId(),"0")  ;
+                    } else {
+                        // hmapFetchPDASavedDataForDefaultData.put(visitProductInfo.getProductId(),"0")  ;
                     }
                 }
             }

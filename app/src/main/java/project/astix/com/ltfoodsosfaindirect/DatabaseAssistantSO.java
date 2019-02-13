@@ -86,7 +86,7 @@ public class DatabaseAssistantSO
     {
 
         xmlBuilder = new XmlBuilder();
-        xmlBuilder.start(dbName);
+        xmlBuilder.start(CommonInfo.Database_Assistant_SO_DB_NAME);
 
         if (1==1)
         {

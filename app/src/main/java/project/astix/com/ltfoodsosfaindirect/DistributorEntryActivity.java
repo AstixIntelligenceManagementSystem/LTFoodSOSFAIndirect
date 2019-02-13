@@ -1784,7 +1784,8 @@ public class DistributorEntryActivity extends Activity {
 
         File file2send = new File(newzipfile);
 
-        String urlString = CommonInfo.DistributorSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+//        String urlString = CommonInfo.DistributorSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameDistributorSyncPath+"&CLIENTFILENAME=" + zipFileName;
 
         try {
 

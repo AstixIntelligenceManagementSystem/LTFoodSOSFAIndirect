@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -26,8 +27,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -106,14 +105,10 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-
-import static project.astix.com.ltfoodsosfaindirect.R.id.ll_distrbtnMap;
-import static project.astix.com.ltfoodsosfaindirect.R.id.ll_dsrTracker;
-
-public class AllButtonActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
+public class AllButtonActivity extends BaseActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     InputStream inputStream;
 
-    public  File fileintialFolder;
+    public File fileintialFolder;
     private File[] listFileFolder;
     ProgressDialog pDialogGetStoresImage;
     SharedPreferences sharedPrefForRegistration;
@@ -121,10 +116,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     LinearLayout ll_Parent;
     static int flgJointWorking = 0;
     public String userDate;
-    boolean serviceException=false;
+    boolean serviceException = false;
     SharedPreferences sharedPref;
-    int slctdCoverageAreaNodeID=0,slctdCoverageAreaNodeType=0,slctdDSrSalesmanNodeId=0,slctdDSrSalesmanNodeType=0;
-    public int valDayEndOrChangeRoute=1; // 1=Clicked on Day End Button, 2=Clicked on Change Route Button
+    int slctdCoverageAreaNodeID = 0, slctdCoverageAreaNodeType = 0, slctdDSrSalesmanNodeId = 0, slctdDSrSalesmanNodeType = 0;
+    public int valDayEndOrChangeRoute = 1; // 1=Clicked on Day End Button, 2=Clicked on Change Route Button
     String whereTo = "11";
     public String[] StoreList2Procs;
     public String[] storeCode;
@@ -142,32 +137,32 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     public String[] storeStatus;
 
 
-    public int powerCheck=0;
+    public int powerCheck = 0;
 
-    public  PowerManager.WakeLock wl;
-    public String rID="0";    // Abhinav Sir tell Sunil for set its value zero at 10 October 2017
+    public PowerManager.WakeLock wl;
+    public String rID = "0";    // Abhinav Sir tell Sunil for set its value zero at 10 October 2017
     LinearLayout ll_noVisit, ll_marketVisit, ll_reports, ll_storeVal, ll_distrbtrStock, ll_execution;
     String[] drsNames;
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 
-   // DBAdapterLtFoods dbengineSo = new DBAdapterLtFoods(this);
-    LinkedHashMap<String, String> hmapdsrIdAndDescr_details=new LinkedHashMap<String, String>();
-    public String	SelectedDSRValue="";
-    public String SelectedDistributorValue="";
+    // DBAdapterLtFoods dbengineSo = new DBAdapterLtFoods(this);
+    LinkedHashMap<String, String> hmapdsrIdAndDescr_details = new LinkedHashMap<String, String>();
+    public String SelectedDSRValue = "";
+    public String SelectedDistributorValue = "";
     ServiceWorker newservice = new ServiceWorker();
     String imei;
-    public int chkFlgForErrorToCloseApp=0;
+    public int chkFlgForErrorToCloseApp = 0;
     public String fDate;
     public SimpleDateFormat sdf;
 
     public String ReasonId;
-    public String ReasonText="NA";
-    public static int RowId=0;
+    public String ReasonText = "NA";
+    public static int RowId = 0;
 
 
-    public  int click_but_distribtrStock=0;
-    int CstmrNodeId=0,CstomrNodeType= 0;
+    public int click_but_distribtrStock = 0;
+    int CstmrNodeId = 0, CstomrNodeType = 0;
 
 
     public String newfullFileName;
@@ -179,30 +174,30 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     public int syncFLAG = 0;
 
     public ProgressDialog pDialogGetStores;
-    public  TextView noVisit_tv;
+    public TextView noVisit_tv;
     String[] reasonNames;
-    LinkedHashMap<String, String> hmapReasonIdAndDescr_details=new LinkedHashMap<String, String>();
+    LinkedHashMap<String, String> hmapReasonIdAndDescr_details = new LinkedHashMap<String, String>();
 
     public Date currDate;
     public SimpleDateFormat currDateFormat;
     public String currSysDate;
 
-    LinearLayout ll_dsrTracker,ll_distrbtnMap,ll_DayEnd,DSMProfiles,ll_SoProfile;
+    LinearLayout ll_dsrTracker, ll_distrbtnMap, ll_DayEnd, DSMProfiles, ll_SoProfile;
     ImageView imgVw_logout;
 
     //report alert
     String[] Distribtr_list;
-    String DbrNodeId,DbrNodeType,DbrName;
-    ArrayList<String> DbrArray=new ArrayList<String>();
-    LinkedHashMap<String,String> hmapDistrbtrList=new LinkedHashMap<>();
-    public String SelectedDistrbtrName="";
+    String DbrNodeId, DbrNodeType, DbrName;
+    ArrayList<String> DbrArray = new ArrayList<String>();
+    LinkedHashMap<String, String> hmapDistrbtrList = new LinkedHashMap<>();
+    public String SelectedDistrbtrName = "";
 
     //market visit loc alert
     public LocationManager locationManager;
-    android.app.AlertDialog GPSONOFFAlert=null;
+    android.app.AlertDialog GPSONOFFAlert = null;
     public AppLocationService appLocationService;
     public PowerManager pm;
-    String ButtonClick="";
+    String ButtonClick = "";
     public ProgressDialog pDialog2STANDBY;
 
     private final long startTime = 15000;
@@ -221,84 +216,78 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     public boolean isGPSEnabled = false;
     public boolean isNetworkEnabled = false;
 
-    public String fnAccurateProvider="";
-    public String fnLati="0";
-    public String fnLongi="0";
-    public Double fnAccuracy=0.0;
+    public String fnAccurateProvider = "";
+    public String fnLati = "0";
+    public String fnLongi = "0";
+    public Double fnAccuracy = 0.0;
 
-    public String FusedLocationLatitudeWithFirstAttempt="0";
-    public String FusedLocationLongitudeWithFirstAttempt="0";
-    public String FusedLocationAccuracyWithFirstAttempt="0";
-    public String AllProvidersLocation="";
-    public String FusedLocationLatitude="0";
-    public String FusedLocationLongitude="0";
-    public String FusedLocationProvider="";
-    public String FusedLocationAccuracy="0";
+    public String FusedLocationLatitudeWithFirstAttempt = "0";
+    public String FusedLocationLongitudeWithFirstAttempt = "0";
+    public String FusedLocationAccuracyWithFirstAttempt = "0";
+    public String AllProvidersLocation = "";
+    public String FusedLocationLatitude = "0";
+    public String FusedLocationLongitude = "0";
+    public String FusedLocationProvider = "";
+    public String FusedLocationAccuracy = "0";
 
-    public String GPSLocationLatitude="0";
-    public String GPSLocationLongitude="0";
-    public String GPSLocationProvider="";
-    public String GPSLocationAccuracy="0";
+    public String GPSLocationLatitude = "0";
+    public String GPSLocationLongitude = "0";
+    public String GPSLocationProvider = "";
+    public String GPSLocationAccuracy = "0";
 
-    public String NetworkLocationLatitude="0";
-    public String NetworkLocationLongitude="0";
-    public String NetworkLocationProvider="";
-    public String NetworkLocationAccuracy="0";
-    public static int flgLocationServicesOnOff=0;
-    public static int flgGPSOnOff=0;
-    public static int flgNetworkOnOff=0;
-    public static int flgFusedOnOff=0;
-    public static int flgInternetOnOffWhileLocationTracking=0;
-    public static int flgRestart=0;
-    public static int flgStoreOrder=0;
-    LinkedHashMap<String,String> hmapStoreVideoUrl=new LinkedHashMap<String,String>();
-    ArrayList<String> arrayContentDownload=new ArrayList<String>();
+    public String NetworkLocationLatitude = "0";
+    public String NetworkLocationLongitude = "0";
+    public String NetworkLocationProvider = "";
+    public String NetworkLocationAccuracy = "0";
+    public static int flgLocationServicesOnOff = 0;
+    public static int flgGPSOnOff = 0;
+    public static int flgNetworkOnOff = 0;
+    public static int flgFusedOnOff = 0;
+    public static int flgInternetOnOffWhileLocationTracking = 0;
+    public static int flgRestart = 0;
+    public static int flgStoreOrder = 0;
+    LinkedHashMap<String, String> hmapStoreVideoUrl = new LinkedHashMap<String, String>();
+    ArrayList<String> arrayContentDownload = new ArrayList<String>();
     private ProgressDialog pDialog;
-    int countContentDownloaded =0;
-    public static String address,pincode,city,state,latitudeToSave,longitudeToSave,accuracyToSave;
-    int countSubmitClicked=0;
+    int countContentDownloaded = 0;
+    public static String address, pincode, city, state, latitudeToSave, longitudeToSave, accuracyToSave;
+    int countSubmitClicked = 0;
     String fusedData;
 
     public static boolean isDayEndClicked;
 
     public boolean onKeyDown(int keyCode, KeyEvent event)    // Control the PDA Native Button Handling
     {
-        if(keyCode==KeyEvent.KEYCODE_BACK)
-        {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             return true;
             // finish();
         }
-        if(keyCode==KeyEvent.KEYCODE_HOME)
-        {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
             // finish();
 
         }
-        if(keyCode==KeyEvent.KEYCODE_MENU)
-        {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             return true;
         }
-        if(keyCode== KeyEvent.KEYCODE_SEARCH)
-        {
+        if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             return true;
         }
 
-        return super.onKeyDown(keyCode, event);}
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         wl.release();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        flgChangeRouteOrDayEnd=0;
-        if(isDayEndClicked)
-        {
-            flgChangeRouteOrDayEnd=1;
+        flgChangeRouteOrDayEnd = 0;
+        if (isDayEndClicked) {
+            flgChangeRouteOrDayEnd = 1;
             dayEndFunctionalityAfterDialogSummary();
         }
 
@@ -325,57 +314,45 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }*/
     }
 
-    public void DistributiorVisit()
-    {
+    public void DistributiorVisit() {
         dbengine.open();
         dbengine.maintainPDADate();
-        String getPDADate=dbengine.fnGetPdaDate();
-        String getServerDate=dbengine.fnGetServerDate();
+        String getPDADate = dbengine.fnGetPdaDate();
+        String getServerDate = dbengine.fnGetServerDate();
 
         dbengine.close();
 
 
-        if(!getServerDate.equals(getPDADate))
-        {
-            if(isOnline())
-            {
+        if (!getServerDate.equals(getPDADate)) {
+            if (isOnline()) {
 
-                try
-                {
-                    click_but_distribtrStock=1;
+                try {
+                    click_but_distribtrStock = 1;
                     FullSyncDataNow task = new FullSyncDataNow(AllButtonActivity.this);
                     task.execute();
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
 
                 }
-            }
-            else
-            {
+            } else {
                 showNoConnAlertDistributor();
             }
-        }
-        else
-        {
+        } else {
 
-            if(imei==null)
-            {
-                imei=CommonInfo.imei;
+            if (imei == null) {
+                imei = CommonInfo.imei;
             }
-            if(fDate==null)
-            {
+            if (fDate == null) {
                 Date date1 = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
                 fDate = sdf.format(date1).toString().trim();
             }
 
-            Intent i=new Intent(AllButtonActivity.this,DistributorCheckInForStock.class);
+            Intent i = new Intent(AllButtonActivity.this, DistributorCheckInForStock.class);
             i.putExtra("imei", imei);
             i.putExtra("CstmrNodeId", CstmrNodeId);
             i.putExtra("CstomrNodeType", CstomrNodeType);
             i.putExtra("fDate", fDate);
-            i.putExtra("DistributorName","BLANK");
+            i.putExtra("DistributorName", "BLANK");
             startActivity(i);
             finish();
 
@@ -383,24 +360,22 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    private void getReasonDetail() throws IOException
-    {
+    private void getReasonDetail() throws IOException {
 
-        int check=dbengine.countDataIntblNoVisitReasonMaster();
+        int check = dbengine.countDataIntblNoVisitReasonMaster();
 
-        hmapReasonIdAndDescr_details=dbengine.fetch_Reason_List();
+        hmapReasonIdAndDescr_details = dbengine.fetch_Reason_List();
 
-        int index=0;
-        if(hmapReasonIdAndDescr_details!=null)
-        {
-            reasonNames=new String[hmapReasonIdAndDescr_details.size()];
+        int index = 0;
+        if (hmapReasonIdAndDescr_details != null) {
+            reasonNames = new String[hmapReasonIdAndDescr_details.size()];
             LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(hmapReasonIdAndDescr_details);
             Set set2 = map.entrySet();
             Iterator iterator = set2.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry me2 = (Map.Entry)iterator.next();
-                reasonNames[index]=me2.getKey().toString();
-                index=index+1;
+            while (iterator.hasNext()) {
+                Map.Entry me2 = (Map.Entry) iterator.next();
+                reasonNames[index] = me2.getKey().toString();
+                index = index + 1;
             }
         }
 
@@ -412,60 +387,49 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_button);
-
-        sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
-        ll_Parent=(LinearLayout)findViewById(R.id.ll_Parent);
+        dbengine = new DBAdapterKenya(this);
+        sPrefAttandance = getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
+        ll_Parent = (LinearLayout) findViewById(R.id.ll_Parent);
         currDate = new Date();
-        currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+        currDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 
         userDate = currDateFormat.format(currDate).toString();
-        sharedPrefForRegistration=getSharedPreferences("RegistrationValidation", MODE_PRIVATE);
+        sharedPrefForRegistration = getSharedPreferences("RegistrationValidation", MODE_PRIVATE);
         sharedPref = getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
-        if(sharedPref.contains("CoverageAreaNodeID"))
-        {
-            if(sharedPref.getInt("CoverageAreaNodeID",0)!=0)
-            {
-                CommonInfo.CoverageAreaNodeID=sharedPref.getInt("CoverageAreaNodeID",0);
-                CommonInfo.CoverageAreaNodeType=sharedPref.getInt("CoverageAreaNodeType",0);
+        if (sharedPref.contains("CoverageAreaNodeID")) {
+            if (sharedPref.getInt("CoverageAreaNodeID", 0) != 0) {
+                CommonInfo.CoverageAreaNodeID = sharedPref.getInt("CoverageAreaNodeID", 0);
+                CommonInfo.CoverageAreaNodeType = sharedPref.getInt("CoverageAreaNodeType", 0);
             }
         }
-        if(sharedPref.contains("SalesmanNodeId"))
-        {
-            if(sharedPref.getInt("SalesmanNodeId",0)!=0)
-            {
-                CommonInfo.SalesmanNodeId=sharedPref.getInt("SalesmanNodeId",0);
-                CommonInfo.SalesmanNodeType=sharedPref.getInt("SalesmanNodeType",0);
+        if (sharedPref.contains("SalesmanNodeId")) {
+            if (sharedPref.getInt("SalesmanNodeId", 0) != 0) {
+                CommonInfo.SalesmanNodeId = sharedPref.getInt("SalesmanNodeId", 0);
+                CommonInfo.SalesmanNodeType = sharedPref.getInt("SalesmanNodeType", 0);
             }
         }
-        if(sharedPref.contains("flgDataScope"))
-        {
-            if(sharedPref.getInt("flgDataScope",0)!=0)
-            {
-                CommonInfo.flgDataScope=sharedPref.getInt("flgDataScope",0);
+        if (sharedPref.contains("flgDataScope")) {
+            if (sharedPref.getInt("flgDataScope", 0) != 0) {
+                CommonInfo.flgDataScope = sharedPref.getInt("flgDataScope", 0);
 
             }
         }
-        if(sharedPref.contains("flgDSRSO"))
-        {
-            if(sharedPref.getInt("flgDSRSO",0)!=0)
-            {
-                CommonInfo.FlgDSRSO=sharedPref.getInt("flgDSRSO",0);
+        if (sharedPref.contains("flgDSRSO")) {
+            if (sharedPref.getInt("flgDSRSO", 0) != 0) {
+                CommonInfo.FlgDSRSO = sharedPref.getInt("flgDSRSO", 0);
 
             }
         }
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();
 
-        locationManager=(LocationManager) this.getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
-        if(CommonInfo.imei.trim().equals(null) || CommonInfo.imei.trim().equals(""))
-        {
+        if (CommonInfo.imei.trim().equals(null) || CommonInfo.imei.trim().equals("")) {
             imei = tManager.getDeviceId();
-            CommonInfo.imei=imei;
-        }
-        else
-        {
-            imei=CommonInfo.imei.trim();
+            CommonInfo.imei = imei;
+        } else {
+            imei = CommonInfo.imei.trim();
         }
 
       /*  //  SharedPreferences.Editor editor = sharedPref.edit();
@@ -475,74 +439,67 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
         editor.commit();*/
-        shardPrefForSalesman(0,0);
+        shardPrefForSalesman(0, 0);
 
         flgDataScopeSharedPref(0);
-        Date date1=new Date();
+        Date date1 = new Date();
         sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         fDate = sdf.format(date1).toString().trim();
 
         currDate = new Date();
-        currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+        currDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 
         currSysDate = currDateFormat.format(currDate).toString();
         initialiseViews();
-        if(powerCheck==0)
-        {
+        if (powerCheck == 0) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
             wl.acquire();
         }
 
 
-        try{
+        try {
 //if coming from registration sync by dayend redirect to dayend
-            Intent intenFromSync= getIntent();
-            if(intenFromSync!=null){
-                if(intenFromSync.hasExtra("Button")){
-                    ButtonClick= intenFromSync.getStringExtra("Button");
-                    if(ButtonClick.equals("DAYEND")){
+            Intent intenFromSync = getIntent();
+            if (intenFromSync != null) {
+                if (intenFromSync.hasExtra("Button")) {
+                    ButtonClick = intenFromSync.getStringExtra("Button");
+                    if (ButtonClick.equals("DAYEND")) {
                         AllDayendCode();
                     }
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    private void getDSRDetail() throws IOException
-    {
+    private void getDSRDetail() throws IOException {
 
-        int check=dbengine.countDataIntblNoVisitReasonMaster();
+        int check = dbengine.countDataIntblNoVisitReasonMaster();
 
-        hmapdsrIdAndDescr_details=dbengine.fetch_DSRCoverage_List();
+        hmapdsrIdAndDescr_details = dbengine.fetch_DSRCoverage_List();
 
-        int index=0;
-        if(hmapdsrIdAndDescr_details!=null)
-        {
-            drsNames=new String[hmapdsrIdAndDescr_details.size()];
+        int index = 0;
+        if (hmapdsrIdAndDescr_details != null) {
+            drsNames = new String[hmapdsrIdAndDescr_details.size()];
             LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(hmapdsrIdAndDescr_details);
             Set set2 = map.entrySet();
             Iterator iterator = set2.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry me2 = (Map.Entry)iterator.next();
-                drsNames[index]=me2.getKey().toString();
-                index=index+1;
+            while (iterator.hasNext()) {
+                Map.Entry me2 = (Map.Entry) iterator.next();
+                drsNames[index] = me2.getKey().toString();
+                index = index + 1;
             }
         }
 
 
     }
 
-    public static boolean deleteNon_EmptyDir(File dir)
-    {
-        if (dir.isDirectory())
-        {
+    public static boolean deleteNon_EmptyDir(File dir) {
+        if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i=0; i<children.length; i++)
-            {
+            for (int i = 0; i < children.length; i++) {
                 boolean success = deleteNon_EmptyDir(new File(dir, children[i]));
                 if (!success) {
                     return false;
@@ -552,22 +509,19 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         return dir.delete();
     }
 
-    public void dialogLogout()
-    {
+    public void dialogLogout() {
 
         //AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(LauncherActivity.this, R.style.Dialog));
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllButtonActivity.this);
 
         alertDialog.setTitle(R.string.AlertDialogHeaderMsg);
         alertDialog.setMessage(R.string.LogoutMsg);
-        alertDialog.setPositiveButton(R.string.AlertDialogYesButton, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog,int which)
-            {
+        alertDialog.setPositiveButton(R.string.AlertDialogYesButton, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
 
-         /*       CommonInfo.AnyVisit=0;
+                /*       CommonInfo.AnyVisit=0;
 
-               *//* File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+                 *//* File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
                 if (!OrderXMLFolder.exists())
                 {
                     OrderXMLFolder.mkdirs();
@@ -609,10 +563,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
         });
 
-        alertDialog.setNegativeButton(R.string.AlertDialogNoButton, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialog.setNegativeButton(R.string.AlertDialogNoButton, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
@@ -621,9 +573,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-
-    void initialiseViews()
-    {
+    void initialiseViews() {
         ll_noVisit = (LinearLayout) findViewById(R.id.ll_noVisit);
         ll_marketVisit = (LinearLayout) findViewById(R.id.ll_marketVisit);
         ll_reports = (LinearLayout) findViewById(R.id.ll_reports);
@@ -638,7 +588,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         DSMProfiles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(AllButtonActivity.this,DistributorProfilingActivity.class);
+                Intent i = new Intent(AllButtonActivity.this, DistributorProfilingActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -648,14 +598,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         ll_SoProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(AllButtonActivity.this,SoRegistrationActivity.class);
+                Intent i = new Intent(AllButtonActivity.this, SoRegistrationActivity.class);
                 i.putExtra("IntentFrom", "AllButtonActivity");
                 i.putExtra("Button", "DSMRegistration");
                 startActivity(i);
                 finish();
             }
         });
-
 
 
         try {
@@ -665,13 +614,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             e1.printStackTrace();
         }
 
-        imgVw_logout=(ImageView) findViewById(R.id.imgVw_logout);
+        imgVw_logout = (ImageView) findViewById(R.id.imgVw_logout);
 
-        imgVw_logout.setOnClickListener(new View.OnClickListener()
-        {
+        imgVw_logout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
                 /*File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
                 if (!OrderXMLFolder.exists())
@@ -704,9 +651,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
               else
                 {*/
-                    dialogLogout();
+                dialogLogout();
 
-               // }
+                // }
                 /*else if(AllFilesNameNotSync.length>0)
                 {
                     showAlertForEveryOne("Please Day End Before Logging Out.");
@@ -717,12 +664,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         int checkDataNotSync = dbengine.CheckUserDoneGetStoreOrNot();
 
-        if (checkDataNotSync == 1)
-        {
+        if (checkDataNotSync == 1) {
 
-        }
-        else
-        {
+        } else {
             noVisitWorking();
         }
         marketVisitWorking();
@@ -746,36 +690,32 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    void getDistribtrList()
-    {
+    void getDistribtrList() {
         dbengine.open();
 
-        Distribtr_list=dbengine.getDistributorDataMstr();
+        Distribtr_list = dbengine.getDistributorDataMstr();
         dbengine.close();
-        for(int i=0;i<Distribtr_list.length;i++)
-        {
-            String value=Distribtr_list[i];
-            DbrNodeId=value.split(Pattern.quote("^"))[0];
-            DbrNodeType=value.split(Pattern.quote("^"))[1];
-            DbrName=value.split(Pattern.quote("^"))[2];
+        for (int i = 0; i < Distribtr_list.length; i++) {
+            String value = Distribtr_list[i];
+            DbrNodeId = value.split(Pattern.quote("^"))[0];
+            DbrNodeType = value.split(Pattern.quote("^"))[1];
+            DbrName = value.split(Pattern.quote("^"))[2];
             //flgReMap=Integer.parseInt(value.split(Pattern.quote("^"))[3]);
 
-            hmapDistrbtrList.put(DbrName,DbrNodeId+"^"+DbrNodeType);
+            hmapDistrbtrList.put(DbrName, DbrNodeId + "^" + DbrNodeType);
             DbrArray.add(DbrName);
         }
 
     }
 
-    public void midPart()
-    {
+    public void midPart() {
         String tempSID;
         String tempSNAME;
 
         stIDs = new ArrayList<String>(StoreList2Procs.length);
         stNames = new ArrayList<String>(StoreList2Procs.length);
 
-        for (int x = 0; x < (StoreList2Procs.length); x++)
-        {
+        for (int x = 0; x < (StoreList2Procs.length); x++) {
             StringTokenizer tokens = new StringTokenizer(String.valueOf(StoreList2Procs[x]), "%");
             tempSID = tokens.nextToken().trim();
             tempSNAME = tokens.nextToken().trim();
@@ -785,21 +725,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
     }
 
-    public void confirmationForSubmission(String number)
-    {
+    public void confirmationForSubmission(String number) {
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(AllButtonActivity.this);
 
         // Setting Dialog Title
         alertDialog.setTitle("Confirm Cancel..");
 
         // Setting Dialog Message
-        if(1<Integer.valueOf(number))
-        {
-            alertDialog.setMessage("Are you sure you want "+ number +" orders are to be cancelled ?");
-        }
-        else
-        {
-            alertDialog.setMessage("Are you sure you want "+ number +" order to be cancelled ?");
+        if (1 < Integer.valueOf(number)) {
+            alertDialog.setMessage("Are you sure you want " + number + " orders are to be cancelled ?");
+        } else {
+            alertDialog.setMessage("Are you sure you want " + number + " order to be cancelled ?");
         }
 
 
@@ -808,8 +744,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-
+            public void onClick(DialogInterface dialog, int which) {
 
 
                 whatTask = 2;
@@ -842,40 +777,34 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         alertDialog.show();
     }
 
-    public void dayEndCustomAlert(int flagWhichButtonClicked)
-    {
-        final Dialog dialog = new Dialog(AllButtonActivity.this,R.style.AlertDialogDayEndTheme);
+    public void dayEndCustomAlert(int flagWhichButtonClicked) {
+        final Dialog dialog = new Dialog(AllButtonActivity.this, R.style.AlertDialogDayEndTheme);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.day_end_custom_alert);
-        if(flagWhichButtonClicked==1)
-        {
+        if (flagWhichButtonClicked == 1) {
             dialog.setTitle(R.string.genTermSelectStoresPendingToCompleteDayEnd);
-        }
-        else if(flagWhichButtonClicked==2)
-        {
+        } else if (flagWhichButtonClicked == 2) {
             dialog.setTitle(R.string.genTermSelectStoresPendingToCompleteChangeRoute);
         }
 
 
-
-        LinearLayout ll_product_not_submitted=(LinearLayout) dialog.findViewById(R.id.ll_product_not_submitted);
+        LinearLayout ll_product_not_submitted = (LinearLayout) dialog.findViewById(R.id.ll_product_not_submitted);
         mSelectedItems.clear();
         final String[] stNames4List = new String[stNames.size()];
-        checks=new boolean[stNames.size()];
+        checks = new boolean[stNames.size()];
         stNames.toArray(stNames4List);
 
-        for(int cntPendingList=0;cntPendingList<stNames4List.length;cntPendingList++)
-        {
-            LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View viewAlertProduct=inflater.inflate(R.layout.day_end_alrt,null);
-            final TextView txtVw_product_name=(TextView) viewAlertProduct.findViewById(R.id.txtVw_product_name);
+        for (int cntPendingList = 0; cntPendingList < stNames4List.length; cntPendingList++) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View viewAlertProduct = inflater.inflate(R.layout.day_end_alrt, null);
+            final TextView txtVw_product_name = (TextView) viewAlertProduct.findViewById(R.id.txtVw_product_name);
             txtVw_product_name.setText(stNames4List[cntPendingList]);
             txtVw_product_name.setTextColor(this.getResources().getColor(R.color.green_submitted));
-            final ImageView img_to_be_submit=(ImageView) viewAlertProduct.findViewById(R.id.img_to_be_submit);
+            final ImageView img_to_be_submit = (ImageView) viewAlertProduct.findViewById(R.id.img_to_be_submit);
             img_to_be_submit.setTag(cntPendingList);
 
-            final ImageView img_to_be_cancel=(ImageView) viewAlertProduct.findViewById(R.id.img_to_be_cancel);
+            final ImageView img_to_be_cancel = (ImageView) viewAlertProduct.findViewById(R.id.img_to_be_cancel);
             img_to_be_cancel.setTag(cntPendingList);
             img_to_be_submit.setOnClickListener(new View.OnClickListener() {
 
@@ -883,13 +812,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 public void onClick(View v) {
 
 
-                    if(!checks[Integer.valueOf(img_to_be_submit.getTag().toString())])
-                    {
-                        img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_hover) );
-                        img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_normal) );
+                    if (!checks[Integer.valueOf(img_to_be_submit.getTag().toString())]) {
+                        img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_hover));
+                        img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_normal));
                         txtVw_product_name.setTextColor(getResources().getColor(R.color.green_submitted));
                         mSelectedItems.add(stNames4List[Integer.valueOf(img_to_be_submit.getTag().toString())]);
-                        checks[Integer.valueOf(img_to_be_submit.getTag().toString())]=true;
+                        checks[Integer.valueOf(img_to_be_submit.getTag().toString())] = true;
                     }
 
 
@@ -900,16 +828,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                 @Override
                 public void onClick(View v) {
-                    if (mSelectedItems.contains(stNames4List[Integer.valueOf(img_to_be_cancel.getTag().toString())]))
-                    {
-                        if(checks[Integer.valueOf(img_to_be_cancel.getTag().toString())])
-                        {
+                    if (mSelectedItems.contains(stNames4List[Integer.valueOf(img_to_be_cancel.getTag().toString())])) {
+                        if (checks[Integer.valueOf(img_to_be_cancel.getTag().toString())]) {
 
-                            img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_normal) );
-                            img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_hover) );
+                            img_to_be_submit.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.select_normal));
+                            img_to_be_cancel.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.cancel_hover));
                             txtVw_product_name.setTextColor(Color.RED);
                             mSelectedItems.remove(stNames4List[Integer.valueOf(img_to_be_cancel.getTag().toString())]);
-                            checks[Integer.valueOf(img_to_be_cancel.getTag().toString())]=false;
+                            checks[Integer.valueOf(img_to_be_cancel.getTag().toString())] = false;
                         }
 
                     }
@@ -917,13 +843,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
             });
             mSelectedItems.add(stNames4List[cntPendingList]);
-            checks[cntPendingList]=true;
+            checks[cntPendingList] = true;
             ll_product_not_submitted.addView(viewAlertProduct);
         }
 
 
-        Button btnSubmit=(Button) dialog.findViewById(R.id.btnSubmit);
-        Button btn_cancel_Back=(Button) dialog.findViewById(R.id.btn_cancel_Back);
+        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        Button btn_cancel_Back = (Button) dialog.findViewById(R.id.btn_cancel_Back);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -933,26 +859,18 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     DayEnd();
 
 
-                }
+                } else {
 
-                else {
-
-                    int countOfOrderNonSelected=0;
-                    for(int countForFalse=0;countForFalse<checks.length;countForFalse++)
-                    {
-                        if(checks[countForFalse]==false)
-                        {
+                    int countOfOrderNonSelected = 0;
+                    for (int countForFalse = 0; countForFalse < checks.length; countForFalse++) {
+                        if (checks[countForFalse] == false) {
                             countOfOrderNonSelected++;
                         }
 
                     }
-                    if(countOfOrderNonSelected>0)
-                    {
+                    if (countOfOrderNonSelected > 0) {
                         confirmationForSubmission(String.valueOf(countOfOrderNonSelected));
-                    }
-
-                    else
-                    {
+                    } else {
 
 
                         whatTask = 2;
@@ -979,7 +897,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             @Override
             public void onClick(View v) {
-                valDayEndOrChangeRoute=0;
+                valDayEndOrChangeRoute = 0;
                 dialog.dismiss();
             }
         });
@@ -990,24 +908,21 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dialog.show();
 
 
-
-
     }
 
-    public void DayEnd()
-    {
+    public void DayEnd() {
 
 
         android.app.AlertDialog.Builder alertDialogSubmitConfirm = new android.app.AlertDialog.Builder(AllButtonActivity.this);
 
         LayoutInflater inflater = getLayoutInflater();
-        View view=inflater.inflate(R.layout.titlebar, null);
+        View view = inflater.inflate(R.layout.titlebar, null);
         alertDialogSubmitConfirm.setCustomTitle(view);
         TextView title_txt = (TextView) view.findViewById(R.id.title_txt);
         title_txt.setText(getText(R.string.PleaseConformMsg));
 
 
-        View view1=inflater.inflate(R.layout.custom_alert_dialog, null);
+        View view1 = inflater.inflate(R.layout.custom_alert_dialog, null);
         view1.setBackgroundColor(Color.parseColor("#1D2E3C"));
         TextView msg_txt = (TextView) view1.findViewById(R.id.msg_txt);
         msg_txt.setText(getText(R.string.genTermDayEndAlert));
@@ -1015,11 +930,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         alertDialogSubmitConfirm.setInverseBackgroundForced(true);
 
 
-
-        alertDialogSubmitConfirm.setNeutralButton(R.string.AlertDialogYesButton,new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialogSubmitConfirm.setNeutralButton(R.string.AlertDialogYesButton, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 //System.out.println("Abhinav store Selection  Step 9");
                 // Location_Getting_Service.closeFlag = 1;
                 //enableGPSifNot();
@@ -1057,8 +969,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         //System.out.println(e);
                     }
                     // --
-                }
-                else {
+                } else {
                     //System.out.println("Abhinav store Selection  Step 11");
                     // show dialog for clear..clear + tranx to launcher
 
@@ -1091,12 +1002,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
         });
 
-        alertDialogSubmitConfirm.setNegativeButton(R.string.AlertDialogNoButton,new DialogInterface.OnClickListener()
-        {
+        alertDialogSubmitConfirm.setNegativeButton(R.string.AlertDialogNoButton, new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
@@ -1107,71 +1016,62 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    public void DayEndWithoutalert()
-    {
+    public void DayEndWithoutalert() {
 
         dbengine.open();
-        String rID=dbengine.GetActiveRouteID();
+        String rID = dbengine.GetActiveRouteID();
 
         dbengine.UpdateTblDayStartEndDetails(Integer.parseInt(rID), valDayEndOrChangeRoute);
         dbengine.close();
 
         SyncNow();
 
-        if(isOnline())
-        {
+        if (isOnline()) {
             UploadImageFromFolder(0);
 
-        }
-        else
-        {
+        } else {
             showNoConnAlert();
         }
 
     }
 
 
-    public void SyncNow()
-    {
+    public void SyncNow() {
 
         syncTIMESTAMP = System.currentTimeMillis();
         Date dateobj = new Date(syncTIMESTAMP);
 
 
         dbengine.open();
-        String presentRoute=dbengine.GetActiveRouteID();
+        String presentRoute = dbengine.GetActiveRouteID();
         dbengine.close();
         //syncTIMESTAMP = System.currentTimeMillis();
         //Date dateobj = new Date(syncTIMESTAMP);
-        SimpleDateFormat df = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss",Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss", Locale.ENGLISH);
         //fullFileName1 = df.format(dateobj);
-        String newfullFileName=imei+"."+presentRoute+"."+ df.format(dateobj);
+        String newfullFileName = imei + "." + presentRoute + "." + df.format(dateobj);
 
 
-
-        try
-        {
+        try {
 
             File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
 
-            if (!OrderXMLFolder.exists())
-            {
+            if (!OrderXMLFolder.exists()) {
                 OrderXMLFolder.mkdirs();
             }
 
-            String routeID=dbengine.GetActiveRouteIDSunil();
+            String routeID = dbengine.GetActiveRouteIDSunil();
 
             DASFA.open();
-            DASFA.export(dbengine.DATABASE_NAME, newfullFileName,routeID);
+            DASFA.export(dbengine.DATABASE_NAME, newfullFileName, routeID);
 
 
             DASFA.close();
 
-            dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+            dbengine.savetbl_XMLfiles(newfullFileName, "3", "1");
             dbengine.open();
             dbengine.fnSettblDsrLocationDetails();
-            for (int nosSelected = 0; nosSelected <= mSelectedItems.size() - 1; nosSelected++)
-            {
+            for (int nosSelected = 0; nosSelected <= mSelectedItems.size() - 1; nosSelected++) {
                 String valSN = (String) mSelectedItems.get(nosSelected);
                 int valID = stNames.indexOf(valSN);
                 String stIDneeded = stIDs.get(valID);
@@ -1181,8 +1081,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 dbengine.UpdateStoreReturnphotoFlag(stIDneeded.trim(), 5);
                 dbengine.updateflgFromWhereSubmitStatusAgainstStore(stIDneeded, 1);
 
-                if(dbengine.fnchkIfStoreHasInvoiceEntry(stIDneeded)==1)
-                {
+                if (dbengine.fnchkIfStoreHasInvoiceEntry(stIDneeded) == 1) {
                     dbengine.updateStoreQuoteSubmitFlgInStoreMstrInChangeRouteCase(stIDneeded, 0);
                 }
 
@@ -1190,39 +1089,32 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
             dbengine.close();
 
-            flgChangeRouteOrDayEnd=valDayEndOrChangeRoute;
+            flgChangeRouteOrDayEnd = valDayEndOrChangeRoute;
 
 
-
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
 
-    void dayEndWorking()
-    {
-        ll_DayEnd.setOnClickListener(new View.OnClickListener()
-        {
+    void dayEndWorking() {
+        ll_DayEnd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 AllDayendCode();
             }
         });
 
     }
 
-    void dayEndFunctionalityAfterDialogSummary()
-    {
-        isDayEndClicked=false;
+    void dayEndFunctionalityAfterDialogSummary() {
+        isDayEndClicked = false;
         File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
 
         // check number of files in folder
-        final String [] AllFilesNameNotSync= checkNumberOfFiles(del);
+        final String[] AllFilesNameNotSync = checkNumberOfFiles(del);
 
         String xmlfileNames = dbengine.fnGetXMLFileAll("3");
 
@@ -1230,10 +1122,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dbengine.open();
         String[] SaveStoreList = dbengine.SaveStoreList();
         dbengine.close();
-        if(xmlfileNames.length()>0 || SaveStoreList.length != 0)
-        {
-            if(isOnline())
-            {
+        if (xmlfileNames.length() > 0 || SaveStoreList.length != 0) {
+            if (isOnline()) {
                 whereTo = "11";
                 //////System.out.println("Abhinav store Selection  Step 1");
                 //////System.out.println("StoreList2Procs(before): " + StoreList2Procs.length);
@@ -1250,50 +1140,37 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     //showPendingStorelist(1);
                     dbengine.close();
 
-                } else if (dbengine.GetLeftStoresChk() == true)
-                {
+                } else if (dbengine.GetLeftStoresChk() == true) {
                     //////System.out.println("Abhinav store Selection  Step 7");
                     //enableGPSifNot();
                     // showChangeRouteConfirm();
                     DayEnd();
                     dbengine.close();
-                }
-
-                else {
+                } else {
                     DayEndWithoutalert();
                 }
-            }
-            else
-            {
+            } else {
                 showNoConnAlert();
 
 
             }
-        }
-        else
-        {
-            if(isOnline())
-            {
+        } else {
+            if (isOnline()) {
                 whereTo = "11";
                 DayEndWithoutalert();
-            }
-            else
-            {
+            } else {
                 showNoConnAlert();
             }
-           // showAlertForEveryOne("There is no Pending data for upload.");
+            // showAlertForEveryOne("There is no Pending data for upload.");
 
         }
 
     }
 
-    void dsrTrackerWorking()
-    {
-       ll_dsrTracker.setOnClickListener(new View.OnClickListener()
-        {
+    void dsrTrackerWorking() {
+        ll_dsrTracker.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 /*if(ll_dsrTracker.isSelected())
                     ll_dsrTracker.setSelected(false);
                 else
@@ -1308,92 +1185,76 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    void distributorMapWorking()
-    {
-        ll_distrbtnMap.setOnClickListener(new View.OnClickListener()
-        {
+    void distributorMapWorking() {
+        ll_distrbtnMap.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 /*if(ll_distrbtnMap.isSelected())
                     ll_distrbtnMap.setSelected(false);
                 else
                     ll_distrbtnMap.setSelected(true);*/
 
-                Intent intent=new Intent(AllButtonActivity.this,DistributorMapActivity.class);
+                Intent intent = new Intent(AllButtonActivity.this, DistributorMapActivity.class);
                 startActivity(intent);
-               // finish();
+                // finish();
 
             }
         });
     }
 
 
-    void noVisitWorking()
-    {
-        int submitFlag=CommonInfo.AnyVisit;
-        noVisit_tv=(TextView) findViewById(R.id.noVisit_tv);
+    void noVisitWorking() {
+        int submitFlag = CommonInfo.AnyVisit;
+        noVisit_tv = (TextView) findViewById(R.id.noVisit_tv);
 
-        int check=dbengine.fetchflgHasVisitFromtblNoVisitStoreDetails(""+4);
-        if(check==0 && submitFlag==0) // 0 means user did not do any visit or getStore
+        int check = dbengine.fetchflgHasVisitFromtblNoVisitStoreDetails("" + 4);
+        if (check == 0 && submitFlag == 0) // 0 means user did not do any visit or getStore
         {
             ll_noVisit.setEnabled(true);
-        }
-        else
-        {
+        } else {
             ll_noVisit.setEnabled(false);
-            String aab=dbengine.fetchReasonDescr();
-            if(ReasonText.equals("") || ReasonText.equals("NA") || ReasonText.equals(null))
-            {
+            String aab = dbengine.fetchReasonDescr();
+            if (ReasonText.equals("") || ReasonText.equals("NA") || ReasonText.equals(null)) {
 
                 noVisit_tv.setText("No Store Visit today");
-            }
-            else
-            {
-                noVisit_tv.setText("Reason :"+ReasonText);
+            } else {
+                noVisit_tv.setText("Reason :" + ReasonText);
             }
         }
 
         ll_noVisit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 displayAlertDialog();
             }
         });
 
     }
 
-    public void displayAlertDialog()
-    {
+    public void displayAlertDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog_nostore, null);
         final EditText et_Reason = (EditText) alertLayout.findViewById(R.id.et_Reason);
         et_Reason.setVisibility(View.INVISIBLE);
 
-        final Spinner spinner_reason=(Spinner) alertLayout.findViewById(R.id.spinner_reason);
+        final Spinner spinner_reason = (Spinner) alertLayout.findViewById(R.id.spinner_reason);
 
-        ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,reasonNames);
+        ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, reasonNames);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_reason.setAdapter(adapterCategory);
 
-        spinner_reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spinner_reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-            {
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 // TODO Auto-generated method stub
-                String	spinnerReasonSelected = spinner_reason.getSelectedItem().toString();
-                ReasonText=spinnerReasonSelected;
-                int check=dbengine.fetchFlgToShowTextBox(spinnerReasonSelected);
-                ReasonId=dbengine.fetchReasonIdBasedOnReasonDescr(spinnerReasonSelected);
-                if(check==0)
-                {
+                String spinnerReasonSelected = spinner_reason.getSelectedItem().toString();
+                ReasonText = spinnerReasonSelected;
+                int check = dbengine.fetchFlgToShowTextBox(spinnerReasonSelected);
+                ReasonId = dbengine.fetchReasonIdBasedOnReasonDescr(spinnerReasonSelected);
+                if (check == 0) {
                     et_Reason.setVisibility(View.INVISIBLE);
-                }
-                else
-                {
+                } else {
                     et_Reason.setVisibility(View.VISIBLE);
                 }
 
@@ -1402,8 +1263,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
+            public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
 
             }
@@ -1418,8 +1278,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
 
             }
         });
@@ -1427,92 +1286,73 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         alert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
 
                 noVisit_tv.setEnabled(false);
 
-                if (ReasonText.equals("")||ReasonText.equals("Select Reason"))
-                {
+                if (ReasonText.equals("") || ReasonText.equals("Select Reason")) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllButtonActivity.this);
                     alertDialog.setTitle("Error");
                     alertDialog.setMessage("Please select the reason first.");
                     alertDialog.setIcon(R.drawable.error);
                     alertDialog.setCancelable(false);
 
-                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog,int which)
-                        {
+                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             displayAlertDialog();
 
                         }
                     });
                     alertDialog.show();
-                }
-                else
-                {
+                } else {
 
                     // code for matching password
                     String reason;
                     TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     imei = tManager.getDeviceId();
-                    if(CommonInfo.imei.trim().equals(null) || CommonInfo.imei.trim().equals(""))
-                    {
+                    if (CommonInfo.imei.trim().equals(null) || CommonInfo.imei.trim().equals("")) {
                         imei = tManager.getDeviceId();
-                        CommonInfo.imei=imei;
-                    }
-                    else
-                    {
-                        imei=CommonInfo.imei.trim();
+                        CommonInfo.imei = imei;
+                    } else {
+                        imei = CommonInfo.imei.trim();
                     }
 
 
-                    Date pdaDate=new Date();
-                    SimpleDateFormat	sdfPDaDate = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+                    Date pdaDate = new Date();
+                    SimpleDateFormat sdfPDaDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
                     String CurDate = sdfPDaDate.format(pdaDate).toString().trim();
 
-                    if(et_Reason.isShown())
-                    {
+                    if (et_Reason.isShown()) {
 
-                        if(TextUtils.isEmpty(et_Reason.getText().toString().trim()))
-                        {
+                        if (TextUtils.isEmpty(et_Reason.getText().toString().trim())) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllButtonActivity.this);
                             alertDialog.setTitle("Error");
                             alertDialog.setMessage("Please enter the reason.");
                             alertDialog.setIcon(R.drawable.error);
                             alertDialog.setCancelable(false);
 
-                            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                            {
-                                public void onClick(DialogInterface dialog,int which)
-                                {
+                            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     displayAlertDialog();
 
                                 }
                             });
                             alertDialog.show();
-                        }
-                        else
-                        {
+                        } else {
                             ReasonText = et_Reason.getText().toString();
-                            if(isOnline())
-                            {
+                            if (isOnline()) {
                                 GetNoStoreVisitForDay task = new GetNoStoreVisitForDay(AllButtonActivity.this);
                                 task.execute();
-                            }
-                            else
-                            {
-                                dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId,ReasonText);
+                            } else {
+                                dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId, ReasonText);
                                 dbengine.updateCurDatetblNoVisitStoreDetails(fDate);
                                 dbengine.updateSstattblNoVisitStoreDetails(3);
 
                                 //String[] aa= dbengine.fnGetALLDataInfo();
-                                String aab=dbengine.fetchReasonDescr();
-                                noVisit_tv.setText("Reason :"+ReasonText);
-
+                                String aab = dbengine.fetchReasonDescr();
+                                noVisit_tv.setText("Reason :" + ReasonText);
 
 
                                 showNoConnAlert();
@@ -1520,19 +1360,13 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                             }
 
 
-
                         }
-                    }
-                    else
-                    {
-                        if(isOnline())
-                        {
+                    } else {
+                        if (isOnline()) {
                             GetNoStoreVisitForDay task = new GetNoStoreVisitForDay(AllButtonActivity.this);
                             task.execute();
-                        }
-                        else
-                        {
-                            dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId,ReasonText);
+                        } else {
+                            dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId, ReasonText);
                             dbengine.updateCurDatetblNoVisitStoreDetails(fDate);
                             dbengine.updateSstattblNoVisitStoreDetails(3);
                             showNoConnAlert();
@@ -1551,29 +1385,24 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dialog.show();
     }
 
-    public boolean isOnline()
-    {
+    public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected())
-        {
+        if (netInfo != null && netInfo.isConnected()) {
             return true;
         }
         return false;
     }
 
-    public void showNoConnAlert()
-    {
+    public void showNoConnAlert() {
         AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
         alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
         alertDialogNoConn.setMessage(R.string.NoDataConnectionFullMsg);
         alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,
-                new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                       // finish();
+                        // finish();
                     }
                 });
         alertDialogNoConn.setIcon(R.drawable.error_ico);
@@ -1590,10 +1419,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     protected void startLocationUpdates() {
         try {
-            PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates( mGoogleApiClient, mLocationRequest, this);
-        }
-        catch(SecurityException e)
-        {
+            PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } catch (SecurityException e) {
 
         }
 
@@ -1617,21 +1444,18 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         updateUI();
     }
 
-    private class GetNoStoreVisitForDay extends AsyncTask<Void, Void, Void>
-    {
+    private class GetNoStoreVisitForDay extends AsyncTask<Void, Void, Void> {
         ServiceWorker newservice = new ServiceWorker();
 
         ProgressDialog pDialogGetNoStoreVisitForDay;
 
-        public GetNoStoreVisitForDay(AllButtonActivity activity)
-        {
+        public GetNoStoreVisitForDay(AllButtonActivity activity) {
             pDialogGetNoStoreVisitForDay = new ProgressDialog(activity);
         }
 
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
@@ -1646,23 +1470,18 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
 
             try {
 
 
-                for(int mm = 1; mm < 2  ; mm++)
-                {
-                    if(mm==1)
-                    {
-                        newservice = newservice.getCallspSaveReasonForNoVisit(getApplicationContext(), fDate, imei, ReasonId,ReasonText);
+                for (int mm = 1; mm < 2; mm++) {
+                    if (mm == 1) {
+                        newservice = newservice.getCallspSaveReasonForNoVisit(getApplicationContext(), fDate, imei, ReasonId, ReasonText);
 
-                        if(!newservice.director.toString().trim().equals("1"))
-                        {
-                            if(chkFlgForErrorToCloseApp==0)
-                            {
-                                chkFlgForErrorToCloseApp=1;
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
                             }
 
                         }
@@ -1670,17 +1489,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
 
 
-
                 }
 
 
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.i("SvcMgr", "Service Execution Failed!", e);
-            }
-
-            finally
-            {
+            } finally {
                 Log.i("SvcMgr", "Service Execution Completed...");
             }
 
@@ -1688,50 +1502,41 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             Log.i("SvcMgr", "Service Execution Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
 
-            if(pDialogGetNoStoreVisitForDay.isShowing())
-            {
+            if (pDialogGetNoStoreVisitForDay.isShowing()) {
                 pDialogGetNoStoreVisitForDay.dismiss();
             }
 
-            if(chkFlgForErrorToCloseApp==0)
-            {
-                dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId,ReasonText);
+            if (chkFlgForErrorToCloseApp == 0) {
+                dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId, ReasonText);
                 dbengine.updateCurDatetblNoVisitStoreDetails(fDate);
 
                 dbengine.updateSstattblNoVisitStoreDetails(3);
-                String aab=dbengine.fetchReasonDescr();
-                noVisit_tv.setText("Reason :"+ReasonText);
-            }
-            else
-            {
+                String aab = dbengine.fetchReasonDescr();
+                noVisit_tv.setText("Reason :" + ReasonText);
+            } else {
 
 
-                if(RowId==0)
-                {
-                    dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId,ReasonText);
+                if (RowId == 0) {
+                    dbengine.updateReasonIdAndDescrtblNoVisitStoreDetails(ReasonId, ReasonText);
                     dbengine.updateCurDatetblNoVisitStoreDetails(fDate);
                     dbengine.updateSstattblNoVisitStoreDetails(3);
-                    String aab=dbengine.fetchReasonDescr();
-                    noVisit_tv.setText("Reason :"+ReasonText);
+                    String aab = dbengine.fetchReasonDescr();
+                    noVisit_tv.setText("Reason :" + ReasonText);
                     ll_noVisit.setEnabled(false);
 
-                }
-                else
-                {
+                } else {
                     dbengine.updateSstattblNoVisitStoreDetailsAfterSync(4);
-                    String aab=dbengine.fetchReasonDescr();
-                    noVisit_tv.setText("Reason :"+ReasonText);
+                    String aab = dbengine.fetchReasonDescr();
+                    noVisit_tv.setText("Reason :" + ReasonText);
                     ll_noVisit.setEnabled(false);
 
                 }
@@ -1740,14 +1545,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
     }
 
-    void marketVisitWorking()
-    {
-        ll_marketVisit.setOnClickListener(new View.OnClickListener()
-        {
+    void marketVisitWorking() {
+        ll_marketVisit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if(ll_marketVisit.isSelected())
+            public void onClick(View view) {
+                if (ll_marketVisit.isSelected())
                     ll_marketVisit.setSelected(false);
                 else
                     ll_marketVisit.setSelected(true);
@@ -1757,18 +1559,15 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
     }
 
-    public void showAlertForEveryOne(String msg)
-    {
+    public void showAlertForEveryOne(String msg) {
         //AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(new ContextThemeWrapper(LauncherActivity.this, R.style.Dialog));
         AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
 
         alertDialogNoConn.setTitle(R.string.AlertDialogHeaderMsg);
         alertDialogNoConn.setMessage(msg);
         alertDialogNoConn.setCancelable(false);
-        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 //finish();
             }
@@ -1781,33 +1580,31 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     @Override
     protected void onStop() {
         super.onStop();
-        if(GPSONOFFAlert!=null && GPSONOFFAlert.isShowing())
-        {
+        if (GPSONOFFAlert != null && GPSONOFFAlert.isShowing()) {
             GPSONOFFAlert.dismiss();
         }
     }
 
-    void openMarketVisitAlert()
-    {
-        final AlertDialog.Builder alert=new AlertDialog.Builder(AllButtonActivity.this);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    void openMarketVisitAlert() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(AllButtonActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.market_visit_alert, null);
         alert.setView(view);
 
         alert.setCancelable(false);
 
-        final RadioButton rb_myVisit= (RadioButton) view.findViewById(R.id.rb_myVisit);
-        final RadioButton rb_dsrVisit= (RadioButton) view.findViewById(R.id.rb_dsrVisit);
-        final RadioButton rb_jointWorking= (RadioButton) view.findViewById(R.id.rb_jointWorking);
+        final RadioButton rb_myVisit = (RadioButton) view.findViewById(R.id.rb_myVisit);
+        final RadioButton rb_dsrVisit = (RadioButton) view.findViewById(R.id.rb_dsrVisit);
+        final RadioButton rb_jointWorking = (RadioButton) view.findViewById(R.id.rb_jointWorking);
         rb_jointWorking.setVisibility(View.VISIBLE);
-        final Spinner spinner_ddlDistributorWorkingWith= (Spinner) view.findViewById(R.id.spinner_ddlDistributorWorkingWith);
-        final Spinner spinner_dsrVisit= (Spinner) view.findViewById(R.id.spinner_dsrVisit);
-        final Spinner spinner_jointWorking= (Spinner) view.findViewById(R.id.spinner_jointWorking);
+        final Spinner spinner_ddlDistributorWorkingWith = (Spinner) view.findViewById(R.id.spinner_ddlDistributorWorkingWith);
+        final Spinner spinner_dsrVisit = (Spinner) view.findViewById(R.id.spinner_dsrVisit);
+        final Spinner spinner_jointWorking = (Spinner) view.findViewById(R.id.spinner_jointWorking);
 
-        Button btn_proceed= (Button) view.findViewById(R.id.btn_proceed);
-        Button btn_cancel= (Button) view.findViewById(R.id.btn_cancel);
+        Button btn_proceed = (Button) view.findViewById(R.id.btn_proceed);
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
 
-        final AlertDialog dialog=alert.create();
+        final AlertDialog dialog = alert.create();
         dialog.show();
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -1819,12 +1616,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 dialog.dismiss();
                 //dbengine.deletetblStoreList();
-                if(rb_myVisit.isChecked())
-                {
+                if (rb_myVisit.isChecked()) {
                     /*String SONodeIdAndNodeType= dbengine.fnGetPersonNodeIDAndPersonNodeTypeForSO();
 
                     CommonInfo.PersonNodeID=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[0]);
@@ -1857,42 +1652,37 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     slctdDSrSalesmanNodeType=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[1]);*/
 
 
-                    int routeExist=dbengine.fnGetRouteExistOrNot(0,0);
-                    if(routeExist==0)
-                    {
+                    int routeExist = dbengine.fnGetRouteExistOrNot(0, 0);
+                    if (routeExist == 0) {
                         showAlertForEveryOne("There are no Routes Available for You.");
                         return;
                     }
 
                     dbengine.open();
 
-                    rID= dbengine.GetActiveRouteIDCrntDSR(0,0);
+                    rID = dbengine.GetActiveRouteIDCrntDSR(0, 0);
                     dbengine.close();
-                    CommonInfo.CoverageAreaNodeID=0;
-                    CommonInfo.CoverageAreaNodeType=0;
-                    CommonInfo.FlgDSRSO=1;
+                    CommonInfo.CoverageAreaNodeID = 0;
+                    CommonInfo.CoverageAreaNodeType = 0;
+                    CommonInfo.FlgDSRSO = 1;
 
-                    shardPrefForCoverageArea(0,0);
-                    if(dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType))
-                    {
-                        shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+                    shardPrefForCoverageArea(0, 0);
+                    if (dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType)) {
+                        shardPrefForCoverageArea(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType);
 
-                        shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+                        shardPrefForSalesman(slctdDSrSalesmanNodeId, slctdDSrSalesmanNodeType);
 
                         flgDataScopeSharedPref(1);
                         flgDSRSOSharedPref(1);
-                        Intent intent=new Intent(AllButtonActivity.this,StoreSelection.class);
+                        Intent intent = new Intent(AllButtonActivity.this, StoreSelection.class);
                         intent.putExtra("imei", imei);
                         intent.putExtra("userDate", userDate);
                         intent.putExtra("pickerDate", fDate);
                         intent.putExtra("rID", rID);
                         startActivity(intent);
                         finish();
-                    }
-                    else
-                    {
-                        if(dbengine.isDBOpen())
-                        {
+                    } else {
+                        if (dbengine.isDBOpen()) {
                             dbengine.close();
                         }
 
@@ -1959,14 +1749,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }*/
 
 
-                }
-                else if(rb_dsrVisit.isChecked())
-                {
-                    if(!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM") )
-                    {
+                } else if (rb_dsrVisit.isChecked()) {
+                    if (!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM")) {
 
-                      //  int flgSODistributorFirstVisit=0;
-                       // flgSODistributorFirstVisit=dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[0]),Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[1]));
+                        //  int flgSODistributorFirstVisit=0;
+                        // flgSODistributorFirstVisit=dbengine.fnCheckflgSODistributorFirstVisit(Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[0]),Integer.parseInt(DistributorIDNodeType.split(Pattern.quote("^"))[1]));
 
                        /* String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
                         int tempCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
@@ -2024,49 +1811,44 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         }*/
 
 
-                        String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
-                        slctdCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                        slctdCoverageAreaNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                        String DSRNodeIdAndNodeType = dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
+                        slctdCoverageAreaNodeID = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                        slctdCoverageAreaNodeType = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
 
-                        CommonInfo.CoverageAreaNodeID=slctdCoverageAreaNodeID;
-                        CommonInfo.CoverageAreaNodeType=slctdCoverageAreaNodeType;
-                        CommonInfo.FlgDSRSO=2;
+                        CommonInfo.CoverageAreaNodeID = slctdCoverageAreaNodeID;
+                        CommonInfo.CoverageAreaNodeType = slctdCoverageAreaNodeType;
+                        CommonInfo.FlgDSRSO = 2;
 
-                        String DSRPersonNodeIdAndNodeType= dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
-                        slctdDSrSalesmanNodeId=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                        slctdDSrSalesmanNodeType=Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                        String DSRPersonNodeIdAndNodeType = dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
+                        slctdDSrSalesmanNodeId = Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                        slctdDSrSalesmanNodeType = Integer.parseInt(DSRPersonNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
 
                         dbengine.open();
 
-                        rID= dbengine.GetActiveRouteIDCrntDSR(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+                        rID = dbengine.GetActiveRouteIDCrntDSR(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType);
                         dbengine.close();
 
 
-                        if(rID.equals("0"))
-                        {
+                        if (rID.equals("0")) {
 
                         }
 
-                        if(dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType))
-                        {
-                            shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
+                        if (dbengine.isDataAlreadyExist(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType)) {
+                            shardPrefForCoverageArea(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType);
 
-                            shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+                            shardPrefForSalesman(slctdDSrSalesmanNodeId, slctdDSrSalesmanNodeType);
 
                             flgDataScopeSharedPref(2);
                             flgDSRSOSharedPref(2);
-                            Intent intent=new Intent(AllButtonActivity.this,StoreSelection.class);
+                            Intent intent = new Intent(AllButtonActivity.this, StoreSelection.class);
                             intent.putExtra("imei", imei);
                             intent.putExtra("userDate", userDate);
                             intent.putExtra("pickerDate", fDate);
                             intent.putExtra("rID", rID);
                             startActivity(intent);
                             finish();
-                        }
-                        else
-                        {
-                            if(dbengine.isDBOpen())
-                            {
+                        } else {
+                            if (dbengine.isDBOpen()) {
                                 dbengine.close();
                             }
 
@@ -2075,56 +1857,39 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         }
 
 
-
-
-                    }
-                    else
-                    {
+                    } else {
                         showAlertForEveryOne("Please select DSM to Proceed.");
                     }
-                }
-                else if(rb_jointWorking.isChecked())
-                {
-                    if(!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM") )
-                    {
-                        String DSRNodeIdAndNodeType= dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
-                        int tempCoverageAreaNodeID=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                        int tempCoverageAreaNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
-                        shardPrefForCoverageArea(tempCoverageAreaNodeID,tempCoverageAreaNodeType);
+                } else if (rb_jointWorking.isChecked()) {
+                    if (!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM")) {
+                        String DSRNodeIdAndNodeType = dbengine.fnGetDSRNodeIdAndNodeType(SelectedDSRValue);
+                        int tempCoverageAreaNodeID = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                        int tempCoverageAreaNodeType = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                        shardPrefForCoverageArea(tempCoverageAreaNodeID, tempCoverageAreaNodeType);
                         flgDSRSOSharedPref(4);
 
                         // Find GPS
-                       //surbhi loc code
+                        //surbhi loc code
                         boolean isGPSokCheckInResume = false;
-                        boolean isNWokCheckInResume=false;
+                        boolean isNWokCheckInResume = false;
                         isGPSokCheckInResume = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                         isNWokCheckInResume = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-                        if(!isGPSokCheckInResume && !isNWokCheckInResume)
-                        {
-                            try
-                            {
+                        if (!isGPSokCheckInResume && !isNWokCheckInResume) {
+                            try {
                                 showSettingsAlert();
-                            }
-                            catch(Exception e)
-                            {
+                            } catch (Exception e) {
 
                             }
                             isGPSokCheckInResume = false;
-                            isNWokCheckInResume=false;
-                        }
-                        else
-                        {
+                            isNWokCheckInResume = false;
+                        } else {
                             locationRetrievingAndDistanceCalculating();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         showAlertForEveryOne("Please select DSM to Proceed.");
                     }
-                }
-                else
-                {
+                } else {
                     showAlertForEveryOne("Please select atleast one option to Proceeds.");
                 }
             }
@@ -2132,10 +1897,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_myVisit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_myVisit.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_myVisit.isChecked()) {
                     spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
                     rb_dsrVisit.setChecked(false);
                     rb_jointWorking.setChecked(false);
@@ -2143,25 +1906,22 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     spinner_jointWorking.setVisibility(View.GONE);
 
 
-                    ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,DbrArray);
+                    ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, DbrArray);
                     adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_ddlDistributorWorkingWith.setAdapter(adapterCategory);
                     spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
 
-                    spinner_ddlDistributorWorkingWith.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                    {
+                    spinner_ddlDistributorWorkingWith.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                         @Override
-                        public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-                        {
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             // TODO Auto-generated method stub
                             SelectedDistributorValue = spinner_ddlDistributorWorkingWith.getSelectedItem().toString();
 
                         }
 
                         @Override
-                        public void onNothingSelected(AdapterView<?> arg0)
-                        {
+                        public void onNothingSelected(AdapterView<?> arg0) {
                             // TODO Auto-generated method stub
 
                         }
@@ -2171,73 +1931,63 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
 
         rb_dsrVisit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-        {
-            if(rb_dsrVisit.isChecked())
-            {
-                rb_myVisit.setChecked(false);
-                rb_jointWorking.setChecked(false);
-                spinner_jointWorking.setVisibility(View.GONE);
-                spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_dsrVisit.isChecked()) {
+                    rb_myVisit.setChecked(false);
+                    rb_jointWorking.setChecked(false);
+                    spinner_jointWorking.setVisibility(View.GONE);
+                    spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
 
-                ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,drsNames);
-                adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_dsrVisit.setAdapter(adapterCategory);
-                spinner_dsrVisit.setVisibility(View.VISIBLE);
+                    ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, drsNames);
+                    adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_dsrVisit.setAdapter(adapterCategory);
+                    spinner_dsrVisit.setVisibility(View.VISIBLE);
 
-                spinner_dsrVisit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                    spinner_dsrVisit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-                    {
-                        // TODO Auto-generated method stub
-                        SelectedDSRValue = spinner_dsrVisit.getSelectedItem().toString();
+                        @Override
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            // TODO Auto-generated method stub
+                            SelectedDSRValue = spinner_dsrVisit.getSelectedItem().toString();
 
-                    }
+                        }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0)
-                    {
-                        // TODO Auto-generated method stub
+                        @Override
+                        public void onNothingSelected(AdapterView<?> arg0) {
+                            // TODO Auto-generated method stub
 
-                    }
-                });
+                        }
+                    });
 
+                }
             }
-        }
-    });
+        });
 
         rb_jointWorking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_jointWorking.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_jointWorking.isChecked()) {
                     rb_myVisit.setChecked(false);
                     rb_dsrVisit.setChecked(false);
                     spinner_dsrVisit.setVisibility(View.GONE);
                     spinner_ddlDistributorWorkingWith.setVisibility(View.GONE);
 
-                    ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,drsNames);
+                    ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, drsNames);
                     adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_jointWorking.setAdapter(adapterCategory);
                     spinner_jointWorking.setVisibility(View.VISIBLE);
 
-                    spinner_jointWorking.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                    {
+                    spinner_jointWorking.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                         @Override
-                        public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-                        {
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             SelectedDSRValue = spinner_jointWorking.getSelectedItem().toString();
 
                         }
 
                         @Override
-                        public void onNothingSelected(AdapterView<?> arg0)
-                        {
+                        public void onNothingSelected(AdapterView<?> arg0) {
                         }
                     });
 
@@ -2248,8 +1998,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dialog.show();
     }
 
-    public void locationRetrievingAndDistanceCalculating()
-    {
+    public void locationRetrievingAndDistanceCalculating() {
         appLocationService = new AppLocationService();
 
         pm = (PowerManager) getSystemService(POWER_SERVICE);
@@ -2264,8 +2013,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         pDialog2STANDBY.setCancelable(false);
         pDialog2STANDBY.show();
 
-        if (isGooglePlayServicesAvailable())
-        {
+        if (isGooglePlayServicesAvailable()) {
             createLocationRequest();
 
             mGoogleApiClient = new GoogleApiClient.Builder(AllButtonActivity.this)
@@ -2284,19 +2032,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    public class CoundownClass extends CountDownTimer
-    {
+    public class CoundownClass extends CountDownTimer {
 
         public CoundownClass(long startTime, long interval) {
             super(startTime, interval);
         }
 
         @Override
-        public void onFinish()
-        {
+        public void onFinish() {
 
 
-            AllProvidersLocation="";
+            AllProvidersLocation = "";
             /*Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"));
             Date currentLocalTime = cal.getTime();
             DateFormat date = new SimpleDateFormat("HH:mm a");
@@ -2305,248 +2051,205 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             String localTime = date.format(currentLocalTime);*/
 
-            DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+            DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
             Calendar cal = Calendar.getInstance();
             String DateTime = dateFormat.format(cal.getTime());
 
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            String GpsLat="0";
-            String GpsLong="0";
-            String GpsAccuracy="0";
-            String GpsAddress="0";
-            if(isGPSEnabled)
-            {
-                Location nwLocation=appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER,location);
+            String GpsLat = "0";
+            String GpsLong = "0";
+            String GpsAccuracy = "0";
+            String GpsAddress = "0";
+            if (isGPSEnabled) {
+                Location nwLocation = appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER, location);
 
-                if(nwLocation!=null)
-                {
-                    double lattitude=nwLocation.getLatitude();
-                    double longitude=nwLocation.getLongitude();
-                    double accuracy= nwLocation.getAccuracy();
-                    GpsLat=""+lattitude;
-                    GpsLong=""+longitude;
-                    GpsAccuracy=""+accuracy;
-                    if(isOnline())
-                    {
-                        GpsAddress=getAddressOfProviders(GpsLat, GpsLong);
-                    }
-                    else
-                    {
-                        GpsAddress="NA";
+                if (nwLocation != null) {
+                    double lattitude = nwLocation.getLatitude();
+                    double longitude = nwLocation.getLongitude();
+                    double accuracy = nwLocation.getAccuracy();
+                    GpsLat = "" + lattitude;
+                    GpsLong = "" + longitude;
+                    GpsAccuracy = "" + accuracy;
+                    if (isOnline()) {
+                        GpsAddress = getAddressOfProviders(GpsLat, GpsLong);
+                    } else {
+                        GpsAddress = "NA";
                     }
 
-                    GPSLocationLatitude=""+lattitude;
-                    GPSLocationLongitude=""+longitude;
-                    GPSLocationProvider="GPS";
-                    GPSLocationAccuracy=""+accuracy;
-                    AllProvidersLocation="GPS=Lat:"+lattitude+"Long:"+longitude+"Acc:"+accuracy;
+                    GPSLocationLatitude = "" + lattitude;
+                    GPSLocationLongitude = "" + longitude;
+                    GPSLocationProvider = "GPS";
+                    GPSLocationAccuracy = "" + accuracy;
+                    AllProvidersLocation = "GPS=Lat:" + lattitude + "Long:" + longitude + "Acc:" + accuracy;
 
                 }
             }
 
-            Location gpsLocation=appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER,location);
-            String NetwLat="0";
-            String NetwLong="0";
-            String NetwAccuracy="0";
-            String NetwAddress="0";
-            if(gpsLocation!=null)
-            {
-                double lattitude1=gpsLocation.getLatitude();
-                double longitude1=gpsLocation.getLongitude();
-                double accuracy1= gpsLocation.getAccuracy();
+            Location gpsLocation = appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER, location);
+            String NetwLat = "0";
+            String NetwLong = "0";
+            String NetwAccuracy = "0";
+            String NetwAddress = "0";
+            if (gpsLocation != null) {
+                double lattitude1 = gpsLocation.getLatitude();
+                double longitude1 = gpsLocation.getLongitude();
+                double accuracy1 = gpsLocation.getAccuracy();
 
-                NetwLat=""+lattitude1;
-                NetwLong=""+longitude1;
-                NetwAccuracy=""+accuracy1;
-                if(isOnline())
-                {
-                    NetwAddress=getAddressOfProviders(NetwLat, NetwLong);
-                }
-                else
-                {
-                    NetwAddress="NA";
+                NetwLat = "" + lattitude1;
+                NetwLong = "" + longitude1;
+                NetwAccuracy = "" + accuracy1;
+                if (isOnline()) {
+                    NetwAddress = getAddressOfProviders(NetwLat, NetwLong);
+                } else {
+                    NetwAddress = "NA";
                 }
 
-                NetworkLocationLatitude=""+lattitude1;
-                NetworkLocationLongitude=""+longitude1;
-                NetworkLocationProvider="Network";
-                NetworkLocationAccuracy=""+accuracy1;
-                if(!AllProvidersLocation.equals(""))
-                {
-                    AllProvidersLocation=AllProvidersLocation+"$Network=Lat:"+lattitude1+"Long:"+longitude1+"Acc:"+accuracy1;
-                }
-                else
-                {
-                    AllProvidersLocation="Network=Lat:"+lattitude1+"Long:"+longitude1+"Acc:"+accuracy1;
+                NetworkLocationLatitude = "" + lattitude1;
+                NetworkLocationLongitude = "" + longitude1;
+                NetworkLocationProvider = "Network";
+                NetworkLocationAccuracy = "" + accuracy1;
+                if (!AllProvidersLocation.equals("")) {
+                    AllProvidersLocation = AllProvidersLocation + "$Network=Lat:" + lattitude1 + "Long:" + longitude1 + "Acc:" + accuracy1;
+                } else {
+                    AllProvidersLocation = "Network=Lat:" + lattitude1 + "Long:" + longitude1 + "Acc:" + accuracy1;
                 }
 
 
             }
 
-            System.out.println("LOCATION Fused"+fusedData);
+            System.out.println("LOCATION Fused" + fusedData);
 
-            String FusedLat="0";
-            String FusedLong="0";
-            String FusedAccuracy="0";
-            String FusedAddress="0";
+            String FusedLat = "0";
+            String FusedLong = "0";
+            String FusedAccuracy = "0";
+            String FusedAddress = "0";
 
-            if(!FusedLocationProvider.equals(""))
-            {
-                fnAccurateProvider="Fused";
-                fnLati=FusedLocationLatitude;
-                fnLongi=FusedLocationLongitude;
-                fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+            if (!FusedLocationProvider.equals("")) {
+                fnAccurateProvider = "Fused";
+                fnLati = FusedLocationLatitude;
+                fnLongi = FusedLocationLongitude;
+                fnAccuracy = Double.parseDouble(FusedLocationAccuracy);
 
-                FusedLat=FusedLocationLatitude;
-                FusedLong=FusedLocationLongitude;
-                FusedAccuracy=FusedLocationAccuracy;
-                FusedLocationLatitudeWithFirstAttempt=FusedLocationLatitude;
-                FusedLocationLongitudeWithFirstAttempt=FusedLocationLongitude;
-                FusedLocationAccuracyWithFirstAttempt=FusedLocationAccuracy;
+                FusedLat = FusedLocationLatitude;
+                FusedLong = FusedLocationLongitude;
+                FusedAccuracy = FusedLocationAccuracy;
+                FusedLocationLatitudeWithFirstAttempt = FusedLocationLatitude;
+                FusedLocationLongitudeWithFirstAttempt = FusedLocationLongitude;
+                FusedLocationAccuracyWithFirstAttempt = FusedLocationAccuracy;
 
 
-                if(isOnline())
-                {
-                    FusedAddress=getAddressOfProviders(FusedLat, FusedLong);
-                }
-                else
-                {
-                    FusedAddress="NA";
+                if (isOnline()) {
+                    FusedAddress = getAddressOfProviders(FusedLat, FusedLong);
+                } else {
+                    FusedAddress = "NA";
                 }
 
-                if(!AllProvidersLocation.equals(""))
-                {
-                    AllProvidersLocation=AllProvidersLocation+"$Fused=Lat:"+FusedLocationLatitude+"Long:"+FusedLocationLongitude+"Acc:"+fnAccuracy;
-                }
-                else
-                {
-                    AllProvidersLocation="Fused=Lat:"+FusedLocationLatitude+"Long:"+FusedLocationLongitude+"Acc:"+fnAccuracy;
+                if (!AllProvidersLocation.equals("")) {
+                    AllProvidersLocation = AllProvidersLocation + "$Fused=Lat:" + FusedLocationLatitude + "Long:" + FusedLocationLongitude + "Acc:" + fnAccuracy;
+                } else {
+                    AllProvidersLocation = "Fused=Lat:" + FusedLocationLatitude + "Long:" + FusedLocationLongitude + "Acc:" + fnAccuracy;
                 }
             }
 
 
             appLocationService.KillServiceLoc(appLocationService, locationManager);
             try {
-                if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
-                {
+                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                     stopLocationUpdates();
                     mGoogleApiClient.disconnect();
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
 
             }
 
 
-            fnAccurateProvider="";
-            fnLati="0";
-            fnLongi="0";
-            fnAccuracy=0.0;
+            fnAccurateProvider = "";
+            fnLati = "0";
+            fnLongi = "0";
+            fnAccuracy = 0.0;
 
-            if(!FusedLocationProvider.equals(""))
-            {
-                fnAccurateProvider="Fused";
-                fnLati=FusedLocationLatitude;
-                fnLongi=FusedLocationLongitude;
-                fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+            if (!FusedLocationProvider.equals("")) {
+                fnAccurateProvider = "Fused";
+                fnLati = FusedLocationLatitude;
+                fnLongi = FusedLocationLongitude;
+                fnAccuracy = Double.parseDouble(FusedLocationAccuracy);
             }
 
-            if(!fnAccurateProvider.equals(""))
-            {
-                if(!GPSLocationProvider.equals(""))
-                {
-                    if(Double.parseDouble(GPSLocationAccuracy)<fnAccuracy)
-                    {
-                        fnAccurateProvider="Gps";
-                        fnLati=GPSLocationLatitude;
-                        fnLongi=GPSLocationLongitude;
-                        fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+            if (!fnAccurateProvider.equals("")) {
+                if (!GPSLocationProvider.equals("")) {
+                    if (Double.parseDouble(GPSLocationAccuracy) < fnAccuracy) {
+                        fnAccurateProvider = "Gps";
+                        fnLati = GPSLocationLatitude;
+                        fnLongi = GPSLocationLongitude;
+                        fnAccuracy = Double.parseDouble(GPSLocationAccuracy);
                     }
                 }
-            }
-            else
-            {
-                if(!GPSLocationProvider.equals(""))
-                {
-                    fnAccurateProvider="Gps";
-                    fnLati=GPSLocationLatitude;
-                    fnLongi=GPSLocationLongitude;
-                    fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+            } else {
+                if (!GPSLocationProvider.equals("")) {
+                    fnAccurateProvider = "Gps";
+                    fnLati = GPSLocationLatitude;
+                    fnLongi = GPSLocationLongitude;
+                    fnAccuracy = Double.parseDouble(GPSLocationAccuracy);
                 }
             }
 
-            if(!fnAccurateProvider.equals(""))
-            {
-                if(!NetworkLocationProvider.equals(""))
-                {
-                    if(Double.parseDouble(NetworkLocationAccuracy)<fnAccuracy)
-                    {
-                        fnAccurateProvider="Network";
-                        fnLati=NetworkLocationLatitude;
-                        fnLongi=NetworkLocationLongitude;
-                        fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+            if (!fnAccurateProvider.equals("")) {
+                if (!NetworkLocationProvider.equals("")) {
+                    if (Double.parseDouble(NetworkLocationAccuracy) < fnAccuracy) {
+                        fnAccurateProvider = "Network";
+                        fnLati = NetworkLocationLatitude;
+                        fnLongi = NetworkLocationLongitude;
+                        fnAccuracy = Double.parseDouble(NetworkLocationAccuracy);
                     }
                 }
-            }
-            else
-            {
-                if(!NetworkLocationProvider.equals(""))
-                {
-                    fnAccurateProvider="Network";
-                    fnLati=NetworkLocationLatitude;
-                    fnLongi=NetworkLocationLongitude;
-                    fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+            } else {
+                if (!NetworkLocationProvider.equals("")) {
+                    fnAccurateProvider = "Network";
+                    fnLati = NetworkLocationLatitude;
+                    fnLongi = NetworkLocationLongitude;
+                    fnAccuracy = Double.parseDouble(NetworkLocationAccuracy);
                 }
             }
             checkHighAccuracyLocationMode(AllButtonActivity.this);
             // fnAccurateProvider="";
-            if(fnAccurateProvider.equals(""))
-            {
-
+            if (fnAccurateProvider.equals("")) {
 
 
                 dbengine.open();
 
-                String PersonNodeIDAndPersonNodeType=dbengine.FetchPersonNodeIDAndPersonNodeType(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
+                String PersonNodeIDAndPersonNodeType = dbengine.FetchPersonNodeIDAndPersonNodeType(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)));
 
-                String userName=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0];
-                String ContactNo=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1];
+                String userName = PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0];
+                String ContactNo = PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1];
 
-                dbengine.deleteDsrLocationDetails(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
+                dbengine.deleteDsrLocationDetails(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)));
 
-                dbengine.savetblDsrLocationData(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)),PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0],PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1],"NA","NA","NA","NA","NA", "NA", "NA","NA",
-                        "NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA",
-                        "NA","NA","NA","NA","NA","NA");
+                dbengine.savetblDsrLocationData(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)), PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0], PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1], "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA",
+                        "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA",
+                        "NA", "NA", "NA", "NA", "NA", "NA");
 
                 dbengine.close();
 
-                if(pDialog2STANDBY.isShowing())
-                {
+                if (pDialog2STANDBY.isShowing()) {
                     pDialog2STANDBY.dismiss();
                 }
 
 
-                countSubmitClicked=2;
-            }
-            else
-            {
-                String FullAddress="0";
-                if(isOnline())
-                {
-                    FullAddress=   getAddressForDynamic(fnLati, fnLongi);
+                countSubmitClicked = 2;
+            } else {
+                String FullAddress = "0";
+                if (isOnline()) {
+                    FullAddress = getAddressForDynamic(fnLati, fnLongi);
+                } else {
+                    FullAddress = "NA";
                 }
-                else
-                {
-                    FullAddress="NA";
-                }
-                String addr="NA";
-                String zipcode="NA";
-                String city="NA";
-                String state="NA";
+                String addr = "NA";
+                String zipcode = "NA";
+                String city = "NA";
+                String state = "NA";
 
 
-                if(!FullAddress.equals("NA"))
-                {
+                if (!FullAddress.equals("NA")) {
                     addr = FullAddress.split(Pattern.quote("^"))[0];
                     zipcode = FullAddress.split(Pattern.quote("^"))[1];
                     city = FullAddress.split(Pattern.quote("^"))[2];
@@ -2570,13 +2273,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     etState.setText(state);
                 }*/
 
-                if(pDialog2STANDBY.isShowing())
-                {
+                if (pDialog2STANDBY.isShowing()) {
                     pDialog2STANDBY.dismiss();
                 }
-                if(!GpsLat.equals("0") )
-                {
-                    fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
+                if (!GpsLat.equals("0")) {
+                    fnCreateLastKnownGPSLoction(GpsLat, GpsLong, GpsAccuracy);
                 }
 
               /*  LattitudeFromLauncher=fnLati;
@@ -2618,33 +2319,30 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 */
 
                 dbengine.open();
-                dbengine.deleteDsrLocationDetails(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
+                dbengine.deleteDsrLocationDetails(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)));
 
                 //surbhi
 
-                if(GpsAddress.equals(""))
-                {
-                    GpsAddress="NA";
+                if (GpsAddress.equals("")) {
+                    GpsAddress = "NA";
                 }
-                if(NetwAddress.equals(""))
-                {
-                    NetwAddress="NA";
+                if (NetwAddress.equals("")) {
+                    NetwAddress = "NA";
                 }
-                if(FusedAddress.equals(""))
-                {
-                    FusedAddress="NA";
+                if (FusedAddress.equals("")) {
+                    FusedAddress = "NA";
                 }
-                String PersonNodeIDAndPersonNodeType=dbengine.FetchPersonNodeIDAndPersonNodeType(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)));
+                String PersonNodeIDAndPersonNodeType = dbengine.FetchPersonNodeIDAndPersonNodeType(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)));
 
-                String userName=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0];
-                String ContactNo=PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1];
+                String userName = PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0];
+                String ContactNo = PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1];
 
-                dbengine.savetblDsrLocationData(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)),String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)),
-                        PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0],PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1],
-                        DateTime, addr,zipcode, city, state,fnLati, fnLongi,String.valueOf(fnAccuracy),
-                        fnAccurateProvider,AllProvidersLocation,GpsLat,GpsLong,GpsAccuracy,GpsAddress,
-                        NetwLat,NetwLong,NetwAccuracy,NetwAddress,FusedLat, FusedLong,FusedAccuracy,FusedAddress,
-                        FusedLocationLatitudeWithFirstAttempt,FusedLocationLongitudeWithFirstAttempt,FusedLocationAccuracyWithFirstAttempt);
+                dbengine.savetblDsrLocationData(String.valueOf(sharedPref.getInt("CoverageAreaNodeID", 0)), String.valueOf(sharedPref.getInt("CoverageAreaNodeType", 0)),
+                        PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[0], PersonNodeIDAndPersonNodeType.split(Pattern.quote("^"))[1],
+                        DateTime, addr, zipcode, city, state, fnLati, fnLongi, String.valueOf(fnAccuracy),
+                        fnAccurateProvider, AllProvidersLocation, GpsLat, GpsLong, GpsAccuracy, GpsAddress,
+                        NetwLat, NetwLong, NetwAccuracy, NetwAddress, FusedLat, FusedLong, FusedAccuracy, FusedAddress,
+                        FusedLocationLatitudeWithFirstAttempt, FusedLocationLongitudeWithFirstAttempt, FusedLocationAccuracyWithFirstAttempt);
 
              /*   System.out.println(String.valueOf(String.valueOf(sharedPref.getInt("CoverageAreaNodeID",0)))+"--"+String.valueOf(sharedPref.getInt("CoverageAreaNodeType",0)+"--"+
                         DateTime+"--"+ addr+"--"+zipcode+"--"+ city+"--"+ state+"--"+fnLati+"--"+ fnLongi+"--"+String.valueOf(fnAccuracy)
@@ -2653,68 +2351,60 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         FusedLocationLatitudeWithFirstAttempt+"--"+FusedLocationLongitudeWithFirstAttempt+"--"+FusedLocationAccuracyWithFirstAttempt);
 */
                 dbengine.close();
-                flgJointWorking=1;
+                flgJointWorking = 1;
 
                 whatTask = 2;
-               if(isOnline())
-               {
-                   try {
+                if (isOnline()) {
+                    try {
 
-                       new bgTasker().execute().get();
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                       //System.out.println(e);
-                   } catch (ExecutionException e) {
-                       e.printStackTrace();
-                       //System.out.println(e);
-                   }
-               }
-               else
-               {
-                   try
-                   {
+                        new bgTasker().execute().get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        //System.out.println(e);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                        //System.out.println(e);
+                    }
+                } else {
+                    try {
 
-                       syncTIMESTAMP = System.currentTimeMillis();
-                       Date dateobj = new Date(syncTIMESTAMP);
+                        syncTIMESTAMP = System.currentTimeMillis();
+                        Date dateobj = new Date(syncTIMESTAMP);
 
 
-                       dbengine.open();
-                       String presentRoute=dbengine.GetActiveRouteID();
-                       dbengine.close();
-                       //syncTIMESTAMP = System.currentTimeMillis();
-                       //Date dateobj = new Date(syncTIMESTAMP);
-                       SimpleDateFormat df = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss",Locale.ENGLISH);
-                       //fullFileName1 = df.format(dateobj);
-                       String newfullFileName=imei+"."+presentRoute+"."+ df.format(dateobj);
+                        dbengine.open();
+                        String presentRoute = dbengine.GetActiveRouteID();
+                        dbengine.close();
+                        //syncTIMESTAMP = System.currentTimeMillis();
+                        //Date dateobj = new Date(syncTIMESTAMP);
+                        SimpleDateFormat df = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss", Locale.ENGLISH);
+                        //fullFileName1 = df.format(dateobj);
+                        String newfullFileName = imei + "." + presentRoute + "." + df.format(dateobj);
 
 
+                        File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
 
-                       File OrderXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
+                        if (!OrderXMLFolder.exists()) {
+                            OrderXMLFolder.mkdirs();
+                        }
 
-                       if (!OrderXMLFolder.exists())
-                       {
-                           OrderXMLFolder.mkdirs();
-                       }
+                        String routeID = dbengine.GetActiveRouteIDSunil();
 
-                       String routeID=dbengine.GetActiveRouteIDSunil();
-
-                       DASFA.open();
-                       DASFA.export(dbengine.DATABASE_NAME, newfullFileName,routeID);
+                        DASFA.open();
+                        DASFA.export(dbengine.DATABASE_NAME, newfullFileName, routeID);
 
 
-                       DASFA.close();
+                        DASFA.close();
 
-                       dbengine.savetbl_XMLfiles(newfullFileName, "3","1");
+                        dbengine.savetbl_XMLfiles(newfullFileName, "3", "1");
 
-                   }
-                   catch(Exception e)
-                   {
-                   }
+                    } catch (Exception e) {
+                    }
 
-                       showNoConnAlert();
+                    showNoConnAlert();
 
 
-               }
+                }
 
                 //        if(!checkLastFinalLoctionIsRepeated("28.4873276","77.1045244","22.201"))
                /* if(!checkLastFinalLoctionIsRepeated(fnLati,fnLongi,String.valueOf(fnAccuracy)))
@@ -2754,18 +2444,18 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                 }*/
 
-                GpsLat="0";
-                GpsLong="0";
-                GpsAccuracy="0";
-                GpsAddress="0";
-                NetwLat="0";
-                NetwLong="0";
-                NetwAccuracy="0";
-                NetwAddress="0";
-                FusedLat="0";
-                FusedLong="0";
-                FusedAccuracy="0";
-                FusedAddress="0";
+                GpsLat = "0";
+                GpsLong = "0";
+                GpsAccuracy = "0";
+                GpsAddress = "0";
+                NetwLat = "0";
+                NetwLong = "0";
+                NetwAccuracy = "0";
+                NetwAddress = "0";
+                FusedLat = "0";
+                FusedLong = "0";
+                FusedAccuracy = "0";
+                FusedAddress = "0";
 
                 //code here
             }
@@ -2774,7 +2464,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         @Override
         public void onTick(long arg0) {
 
-        }}
+        }
+    }
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
@@ -2783,18 +2474,18 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
     private void updateUI() {
-        Location loc =mCurrentLocation;
+        Location loc = mCurrentLocation;
         if (null != mCurrentLocation) {
             String lat = String.valueOf(mCurrentLocation.getLatitude());
             String lng = String.valueOf(mCurrentLocation.getLongitude());
 
-            FusedLocationLatitude=lat;
-            FusedLocationLongitude=lng;
-            FusedLocationProvider=mCurrentLocation.getProvider();
-            FusedLocationAccuracy=""+mCurrentLocation.getAccuracy();
-            fusedData="At Time: " + mLastUpdateTime  +
-                    "Latitude: " + lat  +
-                    "Longitude: " + lng  +
+            FusedLocationLatitude = lat;
+            FusedLocationLongitude = lng;
+            FusedLocationProvider = mCurrentLocation.getProvider();
+            FusedLocationAccuracy = "" + mCurrentLocation.getAccuracy();
+            fusedData = "At Time: " + mLastUpdateTime +
+                    "Latitude: " + lat +
+                    "Longitude: " + lng +
                     "Accuracy: " + mCurrentLocation.getAccuracy() +
                     "Provider: " + mCurrentLocation.getProvider();
 
@@ -2803,17 +2494,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
     }
 
-    public String getAddressForDynamic(String latti, String longi){
+    public String getAddressForDynamic(String latti, String longi) {
 
 
-        String areaToMerge="NA";
-        Address addressTemp=null;
-        String addr="NA";
-        String zipcode="NA";
-        String city="NA";
-        String state="NA";
-        String fullAddress="";
-        StringBuilder FULLADDRESS3 =new StringBuilder();
+        String areaToMerge = "NA";
+        Address addressTemp = null;
+        String addr = "NA";
+        String zipcode = "NA";
+        String city = "NA";
+        String state = "NA";
+        String fullAddress = "";
+        StringBuilder FULLADDRESS3 = new StringBuilder();
         try {
             Geocoder geocoder = new Geocoder(AllButtonActivity.this, Locale.ENGLISH);
 
@@ -2822,76 +2513,75 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             PincodeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[5];
             StateFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[6];*/
             List<Address> addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
-            if (addresses != null && addresses.size() > 0){
-                if(addresses.get(0).getAddressLine(1)!=null){
-                    addr=addresses.get(0).getAddressLine(1);
-                    address=addr;
+            if (addresses != null && addresses.size() > 0) {
+                if (addresses.get(0).getAddressLine(1) != null) {
+                    addr = addresses.get(0).getAddressLine(1);
+                    address = addr;
                 }
 
-                if(addresses.get(0).getLocality()!=null){
-                    city=addresses.get(0).getLocality();
-                    this.city=city;
+                if (addresses.get(0).getLocality() != null) {
+                    city = addresses.get(0).getLocality();
+                    this.city = city;
                 }
 
-                if(addresses.get(0).getAdminArea()!=null){
-                    state=addresses.get(0).getAdminArea();
-                    this.state=state;
+                if (addresses.get(0).getAdminArea() != null) {
+                    state = addresses.get(0).getAdminArea();
+                    this.state = state;
                 }
 
 
-                for(int i=0 ;i<addresses.size();i++){
+                for (int i = 0; i < addresses.size(); i++) {
                     addressTemp = addresses.get(i);
-                    if(addressTemp.getPostalCode()!=null){
-                        zipcode=addressTemp.getPostalCode();
-                        this.pincode=zipcode;
+                    if (addressTemp.getPostalCode() != null) {
+                        zipcode = addressTemp.getPostalCode();
+                        this.pincode = zipcode;
                         break;
                     }
                 }
-                if(addresses.get(0).getAddressLine(0)!=null && addr.equals("NA")){
-                    String countryname="NA";
-                    if(addresses.get(0).getCountryName()!=null){
-                        countryname=addresses.get(0).getCountryName();
+                if (addresses.get(0).getAddressLine(0) != null && addr.equals("NA")) {
+                    String countryname = "NA";
+                    if (addresses.get(0).getCountryName() != null) {
+                        countryname = addresses.get(0).getCountryName();
                     }
 
-                    addr=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
+                    addr = getAddressNewWay(addresses.get(0).getAddressLine(0), city, state, zipcode, countryname);
                 }
 
-                NewStoreFormSO recFragment = (NewStoreFormSO)getFragmentManager().findFragmentByTag("NewStoreFragment");
-                if(null != recFragment)
-                {
+                NewStoreFormSO recFragment = (NewStoreFormSO) getFragmentManager().findFragmentByTag("NewStoreFragment");
+                if (null != recFragment) {
                     recFragment.setFreshAddress();
                 }
+            } else {
+                FULLADDRESS3.append("NA");
             }
-            else{FULLADDRESS3.append("NA");}
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
-            return fullAddress=addr+"^"+zipcode+"^"+city+"^"+state;
+        } finally {
+            return fullAddress = addr + "^" + zipcode + "^" + city + "^" + state;
         }
     }
 
-    public String getAddressNewWay(String ZeroIndexAddress,String city,String State,String pincode,String country){
-        String editedAddress=ZeroIndexAddress;
-        if(editedAddress.contains(city)){
-            editedAddress= editedAddress.replace(city,"");
+    public String getAddressNewWay(String ZeroIndexAddress, String city, String State, String pincode, String country) {
+        String editedAddress = ZeroIndexAddress;
+        if (editedAddress.contains(city)) {
+            editedAddress = editedAddress.replace(city, "");
 
         }
-        if(editedAddress.contains(State)){
-            editedAddress=editedAddress.replace(State,"");
+        if (editedAddress.contains(State)) {
+            editedAddress = editedAddress.replace(State, "");
 
         }
-        if(editedAddress.contains(pincode)){
-            editedAddress= editedAddress.replace(pincode,"");
+        if (editedAddress.contains(pincode)) {
+            editedAddress = editedAddress.replace(pincode, "");
 
         }
-        if(editedAddress.contains(country)){
-            editedAddress=editedAddress.replace(country,"");
+        if (editedAddress.contains(country)) {
+            editedAddress = editedAddress.replace(country, "");
 
         }
-        if(editedAddress.contains(",")){
-            editedAddress=editedAddress.replace(","," ");
+        if (editedAddress.contains(",")) {
+            editedAddress = editedAddress.replace(",", " ");
 
         }
         return editedAddress;
@@ -2951,25 +2641,21 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }*/
 
-    public String getAddressOfProviders(String latti, String longi){
+    public String getAddressOfProviders(String latti, String longi) {
 
-        StringBuilder FULLADDRESS2 =new StringBuilder();
+        StringBuilder FULLADDRESS2 = new StringBuilder();
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(AllButtonActivity.this, Locale.ENGLISH);
 
 
-
         try {
             addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
 
-            if (addresses == null || addresses.size()  == 0 || addresses.get(0).getAddressLine(0)==null)
-            {
-                FULLADDRESS2=  FULLADDRESS2.append("NA");
-            }
-            else
-            {
-                FULLADDRESS2 =FULLADDRESS2.append(addresses.get(0).getAddressLine(0));
+            if (addresses == null || addresses.size() == 0 || addresses.get(0).getAddressLine(0) == null) {
+                FULLADDRESS2 = FULLADDRESS2.append("NA");
+            } else {
+                FULLADDRESS2 = FULLADDRESS2.append(addresses.get(0).getAddressLine(0));
             }
 
         } catch (NumberFormatException e) {
@@ -2985,33 +2671,31 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
-    {
+    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy) {
 
         try {
 
-            JSONArray jArray=new JSONArray();
-            JSONObject jsonObjMain=new JSONObject();
+            JSONArray jArray = new JSONArray();
+            JSONObject jsonObjMain = new JSONObject();
 
 
             JSONObject jOnew = new JSONObject();
-            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
-            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
-            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
+            jOnew.put("chekLastGPSLat", chekLastGPSLat);
+            jOnew.put("chekLastGPSLong", chekLastGPSLong);
+            jOnew.put("chekLastGpsAccuracy", chekLastGpsAccuracy);
 
 
             jArray.put(jOnew);
             jsonObjMain.put("GPSLastLocationDetils", jArray);
 
             File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.AppLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
+            if (!jsonTxtFolder.exists()) {
                 jsonTxtFolder.mkdirs();
 
             }
-            String txtFileNamenew="GPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.AppLatLngJsonFile+"/"+txtFileNamenew;
+            String txtFileNamenew = "GPSLastLocation.txt";
+            File file = new File(jsonTxtFolder, txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory() + "/" + CommonInfo.AppLatLngJsonFile + "/" + txtFileNamenew;
 
 
             // If file does not exists, then create it
@@ -3045,34 +2729,32 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
+        } finally {
 
         }
     }
 
-    public boolean checkLastFinalLoctionIsRepeated(String currentLat, String currentLong, String currentAccuracy){
-        boolean repeatedLoction=false;
+    public boolean checkLastFinalLoctionIsRepeated(String currentLat, String currentLong, String currentAccuracy) {
+        boolean repeatedLoction = false;
 
         try {
 
-            String chekLastGPSLat="0";
-            String chekLastGPSLong="0";
-            String chekLastGpsAccuracy="0";
+            String chekLastGPSLat = "0";
+            String chekLastGPSLong = "0";
+            String chekLastGpsAccuracy = "0";
             File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
+            if (!jsonTxtFolder.exists()) {
                 jsonTxtFolder.mkdirs();
 
             }
-            String txtFileNamenew="FinalGPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
+            String txtFileNamenew = "FinalGPSLastLocation.txt";
+            File file = new File(jsonTxtFolder, txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory() + "/" + CommonInfo.FinalLatLngJsonFile + "/" + txtFileNamenew;
 
             // If file does not exists, then create it
             if (file.exists()) {
-                StringBuffer buffer=new StringBuffer();
-                String myjson_stampiGPSLastLocation="";
+                StringBuffer buffer = new StringBuffer();
+                String myjson_stampiGPSLastLocation = "";
                 StringBuffer sb = new StringBuffer();
                 BufferedReader br = null;
 
@@ -3092,7 +2774,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     }
                 }
 
-                myjson_stampiGPSLastLocation=sb.toString();
+                myjson_stampiGPSLastLocation = sb.toString();
 
                 JSONObject jsonObjGPSLast = new JSONObject(myjson_stampiGPSLastLocation);
                 JSONArray jsonObjGPSLastInneralues = jsonObjGPSLast.getJSONArray("GPSLastLocationDetils");
@@ -3100,20 +2782,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 String StringjsonGPSLastnew = jsonObjGPSLastInneralues.getString(0);
                 JSONObject jsonObjGPSLastnewwewe = new JSONObject(StringjsonGPSLastnew);
 
-                chekLastGPSLat=jsonObjGPSLastnewwewe.getString("chekLastGPSLat");
-                chekLastGPSLong=jsonObjGPSLastnewwewe.getString("chekLastGPSLong");
-                chekLastGpsAccuracy=jsonObjGPSLastnewwewe.getString("chekLastGpsAccuracy");
+                chekLastGPSLat = jsonObjGPSLastnewwewe.getString("chekLastGPSLat");
+                chekLastGPSLong = jsonObjGPSLastnewwewe.getString("chekLastGPSLong");
+                chekLastGpsAccuracy = jsonObjGPSLastnewwewe.getString("chekLastGpsAccuracy");
 
-                if(currentLat!=null )
-                {
-                    if(currentLat.equals(chekLastGPSLat) && currentLong.equals(chekLastGPSLong) && currentAccuracy.equals(chekLastGpsAccuracy))
-                    {
-                        repeatedLoction=true;
+                if (currentLat != null) {
+                    if (currentLat.equals(chekLastGPSLat) && currentLong.equals(chekLastGPSLong) && currentAccuracy.equals(chekLastGpsAccuracy)) {
+                        repeatedLoction = true;
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -3121,33 +2800,31 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    public void fnCreateLastKnownFinalLocation(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy)
-    {
+    public void fnCreateLastKnownFinalLocation(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy) {
 
         try {
 
-            JSONArray jArray=new JSONArray();
-            JSONObject jsonObjMain=new JSONObject();
+            JSONArray jArray = new JSONArray();
+            JSONObject jsonObjMain = new JSONObject();
 
 
             JSONObject jOnew = new JSONObject();
-            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
-            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
-            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
+            jOnew.put("chekLastGPSLat", chekLastGPSLat);
+            jOnew.put("chekLastGPSLong", chekLastGPSLong);
+            jOnew.put("chekLastGpsAccuracy", chekLastGpsAccuracy);
 
 
             jArray.put(jOnew);
             jsonObjMain.put("GPSLastLocationDetils", jArray);
 
             File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.FinalLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
+            if (!jsonTxtFolder.exists()) {
                 jsonTxtFolder.mkdirs();
 
             }
-            String txtFileNamenew="FinalGPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+CommonInfo.FinalLatLngJsonFile+"/"+txtFileNamenew;
+            String txtFileNamenew = "FinalGPSLastLocation.txt";
+            File file = new File(jsonTxtFolder, txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory() + "/" + CommonInfo.FinalLatLngJsonFile + "/" + txtFileNamenew;
 
 
             // If file does not exists, then create it
@@ -3181,8 +2858,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
+        } finally {
 
         }
     }
@@ -3191,49 +2867,45 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         int locationMode = 0;
         String locationProviders;
 
-        flgLocationServicesOnOff=0;
-        flgGPSOnOff=0;
-        flgNetworkOnOff=0;
-        flgFusedOnOff=0;
-        flgInternetOnOffWhileLocationTracking=0;
+        flgLocationServicesOnOff = 0;
+        flgGPSOnOff = 0;
+        flgNetworkOnOff = 0;
+        flgFusedOnOff = 0;
+        flgInternetOnOffWhileLocationTracking = 0;
 
-        if(isGooglePlayServicesAvailable())
-        {
-            flgFusedOnOff=1;
+        if (isGooglePlayServicesAvailable()) {
+            flgFusedOnOff = 1;
         }
-        if(isOnline())
-        {
-            flgInternetOnOffWhileLocationTracking=1;
+        if (isOnline()) {
+            flgInternetOnOffWhileLocationTracking = 1;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //Equal or higher than API 19/KitKat
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=1;
+                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 1;
+                    flgNetworkOnOff = 1;
                     //flgFusedOnOff=1;
                 }
-                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=0;
-                    flgNetworkOnOff=1;
+                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 0;
+                    flgNetworkOnOff = 1;
                     // flgFusedOnOff=1;
                 }
-                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=0;
+                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 1;
+                    flgNetworkOnOff = 0;
                     //flgFusedOnOff=0;
                 }
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             //Lower than API 19
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 
@@ -3288,7 +2960,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         android.app.AlertDialog.Builder alertDialogGps = new android.app.AlertDialog.Builder(this);
 
         // Setting Dialog Title
@@ -3307,17 +2979,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
 
         // Showing Alert Message
-        GPSONOFFAlert=alertDialogGps.create();
+        GPSONOFFAlert = alertDialogGps.create();
         GPSONOFFAlert.show();
     }
 
-    void reportsWorking()
-    {
-        ll_reports.setOnClickListener(new View.OnClickListener()
-        {
+    void reportsWorking() {
+        ll_reports.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                /* if(ll_reports.isSelected())
                     ll_reports.setSelected(false);
                 else
@@ -3327,27 +2996,26 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
     }
 
-    void openReportAlert()
-    {
-        final AlertDialog.Builder alert=new AlertDialog.Builder(AllButtonActivity.this);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    void openReportAlert() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(AllButtonActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.report_visit_alert, null);
         alert.setView(view);
 
         alert.setCancelable(false);
 
-        final RadioButton rb_myReport= (RadioButton) view.findViewById(R.id.rb_myReport);
-        final RadioButton rb_dsrReport= (RadioButton) view.findViewById(R.id.rb_dsrReport);
-        final RadioButton rb_WholeReport= (RadioButton) view.findViewById(R.id.rb_WholeReport);
-        final Spinner spinner_dsrVisit= (Spinner) view.findViewById(R.id.spinner_dsrVisit);
+        final RadioButton rb_myReport = (RadioButton) view.findViewById(R.id.rb_myReport);
+        final RadioButton rb_dsrReport = (RadioButton) view.findViewById(R.id.rb_dsrReport);
+        final RadioButton rb_WholeReport = (RadioButton) view.findViewById(R.id.rb_WholeReport);
+        final Spinner spinner_dsrVisit = (Spinner) view.findViewById(R.id.spinner_dsrVisit);
 
-        final RadioButton rb_distrbtrScope= (RadioButton) view.findViewById(R.id.rb_distrbtrScope);
-        final Spinner spinner_distrbtrScope= (Spinner) view.findViewById(R.id.spinner_distrbtrScope);
+        final RadioButton rb_distrbtrScope = (RadioButton) view.findViewById(R.id.rb_distrbtrScope);
+        final Spinner spinner_distrbtrScope = (Spinner) view.findViewById(R.id.spinner_distrbtrScope);
 
-        Button btn_proceed= (Button) view.findViewById(R.id.btn_proceed);
-        Button btn_cancel= (Button) view.findViewById(R.id.btn_cancel);
+        Button btn_proceed = (Button) view.findViewById(R.id.btn_proceed);
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
 
-        final AlertDialog dialog=alert.create();
+        final AlertDialog dialog = alert.create();
         dialog.show();
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -3359,79 +3027,63 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 dialog.dismiss();
-                if(rb_myReport.isChecked())
-                {
-                    String SONodeIdAndNodeType= dbengine.fnGetPersonNodeIDAndPersonNodeTypeForSO();
+                if (rb_myReport.isChecked()) {
+                    String SONodeIdAndNodeType = dbengine.fnGetPersonNodeIDAndPersonNodeTypeForSO();
 
-                    int tempSalesmanNodeId=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                    int tempSalesmanNodeType=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[1]);
-                    shardPrefForSalesman(tempSalesmanNodeId,tempSalesmanNodeType);
+                    int tempSalesmanNodeId = Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                    int tempSalesmanNodeType = Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                    shardPrefForSalesman(tempSalesmanNodeId, tempSalesmanNodeType);
 
                     flgDataScopeSharedPref(1);
                    /* CommonInfo.SalesmanNodeId=0;
                     CommonInfo.SalesmanNodeType=0;
                     CommonInfo.flgDataScope=1;*/
-                    Intent i=new Intent(AllButtonActivity.this,DetailReportSummaryActivityForAll.class);
+                    Intent i = new Intent(AllButtonActivity.this, DetailReportSummaryActivityForAll.class);
                     startActivity(i);
                     finish();
-                }
-                else if(rb_WholeReport.isChecked())
-                {
+                } else if (rb_WholeReport.isChecked()) {
                     /*String SONodeIdAndNodeType= dbengine.fnGetPersonNodeIDAndPersonNodeTypeForSO();
 
                     CommonInfo.PersonNodeID=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[0]);
                     CommonInfo.PersonNodeType=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[1]);*/
 
-                    shardPrefForSalesman(0,0);
+                    shardPrefForSalesman(0, 0);
                     flgDataScopeSharedPref(3);
-                    Intent i=new Intent(AllButtonActivity.this,DetailReportSummaryActivityForAll.class);
+                    Intent i = new Intent(AllButtonActivity.this, DetailReportSummaryActivityForAll.class);
                     startActivity(i);
                     finish();
-                }
-                else if(rb_dsrReport.isChecked())
-                {
-                    if(!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM") )
-                    {
+                } else if (rb_dsrReport.isChecked()) {
+                    if (!SelectedDSRValue.equals("") && !SelectedDSRValue.equals("Select DSM") && !SelectedDSRValue.equals("No DSM")) {
 
-                        String DSRNodeIdAndNodeType= dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
-                        int tempSalesmanNodeId=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                        int tempSalesmanNodeType=Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
-                        shardPrefForSalesman(tempSalesmanNodeId,tempSalesmanNodeType);
+                        String DSRNodeIdAndNodeType = dbengine.fnGetDSRPersonNodeIdAndNodeType(SelectedDSRValue);
+                        int tempSalesmanNodeId = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                        int tempSalesmanNodeType = Integer.parseInt(DSRNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                        shardPrefForSalesman(tempSalesmanNodeId, tempSalesmanNodeType);
                         flgDataScopeSharedPref(2);
 
                         Intent i = new Intent(AllButtonActivity.this, DetailReportSummaryActivityForAll.class);
                         startActivity(i);
                         finish();
+                    } else {
                     }
-                    else
-                    {
-                    }
-                }
-                else if(rb_distrbtrScope.isChecked())
-                {
-                    if(!SelectedDistrbtrName.equals("") && !SelectedDistrbtrName.equals("Select Distributor") && !SelectedDistrbtrName.equals("No Distributor") )
-                    {
-                        String DbrNodeIdAndNodeType= hmapDistrbtrList.get(SelectedDistrbtrName);
-                        int tempSalesmanNodeId=Integer.parseInt(DbrNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
-                        int tempSalesmanNodeType=Integer.parseInt(DbrNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
+                } else if (rb_distrbtrScope.isChecked()) {
+                    if (!SelectedDistrbtrName.equals("") && !SelectedDistrbtrName.equals("Select Distributor") && !SelectedDistrbtrName.equals("No Distributor")) {
+                        String DbrNodeIdAndNodeType = hmapDistrbtrList.get(SelectedDistrbtrName);
+                        int tempSalesmanNodeId = Integer.parseInt(DbrNodeIdAndNodeType.split(Pattern.quote("^"))[0]);
+                        int tempSalesmanNodeType = Integer.parseInt(DbrNodeIdAndNodeType.split(Pattern.quote("^"))[1]);
 
-                        shardPrefForSalesman(tempSalesmanNodeId,tempSalesmanNodeType);
+                        shardPrefForSalesman(tempSalesmanNodeId, tempSalesmanNodeType);
 
                         flgDataScopeSharedPref(4);
                         Intent i = new Intent(AllButtonActivity.this, DetailReportSummaryActivityForAll.class);
                         startActivity(i);
                         finish();
-                    }
-                    else
-                    {
+                    } else {
                         showAlertForEveryOne("Please select Distributor to Proceed.");
                     }
-                }
-                else
-                {
+                } else {
                     showAlertForEveryOne("Please select atleast one option to Proceed.");
                 }
             }
@@ -3439,10 +3091,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_myReport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_myReport.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_myReport.isChecked()) {
                     rb_dsrReport.setChecked(false);
                     rb_WholeReport.setChecked(false);
                     spinner_dsrVisit.setVisibility(View.GONE);
@@ -3453,10 +3103,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
         rb_WholeReport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_WholeReport.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_WholeReport.isChecked()) {
                     rb_dsrReport.setChecked(false);
                     rb_myReport.setChecked(false);
                     spinner_dsrVisit.setVisibility(View.GONE);
@@ -3468,26 +3116,22 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_dsrReport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_dsrReport.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_dsrReport.isChecked()) {
                     rb_myReport.setChecked(false);
                     rb_WholeReport.setChecked(false);
                     rb_distrbtrScope.setChecked(false);
                     spinner_distrbtrScope.setVisibility(View.GONE);
 
-                    ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,drsNames);
+                    ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, drsNames);
                     adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_dsrVisit.setAdapter(adapterCategory);
                     spinner_dsrVisit.setVisibility(View.VISIBLE);
 
-                    spinner_dsrVisit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                    {
+                    spinner_dsrVisit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                         @Override
-                        public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-                        {
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             // TODO Auto-generated method stub
                             SelectedDSRValue = spinner_dsrVisit.getSelectedItem().toString();
                             /*ReasonText=spinnerReasonSelected;
@@ -3507,8 +3151,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         }
 
                         @Override
-                        public void onNothingSelected(AdapterView<?> arg0)
-                        {
+                        public void onNothingSelected(AdapterView<?> arg0) {
                         }
                     });
 
@@ -3518,31 +3161,26 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_distrbtrScope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_distrbtrScope.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_distrbtrScope.isChecked()) {
                     rb_myReport.setChecked(false);
                     rb_WholeReport.setChecked(false);
                     rb_dsrReport.setChecked(false);
                     spinner_dsrVisit.setVisibility(View.GONE);
 
-                    ArrayAdapter adapterCategory=new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item,DbrArray);
+                    ArrayAdapter adapterCategory = new ArrayAdapter(AllButtonActivity.this, android.R.layout.simple_spinner_item, DbrArray);
                     adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_distrbtrScope.setAdapter(adapterCategory);
                     spinner_distrbtrScope.setVisibility(View.VISIBLE);
 
-                    spinner_distrbtrScope.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                    {
+                    spinner_distrbtrScope.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
-                        public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3)
-                        {
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                             SelectedDistrbtrName = spinner_distrbtrScope.getSelectedItem().toString();
                         }
 
                         @Override
-                        public void onNothingSelected(AdapterView<?> arg0)
-                        {
+                        public void onNothingSelected(AdapterView<?> arg0) {
                         }
                     });
                 }
@@ -3553,13 +3191,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         dialog.show();
     }
 
-    void storeValidationWorking()
-    {
+    void storeValidationWorking() {
         ll_storeVal.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                GetStoreAllData getStoreAllDataAsync= new GetStoreAllData(AllButtonActivity.this);
+            public void onClick(View view) {
+                GetStoreAllData getStoreAllDataAsync = new GetStoreAllData(AllButtonActivity.this);
                 getStoreAllDataAsync.execute();
                /* Intent i=new Intent(AllButtonActivity.this,StorelistActivity.class);
                 startActivity(i);
@@ -3578,79 +3214,63 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
     }
 
-    void distributorStockWorking()
-    {
+    void distributorStockWorking() {
         ll_distrbtrStock.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 dbengine.open();
                 dbengine.maintainPDADate();
-                String getPDADate=dbengine.fnGetPdaDate();
-                String getServerDate=dbengine.fnGetServerDate();
+                String getPDADate = dbengine.fnGetPdaDate();
+                String getServerDate = dbengine.fnGetServerDate();
 
                 dbengine.close();
 
 
-                if(!getServerDate.equals(getPDADate))
-                {
-                    if(isOnline())
-                    {
+                if (!getServerDate.equals(getPDADate)) {
+                    if (isOnline()) {
 
-                        try
-                        {
-                            click_but_distribtrStock=1;
+                        try {
+                            click_but_distribtrStock = 1;
                             FullSyncDataNow task = new FullSyncDataNow(AllButtonActivity.this);
                             task.execute();
-                        }
-                        catch(Exception e)
-                        {
+                        } catch (Exception e) {
 
                         }
-                    }
-                    else
-                    {
+                    } else {
                         showNoConnAlertDistributor();
                     }
-                }
-                else
-                {
+                } else {
 
-                    if(imei==null)
-                    {
-                        imei=CommonInfo.imei;
+                    if (imei == null) {
+                        imei = CommonInfo.imei;
                     }
-                    if(fDate==null)
-                    {
+                    if (fDate == null) {
                         Date date1 = new Date();
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
                         fDate = sdf.format(date1).toString().trim();
                     }
 
-                    Intent i=new Intent(AllButtonActivity.this,DistributorCheckInForStock.class);
+                    Intent i = new Intent(AllButtonActivity.this, DistributorCheckInForStock.class);
                     i.putExtra("imei", imei);
                     i.putExtra("CstmrNodeId", CstmrNodeId);
                     i.putExtra("CstomrNodeType", CstomrNodeType);
                     i.putExtra("fDate", fDate);
-                    i.putExtra("DistributorName","BLANK");
+                    i.putExtra("DistributorName", "BLANK");
                     startActivity(i);
                     finish();
-                   // finish();
+                    // finish();
                 }
             }
         });
     }
 
-    public void showNoConnAlertDistributor()
-    {
+    public void showNoConnAlertDistributor() {
         AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
         alertDialogNoConn.setTitle(R.string.genTermNoDataConnection);
         alertDialogNoConn.setMessage(R.string.genTermNoDataConnectionFullMsg);
         alertDialogNoConn.setNeutralButton(R.string.txtOk,
-                new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         // finish();
                     }
@@ -3661,51 +3281,39 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    void executionWorking()
-    {
-        ll_execution.setOnClickListener(new View.OnClickListener()
-        {
+    void executionWorking() {
+        ll_execution.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if(isOnline())
-                {
-                    try
-                    {
-                       ll_execution.setEnabled(false);
+            public void onClick(View view) {
+                if (isOnline()) {
+                    try {
+                        ll_execution.setEnabled(false);
                         GetInvoiceForDay task = new GetInvoiceForDay(AllButtonActivity.this);
                         task.execute();
 
 
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         // e.printStackTrace();
                     }
-                }
-                else
-                {
+                } else {
                     showNoConnAlert();
                 }
             }
         });
     }
 
-    private class GetInvoiceForDay extends AsyncTask<Void, Void, Void>
-    {
+    private class GetInvoiceForDay extends AsyncTask<Void, Void, Void> {
         ServiceWorker newservice = new ServiceWorker();
 
         ProgressDialog pDialogGetInvoiceForDay;
 
-        public GetInvoiceForDay(AllButtonActivity activity)
-        {
+        public GetInvoiceForDay(AllButtonActivity activity) {
             pDialogGetInvoiceForDay = new ProgressDialog(activity);
         }
 
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
@@ -3720,70 +3328,56 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
 
             try {
 
-                HashMap<String,String> hmapInvoiceOrderIDandStatus=new HashMap<String, String>();
-                hmapInvoiceOrderIDandStatus=dbengine.fetchHmapInvoiceOrderIDandStatus();
+                HashMap<String, String> hmapInvoiceOrderIDandStatus = new HashMap<String, String>();
+                hmapInvoiceOrderIDandStatus = dbengine.fetchHmapInvoiceOrderIDandStatus();
 
-                for(int mm = 1; mm < 6  ; mm++)
-                {
-                    if(mm==1)
-                    {
-                        newservice = newservice.callInvoiceButtonStoreMstr(getApplicationContext(), fDate, imei, rID,hmapInvoiceOrderIDandStatus);
+                for (int mm = 1; mm < 6; mm++) {
+                    if (mm == 1) {
+                        newservice = newservice.callInvoiceButtonStoreMstr(getApplicationContext(), fDate, imei, rID, hmapInvoiceOrderIDandStatus);
 
-                        if(!newservice.director.toString().trim().equals("1"))
-                        {
-                            if(chkFlgForErrorToCloseApp==0)
-                            {
-                                chkFlgForErrorToCloseApp=1;
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
                             }
 
                         }
 
                     }
-                    if(mm==2)
-                    {
+                    if (mm == 2) {
                         newservice = newservice.callInvoiceButtonProductMstr(getApplicationContext(), fDate, imei, rID);
 
-                        if(!newservice.director.toString().trim().equals("1"))
-                        {
-                            if(chkFlgForErrorToCloseApp==0)
-                            {
-                                chkFlgForErrorToCloseApp=1;
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
                             }
 
                         }
 
                     }
-                    if(mm==3)
-                    {
-                        newservice = newservice.callInvoiceButtonStoreProductwiseOrder(getApplicationContext(), fDate, imei, rID,hmapInvoiceOrderIDandStatus);
+                    if (mm == 3) {
+                        newservice = newservice.callInvoiceButtonStoreProductwiseOrder(getApplicationContext(), fDate, imei, rID, hmapInvoiceOrderIDandStatus);
                     }
-                    if(mm==4)
-                    {
+                    if (mm == 4) {
                         dbengine.open();
-                        int check1=dbengine.counttblCatagoryMstr();
+                        int check1 = dbengine.counttblCatagoryMstr();
                         dbengine.close();
-                        if(check1==0)
-                        {
+                        if (check1 == 0) {
                             newservice = newservice.getCategory(getApplicationContext(), imei);
                         }
                     }
 
 
-                    if(mm==5)
-                    {
+                    if (mm == 5) {
 
                         newservice = newservice.getCancelReasonsExecution(getApplicationContext(), fDate, rID, imei);
 
-                        if(!newservice.director.toString().trim().equals("1"))
-                        {
-                            if(chkFlgForErrorToCloseApp==0)
-                            {
-                                chkFlgForErrorToCloseApp=1;
+                        if (!newservice.director.toString().trim().equals("1")) {
+                            if (chkFlgForErrorToCloseApp == 0) {
+                                chkFlgForErrorToCloseApp = 1;
                             }
 
                         }
@@ -3792,13 +3386,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
 
 
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.i("SvcMgr", "Service Execution Failed!", e);
-            }
-
-            finally
-            {
+            } finally {
                 Log.i("SvcMgr", "Service Execution Completed...");
             }
 
@@ -3806,19 +3396,16 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             Log.i("SvcMgr", "Service Execution Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
 
-            if(pDialogGetInvoiceForDay.isShowing())
-            {
+            if (pDialogGetInvoiceForDay.isShowing()) {
                 pDialogGetInvoiceForDay.dismiss();
             }
             ll_execution.setEnabled(true);
@@ -3828,26 +3415,21 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             storeIntent.putExtra("pickerDate", fDate);
 
 
-            if(chkFlgForErrorToCloseApp==0)
-            {
-                chkFlgForErrorToCloseApp=0;
+            if (chkFlgForErrorToCloseApp == 0) {
+                chkFlgForErrorToCloseApp = 0;
                 startActivity(storeIntent);
                 finish();
-            }
-            else
-            {
+            } else {
                 AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
                 alertDialogNoConn.setTitle("Information");
                 alertDialogNoConn.setMessage("There is no Invoice Pending");
                 alertDialogNoConn.setCancelable(false);
                 alertDialogNoConn.setNeutralButton(R.string.AlertDialogOkButton,
-                        new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int which)
-                            {
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                               // but_Invoice.setEnabled(true);
-                                chkFlgForErrorToCloseApp=0;
+                                // but_Invoice.setEnabled(true);
+                                chkFlgForErrorToCloseApp = 0;
                             }
                         });
                 alertDialogNoConn.setIcon(R.drawable.info_ico);
@@ -3861,14 +3443,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     private class GetStoreAllData extends AsyncTask<Void, Void, Void> {
 
-        public GetStoreAllData(AllButtonActivity activity)
-        {
+        public GetStoreAllData(AllButtonActivity activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
             pDialogGetStores.setTitle(getText(R.string.PleaseWaitMsg));
@@ -3881,18 +3461,15 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         @Override
         protected Void doInBackground(Void... params) {
-            try
-            {
+            try {
                 dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
                 int DatabaseVersion = dbengine.DATABASE_VERSION;
                 int ApplicationID = dbengine.Application_TypeID;
                 //newservice = newservice.getAvailableAndUpdatedVersionOfApp(getApplicationContext(), imei,fDate,DatabaseVersion,ApplicationID);
 
                 dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(1);
-                for(int mm = 1; mm<6; mm++)
-                {
-                    if(mm==1)
-                    {
+                for (int mm = 1; mm < 6; mm++) {
+                    if (mm == 1) {
                         newservice = newservice.getSOSummary(getApplicationContext(), imei, fDate, DatabaseVersion, ApplicationID);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
@@ -3902,8 +3479,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                         }
                     }
-                    if(mm==2)
-                    {
+                    if (mm == 2) {
                         newservice = newservice.getStoreAllDetails(getApplicationContext(), imei, fDate, DatabaseVersion, ApplicationID);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
@@ -3915,10 +3491,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
                     }
-                    if(mm==3)
-                    {
+                    if (mm == 3) {
                         //callReturnProductReason
-                        newservice = newservice.callfnSingleCallAllWebServiceSO(getApplicationContext(),ApplicationID,imei);
+                        newservice = newservice.callfnSingleCallAllWebServiceSO(getApplicationContext(), ApplicationID, imei);
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
                                 chkFlgForErrorToCloseApp = 1;
@@ -3928,8 +3503,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         }
 
                     }
-                    if(mm==4)
-                    {
+                    if (mm == 4) {
                         newservice = newservice.getQuotationDataFromServer(getApplicationContext(), fDate, imei, "0");
                         if (!newservice.director.toString().trim().equals("1")) {
                             if (chkFlgForErrorToCloseApp == 0) {
@@ -3938,8 +3512,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                             }
                         }
                     }
-                    if(mm==5)
-                    {
+                    if (mm == 5) {
                         //callReturnProductReason
                      /*   newservice = newservice.callReturnProductReason(getApplicationContext(),ApplicationID,imei);
                         if (!newservice.director.toString().trim().equals("1")) {
@@ -3963,25 +3536,20 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            try
-            {
-                if(pDialogGetStores.isShowing())
-                {
+            try {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
 
             }
 
             if (chkFlgForErrorToCloseApp == 1)   // if Webservice showing exception or not excute complete properly
             {
                 chkFlgForErrorToCloseApp = 0;
-                SharedPreferences sharedPreferences=getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPref", MODE_PRIVATE);
                 SharedPreferences.Editor ed;
-                if(sharedPreferences.contains("ServerDate"))
-                {
+                if (sharedPreferences.contains("ServerDate")) {
                     ed = sharedPreferences.edit();
                     ed.putString("ServerDate", "0");
                     ed.commit();
@@ -3989,13 +3557,11 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
                 showAlertSingleButtonInfo("Error while retrieving data.");
-            }
-            else
-            {
-                    dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(0);
-                    Intent i=new Intent(AllButtonActivity.this,StorelistActivity.class);
-                    startActivity(i);
-                    finish();
+            } else {
+                dbengine.fnInsertOrUpdate_tblAllServicesCalledSuccessfull(0);
+                Intent i = new Intent(AllButtonActivity.this, StorelistActivity.class);
+                startActivity(i);
+                finish();
 
             }
         }
@@ -4003,16 +3569,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-
-
-
-    private class FullSyncDataNow extends AsyncTask<Void, Void, Void>
-    {
+    private class FullSyncDataNow extends AsyncTask<Void, Void, Void> {
 
 
         ProgressDialog pDialogGetStores;
-        public FullSyncDataNow(AllButtonActivity activity)
-        {
+
+        public FullSyncDataNow(AllButtonActivity activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
@@ -4033,66 +3595,56 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         @Override
 
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
 
-            int Outstat=3;
+            int Outstat = 3;
 
-            long  syncTIMESTAMP = System.currentTimeMillis();
+            long syncTIMESTAMP = System.currentTimeMillis();
             Date dateobj = new Date(syncTIMESTAMP);
-            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
             String StampEndsTime = df.format(dateobj);
 
 
-
             dbengine.open();
-            String presentRoute=dbengine.GetActiveRouteIDForDistributor();
+            String presentRoute = dbengine.GetActiveRouteIDForDistributor();
             dbengine.close();
 
-            SimpleDateFormat df1 = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss",Locale.ENGLISH);
-            newfullFileName=imei+"."+presentRoute+"."+ df1.format(dateobj);
+            SimpleDateFormat df1 = new SimpleDateFormat("dd.MMM.yyyy.HH.mm.ss", Locale.ENGLISH);
+            newfullFileName = imei + "." + presentRoute + "." + df1.format(dateobj);
 
-            try
-            {
+            try {
 
                 File MeijiDistributorEntryXMLFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.DistributorXMLFolder);
-                if (!MeijiDistributorEntryXMLFolder.exists())
-                {
+                if (!MeijiDistributorEntryXMLFolder.exists()) {
                     MeijiDistributorEntryXMLFolder.mkdirs();
                 }
 
-                int checkNoFiles=dbengine.counttblDistributorSavedData();
-                if(checkNoFiles==1)
-                {
-                    String routeID=dbengine.GetActiveRouteIDSunil();
+                int checkNoFiles = dbengine.counttblDistributorSavedData();
+                if (checkNoFiles == 1) {
+                    String routeID = dbengine.GetActiveRouteIDSunil();
                     DA.open();
-                    DA.export(CommonInfo.DATABASE_NAME, newfullFileName,routeID);
+                    DA.export(CommonInfo.DATABASE_NAME, newfullFileName, routeID);
                     DA.close();
 
                 }
 
                 dbengine.open();
                 dbengine.maintainPDADate();
-                String getPDADate=dbengine.fnGetPdaDate();
-                String getServerDate=dbengine.fnGetServerDate();
+                String getPDADate = dbengine.fnGetPdaDate();
+                String getServerDate = dbengine.fnGetServerDate();
 
                 dbengine.close();
 
                 //dbengine.deleteDistributorStockTbles();
-                if(!getServerDate.equals(getPDADate))
-                {
+                if (!getServerDate.equals(getPDADate)) {
                     dbengine.deleteDistributorStockTbles();
                 }
 
 
-
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
 
                 e.printStackTrace();
-                if(pDialogGetStores.isShowing())
-                {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
             }
@@ -4100,28 +3652,22 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
 
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if(pDialogGetStores.isShowing())
-            {
+            if (pDialogGetStores.isShowing()) {
                 pDialogGetStores.dismiss();
             }
 
-            try
-            {
+            try {
 
                 task2 = new SyncXMLfileData(AllButtonActivity.this);
                 task2.execute();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
 
             }
 
@@ -4130,28 +3676,21 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
+    private class SyncXMLfileData extends AsyncTask<Void, Void, Integer> {
 
 
-    private class SyncXMLfileData extends AsyncTask<Void, Void, Integer>
-    {
-
-
-
-        public SyncXMLfileData(AllButtonActivity activity)
-        {
+        public SyncXMLfileData(AllButtonActivity activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
             File MeijiIndirectSFAxmlFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.DistributorXMLFolder);
 
-            if (!MeijiIndirectSFAxmlFolder.exists())
-            {
+            if (!MeijiIndirectSFAxmlFolder.exists()) {
                 MeijiIndirectSFAxmlFolder.mkdirs();
             }
 
@@ -4167,8 +3706,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected Integer doInBackground(Void... params)
-        {
+        protected Integer doInBackground(Void... params) {
 
 
             // This method used for sending xml from Folder without taking records in DB.
@@ -4178,36 +3716,28 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             File del = new File(Environment.getExternalStorageDirectory(), CommonInfo.DistributorXMLFolder);
 
             // check number of files in folder
-            String [] AllFilesName= checkNumberOfFiles(del);
+            String[] AllFilesName = checkNumberOfFiles(del);
 
 
-            if(AllFilesName.length>0)
-            {
+            if (AllFilesName.length > 0) {
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
 
-                for(int vdo=0;vdo<AllFilesName.length;vdo++)
-                {
-                    String fileUri=  AllFilesName[vdo];
+                for (int vdo = 0; vdo < AllFilesName.length; vdo++) {
+                    String fileUri = AllFilesName[vdo];
 
 
-                    System.out.println("Sunil Again each file Name :" +fileUri);
+                    System.out.println("Sunil Again each file Name :" + fileUri);
 
-                    if(fileUri.contains(".zip"))
-                    {
+                    if (fileUri.contains(".zip")) {
                         File file = new File(fileUri);
                         file.delete();
-                    }
-                    else
-                    {
-                        String f1=Environment.getExternalStorageDirectory().getPath()+"/"+CommonInfo.DistributorXMLFolder+"/"+fileUri;
-                        System.out.println("Sunil Again each file full path"+f1);
-                        try
-                        {
-                            upLoad2ServerXmlFiles(f1,fileUri);
-                        }
-                        catch (Exception e)
-                        {
+                    } else {
+                        String f1 = Environment.getExternalStorageDirectory().getPath() + "/" + CommonInfo.DistributorXMLFolder + "/" + fileUri;
+                        System.out.println("Sunil Again each file full path" + f1);
+                        try {
+                            upLoad2ServerXmlFiles(f1, fileUri);
+                        } catch (Exception e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
@@ -4215,12 +3745,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                 }
 
-            }
-            else
-            {
+            } else {
 
             }
-
 
 
             // pDialogGetStores.dismiss();
@@ -4229,85 +3756,69 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             //	Log.i("SyncMasterForDistributor", "Sync Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Integer result)
-        {
+        protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
-            if(!isFinishing())
-            {
+            if (!isFinishing()) {
 
                 //	Log.i("SyncMasterForDistributor", "Sync cycle completed");
 
 
-                if(pDialogGetStores.isShowing())
-                {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
 
 
-
-
             }
-            if(click_but_distribtrStock==1)
-            {
-                click_but_distribtrStock=0;
+            if (click_but_distribtrStock == 1) {
+                click_but_distribtrStock = 0;
                 //changes
-                if(imei==null)
-                {
-                    imei=CommonInfo.imei;
+                if (imei == null) {
+                    imei = CommonInfo.imei;
                 }
-                if(fDate==null)
-                {
+                if (fDate == null) {
                     Date date1 = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
                     fDate = sdf.format(date1).toString().trim();
                 }
-                Intent i=new Intent(AllButtonActivity.this,DistributorCheckInForStock.class);
+                Intent i = new Intent(AllButtonActivity.this, DistributorCheckInForStock.class);
                 i.putExtra("imei", imei);
                 i.putExtra("CstmrNodeId", CstmrNodeId);
                 i.putExtra("CstomrNodeType", CstomrNodeType);
                 i.putExtra("fDate", fDate);
-                i.putExtra("DistributorName","BLANK");
+                i.putExtra("DistributorName", "BLANK");
                 startActivity(i);
                 finish();
-               // finish();
+                // finish();
             }
         }
-
-
-
 
 
     }
 
 
-    public  int upLoad2ServerXmlFiles(String sourceFileUri,String fileUri)
-    {
+    public int upLoad2ServerXmlFiles(String sourceFileUri, String fileUri) {
 
-        fileUri=fileUri.replace(".xml", "");
+        fileUri = fileUri.replace(".xml", "");
 
         String fileName = fileUri;
-        String zipFileName=fileUri;
+        String zipFileName = fileUri;
 
-        String newzipfile = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorXMLFolder+"/" + fileName + ".zip";
+        String newzipfile = Environment.getExternalStorageDirectory() + "/" + CommonInfo.DistributorXMLFolder + "/" + fileName + ".zip";
         ///storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.zip
 
-        sourceFileUri=newzipfile;
+        sourceFileUri = newzipfile;
 
-        xmlForWeb[0] = Environment.getExternalStorageDirectory() + "/"+CommonInfo.DistributorXMLFolder+"/" + fileName + ".xml";
+        xmlForWeb[0] = Environment.getExternalStorageDirectory() + "/" + CommonInfo.DistributorXMLFolder + "/" + fileName + ".xml";
         //[/storage/sdcard0/PrabhatDirectSFAXml/359648069495987.2.21.04.2016.12.44.02.xml]
 
-        try
-        {
-            zip(xmlForWeb,newzipfile);
-        }
-        catch (Exception e1)
-        {
+        try {
+            zip(xmlForWeb, newzipfile);
+        } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             //java.io.FileNotFoundException: /359648069495987.2.21.04.2016.12.44.02: open failed: EROFS (Read-only file system)
@@ -4326,7 +3837,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         File file2send = new File(newzipfile);
 
-        String urlString = CommonInfo.DistributorSyncPath.trim()+"?CLIENTFILENAME=" + zipFileName;
+        // String urlString = CommonInfo.DistributorSyncPath.trim()+"?CLIENTFILENAME=" + zipFileName;
+        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameDistributorSyncPath + "&CLIENTFILENAME=" + zipFileName;
 
         try {
 
@@ -4362,8 +3874,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             // read file and write it into form...
             bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
-            while (bytesRead > 0)
-            {
+            while (bytesRead > 0) {
                 dos.write(buffer, 0, bufferSize);
                 bytesAvailable = fileInputStream.available();
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -4380,32 +3891,29 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
 
-            if(serverResponseCode == 200)
-            {
+            if (serverResponseCode == 200) {
 						  /* dbengine.open();
 						   dbengine.upDateXMLFileFlag(fileUri, 4);
 						   dbengine.close();*/
 
                 //new File(dir, fileUri).delete();
-                syncFLAG=1;
+                syncFLAG = 1;
 
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 // editor.remove(xmlForWeb[0]);
-                editor.putString(fileUri, ""+4);
+                editor.putString(fileUri, "" + 4);
                 editor.commit();
 
-                String FileSyncFlag=pref.getString(fileUri, ""+1);
+                String FileSyncFlag = pref.getString(fileUri, "" + 1);
 
                 delXML(xmlForWeb[0].toString());
 						   		/*dbengine.open();
 					            dbengine.deleteXMLFileRow(fileUri);
 					            dbengine.close();*/
 
-            }
-            else
-            {
-                syncFLAG=0;
+            } else {
+                syncFLAG = 0;
             }
 
             //close the streams //
@@ -4413,79 +3921,62 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             dos.flush();
             dos.close();
 
-        } catch (MalformedURLException ex)
-        {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
         return serverResponseCode;
 
     }
 
-    public void delXML(String delPath)
-    {
+    public void delXML(String delPath) {
         File file = new File(delPath);
         file.delete();
         File file1 = new File(delPath.toString().replace(".xml", ".zip"));
         file1.delete();
     }
 
-    public static void zip(String[] files, String zipFile) throws IOException
-    {
+    public static void zip(String[] files, String zipFile) throws IOException {
         BufferedInputStream origin = null;
         final int BUFFER_SIZE = 2048;
 
         ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
-        try
-        {
+        try {
             byte data[] = new byte[BUFFER_SIZE];
 
-            for (int i = 0; i < files.length; i++)
-            {
+            for (int i = 0; i < files.length; i++) {
                 FileInputStream fi = new FileInputStream(files[i]);
                 origin = new BufferedInputStream(fi, BUFFER_SIZE);
-                try
-                {
+                try {
                     ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
                     out.putNextEntry(entry);
                     int count;
-                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
-                    {
+                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
                         out.write(data, 0, count);
                     }
-                }
-                finally
-                {
+                } finally {
                     origin.close();
                 }
             }
-        }
-        finally
-        {
+        } finally {
             out.close();
         }
     }
 
-    public static String[] checkNumberOfFiles(File dir)
-    {
-        int NoOfFiles=0;
-        String [] Totalfiles = null;
+    public static String[] checkNumberOfFiles(File dir) {
+        int NoOfFiles = 0;
+        String[] Totalfiles = null;
 
-        if (dir.isDirectory())
-        {
+        if (dir.isDirectory()) {
             String[] children = dir.list();
-            NoOfFiles=children.length;
-            Totalfiles=new String[children.length];
+            NoOfFiles = children.length;
+            Totalfiles = new String[children.length];
 
-            for (int i=0; i<children.length; i++)
-            {
-                Totalfiles[i]=children[i];
+            for (int i = 0; i < children.length; i++) {
+                Totalfiles[i] = children[i];
             }
         }
         return Totalfiles;
@@ -4502,10 +3993,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 //System.out.println("starting bgTasker Exec().....: ");
 
 
-
-
                 dbengine.open();
-                String rID=dbengine.GetActiveRouteID();
+                String rID = dbengine.GetActiveRouteID();
                 dbengine.UpdateTblDayStartEndDetails(Integer.parseInt(rID), valDayEndOrChangeRoute);
                 //System.out.println("TblDayStartEndDetails Background: "+ rID);
                 //System.out.println("TblDayStartEndDetails Background valDayEndOrChangeRoute: "+ valDayEndOrChangeRoute);
@@ -4513,14 +4002,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                 //System.out.println("Induwati   whatTask :"+whatTask);
 
-                if (whatTask == 2)
-                {
+                if (whatTask == 2) {
                     whatTask = 0;
                     // stores with Sstat = 1 !
                     dbengine.open();
                     // dbengine.fnTruncateTblSelectedStoreIDinChangeRouteCase();
-                    for (int nosSelected = 0; nosSelected <= mSelectedItems.size() - 1; nosSelected++)
-                    {
+                    for (int nosSelected = 0; nosSelected <= mSelectedItems.size() - 1; nosSelected++) {
                         String valSN = (String) mSelectedItems.get(nosSelected);
                         int valID = stNames.indexOf(valSN);
                         String stIDneeded = stIDs.get(valID);
@@ -4533,8 +4020,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                         //System.out.println("stIDneeded : " + stIDneeded);
                         dbengine.insertTblSelectedStoreIDinChangeRouteCase(stIDneeded);
                         dbengine.updateflgFromWhereSubmitStatusAgainstStore(stIDneeded, 1);
-                        if(dbengine.fnchkIfStoreHasInvoiceEntry(stIDneeded)==1)
-                        {
+                        if (dbengine.fnchkIfStoreHasInvoiceEntry(stIDneeded) == 1) {
                             dbengine.updateStoreQuoteSubmitFlgInStoreMstrInChangeRouteCase(stIDneeded, 0);
                         }
                     }
@@ -4552,7 +4038,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     SyncNow();
 
 
-                }else if (whatTask == 3) {
+                } else if (whatTask == 3) {
                     // sync rest
                     whatTask = 0;
 
@@ -4566,10 +4052,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     SyncNow();
 
 
-					/*
-					 * dbengine.open(); dbengine.reCreateDB(); dbengine.close();
-					 */
-                }else if (whatTask == 1) {
+                    /*
+                     * dbengine.open(); dbengine.reCreateDB(); dbengine.close();
+                     */
+                } else if (whatTask == 1) {
                     // clear all
                     whatTask = 0;
 
@@ -4598,9 +4084,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             } catch (Exception e) {
                 Log.i("bgTasker", "bgTasker Execution Failed!", e);
 
-            }
-
-            finally {
+            } finally {
 
                 Log.i("bgTasker", "bgTasker Execution Completed...");
 
@@ -4610,11 +4094,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
-            pDialog2 = ProgressDialog.show(AllButtonActivity.this,getText(R.string.PleaseWaitMsg),getText(R.string.genTermProcessingRequest), true);
+            pDialog2 = ProgressDialog.show(AllButtonActivity.this, getText(R.string.PleaseWaitMsg), getText(R.string.genTermProcessingRequest), true);
             pDialog2.setIndeterminate(true);
             pDialog2.setCancelable(false);
             pDialog2.show();
@@ -4632,13 +4115,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
             Log.i("bgTasker", "bgTasker Execution cycle completed");
             pDialog2.dismiss();
-            if(isOnline())
-            {
+            if (isOnline()) {
                 UploadImageFromFolder(0);
 
-            }
-            else
-            {
+            } else {
                 showNoConnAlert();
             }
             whatTask = 0;
@@ -4647,11 +4127,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    public void shardPrefForCoverageArea(int coverageAreaNodeID,int coverageAreaNodeType)
-    {
+    public void shardPrefForCoverageArea(int coverageAreaNodeID, int coverageAreaNodeType) {
 
 
-      SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences.Editor editor = sharedPref.edit();
 
         editor.putInt("CoverageAreaNodeID", coverageAreaNodeID);
         editor.putInt("CoverageAreaNodeType", coverageAreaNodeType);
@@ -4662,10 +4141,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    public void shardPrefForSalesman(int salesmanNodeId,int salesmanNodeType)
-    {
-
-
+    public void shardPrefForSalesman(int salesmanNodeId, int salesmanNodeType) {
 
 
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -4678,8 +4154,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
     }
 
-    public void flgDataScopeSharedPref(int _flgDataScope)
-    {
+    public void flgDataScopeSharedPref(int _flgDataScope) {
         SharedPreferences.Editor editor = sharedPref.edit();
 
 
@@ -4688,8 +4163,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
     }
-    public void flgDSRSOSharedPref(int _flgDSRSO)
-    {
+
+    public void flgDSRSOSharedPref(int _flgDSRSO) {
         SharedPreferences.Editor editor = sharedPref.edit();
 
 
@@ -4700,23 +4175,22 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    void openDSRTrackerAlert()
-    {
-        final AlertDialog.Builder alert=new AlertDialog.Builder(AllButtonActivity.this);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    void openDSRTrackerAlert() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(AllButtonActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dsr_tracker_alert, null);
         alert.setView(view);
 
         alert.setCancelable(false);
 
-        final RadioButton rb_dataReport= (RadioButton) view.findViewById(R.id.rb_dataReport);
-        final RadioButton rb_onMap= (RadioButton) view.findViewById(R.id.rb_onMap);
+        final RadioButton rb_dataReport = (RadioButton) view.findViewById(R.id.rb_dataReport);
+        final RadioButton rb_onMap = (RadioButton) view.findViewById(R.id.rb_onMap);
 
 
-        Button btn_proceed= (Button) view.findViewById(R.id.btn_proceed);
-        Button btn_cancel= (Button) view.findViewById(R.id.btn_cancel);
+        Button btn_proceed = (Button) view.findViewById(R.id.btn_proceed);
+        Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
 
-        final AlertDialog dialog=alert.create();
+        final AlertDialog dialog = alert.create();
         dialog.show();
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -4728,24 +4202,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 dialog.dismiss();
-                if(rb_dataReport.isChecked())
-                {
-                    Intent i=new Intent(AllButtonActivity.this,WebViewDSRDataReportActivity.class);
+                if (rb_dataReport.isChecked()) {
+                    Intent i = new Intent(AllButtonActivity.this, WebViewDSRDataReportActivity.class);
                     startActivity(i);
 
-                }
-                else if(rb_onMap.isChecked())
-                {
+                } else if (rb_onMap.isChecked()) {
                     Intent i = new Intent(AllButtonActivity.this, WebViewDSRTrackerActivity.class);
                     startActivity(i);
 
-                }
-
-               else
-                {
+                } else {
                     showAlertForEveryOne("Please select atleast one option to Proceeds.");
                 }
             }
@@ -4753,10 +4220,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_dataReport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_dataReport.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_dataReport.isChecked()) {
                     rb_onMap.setChecked(false);
 
                 }
@@ -4765,10 +4230,8 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         rb_onMap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                if(rb_onMap.isChecked())
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (rb_onMap.isChecked()) {
                     rb_dataReport.setChecked(false);
 
                 }
@@ -4776,29 +4239,25 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         });
 
 
-
         dialog.show();
     }
 
 
-    private class GetStoresForDay extends AsyncTask<Void, Void, Void>
-    {
+    private class GetStoresForDay extends AsyncTask<Void, Void, Void> {
 
 
-        public GetStoresForDay(AllButtonActivity activity)
-        {
+        public GetStoresForDay(AllButtonActivity activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
+
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
             dbengine.open();
-            String getPDADate=dbengine.fnGetPdaDate();
-            String getServerDate=dbengine.fnGetServerDate();
-
+            String getPDADate = dbengine.fnGetPdaDate();
+            String getServerDate = dbengine.fnGetServerDate();
 
 
             dbengine.close();
@@ -4806,10 +4265,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             //System.out.println("Checking  Oncreate Date PDA GetStoresForDay:"+getPDADate);
             //System.out.println("Checking  Oncreate Date Server GetStoresForDay :"+getServerDate);
 
-            if(!getPDADate.equals(""))  // || !getPDADate.equals("NA") || !getPDADate.equals("Null") || !getPDADate.equals("NULL")
+            if (!getPDADate.equals(""))  // || !getPDADate.equals("NA") || !getPDADate.equals("Null") || !getPDADate.equals("NULL")
             {
-                if(!getServerDate.equals(getPDADate))
-                {
+                if (!getServerDate.equals(getPDADate)) {
 
 					/*showAlertBox("Your Phone  Date is not Up to date.Please Correct the Date.");
 					dbengine.open();
@@ -4819,9 +4277,6 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 					return;*/
                 }
             }
-
-
-
 
 
             dbengine.open();
@@ -4836,19 +4291,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }*/
 
 
-
-
             long syncTIMESTAMP = System.currentTimeMillis();
             Date dateobj = new Date(syncTIMESTAMP);
-            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH);
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
             String startTS = df.format(dateobj);
 
-            int DayEndFlg=0;
-            int ChangeRouteFlg=0;
+            int DayEndFlg = 0;
+            int ChangeRouteFlg = 0;
 
-            int DatabaseVersion=dbengine.DATABASE_VERSION;
-            String AppVersionID=dbengine.AppVersionID;
-            dbengine.insertTblDayStartEndDetails(imei,startTS,rID,DayEndFlg,ChangeRouteFlg,fDate,AppVersionID);//DatabaseVersion;//getVersionNumber
+            int DatabaseVersion = dbengine.DATABASE_VERSION;
+            String AppVersionID = dbengine.AppVersionID;
+            dbengine.insertTblDayStartEndDetails(imei, startTS, rID, DayEndFlg, ChangeRouteFlg, fDate, AppVersionID);//DatabaseVersion;//getVersionNumber
             dbengine.close();
 
 
@@ -4858,84 +4311,69 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             pDialogGetStores.setCancelable(false);
             pDialogGetStores.setCanceledOnTouchOutside(false);
             pDialogGetStores.show();
-            if(dbengine.isDBOpen())
-            {
+            if (dbengine.isDBOpen()) {
                 dbengine.close();
             }
 
         }
 
         @Override
-        protected Void doInBackground(Void... args)
-        {
+        protected Void doInBackground(Void... args) {
             ServiceWorker newservice = new ServiceWorker();
 
-            try
-            {
-                for(int mm = 1; mm < 40  ; mm++)
-                {
-                    System.out.println("bywww "+mm);
-                    if(mm==1)
-                    {
+            try {
+                for (int mm = 1; mm < 40; mm++) {
+                    System.out.println("bywww " + mm);
+                    if (mm == 1) {
                         newservice = newservice.getProductListLastVisitStockOrOrderMstr(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=1)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 1) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==2)
-                    {
+                    if (mm == 2) {
 
                         newservice = newservice.getallProduct(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=2)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 2) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==3)
-                    {
+                    if (mm == 3) {
 
                         newservice = newservice.getCategory(getApplicationContext(), imei);
-                        if(newservice.flagExecutedServiceSuccesfully!=3)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 3) {
+                            serviceException = true;
                             break;
                         }
 
                     }
-                    if(mm==4)
-                    {
+                    if (mm == 4) {
 
                         Date currDateNew = new Date();
-                        SimpleDateFormat currDateFormatNew = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+                        SimpleDateFormat currDateFormatNew = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 
                         String currSysDateNew = currDateFormatNew.format(currDateNew).toString();
                         newservice = newservice.getAllNewSchemeStructure(getApplicationContext(), currSysDateNew, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=4)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 4) {
+                            serviceException = true;
                             break;
                         }
 
                     }
-                    if(mm==5)
-                    {
+                    if (mm == 5) {
 
                         Date currDateNew = new Date();
-                        SimpleDateFormat currDateFormatNew = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+                        SimpleDateFormat currDateFormatNew = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 
                         String currSysDateNew = currDateFormatNew.format(currDateNew).toString();
                         newservice = newservice.getallPDASchAppListForSecondPage(getApplicationContext(), currSysDateNew, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=5)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 5) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==6)
-                    {
+                    if (mm == 6) {
 					/*Date currDateNew = new Date();
 					SimpleDateFormat currDateFormatNew = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 
@@ -4947,8 +4385,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						break;
 					}*/
                     }
-                    if(mm==7)
-                    {
+                    if (mm == 7) {
 
 
 
@@ -4964,73 +4401,56 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 					}*/
 
 
-
                     }
-                    if(mm==8)
-                    {
+                    if (mm == 8) {
                         newservice = newservice.getfnGetStoreWiseTarget(getApplicationContext(), fDate, imei, rID);
                     }
-                    if(mm==9)
-                    {
+                    if (mm == 9) {
 
                     }
-                    if(mm==10)
-                    {
+                    if (mm == 10) {
 
                     }
-                    if(mm==11)
-                    {
+                    if (mm == 11) {
 
                     }
-                    if(mm==12)
-                    {
+                    if (mm == 12) {
 
                     }
-                    if(mm==13)
-                    {
+                    if (mm == 13) {
 
                     }
-                    if(mm==14)
-                    {
+                    if (mm == 14) {
 
                     }
-                    if(mm==15)
-                    {
+                    if (mm == 15) {
 
                     }
-                    if(mm==16)
-                    {
+                    if (mm == 16) {
 
                     }
-                    if(mm==17)
-                    {
+                    if (mm == 17) {
 
                     }
-                    if(mm==18)
-                    {
+                    if (mm == 18) {
 
                     }
-                    if(mm==19)
-                    {
+                    if (mm == 19) {
 
                     }
-                    if(mm==20)
-                    {
+                    if (mm == 20) {
 
                     }
-                    if(mm==21)
-                    {
+                    if (mm == 21) {
                         newservice = newservice.GetPDAIsSchemeApplicable(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=21)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 21) {
+                            serviceException = true;
                             break;
                         }
 
                     }
 
-                    if(mm==22)
-                    {
+                    if (mm == 22) {
 						/*newservice = newservice.getallPDAtblSyncSummuryDetails(getApplicationContext(), fDate, imei, rID);
 						if(newservice.flagExecutedServiceSuccesfully!=22)
 						{
@@ -5039,12 +4459,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						}
 						*/
                     }
-                    if(mm==23)
-                    {
+                    if (mm == 23) {
                         //newservice = newservice.getallPDAtblSyncSummuryForProductDetails(getApplicationContext(), fDate, imei, rID);
                     }
-                    if(mm==24)
-                    {
+                    if (mm == 24) {
 					/*newservice = newservice.GetSchemeCoupon(getApplicationContext(), fDate, imei, rID);
 					if(newservice.flagExecutedServiceSuccesfully!=24)
 					{
@@ -5052,8 +4470,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						break;
 					}*/
                     }
-                    if(mm==25)
-                    {
+                    if (mm == 25) {
 				/*	newservice = newservice.GetSchemeCouponSlab(getApplicationContext(), fDate, imei, rID);
 					if(newservice.flagExecutedServiceSuccesfully!=25)
 					{
@@ -5061,8 +4478,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						break;
 					}*/
                     }
-                    if(mm==26)
-                    {
+                    if (mm == 26) {
 				/*	newservice = newservice.GetDaySummaryNew(getApplicationContext(), fDate, imei, rID);
 					if(newservice.flagExecutedServiceSuccesfully!=26)
 					{
@@ -5070,17 +4486,16 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						break;
 					}*/
                     }
-                    if(mm==27)
-                    {/*
+                    if (mm == 27) {/*
 					newservice = newservice.GetOrderDetailsOnLastSalesSummary(getApplicationContext(), fDate, imei, rID);
 					if(newservice.flagExecutedServiceSuccesfully!=27)
 					{
 						serviceException="GetOrderDetailsOnLastSalesSummary";
 						break;
 					}
-					*/}
-                    if(mm==28)
-                    {
+					*/
+                    }
+                    if (mm == 28) {
 				/*	newservice = newservice.GetVisitDetailsOnLastSalesSummary(getApplicationContext(), fDate, imei, rID);
 					if(newservice.flagExecutedServiceSuccesfully!=28)
 					{
@@ -5088,67 +4503,53 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 						break;
 					}*/
                     }
-                    if(mm==29)
-                    {
+                    if (mm == 29) {
                         newservice = newservice.GetLODDetailsOnLastSalesSummary(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=29)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 29) {
+                            serviceException = true;
                             break;
                         }
                     }
 
-                    if(mm==31)
-                    {
+                    if (mm == 31) {
                         newservice = newservice.GetCallspForPDAGetLastVisitDate(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=31)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 31) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==32)
-                    {
+                    if (mm == 32) {
                         newservice = newservice.GetCallspForPDAGetLastOrderDate(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=32)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 32) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==33)
-                    {
+                    if (mm == 33) {
                         newservice = newservice.GetCallspForPDAGetLastVisitDetails(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=33)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 33) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==34)
-                    {
+                    if (mm == 34) {
                         newservice = newservice.GetCallspForPDAGetLastOrderDetails(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=34)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 34) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==35)
-                    {
+                    if (mm == 35) {
                         newservice = newservice.GetCallspForPDAGetLastOrderDetails_TotalValues(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=35)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 35) {
+                            serviceException = true;
                             break;
                         }
                     }
-                    if(mm==36)
-                    {
+                    if (mm == 36) {
                         newservice = newservice.GetCallspForPDAGetExecutionSummary(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=36)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 36) {
+                            serviceException = true;
                             break;
                         }
                     }
@@ -5169,12 +4570,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 				}*/
 
-                    if(mm==39)
-                    {
+                    if (mm == 39) {
                         newservice = newservice.getallStores(getApplicationContext(), fDate, imei, rID);
-                        if(newservice.flagExecutedServiceSuccesfully!=1)
-                        {
-                            serviceException=true;
+                        if (newservice.flagExecutedServiceSuccesfully != 1) {
+                            serviceException = true;
                             break;
                         }
 
@@ -5184,13 +4583,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
 
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.i("SvcMgr", "Service Execution Failed!", e);
-            }
-            finally
-            {
+            } finally {
                 Log.i("SvcMgr", "Service Execution Completed...");
             }
             return null;
@@ -5198,99 +4593,80 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
             Log.i("SvcMgr", "Service Execution cycle completed");
 
-            try
-            {
-                if(pDialogGetStores.isShowing())
-                {
+            try {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
+            } catch (Exception e) {
             }
-            catch(Exception e)
-            {}
-            if(serviceException)
-            {
-                try
-                {
+            if (serviceException) {
+                try {
                     //but_GetStore.setEnabled(true);
-                    showAlertException("Error.....","Error while Retrieving Data!\n Please Retry");
+                    showAlertException("Error.....", "Error while Retrieving Data!\n Please Retry");
+                } catch (Exception e) {
                 }
-                catch(Exception e)
-                {}
-                serviceException=false;
+                serviceException = false;
                /* dbengine.open();
                 serviceException=false;
                 dbengine.maintainPDADate();
                 dbengine.dropRoutesTBL();
                 dbengine.reCreateDB();
                 dbengine.close();*/
-            }
-            else
-            {
+            } else {
                 //downloadVideo******************--------------------------------------
                 dbengine.open();
                 // dbengine.deletetblVideoStoreWise();
                 dbengine.close();
                 dbengine.open();
-                hmapStoreVideoUrl=   dbengine.fetchtblVideoStoreWise();
+                hmapStoreVideoUrl = dbengine.fetchtblVideoStoreWise();
                 dbengine.close();
-                if(!hmapStoreVideoUrl.isEmpty()){
-                    for(Map.Entry<String, String> entry:hmapStoreVideoUrl.entrySet())
-                    {
-                        String data=entry.getValue().toString().trim();
-                        String ContentName=   data.toString().split(Pattern.quote("^"))[0];
-                        String flgNewContentLaunched=   data=   data.toString().split(Pattern.quote("^"))[1];
+                if (!hmapStoreVideoUrl.isEmpty()) {
+                    for (Map.Entry<String, String> entry : hmapStoreVideoUrl.entrySet()) {
+                        String data = entry.getValue().toString().trim();
+                        String ContentName = data.toString().split(Pattern.quote("^"))[0];
+                        String flgNewContentLaunched = data = data.toString().split(Pattern.quote("^"))[1];
                         //if video is already in folder then do not add it
                         //existing video will delete in doInbackgroud Do remember
 
                         String PATH = Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/";
 
-                        File file2 = new File(PATH+ContentName);
-                        if(file2.exists() && flgNewContentLaunched.equals("0"))
-                        {
+                        File file2 = new File(PATH + ContentName);
+                        if (file2.exists() && flgNewContentLaunched.equals("0")) {
 
-                        }
-                        else if(flgNewContentLaunched.equals("1"))
-                        {
-                            arrayContentDownload.add(entry.getKey().toString().trim()+"^"+ContentName);
+                        } else if (flgNewContentLaunched.equals("1")) {
+                            arrayContentDownload.add(entry.getKey().toString().trim() + "^" + ContentName);
 
-                        }
-
-                        else{
-                            arrayContentDownload.add(entry.getKey().toString().trim()+"^"+ContentName);
+                        } else {
+                            arrayContentDownload.add(entry.getKey().toString().trim() + "^" + ContentName);
                         }
 
 
                     }
                 }
 
-                if(arrayContentDownload.size()>0)
-                {
+                if (arrayContentDownload.size() > 0) {
                     DownloadVideo task = new DownloadVideo();
                     task.execute(arrayContentDownload);
 
-                }
-                else
-                {  //dbengine.close();
-                    shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
-                    shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+                } else {  //dbengine.close();
+                    shardPrefForCoverageArea(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType);
+                    shardPrefForSalesman(slctdDSrSalesmanNodeId, slctdDSrSalesmanNodeType);
 
                     flgDataScopeSharedPref(2);
                     flgDSRSOSharedPref(2);
                     //onCreate(new Bundle());
 
-                    if(dbengine.isDBOpen())
-                    {
+                    if (dbengine.isDBOpen()) {
                         dbengine.close();
                     }
 
 
-                    Intent storeIntent = new Intent(AllButtonActivity.this,StoreSelection.class);
+                    Intent storeIntent = new Intent(AllButtonActivity.this, StoreSelection.class);
                     storeIntent.putExtra("imei", imei);
                     storeIntent.putExtra("userDate", userDate);
                     storeIntent.putExtra("pickerDate", fDate);
@@ -5301,14 +4677,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                 }
 
 
-
             }
 
         }
     }
 
-    public void showAlertException(String title,String msg)
-    {
+    public void showAlertException(String title, String msg) {
         android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(AllButtonActivity.this);
 
         // Setting Dialog Title
@@ -5320,7 +4694,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         alertDialog.setCancelable(false);
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
 
                 new GetStoresForDay(AllButtonActivity.this).execute();
                 dialog.dismiss();
@@ -5339,16 +4713,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         // Showing Alert Message
         alertDialog.show();
     }
-    private class DownloadVideo extends AsyncTask<ArrayList<String>, String, ArrayList<String>>
-    {
 
-
-
+    private class DownloadVideo extends AsyncTask<ArrayList<String>, String, ArrayList<String>> {
 
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(AllButtonActivity.this);
             pDialog.setMessage("Downloading Content. Please wait...");
@@ -5361,19 +4731,16 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected ArrayList<String> doInBackground(ArrayList<String>... params)
-        {
+        protected ArrayList<String> doInBackground(ArrayList<String>... params) {
 
-            try
-            {
+            try {
                 ArrayList<String> passed = params[0];
-                System.out.println("Nitish Contents async =  "+params[0]);
+                System.out.println("Nitish Contents async =  " + params[0]);
 
                 // dbengine.open();
-                for(int i=0;i<passed.size();i++)
-                {
-                    String URL_String=   passed.get(i).toString().split(Pattern.quote("^"))[0];
-                    String Video_Name=     passed.get(i).toString().split(Pattern.quote("^"))[1];
+                for (int i = 0; i < passed.size(); i++) {
+                    String URL_String = passed.get(i).toString().split(Pattern.quote("^"))[0];
+                    String Video_Name = passed.get(i).toString().split(Pattern.quote("^"))[1];
 
                     URL url = new URL(URL_String);
                     URLConnection connection = url.openConnection();
@@ -5383,19 +4750,15 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     urlConnection.connect();
                     String PATH = Environment.getExternalStorageDirectory() + "/" + CommonInfo.VideoFolder + "/";
 
-                    File file2 = new File(PATH+Video_Name);
-                    if(file2.exists())
-                    {
+                    File file2 = new File(PATH + Video_Name);
+                    if (file2.exists()) {
                         file2.delete();
                     }
 
                     File file1 = new File(PATH);
-                    if(!file1.exists())
-                    {
+                    if (!file1.exists()) {
                         file1.mkdirs();
                     }
-
-
 
 
                     File file = new File(file1, Video_Name);
@@ -5409,101 +4772,89 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                     byte[] buffer = new byte[size];
                     int bufferLength = 0;
-                    long total=0;
+                    long total = 0;
                     int current = 0;
-                    while ( (bufferLength = inputStream.read(buffer)) != -1 )
-                    {
+                    while ((bufferLength = inputStream.read(buffer)) != -1) {
                         total += bufferLength;
                /* total +=bufferLength;
                 publishProgress(""+(int)((total*100)/size));*/
-                        publishProgress(""+(int)((total*100)/size));
+                        publishProgress("" + (int) ((total * 100) / size));
                         fileOutput.write(buffer, 0, bufferLength);
                     }
 
                     fileOutput.close();
 
 
-
                 }
 
 
+            } catch (Exception e) {
+            } finally {
             }
-            catch(Exception e)
-            {}
-
-            finally
-            {}
 
             return null;
         }
 
 
         @Override
-        protected void onPostExecute(ArrayList<String> result)
-        {
+        protected void onPostExecute(ArrayList<String> result) {
             super.onPostExecute(result);
-            if(pDialog.isShowing())
-            {
+            if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-              //dbengine.close();
-                shardPrefForCoverageArea(slctdCoverageAreaNodeID,slctdCoverageAreaNodeType);
-                shardPrefForSalesman(slctdDSrSalesmanNodeId,slctdDSrSalesmanNodeType);
+            //dbengine.close();
+            shardPrefForCoverageArea(slctdCoverageAreaNodeID, slctdCoverageAreaNodeType);
+            shardPrefForSalesman(slctdDSrSalesmanNodeId, slctdDSrSalesmanNodeType);
 
-                flgDataScopeSharedPref(2);
-                flgDSRSOSharedPref(2);
-                //onCreate(new Bundle());
+            flgDataScopeSharedPref(2);
+            flgDSRSOSharedPref(2);
+            //onCreate(new Bundle());
 
-                if(dbengine.isDBOpen())
-                {
-                    dbengine.close();
-                }
+            if (dbengine.isDBOpen()) {
+                dbengine.close();
+            }
 
 
-                Intent storeIntent = new Intent(AllButtonActivity.this,StoreSelection.class);
-                storeIntent.putExtra("imei", imei);
-                storeIntent.putExtra("userDate", userDate);
-                storeIntent.putExtra("pickerDate", fDate);
-                storeIntent.putExtra("rID", rID);
-                startActivity(storeIntent);
-                finish();
-
+            Intent storeIntent = new Intent(AllButtonActivity.this, StoreSelection.class);
+            storeIntent.putExtra("imei", imei);
+            storeIntent.putExtra("userDate", userDate);
+            storeIntent.putExtra("pickerDate", fDate);
+            storeIntent.putExtra("rID", rID);
+            startActivity(storeIntent);
+            finish();
 
 
         }
+
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
 
             pDialog.setProgress(Integer.parseInt(progress[0]));
-            pDialog.setMessage("Downloading Content "+String.valueOf(countContentDownloaded)+"/"+arrayContentDownload.size());
-            if(progress[0].equals("100"))
-            {
+            pDialog.setMessage("Downloading Content " + String.valueOf(countContentDownloaded) + "/" + arrayContentDownload.size());
+            if (progress[0].equals("100")) {
                 countContentDownloaded++;
-                pDialog.setMessage("Downloading Content "+String.valueOf(countContentDownloaded)+"/"+arrayContentDownload.size());
+                pDialog.setMessage("Downloading Content " + String.valueOf(countContentDownloaded) + "/" + arrayContentDownload.size());
 
             }
 
         }
     }
-    public void AllDayendCode(){
-        flgChangeRouteOrDayEnd=1;
-        if(isOnline())
-        {
 
-            if(sharedPrefForRegistration.contains("FlgRegistered") && sharedPrefForRegistration.contains("SubmitOrNot"))
-            {
-                if(sharedPrefForRegistration.getString("FlgRegistered", "").equals("0") && sharedPrefForRegistration.getString("SubmitOrNot", "").equals("0"))
-                {
+    public void AllDayendCode() {
+        flgChangeRouteOrDayEnd = 1;
+        if (isOnline()) {
+
+            if (sharedPrefForRegistration.contains("FlgRegistered") && sharedPrefForRegistration.contains("SubmitOrNot")) {
+                if (sharedPrefForRegistration.getString("FlgRegistered", "").equals("0") && sharedPrefForRegistration.getString("SubmitOrNot", "").equals("0")) {
                     AlertDialog.Builder alertDialogNoConn = new AlertDialog.Builder(AllButtonActivity.this);
                     alertDialogNoConn.setTitle(R.string.genTermNoDataConnection);
                     alertDialogNoConn.setMessage("Please Update SO Profile Data before Day End");
                     alertDialogNoConn.setNeutralButton(R.string.txtOk,
                             new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
+                                public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
 
-                                    Intent i=new Intent(AllButtonActivity.this,SoRegistrationActivity.class);
+                                    Intent i = new Intent(AllButtonActivity.this, SoRegistrationActivity.class);
                                     i.putExtra("IntentFrom", "AllButtonActivity");
                                     i.putExtra("Button", "DAYEND");
                                     startActivity(i);
@@ -5516,21 +4867,16 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
                     AlertDialog alert = alertDialogNoConn.create();
                     alert.show();
 
-                }
-                else
-                {
-                    Intent in=new Intent(AllButtonActivity.this,DialogDayEndSummaryActivity.class);
+                } else {
+                    Intent in = new Intent(AllButtonActivity.this, DialogDayEndSummaryActivity.class);
                     startActivity(in);
                 }
 
-            }
-            else
-            {
-                Intent in=new Intent(AllButtonActivity.this,DialogDayEndSummaryActivity.class);
+            } else {
+                Intent in = new Intent(AllButtonActivity.this, DialogDayEndSummaryActivity.class);
                 startActivity(in);
             }
-        }
-        else{
+        } else {
             showAlertSingleButtonError(getResources().getString(R.string.NoDataConnectionFullMsg));
         }
 
@@ -5538,29 +4884,23 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
     }
 
 
-    public void	UploadImageFromFolder(int flagForWheresendAfterSyncComplete){
+    public void UploadImageFromFolder(int flagForWheresendAfterSyncComplete) {
 
-        File   fileintial = new File(Environment.getExternalStorageDirectory()
+        File fileintial = new File(Environment.getExternalStorageDirectory()
                 + File.separator + CommonInfo.ImagesFolder);
-        String[] imageToBeDeletedFromSdCard=dbengine.deletFromSDCardStoreSctnImage(4);
-        if(!imageToBeDeletedFromSdCard[0].equals("No Data"))
-        {
-            for(int i=0;i<imageToBeDeletedFromSdCard.length;i++)
-            {
+        String[] imageToBeDeletedFromSdCard = dbengine.deletFromSDCardStoreSctnImage(4);
+        if (!imageToBeDeletedFromSdCard[0].equals("No Data")) {
+            for (int i = 0; i < imageToBeDeletedFromSdCard.length; i++) {
 
                 //String file_dj_path = Environment.getExternalStorageDirectory() + "/RSPLSFAImages/"+imageToBeDeletedFromSdCard[i].toString().trim();
-                String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" +imageToBeDeletedFromSdCard[i].toString().trim();
+                String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" + imageToBeDeletedFromSdCard[i].toString().trim();
 
                 File fdelete = new File(file_dj_path);
-                if (fdelete.exists())
-                {
-                    if (fdelete.delete())
-                    {
+                if (fdelete.exists()) {
+                    if (fdelete.delete()) {
                         Log.e("-->", "file Deleted :" + file_dj_path);
                         callBroadCast();
-                    }
-                    else
-                    {
+                    } else {
                         Log.e("-->", "file not Deleted :" + file_dj_path);
                     }
                 }
@@ -5568,27 +4908,24 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
 
-        SyncImageDataFromFolder syncImageFromFolder=new SyncImageDataFromFolder(AllButtonActivity.this,flagForWheresendAfterSyncComplete);
+        SyncImageDataFromFolder syncImageFromFolder = new SyncImageDataFromFolder(AllButtonActivity.this, flagForWheresendAfterSyncComplete);
         syncImageFromFolder.execute();
 
     }
 
 
-    private class SyncImageDataFromFolder extends AsyncTask<Void, Void, Void>
-    {
+    private class SyncImageDataFromFolder extends AsyncTask<Void, Void, Void> {
         String[] fp2s;
         String[] NoOfOutletID;
         int flagForWheresendAfterSyncComplete;
 
-        public SyncImageDataFromFolder(AllButtonActivity activity,int flagForWheresendAfterSyncComplete)
-        {
+        public SyncImageDataFromFolder(AllButtonActivity activity, int flagForWheresendAfterSyncComplete) {
             pDialogGetStoresImage = new ProgressDialog(activity);
-            this.flagForWheresendAfterSyncComplete=flagForWheresendAfterSyncComplete;
+            this.flagForWheresendAfterSyncComplete = flagForWheresendAfterSyncComplete;
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
@@ -5602,12 +4939,9 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             pDialogGetStoresImage.show();
 
 
-            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-            }
-            else
-            {
+            } else {
                 // Locate the image folder in your SD Card
                 fileintialFolder = new File(Environment.getExternalStorageDirectory()
                         + File.separator + CommonInfo.ImagesFolder);
@@ -5616,103 +4950,86 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             }
 
 
-            if (fileintialFolder.isDirectory())
-            {
+            if (fileintialFolder.isDirectory()) {
                 listFileFolder = fileintialFolder.listFiles();
             }
-
-
-
 
 
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
 
 
             // Sync POS Images
 
-            try
-            {
+            try {
 
-                if(listFileFolder!=null && listFileFolder.length>0)
-                {
-                    for(int chkCountstore=0; chkCountstore < listFileFolder.length;chkCountstore++)
-                    {
+                if (listFileFolder != null && listFileFolder.length > 0) {
+                    for (int chkCountstore = 0; chkCountstore < listFileFolder.length; chkCountstore++) {
 
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-                        String image_str= compressImage(listFileFolder[chkCountstore].getAbsolutePath());// BitMapToString(bmp);
+                        String image_str = compressImage(listFileFolder[chkCountstore].getAbsolutePath());// BitMapToString(bmp);
 
 
                         ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-                        String UploadingImageName=listFileFolder[chkCountstore].getName();
+                        String UploadingImageName = listFileFolder[chkCountstore].getName();
 
-                        try
-                        {
+                        try {
                             stream.flush();
-                        }
-                        catch (IOException e1)
-                        {
+                        } catch (IOException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
-                        try
-                        {
+                        try {
                             stream.close();
-                        }
-                        catch (IOException e1)
-                        {
+                        } catch (IOException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
 
                         long syncTIMESTAMP = System.currentTimeMillis();
                         Date datefromat = new Date(syncTIMESTAMP);
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS",Locale.ENGLISH);
-                        String onlyDate=df.format(datefromat);
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS", Locale.ENGLISH);
+                        String onlyDate = df.format(datefromat);
 
 
                         nameValuePairs.add(new BasicNameValuePair("image", image_str));
-                        nameValuePairs.add(new BasicNameValuePair("FileName",UploadingImageName));
-                        nameValuePairs.add(new BasicNameValuePair("comment","NA"));
-                        nameValuePairs.add(new BasicNameValuePair("storeID","0"));
-                        nameValuePairs.add(new BasicNameValuePair("date",onlyDate));
-                        nameValuePairs.add(new BasicNameValuePair("routeID","0"));
+                        nameValuePairs.add(new BasicNameValuePair("FileName", UploadingImageName));
+                        nameValuePairs.add(new BasicNameValuePair("comment", "NA"));
+                        nameValuePairs.add(new BasicNameValuePair("storeID", "0"));
+                        nameValuePairs.add(new BasicNameValuePair("date", onlyDate));
+                        nameValuePairs.add(new BasicNameValuePair("routeID", "0"));
 
-                        try
-                        {
+                        try {
 
-                            HttpParams httpParams = new BasicHttpParams();
-                            HttpConnectionParams.setSoTimeout(httpParams, 0);
-                            HttpClient httpclient = new DefaultHttpClient(httpParams);
-                            HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                            HttpParams httpParams = new BasicHttpParams();
+//                            HttpConnectionParams.setSoTimeout(httpParams, 0);
+//                            HttpClient httpclient = new DefaultHttpClient(httpParams);
+//                            //HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                            HttpPost httppost = new HttpPost(CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameImageSyncPath );
+//
+//                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//                            HttpResponse response = httpclient.execute(httppost);
+//                            String the_string_response = convertResponseToString(response);
+                            String the_string_response=HttpUtils.requestData(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath,nameValuePairs);
 
 
-                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                            HttpResponse response = httpclient.execute(httppost);
-                            String the_string_response = convertResponseToString(response);
 
                             System.out.println("Sunil Doing Testing Response after sending Image" + the_string_response);
 
                             //  if(serverResponseCode == 200)
-                            if(the_string_response.equals("Abhinav"))
-                            {
+                            if (the_string_response.equalsIgnoreCase("success")) {
 
 
-                                String file_dj_path = Environment.getExternalStorageDirectory() + "/"+CommonInfo.ImagesFolder+"/"+ UploadingImageName.trim();
+                                String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" + UploadingImageName.trim();
                                 File fdelete = new File(file_dj_path);
-                                if (fdelete.exists())
-                                {
-                                    if (fdelete.delete())
-                                    {
+                                if (fdelete.exists()) {
+                                    if (fdelete.delete()) {
                                         Log.e("-->", "file Deleted :" + file_dj_path);
                                         callBroadCast();
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         Log.e("-->", "file not Deleted :" + file_dj_path);
                                     }
                                 }
@@ -5720,23 +5037,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
                             }
 
-                        }catch(Exception e)
-                        {
+                        } catch (Exception e) {
 
 
                         }
-
-
-
 
 
                     }
                 }
 
 
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
 
 
             }
@@ -5745,17 +5056,14 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             Log.i("SvcMgr", "Service Execution Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if(pDialogGetStoresImage.isShowing() && pDialogGetStoresImage!=null)
-            {
+            if (pDialogGetStoresImage.isShowing() && pDialogGetStoresImage != null) {
                 pDialogGetStoresImage.dismiss();
             }
 
@@ -5770,9 +5078,10 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             finish();
         }
     }
+
     public String compressImage(String imageUri) {
         String filePath = imageUri;//getRealPathFromURI(imageUri);
-        Bitmap scaledBitmap=null;
+        Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
 //      by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
@@ -5818,7 +5127,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 //      this options allow android to claim the bitmap memory if it runs low on memory
         options.inPurgeable = true;
         options.inInputShareable = true;
-        options.inTempStorage = new byte[768*1024];
+        options.inTempStorage = new byte[768 * 1024];
 
         //bmp
 		/*try {
@@ -5858,12 +5167,12 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
 
         //Bitmap scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight,Bitmap.Config.ARGB_8888);
         //bmp=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //scaledBitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
-        bmp.compress(Bitmap.CompressFormat.JPEG,100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-        byte [] arr=baos.toByteArray();
-        String result= Base64.encodeToString(arr, Base64.DEFAULT);
+        byte[] arr = baos.toByteArray();
+        String result = Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
 
 		/*try {
@@ -5888,15 +5197,17 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         //return filename;
 
     }
+
     public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;      }
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
         final float totalPixels = width * height;
         final float totalReqPixelsCap = reqWidth * reqHeight * 2;
         while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
@@ -5906,8 +5217,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         return inSampleSize;
     }
 
-    public String convertResponseToString(HttpResponse response) throws IllegalStateException, IOException
-    {
+    public String convertResponseToString(HttpResponse response) throws IllegalStateException, IOException {
 
         String res = "";
         StringBuffer buffer = new StringBuffer();
@@ -5915,30 +5225,20 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         int contentLength = (int) response.getEntity().getContentLength(); //getting content length�..
         //System.out.println("contentLength : " + contentLength);
         //Toast.makeText(MainActivity.this, "contentLength : " + contentLength, Toast.LENGTH_LONG).show();
-        if (contentLength < 0)
-        {
-        }
-        else
-        {
+        if (contentLength < 0) {
+        } else {
             byte[] data = new byte[512];
             int len = 0;
-            try
-            {
-                while (-1 != (len = inputStream.read(data)) )
-                {
+            try {
+                while (-1 != (len = inputStream.read(data))) {
                     buffer.append(new String(data, 0, len)); //converting to string and appending  to stringbuffer�..
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            try
-            {
+            try {
                 inputStream.close(); // closing the stream�..
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             res = buffer.toString();     // converting stringbuffer to string�..
@@ -5949,6 +5249,7 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
         }
         return res;
     }
+
     public void callBroadCast() {
         if (Build.VERSION.SDK_INT >= 14) {
             Log.e("-->", " >= 14");
@@ -5963,7 +5264,6 @@ public class AllButtonActivity extends BaseActivity implements LocationListener,
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
                     Uri.parse("file://" + Environment.getExternalStorageDirectory())));
         }
-
 
 
     }

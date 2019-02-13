@@ -34,7 +34,7 @@ public class SKUWiseSummaryReportMTD extends Activity
 	public String imei;
 	public String fDate;
 	public SimpleDateFormat sdf;
-	DBAdapterKenya dbengine=new DBAdapterKenya(this); 
+	DBAdapterKenya dbengine;
 	//private Activity mContext;
 	
 	LinearLayout ll_Scroll_product,ll_scheme_detail;
@@ -79,8 +79,8 @@ public class SKUWiseSummaryReportMTD extends Activity
 		
 		
 		setContentView(R.layout.sku_summary_mtd);
-		
-		
+
+		dbengine = new DBAdapterKenya(this);
 		Intent extras = getIntent();
 		bck = extras.getIntExtra("bck", 0);
 		

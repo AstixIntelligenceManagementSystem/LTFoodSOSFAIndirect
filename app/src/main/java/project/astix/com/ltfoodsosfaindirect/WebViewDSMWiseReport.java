@@ -38,7 +38,7 @@ public class WebViewDSMWiseReport  extends Activity{
     String ImageUrl;
 
     ImageView btn_bck;
-    DBAdapterKenya dbengine= new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 
 
     ProgressDialog progressDialog;
@@ -96,6 +96,7 @@ public class WebViewDSMWiseReport  extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
+        dbengine = new DBAdapterKenya(this);
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();
 

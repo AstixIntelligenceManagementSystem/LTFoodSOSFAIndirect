@@ -33,7 +33,7 @@ public class CheckDatabaseData extends Activity
 	 
 	 LinkedHashMap<String, String> hmapStore_details=new LinkedHashMap<String, String>();
 	 
-	 DBAdapterKenya dbengine = new DBAdapterKenya(this); 
+	 DBAdapterKenya dbengine;
 	 
 	 String date_value="";
 		String imei="";
@@ -51,6 +51,7 @@ public class CheckDatabaseData extends Activity
 		super.onCreate(savedInstanceState);
 		
 		 setContentView(R.layout.activity_show_data);
+		 dbengine=new DBAdapterKenya(this);
 		 
 		 Intent extras = getIntent();
 			bck = extras.getIntExtra("bck", 0);

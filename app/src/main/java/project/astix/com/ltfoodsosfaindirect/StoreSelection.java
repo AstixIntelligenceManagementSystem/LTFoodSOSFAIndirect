@@ -200,7 +200,7 @@ public class StoreSelection extends BaseActivity implements com.google.android.g
 	public String[] storeNextDayStatus;
     public ListView listView;
 	public ProgressDialog pDialog2STANDBY;
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 	
 
 	public TableRow tr;
@@ -2724,6 +2724,7 @@ public void DayEndWithoutalert()
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_store_selection);
+		dbengine = new DBAdapterKenya(this);
 		hmapStore_details=dbengine.fetch_StoreWiseOrderValue();
 		try
 		{

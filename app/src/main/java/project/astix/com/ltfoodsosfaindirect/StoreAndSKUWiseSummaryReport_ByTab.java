@@ -37,7 +37,7 @@ public class StoreAndSKUWiseSummaryReport_ByTab extends Activity
 	TextView totalDiscount;
 	public int totalLine=0;
 	
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine ;
 	public TableLayout tl2; 
 	public int bck = 0;
 	public String Noti_text="Null";
@@ -80,6 +80,7 @@ public class StoreAndSKUWiseSummaryReport_ByTab extends Activity
 		 getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		
 		setContentView(R.layout.mysummary_bytab);
+		dbengine=new DBAdapterKenya(this);
 		
 		Intent extras = getIntent();
 		bck = extras.getIntExtra("bck", 0);

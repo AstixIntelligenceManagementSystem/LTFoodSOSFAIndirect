@@ -55,7 +55,7 @@ public class WebViewDSRDataReportActivity extends Activity {
     int ntype=150;
 
     ImageView btn_bck;
-    DBAdapterKenya dbengine= new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 
 
     ProgressDialog progressDialog;
@@ -114,6 +114,8 @@ public class WebViewDSRDataReportActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+
+        dbengine = new DBAdapterKenya(this);
 
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();

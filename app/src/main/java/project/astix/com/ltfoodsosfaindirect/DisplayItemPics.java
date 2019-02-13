@@ -91,7 +91,7 @@ public class DisplayItemPics extends AppCompatActivity implements InterfaceClass
     private LinearLayout cameraPreview;
     private boolean cameraFront = false;
 
-    DBAdapterKenya dbengine=new DBAdapterKenya(DisplayItemPics.this);
+    DBAdapterKenya dbengine;
     public AppLocationService appLocationService;
     int countSubmitClicked=0;
     public  int flgLocationServicesOnOffOrderReview=0;
@@ -152,6 +152,7 @@ public class DisplayItemPics extends AppCompatActivity implements InterfaceClass
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_item_pics);
+        dbengine=new DBAdapterKenya(DisplayItemPics.this);
         getDataFromIntent();
         imageback= (ImageView) findViewById(R.id.img_back_Btn);
         btn_submit= (Button) findViewById(R.id.btn_submit);

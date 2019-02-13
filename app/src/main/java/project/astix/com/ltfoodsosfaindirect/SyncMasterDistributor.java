@@ -104,8 +104,7 @@ public class SyncMasterDistributor extends Activity
 
     public  File dir;
 
-    DBAdapterKenya db = new DBAdapterKenya(this);
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     class MyTimerTaskForDataSubmission extends TimerTask
     {
 
@@ -319,7 +318,7 @@ public class SyncMasterDistributor extends Activity
         } catch (Exception e)
         {
             // TODO Auto-generated catch block
-            db.close();
+            dbengine.close();
             e.printStackTrace();
         }
     }
@@ -365,7 +364,7 @@ public class SyncMasterDistributor extends Activity
                 dialog.dismiss();
 
                 int flag=0;
-                String[] imageToBeDeletedFromSdCard=db.deletFromSDcCardPhotoValidationBasedSstat("4");
+                String[] imageToBeDeletedFromSdCard=dbengine.deletFromSDcCardPhotoValidationBasedSstat("4");
                 if(!imageToBeDeletedFromSdCard[0].equals("No Data"))
                 {
                     for(int i=0;i<imageToBeDeletedFromSdCard.length;i++)
@@ -475,7 +474,7 @@ public class SyncMasterDistributor extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_master_distributor);
-
+        dbengine=new DBAdapterKenya(this);
         _activity = this;
 
         Intent syncIntent = getIntent();
@@ -755,9 +754,8 @@ public class SyncMasterDistributor extends Activity
 
 
 
-                        String urlString = CommonInfo.OrderSyncPathDistributorMap.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
-
-
+                        //String urlString = CommonInfo.OrderSyncPathDistributorMap.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
+                        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameOrderSyncPathDistributorMap + "&CLIENTFILENAME=" + xmlFileName + ".zip";
 
                         try
                         {

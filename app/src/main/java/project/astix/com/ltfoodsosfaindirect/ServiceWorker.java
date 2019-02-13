@@ -60,8 +60,6 @@ public class ServiceWorker
 	public String UrlForWebService= CommonInfo.WebServicePath.trim();
 
 
-
-
 	Locale locale  = new Locale("en", "UK");
 	String pattern = "###.##";
 	DecimalFormat decimalFormat = (DecimalFormat)NumberFormat.getNumberInstance(locale);
@@ -1980,15 +1978,7 @@ public class ServiceWorker
 
 
 	                dbengine.savetblSchemeSlabBucketDetails(RowID,SchemeID,SchemeSlabID,BucketID,SubBucketID,SlabSubBucketType,SlabSubBucketValue,SubBucketValType);
-
-
-
-
-
-
-
 	             }
-
 
 	           // tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
 
@@ -1998,9 +1988,7 @@ public class ServiceWorker
 	            	String RowID="NA";
 	            	String ProductID="NA";
 
-
-
-	                Element element = (Element) tblSchemeSlabBucketProductMappingNode.item(i);
+	            	Element element = (Element) tblSchemeSlabBucketProductMappingNode.item(i);
 
 	                NodeList RowIDNode = element.getElementsByTagName("RowID");
 	  	            Element line = (Element) RowIDNode.item(0);
@@ -16922,8 +16910,8 @@ public class ServiceWorker
 		int chkTblStoreListContainsRow=1;
 		StringReader read;
 		InputSource inputstream;
-		final String SOAP_ACTION = "http://tempuri.org/fnGetLTFoodsSODSRRoutesTempByAbhinav";
-		final String METHOD_NAME = "fnGetLTFoodsSODSRRoutesTempByAbhinav";
+		final String SOAP_ACTION = "http://tempuri.org/fnGetLTFoodsSODSRRoutes";
+		final String METHOD_NAME = "fnGetLTFoodsSODSRRoutes";
 		final String NAMESPACE = "http://tempuri.org/";
 		final String URL = UrlForWebService;
 		//Create request

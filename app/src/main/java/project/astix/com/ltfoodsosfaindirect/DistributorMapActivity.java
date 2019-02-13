@@ -100,7 +100,7 @@ import java.util.regex.Pattern;
 
 
 public class DistributorMapActivity extends BaseActivity implements LocationListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,CategoryCommunicatorCityState,com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
+        GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,CategoryCommunicatorCityState, DatePickerDialog.OnDateSetListener
 {
 
     Calendar calendar ;
@@ -282,7 +282,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
     LinkedHashMap<String,String> hmapDbrContactInfo=new LinkedHashMap<>();
 
     @Override
-    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         String mon=MONTHS[monthOfYear];
 
@@ -370,7 +370,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
             public void onClick(View v)
             {
                 dob_Bool=true;
-                calendar = java.util.Calendar.getInstance();
+                calendar = Calendar.getInstance();
                 Year = calendar.get(Calendar.YEAR) ;
                 Month = calendar.get(Calendar.MONTH);
                 Day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -406,7 +406,7 @@ public class DistributorMapActivity extends BaseActivity implements LocationList
             public void onClick(View v)
             {
                 dom_Bool=true;
-                calendar = java.util.Calendar.getInstance();
+                calendar = Calendar.getInstance();
                 Year = calendar.get(Calendar.YEAR) ;
                 Month = calendar.get(Calendar.MONTH);
                 Day = calendar.get(Calendar.DAY_OF_MONTH);

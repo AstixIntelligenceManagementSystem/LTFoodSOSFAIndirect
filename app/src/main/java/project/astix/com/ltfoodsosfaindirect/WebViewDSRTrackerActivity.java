@@ -54,7 +54,7 @@ public class WebViewDSRTrackerActivity extends Activity {
     int ntype=150;
 
     ImageView btn_bck;
-    DBAdapterKenya dbengine= new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 
 
     ProgressDialog progressDialog;
@@ -111,7 +111,7 @@ public class WebViewDSRTrackerActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-
+        dbengine = new DBAdapterKenya(this);
         String SONodeIdAndNodeType= dbengine.fnGetPersonNodeIDAndPersonNodeTypeForSO();
 
         nid=Integer.parseInt(SONodeIdAndNodeType.split(Pattern.quote("^"))[0]);

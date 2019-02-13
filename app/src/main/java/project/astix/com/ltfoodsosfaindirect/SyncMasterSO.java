@@ -17,55 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.*;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
@@ -105,13 +56,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 
-public class SyncMasterSO extends Activity
-{
+public class SyncMasterSO extends Activity {
 
 
     // New Sync way
     public Timer timerForDataSubmission;
-    public	MyTimerTaskForDataSubmission myTimerTaskForDataSubmission;
+    public MyTimerTaskForDataSubmission myTimerTaskForDataSubmission;
 
 
     SyncImageData task1;
@@ -123,15 +73,13 @@ public class SyncMasterSO extends Activity
     public String UploadingImageName;
 
     private File[] listFile;
-    public  File fileintial;
+    public File fileintial;
     //  public String routeID="0";
     String xmlFileName;
     int serverResponseCode = 0;
 
 
-
-
-    Timer timer,timer2;
+    Timer timer, timer2;
     String progressMsg;
 
     public ProgressDialog pDialogGetStores;
@@ -144,7 +92,6 @@ public class SyncMasterSO extends Activity
     private SyncMasterSO _activity;
 
 
-
     public int syncFLAG = 0;
     public int res_code;
     public String zipFileName;
@@ -155,18 +102,14 @@ public class SyncMasterSO extends Activity
     InputStream inputStream;
 
 
+    public File dir;
 
+    DBAdapterKenya dbengine;
 
-    public  File dir;
-
-    DBAdapterKenya dbSO = new DBAdapterKenya(this);
-    DBAdapterKenya dbengineS0 = new DBAdapterKenya(this);
-    class MyTimerTaskForDataSubmission extends TimerTask
-    {
+    class MyTimerTaskForDataSubmission extends TimerTask {
 
         @Override
-        public void run()
-        {
+        public void run() {
 
             SyncMasterSO.this.runOnUiThread(new Runnable() {
 
@@ -176,22 +119,20 @@ public class SyncMasterSO extends Activity
                         timerForDataSubmission.cancel();
                         timerForDataSubmission = null;
                     }
-                    if(task1!=null){
-                        if(task1.getStatus()== AsyncTask.Status.RUNNING)
-                        {
+                    if (task1 != null) {
+                        if (task1.getStatus() == AsyncTask.Status.RUNNING) {
                             task1.cancel(true);
 
                         }
                     }
-                    if(task2!=null) {
+                    if (task2 != null) {
                         if (task2.getStatus() == AsyncTask.Status.RUNNING) {
                             task2.cancel(true);
 
                         }
                     }
 
-                    if(pDialogGetStores.isShowing())
-                    {
+                    if (pDialogGetStores.isShowing()) {
                         pDialogGetStores.dismiss();
                     }
 
@@ -199,28 +140,24 @@ public class SyncMasterSO extends Activity
                     Intent submitStoreIntent = new Intent(SyncMasterSO.this, StorelistActivity.class);
                     startActivity(submitStoreIntent);
                     finish();
-                }});
+                }
+            });
         }
 
     }
-    public void showSyncError()
-    {
+
+    public void showSyncError() {
         AlertDialog.Builder alertDialogSyncError = new AlertDialog.Builder(SyncMasterSO.this);
         alertDialogSyncError.setTitle("Sync Error!");
         alertDialogSyncError.setCancelable(false);
 
-        if(whereTo.contentEquals("11"))
-        {
+        if (whereTo.contentEquals("11")) {
             alertDialogSyncError.setMessage(getText(R.string.syncAlertErrMsgDayEndOrChangeRoute));
-        }
-        else
-        {
+        } else {
             alertDialogSyncError.setMessage(getText(R.string.syncAlertErrMsg));
         }
-        alertDialogSyncError.setNeutralButton("OK",new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialogSyncError.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Intent submitStoreIntent = new Intent(SyncMasterSO.this, StorelistActivity.class);
                 startActivity(submitStoreIntent);
@@ -234,16 +171,14 @@ public class SyncMasterSO extends Activity
         alert.show();
 
     }
-    public void showSyncErrorStart()
-    {
+
+    public void showSyncErrorStart() {
         AlertDialog.Builder alertDialogSyncError = new AlertDialog.Builder(SyncMasterSO.this);
         alertDialogSyncError.setTitle("Sync Error!");
         alertDialogSyncError.setCancelable(false);
         alertDialogSyncError.setMessage("Sync Error! \n\n Please check your Internet Connectivity & Try Again!");
-        alertDialogSyncError.setNeutralButton("OK",new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialogSyncError.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Intent submitStoreIntent = new Intent(SyncMasterSO.this, StorelistActivity.class);
                 startActivity(submitStoreIntent);
@@ -256,8 +191,8 @@ public class SyncMasterSO extends Activity
         alert.show();
 
     }
-    public void showSyncSuccessStart()
-    {
+
+    public void showSyncSuccessStart() {
         AlertDialog.Builder alertDialogSyncOK = new AlertDialog.Builder(SyncMasterSO.this);
         alertDialogSyncOK.setTitle("Information");
         alertDialogSyncOK.setCancelable(false);
@@ -271,10 +206,8 @@ public class SyncMasterSO extends Activity
         // }
 
         alertDialogSyncOK.setNeutralButton("OK",
-                new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
                         dialog.dismiss();
 
@@ -309,43 +242,26 @@ public class SyncMasterSO extends Activity
     }
 
 
-
-
-
-
-
-
-    public String convertResponseToString(HttpResponse response) throws IllegalStateException, IOException
-    {
+    public String convertResponseToString(HttpResponse response) throws IllegalStateException, IOException {
 
         String res = "";
         StringBuffer buffer = new StringBuffer();
         inputStream = response.getEntity().getContent();
         int contentLength = (int) response.getEntity().getContentLength(); //getting content length…..
-        if (contentLength < 0)
-        {
-        }
-        else
-        {
+        if (contentLength < 0) {
+        } else {
             byte[] data = new byte[512];
             int len = 0;
-            try
-            {
-                while (-1 != (len = inputStream.read(data)) )
-                {
+            try {
+                while (-1 != (len = inputStream.read(data))) {
                     buffer.append(new String(data, 0, len)); //converting to string and appending  to stringbuffer…..
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            try
-            {
+            try {
                 inputStream.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             res = buffer.toString();
@@ -355,8 +271,7 @@ public class SyncMasterSO extends Activity
         return res;
     }
 
-    public void sysncStart()
-    {
+    public void sysncStart() {
 
 
         String[] fp2s; // = "/mnt/sdcard/NMPphotos/1539_24-05-2013_1.jpg";
@@ -370,39 +285,31 @@ public class SyncMasterSO extends Activity
             showSyncSuccessStart();
 
 
-
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
-            dbSO.close();
+            dbengine.close();
             e.printStackTrace();
         }
     }
 
 
-    public static boolean deleteFolderFiles(File path)
-    {
+    public static boolean deleteFolderFiles(File path) {
 
-        if( path.exists() )
-        {
+        if (path.exists()) {
             File[] files = path.listFiles();
-            for(int i=0; i<files.length; i++)
-            {
-                if(files[i].isDirectory())
-                {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
                     deleteFolderFiles(files[i]);
-                }
-                else
-                {
+                } else {
                     files[i].delete();
                 }
             }
         }
-        return(path.delete());
+        return (path.delete());
 
     }
-    public void showSyncSuccess()
-    {
+
+    public void showSyncSuccess() {
         AlertDialog.Builder alertDialogSyncOK = new AlertDialog.Builder(SyncMasterSO.this);
         alertDialogSyncOK.setTitle("Information");
         alertDialogSyncOK.setCancelable(false);
@@ -410,39 +317,31 @@ public class SyncMasterSO extends Activity
 
         alertDialogSyncOK.setMessage("Store Detail Submit Successfully.");
 
-        alertDialogSyncOK.setNeutralButton("OK",new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialogSyncOK.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
 
 
-                CommonInfo.AnyVisit=1;
+                CommonInfo.AnyVisit = 1;
                 dialog.dismiss();
 
-                int flag=0;
-                String[] imageToBeDeletedFromSdCard=dbSO.deletFromSDcCardPhotoValidationBasedSstat("4");
-                if(!imageToBeDeletedFromSdCard[0].equals("No Data"))
-                {
-                    for(int i=0;i<imageToBeDeletedFromSdCard.length;i++)
-                    {
-                        flag=1;
+                int flag = 0;
+                String[] imageToBeDeletedFromSdCard = dbengine.deletFromSDcCardPhotoValidationBasedSstat("4");
+                if (!imageToBeDeletedFromSdCard[0].equals("No Data")) {
+                    for (int i = 0; i < imageToBeDeletedFromSdCard.length; i++) {
+                        flag = 1;
 
-                        String file_dj_path = Environment.getExternalStorageDirectory() + "/"+CommonInfo.ImagesFolder+"/"+imageToBeDeletedFromSdCard[i].toString().trim();
+                        String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" + imageToBeDeletedFromSdCard[i].toString().trim();
                         File fdelete = new File(file_dj_path);
-                        if (fdelete.exists())
-                        {
-                            if (fdelete.delete())
-                            {
+                        if (fdelete.exists()) {
+                            if (fdelete.delete()) {
 
                                 callBroadCast();
-                            }
-                            else
-                            {
+                            } else {
 
                             }
                         }
                     }
-                    dbengineS0.fndeleteSbumittedStoreImagesOfSotre(4);
+                    dbengine.fndeleteSbumittedStoreImagesOfSotre(4);
                 }
 
 
@@ -476,62 +375,50 @@ public class SyncMasterSO extends Activity
     }
 
     //
-    public void delXML(String delPath)
-    {
+    public void delXML(String delPath) {
         File file = new File(delPath);
         file.delete();
         File file1 = new File(delPath.toString().replace(".xml", ".zip"));
         file1.delete();
     }
+
     //
     //
-    public static void zip(String[] files, String zipFile) throws IOException
-    {
+    public static void zip(String[] files, String zipFile) throws IOException {
         BufferedInputStream origin = null;
         final int BUFFER_SIZE = 2048;
 
         ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
-        try
-        {
+        try {
             byte data[] = new byte[BUFFER_SIZE];
 
-            for (int i = 0; i < files.length; i++)
-            {
+            for (int i = 0; i < files.length; i++) {
                 FileInputStream fi = new FileInputStream(files[i]);
                 origin = new BufferedInputStream(fi, BUFFER_SIZE);
-                try
-                {
+                try {
                     ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
                     out.putNextEntry(entry);
                     int count;
-                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1)
-                    {
+                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
                         out.write(data, 0, count);
                     }
-                }
-                finally
-                {
+                } finally {
                     origin.close();
                 }
             }
-        }
-        finally
-        {
+        } finally {
             out.close();
         }
     }
 
 
-
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_master);
 
         _activity = this;
+        dbengine = new DBAdapterKenya(this);
 
         Intent syncIntent = getIntent();
         xmlForWeb[0] = syncIntent.getStringExtra("xmlPathForSync");
@@ -539,9 +426,7 @@ public class SyncMasterSO extends Activity
         whereTo = syncIntent.getStringExtra("whereTo");
 
 
-
-        try
-        {
+        try {
 
             task1 = new SyncImageData(SyncMasterSO.this);
             task1.execute();
@@ -556,31 +441,24 @@ public class SyncMasterSO extends Activity
             timerForDataSubmission.schedule(myTimerTaskForDataSubmission, 120000);
 
 
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
-
 
 
     }
 
 
-
-    private class SyncImageData extends AsyncTask<Void, Void, Void>
-    {
+    private class SyncImageData extends AsyncTask<Void, Void, Void> {
         String[] fp2s;
         String[] NoOfOutletID;
 
-        public SyncImageData(SyncMasterSO activity)
-        {
+        public SyncImageData(SyncMasterSO activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
@@ -594,12 +472,9 @@ public class SyncMasterSO extends Activity
             pDialogGetStores.show();
 
 
-            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-            }
-            else
-            {
+            } else {
                 // Locate the image folder in your SD Card
                 fileintial = new File(Environment.getExternalStorageDirectory()
                         + File.separator + CommonInfo.ImagesFolder);
@@ -608,75 +483,62 @@ public class SyncMasterSO extends Activity
             }
 
 
-            if (fileintial.isDirectory())
-            {
+            if (fileintial.isDirectory()) {
                 listFile = fileintial.listFiles();
             }
-
-
-
 
 
         }
 
         @Override
-        protected Void doInBackground(Void... params)
-        {
+        protected Void doInBackground(Void... params) {
 
 
             // Sync POS Images
 
-            try
-            {
+            try {
 
-                try
-                {
-                    dbSO.open();
-                    NoOfOutletID = dbSO.getAllStoreIDForPhotoTakenDetail();
-                    dbSO.close();
+                try {
+                    dbengine.open();
+                    NoOfOutletID = dbengine.getAllStoreIDForPhotoTakenDetail();
+                    dbengine.close();
 
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     // TODO Auto-generated catch block
-                    dbSO.close();
+                    dbengine.close();
                     e.printStackTrace();
                 }
-                for(int chkCountstore=0; chkCountstore < NoOfOutletID.length;chkCountstore++)
-                {
-                    dbSO.open();
-                    int NoOfImages = dbSO.getExistingPicNosSO(NoOfOutletID[chkCountstore].toString());
-                    String[] NoOfImgsPath = dbSO.getImgsPathSO(NoOfOutletID[chkCountstore].toString());
-                    dbSO.close();
+                for (int chkCountstore = 0; chkCountstore < NoOfOutletID.length; chkCountstore++) {
+                    dbengine.open();
+                    int NoOfImages = dbengine.getExistingPicNosSO(NoOfOutletID[chkCountstore].toString());
+                    String[] NoOfImgsPath = dbengine.getImgsPathSO(NoOfOutletID[chkCountstore].toString());
+                    dbengine.close();
 
                     fp2s = new String[2];
 
-                    for(int syCOUNT = 0; syCOUNT < NoOfImages; syCOUNT++)
-                    {
+                    for (int syCOUNT = 0; syCOUNT < NoOfImages; syCOUNT++) {
                         fp2s[0] = NoOfImgsPath[syCOUNT];
                         fp2s[1] = NoOfOutletID[chkCountstore];
 
                         // New Way
 
                         fnameIMG = fp2s[0];
-                        UploadingImageName=fp2s[0];
+                        UploadingImageName = fp2s[0];
 
 
                         String stID = fp2s[1];
-                        String currentImageFileName=fnameIMG;
+                        String currentImageFileName = fnameIMG;
 
-                        boolean isImageExist=false;
-                        for (int i = 0; i < listFile.length; i++)
-                        {
+                        boolean isImageExist = false;
+                        for (int i = 0; i < listFile.length; i++) {
                             FilePathStrings = listFile[i].getAbsolutePath();
-                            if(listFile[i].getName().equals(fnameIMG))
-                            {
-                                fnameIMG=listFile[i].getAbsolutePath();
-                                isImageExist=true;
+                            if (listFile[i].getName().equals(fnameIMG)) {
+                                fnameIMG = listFile[i].getAbsolutePath();
+                                isImageExist = true;
                                 break;
                             }
                         }
-                        if(isImageExist)
-                        {
+                        if (isImageExist) {
                           /*  Bitmap bmp = BitmapFactory.decodeFile(fnameIMG);
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -685,27 +547,19 @@ public class SyncMasterSO extends Activity
 */
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-                            String image_str= compressImage(fnameIMG);// BitMapToString(bmp);
-                            ArrayList<NameValuePair> nameValuePairs = new  ArrayList<NameValuePair>();
+                            String image_str = compressImage(fnameIMG);// BitMapToString(bmp);
+                            ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
 
-
-
-                            try
-                            {
+                            try {
                                 stream.flush();
-                            }
-                            catch (IOException e1)
-                            {
+                            } catch (IOException e1) {
                                 // TODO Auto-generated catch block
                                 e1.printStackTrace();
                             }
-                            try
-                            {
+                            try {
                                 stream.close();
-                            }
-                            catch (IOException e1)
-                            {
+                            } catch (IOException e1) {
                                 // TODO Auto-generated catch block
                                 e1.printStackTrace();
                             }
@@ -713,48 +567,45 @@ public class SyncMasterSO extends Activity
                             long syncTIMESTAMP = System.currentTimeMillis();
                             Date datefromat = new Date(syncTIMESTAMP);
                             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss.SSS");
-                            String onlyDate=df.format(datefromat);
+                            String onlyDate = df.format(datefromat);
 
 
                             nameValuePairs.add(new BasicNameValuePair("image", image_str));
-                            nameValuePairs.add(new BasicNameValuePair("FileName",currentImageFileName));
-                            nameValuePairs.add(new BasicNameValuePair("comment","NA"));
-                            nameValuePairs.add(new BasicNameValuePair("storeID",stID));
-                            nameValuePairs.add(new BasicNameValuePair("date",onlyDate));
-                            nameValuePairs.add(new BasicNameValuePair("routeID","0"));
+                            nameValuePairs.add(new BasicNameValuePair("FileName", currentImageFileName));
+                            nameValuePairs.add(new BasicNameValuePair("comment", "NA"));
+                            nameValuePairs.add(new BasicNameValuePair("storeID", stID));
+                            nameValuePairs.add(new BasicNameValuePair("date", onlyDate));
+                            nameValuePairs.add(new BasicNameValuePair("routeID", "0"));
 
-                            try
-                            {
+                            try {
 
-                                HttpParams httpParams = new BasicHttpParams();
-                                HttpConnectionParams.setSoTimeout(httpParams, 0);
-                                HttpClient httpclient = new DefaultHttpClient(httpParams);
-                                HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                                HttpParams httpParams = new BasicHttpParams();
+//                                HttpConnectionParams.setSoTimeout(httpParams, 0);
+//                                HttpClient httpclient = new DefaultHttpClient(httpParams);
+////                                HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                                HttpPost httppost = new HttpPost(CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameImageSyncPath);
+//
+//
+//                                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//                                HttpResponse response = httpclient.execute(httppost);
+//                                String the_string_response = convertResponseToString(response);
 
-
-                                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                                HttpResponse response = httpclient.execute(httppost);
-                                String the_string_response = convertResponseToString(response);
+                                String the_string_response=HttpUtils.requestData(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath,nameValuePairs);
 
                                 System.out.println("Sunil Doing Testing Response after sending Image" + the_string_response);
 
                                 //  if(serverResponseCode == 200)
-                                if(the_string_response.equals("Abhinav"))
-                                {
+                                if (the_string_response.equalsIgnoreCase("success")) {
 
-                                    dbSO.updateImageRecordsIntableImage(UploadingImageName.toString().trim());
-                                    dbSO.fndeleteSbumittedStoreImagesOfSotre(4);
-                                    String file_dj_path = Environment.getExternalStorageDirectory() + "/"+CommonInfo.ImagesFolder+"/"+UploadingImageName.toString().trim();
+                                    dbengine.updateImageRecordsIntableImage(UploadingImageName.toString().trim());
+                                    dbengine.fndeleteSbumittedStoreImagesOfSotre(4);
+                                    String file_dj_path = Environment.getExternalStorageDirectory() + "/" + CommonInfo.ImagesFolder + "/" + UploadingImageName.toString().trim();
                                     File fdelete = new File(file_dj_path);
-                                    if (fdelete.exists())
-                                    {
-                                        if (fdelete.delete())
-                                        {
+                                    if (fdelete.exists()) {
+                                        if (fdelete.delete()) {
                                             Log.e("-->", "file Deleted :" + file_dj_path);
                                             callBroadCast();
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             Log.e("-->", "file not Deleted :" + file_dj_path);
                                         }
                                     }
@@ -762,8 +613,7 @@ public class SyncMasterSO extends Activity
 
                                 }
 
-                            }catch(Exception e)
-                            {
+                            } catch (Exception e) {
                                 IMGsyOK = 1;
 
                             }
@@ -774,60 +624,44 @@ public class SyncMasterSO extends Activity
 
 
                 }
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 IMGsyOK = 1;
 
             }
-
-
-
-
 
 
             return null;
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             Log.i("SvcMgr", "Service Execution Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Void result)
-        {
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if(pDialogGetStores.isShowing())
-            {
+            if (pDialogGetStores.isShowing()) {
                 pDialogGetStores.dismiss();
             }
 
-            if(IMGsyOK == 1)
-            {
+            if (IMGsyOK == 1) {
                 IMGsyOK = 0;
                 if (myTimerTaskForDataSubmission != null) {
                     myTimerTaskForDataSubmission.cancel();
-                    myTimerTaskForDataSubmission=null;
+                    myTimerTaskForDataSubmission = null;
                 }
-                if (timerForDataSubmission!=null)
-                {
+                if (timerForDataSubmission != null) {
                     timerForDataSubmission.cancel();
                     timerForDataSubmission = null;
                 }
                 showSyncErrorStart();
-            }
-            else
-            {
+            } else {
 
-                try
-                {
+                try {
                     task2 = new SyncXMLfileData(SyncMasterSO.this);
                     task2.execute();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -852,50 +686,41 @@ public class SyncMasterSO extends Activity
         return result;
     }*/
 
-    public String BitMapToString(Bitmap bitmap)
-    {
-        int h1=bitmap.getHeight();
-        int w1=bitmap.getWidth();
+    public String BitMapToString(Bitmap bitmap) {
+        int h1 = bitmap.getHeight();
+        int w1 = bitmap.getWidth();
 
-        if(w1 > 768 || h1 > 1024){
-            bitmap=Bitmap.createScaledBitmap(bitmap,1024,768,true);
+        if (w1 > 768 || h1 > 1024) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, 1024, 768, true);
 
+        } else {
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, w1, h1, true);
         }
 
-
-        else {
-
-            bitmap=Bitmap.createScaledBitmap(bitmap,w1,h1,true);
-        }
-
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
-        byte [] arr=baos.toByteArray();
-        String result=Base64.encodeToString(arr, Base64.DEFAULT);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] arr = baos.toByteArray();
+        String result = Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
     }
 
 
-    private class SyncXMLfileData extends AsyncTask<Void, Void, Integer>
-    {
+    private class SyncXMLfileData extends AsyncTask<Void, Void, Integer> {
 
 
-
-        public SyncXMLfileData(SyncMasterSO activity)
-        {
+        public SyncXMLfileData(SyncMasterSO activity) {
             pDialogGetStores = new ProgressDialog(activity);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
 
 
             File MeijiIndirectSFAxmlFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.OrderXMLFolder);
 
-            if (!MeijiIndirectSFAxmlFolder.exists())
-            {
+            if (!MeijiIndirectSFAxmlFolder.exists()) {
                 MeijiIndirectSFAxmlFolder.mkdirs();
             }
 
@@ -911,38 +736,30 @@ public class SyncMasterSO extends Activity
         }
 
         @Override
-        protected Integer doInBackground(Void... params)
-        {
-
+        protected Integer doInBackground(Void... params) {
 
 
             try {
 
-                String xmlfileNames = dbengineS0.fnGetXMLFile("3","4");
+                String xmlfileNames = dbengine.fnGetXMLFile("3", "4");
 
-                int index=0;
-                if(!xmlfileNames.equals(""))
-                {
-                    String[] xmlfileArray= xmlfileNames.split(Pattern.quote("^"));
+                int index = 0;
+                if (!xmlfileNames.equals("")) {
+                    String[] xmlfileArray = xmlfileNames.split(Pattern.quote("^"));
 
-                    for(int i=0;i<xmlfileArray.length;i++){
-                        System.out.println("index"+index);
-                        xmlFileName=xmlfileArray[i];
-
+                    for (int i = 0; i < xmlfileArray.length; i++) {
+                        System.out.println("index" + index);
+                        xmlFileName = xmlfileArray[i];
 
 
 //
 
 
-
-                        String newzipfile = Environment.getExternalStorageDirectory() + "/"+CommonInfo.OrderXMLFolder+"/" + xmlFileName + ".zip";
-                        xmlForWeb[0]=         Environment.getExternalStorageDirectory() + "/"+CommonInfo.OrderXMLFolder+"/" + xmlFileName + ".xml";
-                        try
-                        {
+                        String newzipfile = Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".zip";
+                        xmlForWeb[0] = Environment.getExternalStorageDirectory() + "/" + CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".xml";
+                        try {
                             zip(xmlForWeb, newzipfile);
-                        }
-                        catch (Exception e1)
-                        {
+                        } catch (Exception e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
@@ -954,7 +771,7 @@ public class SyncMasterSO extends Activity
                         String boundary = "*****";
                         int bytesRead, bytesAvailable, bufferSize;
                         byte[] buffer;
-                        int maxBufferSize = 1 * 1024 *1024;
+                        int maxBufferSize = 1 * 1024 * 1024;
 
                         File file2send = new File(newzipfile);
 
@@ -965,13 +782,11 @@ public class SyncMasterSO extends Activity
                         // String urlString = "http://115.124.126.184/ReadXML_PragaSFA/default.aspx?CLIENTFILENAME=" + zipFileName;
 
 
+//                        String urlString = CommonInfo.OrderSyncPathSO.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
+                        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameOrderSyncPathSO + "&CLIENTFILENAME=" + xmlFileName + ".xml";
 
-                        String urlString = CommonInfo.OrderSyncPathSO.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
 
-
-
-                        try
-                        {
+                        try {
 
                             // open a URL connection to the Servlet
                             FileInputStream fileInputStream = new FileInputStream(file2send);
@@ -1005,8 +820,7 @@ public class SyncMasterSO extends Activity
                             // read file and write it into form...
                             bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
-                            while (bytesRead > 0)
-                            {
+                            while (bytesRead > 0) {
 
                                 dos.write(buffer, 0, bufferSize);
                                 bytesAvailable = fileInputStream.available();
@@ -1026,20 +840,16 @@ public class SyncMasterSO extends Activity
                             Log.i("uploadFile", "HTTP Response is : "
                                     + serverResponseMessage + ": " + serverResponseCode);
 
-                            if(serverResponseCode == 200)
-                            {
+                            if (serverResponseCode == 200) {
 
-                                dbengineS0.upDateTblXmlFile(xmlFileName);
-                                dbengineS0.deleteXmlTable("4");
+                                dbengine.upDateTblXmlFile(xmlFileName);
+                                dbengine.deleteXmlTable("4");
 		                     /*dbengine.upDatetbl_allAnswermstr("3");
 		                     dbengine.upDatetbl_DynamcDataAnswer("3");*/
 
 
-
-
-
-                                deleteViewdXml(CommonInfo.OrderXMLFolder+"/"+xmlFileName+".xml");
-                                deleteViewdXml(CommonInfo.OrderXMLFolder+"/"+xmlFileName+".zip");
+                                deleteViewdXml(CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".xml");
+                                deleteViewdXml(CommonInfo.OrderXMLFolder + "/" + xmlFileName + ".zip");
 
 
                             }
@@ -1049,21 +859,17 @@ public class SyncMasterSO extends Activity
                             dos.flush();
                             dos.close();
                             index++;
-                        } catch (MalformedURLException ex)
-                        {
+                        } catch (MalformedURLException ex) {
 
-                            if(pDialogGetStores.isShowing())
-                            {
+                            if (pDialogGetStores.isShowing()) {
                                 pDialogGetStores.dismiss();
                             }
                             ex.printStackTrace();
 
 
-                        } catch (Exception e)
-                        {
+                        } catch (Exception e) {
 
-                            if(pDialogGetStores.isShowing())
-                            {
+                            if (pDialogGetStores.isShowing()) {
                                 pDialogGetStores.dismiss();
                             }
 
@@ -1072,15 +878,11 @@ public class SyncMasterSO extends Activity
                         // pDialogGetInvoiceForDay.dismiss();
 
 
-
                     }
+                } else {
+                    serverResponseCode = 200;
                 }
-                else
-                {
-                    serverResponseCode=200;
-                }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
                 e.printStackTrace();
             }
@@ -1088,44 +890,36 @@ public class SyncMasterSO extends Activity
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             Log.i("SyncMasterSO", "Sync Cancelled");
         }
 
         @Override
-        protected void onPostExecute(Integer result)
-        {
+        protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
-            if(!isFinishing())
-            {
+            if (!isFinishing()) {
 
                 Log.i("SyncMasterSO", "Sync cycle completed");
 
 
-                if(pDialogGetStores.isShowing())
-                {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
 
                 if (myTimerTaskForDataSubmission != null) {
                     myTimerTaskForDataSubmission.cancel();
-                    myTimerTaskForDataSubmission=null;
+                    myTimerTaskForDataSubmission = null;
                 }
-                if(result!=200)
-                {
-                    if (timerForDataSubmission!=null)
-                    {
+                if (result != 200) {
+                    if (timerForDataSubmission != null) {
                         timerForDataSubmission.cancel();
                         timerForDataSubmission = null;
                     }
-                    if (timer!=null)
-                    {
+                    if (timer != null) {
                         timer.cancel();
                         timer = null;
                     }
-                    if(timer2!=null)
-                    {
+                    if (timer2 != null) {
                         timer2.cancel();
                         timer2 = null;
                     }
@@ -1143,21 +937,16 @@ public class SyncMasterSO extends Activity
                     finish();
                     // }
 
-                }
-                else
-                {
-                    if (timerForDataSubmission!=null)
-                    {
+                } else {
+                    if (timerForDataSubmission != null) {
                         timerForDataSubmission.cancel();
                         timerForDataSubmission = null;
                     }
-                    if (timer!=null)
-                    {
+                    if (timer != null) {
                         timer.cancel();
                         timer = null;
                     }
-                    if(timer2!=null)
-                    {
+                    if (timer2 != null) {
                         timer2.cancel();
                         timer2 = null;
                     }
@@ -1166,44 +955,32 @@ public class SyncMasterSO extends Activity
                     showSyncSuccess();
 
 
-
                 }
 
 
-
-
-            }
-            else
-            {
-                if(pDialogGetStores.isShowing())
-                {
+            } else {
+                if (pDialogGetStores.isShowing()) {
                     pDialogGetStores.dismiss();
                 }
 
-                if (timerForDataSubmission!=null)
-                {
+                if (timerForDataSubmission != null) {
                     timerForDataSubmission.cancel();
                     timerForDataSubmission = null;
                 }
                 if (myTimerTaskForDataSubmission != null) {
                     myTimerTaskForDataSubmission.cancel();
-                    myTimerTaskForDataSubmission=null;
+                    myTimerTaskForDataSubmission = null;
                 }
 
 
-
-
-                if (timer!=null)
-                {
+                if (timer != null) {
                     timer.cancel();
                     timer = null;
                 }
-                if(timer2!=null)
-                {
+                if (timer2 != null) {
                     timer2.cancel();
                     timer2 = null;
                 }
-
 
 
                 Intent submitStoreIntent = new Intent(SyncMasterSO.this, StorelistActivity.class);
@@ -1215,13 +992,11 @@ public class SyncMasterSO extends Activity
         }
 
 
-
     }
 
-    public void deleteViewdXml(String file_dj_path)
-    {
-        File dir=   Environment.getExternalStorageDirectory();
-        File fdelete=new File(dir,file_dj_path);
+    public void deleteViewdXml(String file_dj_path) {
+        File dir = Environment.getExternalStorageDirectory();
+        File fdelete = new File(dir, file_dj_path);
         // File fdelete = new File(file_dj_path);
         if (fdelete.exists()) {
             if (fdelete.delete()) {
@@ -1252,25 +1027,20 @@ public class SyncMasterSO extends Activity
         }
 
 
-
     }
 
 
+    public static String[] checkNumberOfFiles(File dir) {
+        int NoOfFiles = 0;
+        String[] Totalfiles = null;
 
-    public static String[] checkNumberOfFiles(File dir)
-    {
-        int NoOfFiles=0;
-        String [] Totalfiles = null;
-
-        if (dir.isDirectory())
-        {
+        if (dir.isDirectory()) {
             String[] children = dir.list();
-            NoOfFiles=children.length;
-            Totalfiles=new String[children.length];
+            NoOfFiles = children.length;
+            Totalfiles = new String[children.length];
 
-            for (int i=0; i<children.length; i++)
-            {
-                Totalfiles[i]=children[i];
+            for (int i = 0; i < children.length; i++) {
+                Totalfiles[i] = children[i];
             }
         }
         return Totalfiles;
@@ -1279,7 +1049,7 @@ public class SyncMasterSO extends Activity
 
     public String compressImage(String imageUri) {
         String filePath = imageUri;//getRealPathFromURI(imageUri);
-        Bitmap scaledBitmap=null;
+        Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
 //      by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
@@ -1325,7 +1095,7 @@ public class SyncMasterSO extends Activity
 //      this options allow android to claim the bitmap memory if it runs low on memory
         options.inPurgeable = true;
         options.inInputShareable = true;
-        options.inTempStorage = new byte[768*1024];
+        options.inTempStorage = new byte[768 * 1024];
 
         //bmp
 		/*try {
@@ -1365,12 +1135,12 @@ public class SyncMasterSO extends Activity
 
         //Bitmap scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight,Bitmap.Config.ARGB_8888);
         //bmp=Bitmap.createScaledBitmap(bmp,actualWidth,actualHeight,true);
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //scaledBitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
-        bmp.compress(Bitmap.CompressFormat.JPEG,100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-        byte [] arr=baos.toByteArray();
-        String result=Base64.encodeToString(arr, Base64.DEFAULT);
+        byte[] arr = baos.toByteArray();
+        String result = Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
 
 		/*try {
@@ -1395,15 +1165,17 @@ public class SyncMasterSO extends Activity
         //return filename;
 
     }
+
     public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;      }
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
         final float totalPixels = width * height;
         final float totalReqPixelsCap = reqWidth * reqHeight * 2;
         while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {

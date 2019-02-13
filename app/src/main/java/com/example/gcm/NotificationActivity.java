@@ -36,7 +36,7 @@ public class NotificationActivity extends Activity
 	
 	public TableLayout tbl1_dyntable_For_Notification; 
 	public TableRow tr1PG2;
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine;
 	public int ComeFromActivity=0;
 	
 	
@@ -53,7 +53,7 @@ public class NotificationActivity extends Activity
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification);
-		
+		dbengine = new DBAdapterKenya(this);
 		Intent passedvals = getIntent();
 		
 		

@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -141,7 +142,7 @@ public class LastVisitDetails extends Activity {
     DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locale);
 
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
 
 
     @Override
@@ -382,12 +383,10 @@ public class LastVisitDetails extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_last_visit_details);
-
+        dbengine=new DBAdapterKenya(this);
 
         this.registerReceiver(this.KillME, new IntentFilter("KillMEnow"));
-
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
 
         decimalFormat.applyPattern(pattern);
         Intent passedvals = getIntent();

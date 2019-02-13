@@ -146,7 +146,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
     public static String imei="";
     LinkedHashMap<String, String> hmapDsrRegAllDetails;
     Button Submit,validate_btn,CancelButton;
-    DBAdapterKenya dbengine=new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     DataBaseAssistantRegistration DA=new DataBaseAssistantRegistration(this);
     String dbNameID="";
     String doNameID="";
@@ -221,6 +221,7 @@ public class SoRegistrationActivity extends AppCompatActivity implements DatePic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.so_registration_activity);
+        dbengine=new DBAdapterKenya(this);
         sPrefAttandance=getSharedPreferences(CommonInfo.AttandancePreference, MODE_PRIVATE);
         Intent intent = getIntent();
         FROM= intent.getStringExtra("IntentFrom");
@@ -2139,7 +2140,7 @@ return flgValidate;
                     String SignPath_string="0";
                     view.setDrawingCacheEnabled(true);
                     mSignature.save(view, StoredPath);
-                    SignName_string=pic_name +CommonInfo.imei+ ".png";
+                    SignName_string=pic_name + ".png";
                     SignPath_string=StoredPath;
                     long syncTIMESTAMP = System.currentTimeMillis();
                     Date dateobj = new Date(syncTIMESTAMP);

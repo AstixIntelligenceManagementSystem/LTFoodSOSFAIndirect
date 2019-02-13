@@ -50,10 +50,10 @@ import static android.content.Context.POWER_SERVICE;
  * Created by Shivam on 1/4/2018.
  */
 
-public class LocationRetreivingGlobal implements LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
+public class LocationRetreivingGlobal implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public AppLocationService appLocationService;
-    public   PowerManager pm;
-    public	 PowerManager.WakeLock wl;
+    public PowerManager pm;
+    public PowerManager.WakeLock wl;
     public ProgressDialog pDialog2STANDBY;
     Context context;
     GoogleApiClient mGoogleApiClient;
@@ -68,50 +68,50 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
     private final long interval = 10000;
     public CoundownClass countDownTimer;
     public boolean isGPSEnabled = false;
-    public String FusedLocationLatitude="0";
-    public String FusedLocationLongitude="0";
-    public String FusedLocationProvider="";
-    public String FusedLocationAccuracy="0";
+    public String FusedLocationLatitude = "0";
+    public String FusedLocationLongitude = "0";
+    public String FusedLocationProvider = "";
+    public String FusedLocationAccuracy = "0";
 
-    public String GPSLocationLatitude="0";
-    public String GPSLocationLongitude="0";
-    public String GPSLocationProvider="";
-    public String GPSLocationAccuracy="0";
+    public String GPSLocationLatitude = "0";
+    public String GPSLocationLongitude = "0";
+    public String GPSLocationProvider = "";
+    public String GPSLocationAccuracy = "0";
 
-    public String NetworkLocationLatitude="0";
-    public String NetworkLocationLongitude="0";
-    public String NetworkLocationProvider="";
-    public String NetworkLocationAccuracy="0";
-    public String AllProvidersLocation="";
+    public String NetworkLocationLatitude = "0";
+    public String NetworkLocationLongitude = "0";
+    public String NetworkLocationProvider = "";
+    public String NetworkLocationAccuracy = "0";
+    public String AllProvidersLocation = "";
     String fusedData;
 
-    public String finalAccuracy="0";
-    public String fnAccurateProvider="";
-    public String fnLati="0";
-    public String fnLongi="0";
-    public Double fnAccuracy=0.0;
-    public String FusedLocationLatitudeWithFirstAttempt="0";
-    public String FusedLocationLongitudeWithFirstAttempt="0";
-    public String FusedLocationAccuracyWithFirstAttempt="0";
-    public  int flgLocationServicesOnOff=0;
-    public  int flgGPSOnOff=0;
-    public  int flgNetworkOnOff=0;
-    public  int flgFusedOnOff=0;
-    public  int flgInternetOnOffWhileLocationTracking=0;
-    public  int flgRestart=0;
-    public String address,pincode,city,state,latitudeToSave,longitudeToSave,accuracyToSave;
+    public String finalAccuracy = "0";
+    public String fnAccurateProvider = "";
+    public String fnLati = "0";
+    public String fnLongi = "0";
+    public Double fnAccuracy = 0.0;
+    public String FusedLocationLatitudeWithFirstAttempt = "0";
+    public String FusedLocationLongitudeWithFirstAttempt = "0";
+    public String FusedLocationAccuracyWithFirstAttempt = "0";
+    public int flgLocationServicesOnOff = 0;
+    public int flgGPSOnOff = 0;
+    public int flgNetworkOnOff = 0;
+    public int flgFusedOnOff = 0;
+    public int flgInternetOnOffWhileLocationTracking = 0;
+    public int flgRestart = 0;
+    public String address, pincode, city, state, latitudeToSave, longitudeToSave, accuracyToSave;
     Location mCurrentLocation;
     String mLastUpdateTime;
-    Activity activity ;
-    int checkAccuracy=0;
-    boolean fetchAdressFlag=true;// if true means fetch address ,if false dont fetch address
-    public void locationRetrievingAndDistanceCalculating(Context context,boolean fetchAdressFlag,int checkAccuracy)
-    {
+    Activity activity;
+    int checkAccuracy = 0;
+    boolean fetchAdressFlag = true;// if true means fetch address ,if false dont fetch address
+
+    public void locationRetrievingAndDistanceCalculating(Context context, boolean fetchAdressFlag, int checkAccuracy) {
         activity = (Activity) context;
-        locationManager=(LocationManager) context.getSystemService(LOCATION_SERVICE);
-        this.context=context;
-        this.fetchAdressFlag=fetchAdressFlag;
-        this.checkAccuracy=checkAccuracy;
+        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        this.context = context;
+        this.fetchAdressFlag = fetchAdressFlag;
+        this.checkAccuracy = checkAccuracy;
         appLocationService = new AppLocationService();
 
         pm = (PowerManager) context.getSystemService(POWER_SERVICE);
@@ -138,37 +138,42 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
             mGoogleApiClient.connect();
         }
         //startService(new Intent(DynamicActivity.this, AppLocationService.class));
-        context. startService(new Intent(context, AppLocationService.class));
+        context.startService(new Intent(context, AppLocationService.class));
         Location nwLocation = appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER, location);
         Location gpsLocation = appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER, location);
         countDownTimer = new CoundownClass(startTime, interval);
         countDownTimer.start();
 
     }
+
     private boolean isGooglePlayServicesAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (ConnectionResult.SUCCESS == status) {
             return true;
         } else {
-            GooglePlayServicesUtil.getErrorDialog(status,activity , 0).show();
+            GooglePlayServicesUtil.getErrorDialog(status, activity, 0).show();
             return false;
         }
     }
+
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
 
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         startLocationUpdates();
     }
+
     protected void startLocationUpdates() {
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, LocationRetreivingGlobal.this);
 
@@ -192,19 +197,20 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
     }
+
     private void updateUI() {
-        Location loc =mCurrentLocation;
+        Location loc = mCurrentLocation;
         if (null != mCurrentLocation) {
             String lat = String.valueOf(mCurrentLocation.getLatitude());
             String lng = String.valueOf(mCurrentLocation.getLongitude());
 
-            FusedLocationLatitude=lat;
-            FusedLocationLongitude=lng;
-            FusedLocationProvider=mCurrentLocation.getProvider();
-            FusedLocationAccuracy=""+mCurrentLocation.getAccuracy();
-            fusedData="At Time: " + mLastUpdateTime  +
-                    "Latitude: " + lat  +
-                    "Longitude: " + lng  +
+            FusedLocationLatitude = lat;
+            FusedLocationLongitude = lng;
+            FusedLocationProvider = mCurrentLocation.getProvider();
+            FusedLocationAccuracy = "" + mCurrentLocation.getAccuracy();
+            fusedData = "At Time: " + mLastUpdateTime +
+                    "Latitude: " + lat +
+                    "Longitude: " + lng +
                     "Accuracy: " + mCurrentLocation.getAccuracy() +
                     "Provider: " + mCurrentLocation.getProvider();
 
@@ -212,6 +218,7 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
 
         }
     }
+
     public class CoundownClass extends CountDownTimer {
 
         public CoundownClass(long startTime, long interval) {
@@ -221,13 +228,13 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
 
         @Override
         public void onTick(long millisUntilFinished) {
-           System.out.println("Shivam"+FusedLocationAccuracy);
-            if(FusedLocationAccuracy!=null){
-                if(Double.parseDouble(FusedLocationAccuracy)<checkAccuracy && (!FusedLocationAccuracy.equals("0"))){
+            System.out.println("Shivam" + FusedLocationAccuracy);
+            if (FusedLocationAccuracy != null) {
+                if (Double.parseDouble(FusedLocationAccuracy) < checkAccuracy && (!FusedLocationAccuracy.equals("0"))) {
                     //System.out.println("Shivam"+"ontickFInish "+millisUntilFinished+":"+ FusedLocationAccuracy);
 
-                  countDownTimer.onFinish();
-                   countDownTimer.cancel();
+                    countDownTimer.onFinish();
+                    countDownTimer.cancel();
 
                 }
             }
@@ -235,252 +242,212 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
         }
 
         @Override
-        public void onFinish()
-        {
-            AllProvidersLocation="";
+        public void onFinish() {
+            AllProvidersLocation = "";
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            String GpsLat="0";
-            String GpsLong="0";
-            String GpsAccuracy="0";
-            String GpsAddress="0";
-            if(isGPSEnabled)
-            {
+            String GpsLat = "0";
+            String GpsLong = "0";
+            String GpsAccuracy = "0";
+            String GpsAddress = "0";
+            if (isGPSEnabled) {
 
-                Location nwLocation=appLocationService.getLocation(locationManager,LocationManager.GPS_PROVIDER,location);
+                Location nwLocation = appLocationService.getLocation(locationManager, LocationManager.GPS_PROVIDER, location);
 
-                if(nwLocation!=null){
-                    double lattitude=nwLocation.getLatitude();
-                    double longitude=nwLocation.getLongitude();
-                    double accuracy= nwLocation.getAccuracy();
-                    GpsLat=""+lattitude;
-                    GpsLong=""+longitude;
-                    GpsAccuracy=""+accuracy;
-                    if(isOnline() && (fetchAdressFlag))
-                    {
-                        GpsAddress=getAddressOfProviders(GpsLat, GpsLong);
+                if (nwLocation != null) {
+                    double lattitude = nwLocation.getLatitude();
+                    double longitude = nwLocation.getLongitude();
+                    double accuracy = nwLocation.getAccuracy();
+                    GpsLat = "" + lattitude;
+                    GpsLong = "" + longitude;
+                    GpsAccuracy = "" + accuracy;
+                    if (isOnline() && (fetchAdressFlag)) {
+                        GpsAddress = getAddressOfProviders(GpsLat, GpsLong);
+                    } else {
+                        GpsAddress = "NA";
                     }
-                    else
-                    {
-                        GpsAddress="NA";
-                    }
-                    GPSLocationLatitude=""+lattitude;
-                    GPSLocationLongitude=""+longitude;
-                    GPSLocationProvider="GPS";
-                    GPSLocationAccuracy=""+accuracy;
-                    AllProvidersLocation="GPS=Lat:"+lattitude+"Long:"+longitude+"Acc:"+accuracy;
+                    GPSLocationLatitude = "" + lattitude;
+                    GPSLocationLongitude = "" + longitude;
+                    GPSLocationProvider = "GPS";
+                    GPSLocationAccuracy = "" + accuracy;
+                    AllProvidersLocation = "GPS=Lat:" + lattitude + "Long:" + longitude + "Acc:" + accuracy;
 
                 }
             }
 
-            Location gpsLocation=appLocationService.getLocation(locationManager,LocationManager.NETWORK_PROVIDER,location);
-            String NetwLat="0";
-            String NetwLong="0";
-            String NetwAccuracy="0";
-            String NetwAddress="0";
-            if(gpsLocation!=null){
-                double lattitude1=gpsLocation.getLatitude();
-                double longitude1=gpsLocation.getLongitude();
-                double accuracy1= gpsLocation.getAccuracy();
+            Location gpsLocation = appLocationService.getLocation(locationManager, LocationManager.NETWORK_PROVIDER, location);
+            String NetwLat = "0";
+            String NetwLong = "0";
+            String NetwAccuracy = "0";
+            String NetwAddress = "0";
+            if (gpsLocation != null) {
+                double lattitude1 = gpsLocation.getLatitude();
+                double longitude1 = gpsLocation.getLongitude();
+                double accuracy1 = gpsLocation.getAccuracy();
 
-                NetwLat=""+lattitude1;
-                NetwLong=""+longitude1;
-                NetwAccuracy=""+accuracy1;
-                if(isOnline() && (fetchAdressFlag))
-                {
-                    NetwAddress=getAddressOfProviders(NetwLat, NetwLong);
+                NetwLat = "" + lattitude1;
+                NetwLong = "" + longitude1;
+                NetwAccuracy = "" + accuracy1;
+                if (isOnline() && (fetchAdressFlag)) {
+                    NetwAddress = getAddressOfProviders(NetwLat, NetwLong);
+                } else {
+                    NetwAddress = "NA";
                 }
-                else
-                {
-                    NetwAddress="NA";
-                }
-                NetworkLocationLatitude=""+lattitude1;
-                NetworkLocationLongitude=""+longitude1;
-                NetworkLocationProvider="Network";
-                NetworkLocationAccuracy=""+accuracy1;
+                NetworkLocationLatitude = "" + lattitude1;
+                NetworkLocationLongitude = "" + longitude1;
+                NetworkLocationProvider = "Network";
+                NetworkLocationAccuracy = "" + accuracy1;
 
-                if(!AllProvidersLocation.equals(""))
-                {
-                    AllProvidersLocation=AllProvidersLocation+"$Network=Lat:"+lattitude1+"Long:"+longitude1+"Acc:"+accuracy1;
-                }
-                else
-                {
-                    AllProvidersLocation="Network=Lat:"+lattitude1+"Long:"+longitude1+"Acc:"+accuracy1;
+                if (!AllProvidersLocation.equals("")) {
+                    AllProvidersLocation = AllProvidersLocation + "$Network=Lat:" + lattitude1 + "Long:" + longitude1 + "Acc:" + accuracy1;
+                } else {
+                    AllProvidersLocation = "Network=Lat:" + lattitude1 + "Long:" + longitude1 + "Acc:" + accuracy1;
                 }
             }
 									 /* TextView accurcy=(TextView) findViewById(R.id.Acuracy);
 									  accurcy.setText("GPS:"+GPSLocationAccuracy+"\n"+"NETWORK"+NetworkLocationAccuracy+"\n"+"FUSED"+fusedData);*/
 
-            System.out.println("LOCATION Fused"+fusedData);
+            System.out.println("LOCATION Fused" + fusedData);
 
-            String FusedLat="0";
-            String FusedLong="0";
-            String FusedAccuracy="0";
-            String FusedAddress="0";
+            String FusedLat = "0";
+            String FusedLong = "0";
+            String FusedAccuracy = "0";
+            String FusedAddress = "0";
 
-            if(!FusedLocationProvider.equals(""))
-            {
-                fnAccurateProvider="Fused";
-                fnLati=FusedLocationLatitude;
-                fnLongi=FusedLocationLongitude;
-                fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+            if (!FusedLocationProvider.equals("")) {
+                fnAccurateProvider = "Fused";
+                fnLati = FusedLocationLatitude;
+                fnLongi = FusedLocationLongitude;
+                fnAccuracy = Double.parseDouble(FusedLocationAccuracy);
 
-                FusedLat=FusedLocationLatitude;
-                FusedLong=FusedLocationLongitude;
-                FusedAccuracy=FusedLocationAccuracy;
-                FusedLocationLatitudeWithFirstAttempt=FusedLocationLatitude;
-                FusedLocationLongitudeWithFirstAttempt=FusedLocationLongitude;
-                FusedLocationAccuracyWithFirstAttempt=FusedLocationAccuracy;
+                FusedLat = FusedLocationLatitude;
+                FusedLong = FusedLocationLongitude;
+                FusedAccuracy = FusedLocationAccuracy;
+                FusedLocationLatitudeWithFirstAttempt = FusedLocationLatitude;
+                FusedLocationLongitudeWithFirstAttempt = FusedLocationLongitude;
+                FusedLocationAccuracyWithFirstAttempt = FusedLocationAccuracy;
 
-                if(isOnline() && (fetchAdressFlag))
-                {
-                    FusedAddress=getAddressOfProviders(FusedLat, FusedLong);
-                }
-                else
-                {
-                    FusedAddress="NA";
+                if (isOnline() && (fetchAdressFlag)) {
+                    FusedAddress = getAddressOfProviders(FusedLat, FusedLong);
+                } else {
+                    FusedAddress = "NA";
                 }
 
-                if(!AllProvidersLocation.equals(""))
-                {
-                    AllProvidersLocation=AllProvidersLocation+"$Fused=Lat:"+FusedLocationLatitude+"Long:"+FusedLocationLongitude+"Acc:"+fnAccuracy;
-                }
-                else
-                {
-                    AllProvidersLocation="Fused=Lat:"+FusedLocationLatitude+"Long:"+FusedLocationLongitude+"Acc:"+fnAccuracy;
+                if (!AllProvidersLocation.equals("")) {
+                    AllProvidersLocation = AllProvidersLocation + "$Fused=Lat:" + FusedLocationLatitude + "Long:" + FusedLocationLongitude + "Acc:" + fnAccuracy;
+                } else {
+                    AllProvidersLocation = "Fused=Lat:" + FusedLocationLatitude + "Long:" + FusedLocationLongitude + "Acc:" + fnAccuracy;
                 }
             }
 
 
             appLocationService.KillServiceLoc(appLocationService, locationManager);
             try {
-                if(mGoogleApiClient!=null && mGoogleApiClient.isConnected())
-                {
+                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                     stopLocationUpdates();
                     mGoogleApiClient.disconnect();
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
 
             }
 
 
-            fnAccurateProvider="";
-            fnLati="0";
-            fnLongi="0";
-            fnAccuracy=0.0;
+            fnAccurateProvider = "";
+            fnLati = "0";
+            fnLongi = "0";
+            fnAccuracy = 0.0;
 
-            if(!FusedLocationProvider.equals(""))
-            {
-                fnAccurateProvider="Fused";
-                fnLati=FusedLocationLatitude;
-                fnLongi=FusedLocationLongitude;
-                fnAccuracy= Double.parseDouble(FusedLocationAccuracy);
+            if (!FusedLocationProvider.equals("")) {
+                fnAccurateProvider = "Fused";
+                fnLati = FusedLocationLatitude;
+                fnLongi = FusedLocationLongitude;
+                fnAccuracy = Double.parseDouble(FusedLocationAccuracy);
             }
 
-            if(!fnAccurateProvider.equals(""))
-            {
-                if(!GPSLocationProvider.equals(""))
-                {
-                    if(Double.parseDouble(GPSLocationAccuracy)<fnAccuracy)
-                    {
-                        fnAccurateProvider="Gps";
-                        fnLati=GPSLocationLatitude;
-                        fnLongi=GPSLocationLongitude;
-                        fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+            if (!fnAccurateProvider.equals("")) {
+                if (!GPSLocationProvider.equals("")) {
+                    if (Double.parseDouble(GPSLocationAccuracy) < fnAccuracy) {
+                        fnAccurateProvider = "Gps";
+                        fnLati = GPSLocationLatitude;
+                        fnLongi = GPSLocationLongitude;
+                        fnAccuracy = Double.parseDouble(GPSLocationAccuracy);
                     }
                 }
-            }
-            else
-            {
-                if(!GPSLocationProvider.equals(""))
-                {
-                    fnAccurateProvider="Gps";
-                    fnLati=GPSLocationLatitude;
-                    fnLongi=GPSLocationLongitude;
-                    fnAccuracy= Double.parseDouble(GPSLocationAccuracy);
+            } else {
+                if (!GPSLocationProvider.equals("")) {
+                    fnAccurateProvider = "Gps";
+                    fnLati = GPSLocationLatitude;
+                    fnLongi = GPSLocationLongitude;
+                    fnAccuracy = Double.parseDouble(GPSLocationAccuracy);
                 }
             }
 
-            if(!fnAccurateProvider.equals(""))
-            {
-                if(!NetworkLocationProvider.equals(""))
-                {
-                    if(Double.parseDouble(NetworkLocationAccuracy)<fnAccuracy)
-                    {
-                        fnAccurateProvider="Network";
-                        fnLati=NetworkLocationLatitude;
-                        fnLongi=NetworkLocationLongitude;
-                        fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+            if (!fnAccurateProvider.equals("")) {
+                if (!NetworkLocationProvider.equals("")) {
+                    if (Double.parseDouble(NetworkLocationAccuracy) < fnAccuracy) {
+                        fnAccurateProvider = "Network";
+                        fnLati = NetworkLocationLatitude;
+                        fnLongi = NetworkLocationLongitude;
+                        fnAccuracy = Double.parseDouble(NetworkLocationAccuracy);
                     }
                 }
-            }
-            else
-            {
-                if(!NetworkLocationProvider.equals(""))
-                {
-                    fnAccurateProvider="Network";
-                    fnLati=NetworkLocationLatitude;
-                    fnLongi=NetworkLocationLongitude;
-                    fnAccuracy= Double.parseDouble(NetworkLocationAccuracy);
+            } else {
+                if (!NetworkLocationProvider.equals("")) {
+                    fnAccurateProvider = "Network";
+                    fnLati = NetworkLocationLatitude;
+                    fnLongi = NetworkLocationLongitude;
+                    fnAccuracy = Double.parseDouble(NetworkLocationAccuracy);
                 }
             }
             // fnAccurateProvider="";
 
             checkHighAccuracyLocationMode(context);
 
-            if(fnAccurateProvider.equals(""))
-            {
+            if (fnAccurateProvider.equals("")) {
 
-                if(pDialog2STANDBY.isShowing())
-                {
+                if (pDialog2STANDBY.isShowing()) {
                     pDialog2STANDBY.dismiss();
                 }
-                fnLati="NA";
-                fnLongi="NA";
-              //  String.valueOf(fnAccuracy)="NA";
-                finalAccuracy="NA";
-                fnAccurateProvider="NA";
-                GpsLat="NA";
-                GpsLong="NA";
-                GpsAccuracy="NA";
-                NetwLat="NA";
-                NetwLong="NA";
-                NetwAccuracy="NA";
-                FusedLat="NA";
-                FusedLong="NA";
-                FusedAccuracy="NA";
-                AllProvidersLocation="NA";
-                GpsAddress="NA";
-                NetwAddress="NA";
-                FusedAddress="NA";
-                FusedLocationLatitudeWithFirstAttempt="NA";
-                FusedLocationLongitudeWithFirstAttempt="NA";
-                FusedLocationAccuracyWithFirstAttempt="NA";
-                InterfaceClass intrfc=(InterfaceClass)context;
-                intrfc.testFunctionOne(fnLati,fnLongi,finalAccuracy,fnAccurateProvider,GpsLat,GpsLong,GpsAccuracy,NetwLat,NetwLong,NetwAccuracy,FusedLat,FusedLong,FusedAccuracy,AllProvidersLocation,GpsAddress,NetwAddress,FusedAddress,FusedLocationLatitudeWithFirstAttempt,FusedLocationLongitudeWithFirstAttempt,FusedLocationAccuracyWithFirstAttempt,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,address,pincode,city,state);
+                fnLati = "NA";
+                fnLongi = "NA";
+                //  String.valueOf(fnAccuracy)="NA";
+                finalAccuracy = "NA";
+                fnAccurateProvider = "NA";
+                GpsLat = "NA";
+                GpsLong = "NA";
+                GpsAccuracy = "NA";
+                NetwLat = "NA";
+                NetwLong = "NA";
+                NetwAccuracy = "NA";
+                FusedLat = "NA";
+                FusedLong = "NA";
+                FusedAccuracy = "NA";
+                AllProvidersLocation = "NA";
+                GpsAddress = "NA";
+                NetwAddress = "NA";
+                FusedAddress = "NA";
+                FusedLocationLatitudeWithFirstAttempt = "NA";
+                FusedLocationLongitudeWithFirstAttempt = "NA";
+                FusedLocationAccuracyWithFirstAttempt = "NA";
+                InterfaceClass intrfc = (InterfaceClass) context;
+                intrfc.testFunctionOne(fnLati, fnLongi, finalAccuracy, fnAccurateProvider, GpsLat, GpsLong, GpsAccuracy, NetwLat, NetwLong, NetwAccuracy, FusedLat, FusedLong, FusedAccuracy, AllProvidersLocation, GpsAddress, NetwAddress, FusedAddress, FusedLocationLatitudeWithFirstAttempt, FusedLocationLongitudeWithFirstAttempt, FusedLocationAccuracyWithFirstAttempt, flgLocationServicesOnOff, flgGPSOnOff, flgNetworkOnOff, flgFusedOnOff, flgInternetOnOffWhileLocationTracking, address, pincode, city, state);
 
-            }
-            else
-            {
-                if(isOnline() && (fetchAdressFlag))
-                {
-                    getAddressForDynamic(fnLati,fnLongi);
+            } else {
+                if (isOnline() && (fetchAdressFlag)) {
+                    getAddressForDynamic(fnLati, fnLongi);
                 }
-                if(pDialog2STANDBY.isShowing())
-                {
+                if (pDialog2STANDBY.isShowing()) {
                     pDialog2STANDBY.dismiss();
                 }
-                if(!GpsLat.equals("0") )
-                {
-                    fnCreateLastKnownGPSLoction(GpsLat,GpsLong,GpsAccuracy);
+                if (!GpsLat.equals("0")) {
+                    fnCreateLastKnownGPSLoction(GpsLat, GpsLong, GpsAccuracy);
                 }
 
 
-                finalAccuracy=  String.valueOf(fnAccuracy);
+                finalAccuracy = String.valueOf(fnAccuracy);
 
 
-                InterfaceClass intrfc=(InterfaceClass)context;
-                intrfc.testFunctionOne(fnLati,fnLongi,finalAccuracy,fnAccurateProvider,GpsLat,GpsLong,GpsAccuracy,NetwLat,NetwLong,NetwAccuracy,FusedLat,FusedLong,FusedAccuracy,AllProvidersLocation,GpsAddress,NetwAddress,FusedAddress,FusedLocationLatitudeWithFirstAttempt,FusedLocationLongitudeWithFirstAttempt,FusedLocationAccuracyWithFirstAttempt,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,address,pincode,city,state);
+                InterfaceClass intrfc = (InterfaceClass) context;
+                intrfc.testFunctionOne(fnLati, fnLongi, finalAccuracy, fnAccurateProvider, GpsLat, GpsLong, GpsAccuracy, NetwLat, NetwLong, NetwAccuracy, FusedLat, FusedLong, FusedAccuracy, AllProvidersLocation, GpsAddress, NetwAddress, FusedAddress, FusedLocationLatitudeWithFirstAttempt, FusedLocationLongitudeWithFirstAttempt, FusedLocationAccuracyWithFirstAttempt, flgLocationServicesOnOff, flgGPSOnOff, flgNetworkOnOff, flgFusedOnOff, flgInternetOnOffWhileLocationTracking, address, pincode, city, state);
 
 
 
@@ -515,35 +482,31 @@ public class LocationRetreivingGlobal implements LocationListener,GoogleApiClien
 
                 }*/
 
-                GpsLat="0";
-                GpsLong="0";
-                GpsAccuracy="0";
-                GpsAddress="0";
-                NetwLat="0";
-                NetwLong="0";
-                NetwAccuracy="0";
-                NetwAddress="0";
-                FusedLat="0";
-                FusedLong="0";
-                FusedAccuracy="0";
-                FusedAddress="0";
+                GpsLat = "0";
+                GpsLong = "0";
+                GpsAccuracy = "0";
+                GpsAddress = "0";
+                NetwLat = "0";
+                NetwLong = "0";
+                NetwAccuracy = "0";
+                NetwAddress = "0";
+                FusedLat = "0";
+                FusedLong = "0";
+                FusedAccuracy = "0";
+                FusedAddress = "0";
 
                 //code here
             }
-
-
 
 
         }
 
     }
 
-    public  boolean isOnline()
-    {
+    public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected())
-        {
+        if (netInfo != null && netInfo.isConnected()) {
             return true;
         }
         return false;
@@ -610,25 +573,21 @@ else{
 
     }*/
 
-    public String getAddressOfProviders(String latti, String longi){
+    public String getAddressOfProviders(String latti, String longi) {
 
-        StringBuilder FULLADDRESS2 =new StringBuilder();
+        StringBuilder FULLADDRESS2 = new StringBuilder();
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(context, Locale.ENGLISH);
 
 
-
         try {
             addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
 
-            if (addresses == null || addresses.size()  == 0 || addresses.get(0).getAddressLine(0)==null)
-            {
-                FULLADDRESS2=  FULLADDRESS2.append("NA");
-            }
-            else
-            {
-                FULLADDRESS2 =FULLADDRESS2.append(addresses.get(0).getAddressLine(0));
+            if (addresses == null || addresses.size() == 0 || addresses.get(0).getAddressLine(0) == null) {
+                FULLADDRESS2 = FULLADDRESS2.append("NA");
+            } else {
+                FULLADDRESS2 = FULLADDRESS2.append(addresses.get(0).getAddressLine(0));
             }
 
         } catch (NumberFormatException e) {
@@ -649,49 +608,45 @@ else{
         int locationMode = 0;
         String locationProviders;
 
-        flgLocationServicesOnOff=0;
-        flgGPSOnOff=0;
-        flgNetworkOnOff=0;
-        flgFusedOnOff=0;
-        flgInternetOnOffWhileLocationTracking=0;
+        flgLocationServicesOnOff = 0;
+        flgGPSOnOff = 0;
+        flgNetworkOnOff = 0;
+        flgFusedOnOff = 0;
+        flgInternetOnOffWhileLocationTracking = 0;
 
-        if(isGooglePlayServicesAvailable())
-        {
-            flgFusedOnOff=1;
+        if (isGooglePlayServicesAvailable()) {
+            flgFusedOnOff = 1;
         }
-        if(isOnline())
-        {
-            flgInternetOnOffWhileLocationTracking=1;
+        if (isOnline()) {
+            flgInternetOnOffWhileLocationTracking = 1;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //Equal or higher than API 19/KitKat
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=1;
+                if (locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 1;
+                    flgNetworkOnOff = 1;
                     //flgFusedOnOff=1;
                 }
-                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=0;
-                    flgNetworkOnOff=1;
+                if (locationMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 0;
+                    flgNetworkOnOff = 1;
                     // flgFusedOnOff=1;
                 }
-                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY){
-                    flgLocationServicesOnOff=1;
-                    flgGPSOnOff=1;
-                    flgNetworkOnOff=0;
+                if (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY) {
+                    flgLocationServicesOnOff = 1;
+                    flgGPSOnOff = 1;
+                    flgNetworkOnOff = 0;
                     //flgFusedOnOff=0;
                 }
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             //Lower than API 19
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 
@@ -726,17 +681,18 @@ else{
         }
 
     }
-    public String getAddressForDynamic(String latti,String longi){
+
+    public String getAddressForDynamic(String latti, String longi) {
 
 
-        String areaToMerge="NA";
-        Address addressTemp=null;
-        String addr="NA";
-        String zipcode="NA";
-        String city="NA";
-        String state="NA";
-        String fullAddress="";
-        StringBuilder FULLADDRESS3 =new StringBuilder();
+        String areaToMerge = "NA";
+        Address addressTemp = null;
+        String addr = "NA";
+        String zipcode = "NA";
+        String city = "NA";
+        String state = "NA";
+        String fullAddress = "";
+        StringBuilder FULLADDRESS3 = new StringBuilder();
         try {
             Geocoder geocoder = new Geocoder(context, Locale.ENGLISH);
 
@@ -745,39 +701,39 @@ else{
             PincodeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[5];
             StateFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[6];*/
             List<Address> addresses = geocoder.getFromLocation(Double.parseDouble(latti), Double.parseDouble(longi), 1);
-            if (addresses != null && addresses.size() > 0){
-                if(addresses.get(0).getAddressLine(1)!=null){
-                    addr=addresses.get(0).getAddressLine(1);
-                    address=addr;
+            if (addresses != null && addresses.size() > 0) {
+                if (addresses.get(0).getAddressLine(1) != null) {
+                    addr = addresses.get(0).getAddressLine(1);
+                    address = addr;
                 }
 
-                if(addresses.get(0).getLocality()!=null){
-                    city=addresses.get(0).getLocality();
-                    this.city=city;
+                if (addresses.get(0).getLocality() != null) {
+                    city = addresses.get(0).getLocality();
+                    this.city = city;
                 }
 
-                if(addresses.get(0).getAdminArea()!=null){
-                    state=addresses.get(0).getAdminArea();
-                    this.state=state;
+                if (addresses.get(0).getAdminArea() != null) {
+                    state = addresses.get(0).getAdminArea();
+                    this.state = state;
                 }
 
 
-                for(int i=0 ;i<addresses.size();i++){
+                for (int i = 0; i < addresses.size(); i++) {
                     addressTemp = addresses.get(i);
-                    if(addressTemp.getPostalCode()!=null){
-                        zipcode=addressTemp.getPostalCode();
-                        this.pincode=zipcode;
+                    if (addressTemp.getPostalCode() != null) {
+                        zipcode = addressTemp.getPostalCode();
+                        this.pincode = zipcode;
                         break;
                     }
                 }
 
-                if(addresses.get(0).getAddressLine(0)!=null && addr.equals("NA")){
-                    String countryname="NA";
-                    if(addresses.get(0).getCountryName()!=null){
-                        countryname=addresses.get(0).getCountryName();
+                if (addresses.get(0).getAddressLine(0) != null && addr.equals("NA")) {
+                    String countryname = "NA";
+                    if (addresses.get(0).getCountryName() != null) {
+                        countryname = addresses.get(0).getCountryName();
                     }
 
-                    addr=  getAddressNewWay(addresses.get(0).getAddressLine(0),city,state,zipcode,countryname);
+                    addr = getAddressNewWay(addresses.get(0).getAddressLine(0), city, state, zipcode, countryname);
                 }
 
               /*  NewStoreFormSO recFragment = (NewStoreFormSO)getFragmentManager().findFragmentByTag("NewStoreFragment");
@@ -785,67 +741,67 @@ else{
                 {
                     recFragment.setFreshAddress();
                 }*/
+            } else {
+                FULLADDRESS3.append("NA");
             }
-            else{FULLADDRESS3.append("NA");}
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
-            return fullAddress=addr+"^"+zipcode+"^"+city+"^"+state;
+        } finally {
+            return fullAddress = addr + "^" + zipcode + "^" + city + "^" + state;
         }
     }
-    public String getAddressNewWay(String ZeroIndexAddress,String city,String State,String pincode,String country){
-        String editedAddress=ZeroIndexAddress;
-        if(editedAddress.contains(city)){
-            editedAddress= editedAddress.replace(city,"");
+
+    public String getAddressNewWay(String ZeroIndexAddress, String city, String State, String pincode, String country) {
+        String editedAddress = ZeroIndexAddress;
+        if (editedAddress.contains(city)) {
+            editedAddress = editedAddress.replace(city, "");
 
         }
-        if(editedAddress.contains(State)){
-            editedAddress=editedAddress.replace(State,"");
+        if (editedAddress.contains(State)) {
+            editedAddress = editedAddress.replace(State, "");
 
         }
-        if(editedAddress.contains(pincode)){
-            editedAddress= editedAddress.replace(pincode,"");
+        if (editedAddress.contains(pincode)) {
+            editedAddress = editedAddress.replace(pincode, "");
 
         }
-        if(editedAddress.contains(country)){
-            editedAddress=editedAddress.replace(country,"");
+        if (editedAddress.contains(country)) {
+            editedAddress = editedAddress.replace(country, "");
 
         }
-        if(editedAddress.contains(",")){
-            editedAddress=editedAddress.replace(","," ");
+        if (editedAddress.contains(",")) {
+            editedAddress = editedAddress.replace(",", " ");
 
         }
         return editedAddress;
     }
-    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat,String chekLastGPSLong,String chekLastGpsAccuracy)
-    {
+
+    public void fnCreateLastKnownGPSLoction(String chekLastGPSLat, String chekLastGPSLong, String chekLastGpsAccuracy) {
 
         try {
 
-            JSONArray jArray=new JSONArray();
-            JSONObject jsonObjMain=new JSONObject();
+            JSONArray jArray = new JSONArray();
+            JSONObject jsonObjMain = new JSONObject();
 
 
             JSONObject jOnew = new JSONObject();
-            jOnew.put( "chekLastGPSLat",chekLastGPSLat);
-            jOnew.put( "chekLastGPSLong",chekLastGPSLong);
-            jOnew.put( "chekLastGpsAccuracy", chekLastGpsAccuracy);
+            jOnew.put("chekLastGPSLat", chekLastGPSLat);
+            jOnew.put("chekLastGPSLong", chekLastGPSLong);
+            jOnew.put("chekLastGpsAccuracy", chekLastGpsAccuracy);
 
 
             jArray.put(jOnew);
             jsonObjMain.put("GPSLastLocationDetils", jArray);
 
             File jsonTxtFolder = new File(Environment.getExternalStorageDirectory(), CommonInfo.AppLatLngJsonFile);
-            if (!jsonTxtFolder.exists())
-            {
+            if (!jsonTxtFolder.exists()) {
                 jsonTxtFolder.mkdirs();
 
             }
-            String txtFileNamenew="GPSLastLocation.txt";
-            File file = new File(jsonTxtFolder,txtFileNamenew);
-            String fpath = Environment.getExternalStorageDirectory()+"/"+ CommonInfo.AppLatLngJsonFile+"/"+txtFileNamenew;
+            String txtFileNamenew = "GPSLastLocation.txt";
+            File file = new File(jsonTxtFolder, txtFileNamenew);
+            String fpath = Environment.getExternalStorageDirectory() + "/" + CommonInfo.AppLatLngJsonFile + "/" + txtFileNamenew;
 
 
             // If file does not exists, then create it
@@ -879,8 +835,7 @@ else{
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
+        } finally {
 
         }
     }

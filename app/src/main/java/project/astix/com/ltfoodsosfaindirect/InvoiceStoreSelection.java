@@ -119,7 +119,7 @@ public class InvoiceStoreSelection extends Activity implements OnItemSelectedLis
 	ListAdapter adapter;
 	InvoiceDatabaseAssistant DA = new InvoiceDatabaseAssistant(this);
 
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine;
 	String[] StoreName;
 	ArrayList<String> dataItems = new ArrayList<String>();
 	public String Noti_text="Null";
@@ -267,6 +267,9 @@ public class InvoiceStoreSelection extends Activity implements OnItemSelectedLis
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_invoice_storeselection);
+		dbengine=new DBAdapterKenya(this);
+
+
 		Intent passedvals = getIntent();
 		imei = passedvals.getStringExtra("imei");
 		currSysDate = passedvals.getStringExtra("currSysDate");

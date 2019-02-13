@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentTop="true"
+        android:background="#a25611"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/Toolbar.TitleText">
+
+        <ImageView
+            android:id="@+id/backIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_back"
+            android:textSize="15sp"
+
+
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Order Details"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/logoutIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingRight="10dp"
+            android:src="@drawable/logout30"
+            android:textSize="15sp"
+
+
+            android:visibility="gone" />
+
+        <!-- app:titleTextAppearance using for custom title size -->
+
+    </android.support.v7.widget.Toolbar>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:layout_weight="1.4"
+                android:background="@drawable/actual_visit_row_header"
+
+                android:text="Product" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_weight=".6"
+                android:textColor="#fff"
+                android:background="@drawable/actual_visit_row_header"
+                android:text="Quantity in Pcs" />
+        </TableRow>
+
+
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:text="Product 1"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:hint="Qty"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+
+
+        </TableRow>
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:text="Product 2"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:hint="Qty"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+
+
+        </TableRow>
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:text="Product 3"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:hint="Qty"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+        </TableRow>
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:text="Product 3"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:hint="Qty"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+
+        </TableRow>
+        <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:text="Product 4"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:hint="Qty"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+    </TableRow>
+        <TableRow android:weightSum="2">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:text="Product 5"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".6"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:hint="Qty"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+
+        </TableRow>
+       <!-- <TableRow android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:text="CHEFS CHOICE BAS 1X25 KG NWB"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".4"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+
+        </TableRow>
+        <TableRow android:weightSum="2">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:gravity="left"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="4dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="4dp"
+                android:textColor="#cf701b"
+                android:textSize="10dp"
+                android:text="CHEFS SEC ROYAL XXL SELA1X10 KG H/BAG"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="1dp"
+                android:layout_weight=".4"
+                android:background="@drawable/et_boundary"
+                android:gravity="center"
+                android:inputType="number"
+                android:padding="1dp"
+                android:text=""
+                android:textSize="11sp" />
+            </TableRow>-->
+
+
+    </TableLayout>
+    <LinearLayout
+        android:id="@+id/sixth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/prevP2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:text="Back"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/nxtP4"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+
+            android:text="Submit"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/btn_Cancel"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1.1"
+            android:background="@drawable/custom_button"
+
+            android:text="Cancel"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+</LinearLayout>

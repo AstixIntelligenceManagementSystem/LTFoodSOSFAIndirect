@@ -25,7 +25,7 @@ public class LastVisitDetailsSecondPart extends Activity
 	public String fDate;
 	public String pickerDate;
 	
-	DBAdapterKenya dbengine = new DBAdapterKenya(this); 
+	DBAdapterKenya dbengine ;
 	
 	public TableLayout tbl1_dyntable_For_LastVisitDate; 
 	
@@ -62,7 +62,8 @@ public class LastVisitDetailsSecondPart extends Activity
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_last_visit_details_second_part);
-		
+		dbengine=new DBAdapterKenya(this);
+
 		Intent passedvals = getIntent();
 
 		fStoreID = passedvals.getStringExtra("storeID");

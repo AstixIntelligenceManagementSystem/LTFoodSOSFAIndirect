@@ -424,7 +424,7 @@ public class ProductOrderFilterSearch extends Activity implements InterfaceClass
 
     //Database
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     DatabaseAssistant DA = new DatabaseAssistant(this);
 
     //Common Controls Box
@@ -535,6 +535,7 @@ public class ProductOrderFilterSearch extends Activity implements InterfaceClass
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+        dbengine = new DBAdapterKenya(this);
         if (powerCheck == 0) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");

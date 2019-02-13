@@ -29,7 +29,7 @@ public class GCMNotificationIntentService extends IntentService
 	// Sets an ID for the notification, so it can be updated
 	public static final int notifyID = 9001;
 	NotificationCompat.Builder builder;
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine;
 
 	//public String DuplicateMsgServerID="";
 
@@ -43,7 +43,7 @@ public class GCMNotificationIntentService extends IntentService
 	protected void onHandleIntent(Intent intent)
 	{
 
-
+		dbengine = new DBAdapterKenya(this);
 		Bundle extras = intent.getExtras();
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 

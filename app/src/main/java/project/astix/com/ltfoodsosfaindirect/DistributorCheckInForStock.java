@@ -117,7 +117,7 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
 
     String fetchedFromDb = "0";
     SharedPreferences sharedPref;
-    DBAdapterKenya dbengine = new DBAdapterKenya(DistributorCheckInForStock.this);
+    DBAdapterKenya dbengine;
     LinkedHashMap<String, String> hmapdsrIdAndDescr_details = new LinkedHashMap<String, String>();
     String[] drsNames;
     public String SelectedDSRValue = "";
@@ -324,6 +324,7 @@ public class DistributorCheckInForStock extends BaseActivity implements Location
         setContentView(R.layout.distributor_checkin_for_stock_activity);
 
         sharedPref = getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
+        dbengine= new DBAdapterKenya(DistributorCheckInForStock.this);
         if (sharedPref.contains("CoverageAreaNodeID")) {
             if (sharedPref.getInt("CoverageAreaNodeID", 0) != 0) {
                 CommonInfo.CoverageAreaNodeID = sharedPref.getInt("CoverageAreaNodeID", 0);

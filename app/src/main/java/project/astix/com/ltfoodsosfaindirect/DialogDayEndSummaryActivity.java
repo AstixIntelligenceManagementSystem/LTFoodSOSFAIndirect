@@ -80,7 +80,7 @@ public class DialogDayEndSummaryActivity extends BaseActivity
 
     public String back="0";
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     public TableLayout tl2;
     public int bck = 0;
 
@@ -201,7 +201,7 @@ public class DialogDayEndSummaryActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_summary);
-
+        dbengine = new DBAdapterKenya(this);
         currDate = new Date();
         currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
 
@@ -362,7 +362,7 @@ public class DialogDayEndSummaryActivity extends BaseActivity
             Toast.makeText(DialogDayEndSummaryActivity.this, "Your device has no Data Connection. \n Please ensure Internet is accessible to Continue.", Toast.LENGTH_SHORT).show();
         }
 
-        btn_done.setOnClickListener(new View.OnClickListener() {
+        btn_done.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 AllButtonActivity.isDayEndClicked=true;

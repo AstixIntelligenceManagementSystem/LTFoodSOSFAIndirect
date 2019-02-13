@@ -78,7 +78,7 @@ public class SummaryActivity extends BaseActivity {
     public TextView tv_SOName, tv_ServerLastRefreshTime, tv_ToadyStoreSOCount, errorMessageTextView,txt_ln_InfoSectionDetails,tv_PersonRole;
     public Button btn_Proceed;
     public LinearLayout erreorSectionParent,ln_InfoSection;
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine ;
     DatabaseAssistant DA = new DatabaseAssistant(SummaryActivity.this);
     int serverResponseCode = 0;
     public int syncFLAG = 0;
@@ -115,6 +115,7 @@ public class SummaryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.summary_activity);
+        dbengine = new DBAdapterKenya(this);
         Date date1=new Date();
         sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         fDate = sdf.format(date1).toString().trim();
@@ -384,18 +385,22 @@ public class SummaryActivity extends BaseActivity {
 
             //HttpConnectionParams.setConnectionTimeout(httpParams, some_reasonable_timeout);
 
-            HttpConnectionParams.setSoTimeout(httpParams, some_reasonable_timeout + 2000);
+//            HttpConnectionParams.setSoTimeout(httpParams, some_reasonable_timeout + 2000);
+//
+//
+//            HttpClient httpclient = new DefaultHttpClient(httpParams);
+//           // HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath);
+//            HttpPost httppost = new HttpPost(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath);
+//
+//
+//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//            HttpResponse response = httpclient.execute(httppost);
+//
+//            String the_string_response = convertResponseToString(response);
 
+            String the_string_response=HttpUtils.requestData(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath,nameValuePairs);
 
-            HttpClient httpclient = new DefaultHttpClient(httpParams);
-            HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath);
-
-
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String the_string_response = convertResponseToString(response);
-            if (the_string_response.equals("Abhinav")) {
+            if (the_string_response.equalsIgnoreCase("success")) {
                 dbengine.updateSSttImage(fileName, 4);
                 dbengine.fndeleteSbumittedStoreImagesOfSotre(4);
 
@@ -695,7 +700,8 @@ public class SummaryActivity extends BaseActivity {
 
         File file2send = new File(newzipfile);
 
-        String urlString = CommonInfo.OrderSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+//        String urlString = CommonInfo.OrderSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameOrderSync + "&CLIENTFILENAME=" + zipFileName;
 
         try {
 

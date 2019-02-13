@@ -82,7 +82,7 @@ public class DetailReportSummaryActivityForAll extends BaseActivity
 
     public String back="0";
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     public TableLayout tl2;
     public int bck = 0;
 
@@ -207,6 +207,8 @@ int SalesmanNodeId,SalesmanNodeType,flgDataScope=0;
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_summary);
+
+        dbengine=new DBAdapterKenya(this);
 
         currDate = new Date();
         currDateFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
@@ -844,7 +846,7 @@ public void intializeFields(){
 
         //account census
         final Button butn_census_report = (Button) dialog.findViewById(R.id.butn_census_report);
-        butn_census_report.setOnClickListener(new View.OnClickListener() {
+        butn_census_report.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(DetailReportSummaryActivityForAll.this,AddedOutletSummaryReportActivity.class);
@@ -866,7 +868,7 @@ public void intializeFields(){
 
 
         final Button btnExecution = (Button) dialog.findViewById(R.id.btnExecution);
-        btnExecution.setOnClickListener(new View.OnClickListener()
+        btnExecution.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -902,7 +904,7 @@ public void intializeFields(){
         });
 
         final   Button btnDistributorStock = (Button) dialog.findViewById(R.id.btnDistributorStock);
-        btnDistributorStock.setOnClickListener(new View.OnClickListener() {
+        btnDistributorStock.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -1097,14 +1099,14 @@ public void intializeFields(){
         final android.support.v7.app.AlertDialog dialog=alert.create();
         dialog.show();
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
+        btn_cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        btn_proceed.setOnClickListener(new View.OnClickListener() {
+        btn_proceed.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -1617,14 +1619,14 @@ public void intializeFields(){
         final android.support.v7.app.AlertDialog dialog=alert.create();
         dialog.show();
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
+        btn_cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        btn_proceed.setOnClickListener(new View.OnClickListener() {
+        btn_proceed.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -2158,7 +2160,7 @@ public void intializeFields(){
 
     public void showAlertException(String title,String msg)
     {
-        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(DetailReportSummaryActivityForAll.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DetailReportSummaryActivityForAll.this);
 
         // Setting Dialog Title
         alertDialog.setTitle(title);

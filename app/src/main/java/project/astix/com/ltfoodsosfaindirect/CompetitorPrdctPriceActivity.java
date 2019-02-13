@@ -100,7 +100,7 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
     public String pickerDate;
     public String SN="";
     LinearLayout ll_CompetitorPrdct;
-    DBAdapterKenya dbengine=new DBAdapterKenya(CompetitorPrdctPriceActivity.this);
+    DBAdapterKenya dbengine;
     public AppLocationService appLocationService;
 
     public ProgressDialog pDialog2STANDBY;
@@ -141,7 +141,7 @@ public class CompetitorPrdctPriceActivity extends AppCompatActivity implements I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competitor_prdct_price);
-
+dbengine=new DBAdapterKenya(CompetitorPrdctPriceActivity.this);
         long syncTIMESTAMP = System.currentTimeMillis();
         Date dateobj = new Date(syncTIMESTAMP);
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);

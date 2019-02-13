@@ -21,12 +21,14 @@ public class DistributorProfilingActivity extends AppCompatActivity {
     LinearLayout ll_distributor;
     View previousDistSlctd;
     boolean isSelectedStore=false;
-    DBAdapterKenya dbEngine=new DBAdapterKenya(this);
+    DBAdapterKenya dbEngine;
     Button btn_next,BackBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distributor_profiling);
+        dbEngine = new DBAdapterKenya(this);
+
         ll_distributor= (LinearLayout) findViewById(R.id.ll_distributor);
         btn_next= (Button) findViewById(R.id.btn_next);
         BackBtn= (Button) findViewById(R.id.BackBtn);

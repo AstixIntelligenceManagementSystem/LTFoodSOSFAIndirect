@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,7 +46,7 @@ public class CustomVisitStockAdapter extends RecyclerView.Adapter<CustomVisitSto
         this.customKeyboard = customKeyboard;
         editTextClickListener = (EditTextClickListener) mContext;
         //  customKeyboard = new CustomKeyboard((Activity) mContext,R.id.keyboardviewNum,R.xml.num);
-        //   Log.d(TAG, "productInfoList :" + this.productInfoList.toString());
+        Log.d(TAG, "productInfoList :" + this.productInfoList.toString());
     }
 
     @Override
@@ -86,7 +87,7 @@ public class CustomVisitStockAdapter extends RecyclerView.Adapter<CustomVisitSto
         holder.stockValueET.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View v, MotionEvent event) {
-                if (v instanceof EditText){
+                if (v instanceof EditText) {
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {

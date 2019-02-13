@@ -106,8 +106,7 @@ public class SyncRegistrationDetails extends Activity
 
     public  File dir;
     String FROM="";
-    DBAdapterKenya db = new DBAdapterKenya(this);
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine ;
     class MyTimerTaskForDataSubmission extends TimerTask
     {
 
@@ -137,7 +136,7 @@ public class SyncRegistrationDetails extends Activity
                         }
                     }
 
-                    if(pDialogGetStores.isShowing())
+                    if(pDialogGetStores!=null && !isFinishing() && !isDestroyed() && pDialogGetStores.isShowing())
                     {
                         pDialogGetStores.dismiss();
                     }
@@ -394,7 +393,7 @@ public class SyncRegistrationDetails extends Activity
         } catch (Exception e)
         {
             // TODO Auto-generated catch block
-            db.close();
+            dbengine.close();
             e.printStackTrace();
         }
     }
@@ -517,7 +516,7 @@ public class SyncRegistrationDetails extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.syncregistraion);
-
+        dbengine = new DBAdapterKenya(this);
         _activity = this;
 
         Intent syncIntent = getIntent();
@@ -960,7 +959,8 @@ public class SyncRegistrationDetails extends Activity
 
 
 
-                        String urlString = CommonInfo.OrderSyncPath.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
+//                        String urlString = CommonInfo.OrderSyncPath.trim()+"?CLIENTFILENAME=" + xmlFileName+".zip";
+                        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameOrderSync + "&CLIENTFILENAME=" + xmlFileName+ ".zip";
 
 
 
@@ -1046,7 +1046,7 @@ public class SyncRegistrationDetails extends Activity
                         } catch (MalformedURLException ex)
                         {
 
-                            if(pDialogGetStores.isShowing())
+                            if(pDialogGetStores!=null && !isFinishing() && !isDestroyed() && pDialogGetStores.isShowing())
                             {
                                 pDialogGetStores.dismiss();
                             }
@@ -1056,7 +1056,7 @@ public class SyncRegistrationDetails extends Activity
                         } catch (Exception e)
                         {
 
-                            if(pDialogGetStores.isShowing())
+                            if(pDialogGetStores!=null && !isFinishing() && !isDestroyed() && pDialogGetStores.isShowing())
                             {
                                 pDialogGetStores.dismiss();
                             }
@@ -1097,7 +1097,7 @@ public class SyncRegistrationDetails extends Activity
                 Log.i("SyncMaster", "Sync cycle completed");
 
 
-                if(pDialogGetStores.isShowing())
+                if(pDialogGetStores!=null && !isFinishing() && !isDestroyed() && pDialogGetStores.isShowing())
                 {
                     pDialogGetStores.dismiss();
                 }
@@ -1172,7 +1172,7 @@ public class SyncRegistrationDetails extends Activity
             }
             else
             {
-                if(pDialogGetStores.isShowing())
+                if(pDialogGetStores!=null && !isFinishing() && !isDestroyed() && pDialogGetStores.isShowing())
                 {
                     pDialogGetStores.dismiss();
                 }
@@ -1531,20 +1531,23 @@ public class SyncRegistrationDetails extends Activity
                         try
                         {
 
-                            HttpParams httpParams = new BasicHttpParams();
-                            HttpConnectionParams.setSoTimeout(httpParams, 0);
-                            HttpClient httpclient = new DefaultHttpClient(httpParams);
-                            HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                            HttpParams httpParams = new BasicHttpParams();
+//                            HttpConnectionParams.setSoTimeout(httpParams, 0);
+//                            HttpClient httpclient = new DefaultHttpClient(httpParams);
+////                            HttpPost httppost = new HttpPost(CommonInfo.ImageSyncPath.trim());
+//                            HttpPost httppost = new HttpPost(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath);
+//
+//                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//                            HttpResponse response = httpclient.execute(httppost);
+//                            String the_string_response = convertResponseToString(response);
 
+                            String the_string_response=HttpUtils.requestData(CommonInfo.COMMON_SYNC_PATH_URL.trim()+ CommonInfo.ClientFileNameImageSyncPath,nameValuePairs);
 
-                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                            HttpResponse response = httpclient.execute(httppost);
-                            String the_string_response = convertResponseToString(response);
 
                             System.out.println("Sunil Doing Testing Response after sending Image" + the_string_response);
 
                             //  if(serverResponseCode == 200)
-                            if(the_string_response.equals("Abhinav"))
+                            if(the_string_response.equalsIgnoreCase("success"))
                             {
 
 
@@ -1600,7 +1603,7 @@ public class SyncRegistrationDetails extends Activity
         protected void onPostExecute(Void result)
         {
             super.onPostExecute(result);
-            if(pDialogGetStoresImage.isShowing() && pDialogGetStoresImage!=null)
+            if(pDialogGetStoresImage!=null && !isFinishing() && !isDestroyed() && pDialogGetStoresImage.isShowing())
             {
                 pDialogGetStoresImage.dismiss();
             }

@@ -404,7 +404,7 @@ public static int flgRestart=0;
 		 
 		//Database
 		 
-		DBAdapterKenya dbengine = new DBAdapterKenya(this); 
+		DBAdapterKenya dbengine;
 		DatabaseAssistant DA = new DatabaseAssistant(this);
 		 
 		 //Common Controls Box
@@ -551,6 +551,8 @@ public static int flgRestart=0;
 			// TODO Auto-generated method stub
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_product_list_review);
+
+			dbengine = new DBAdapterKenya(this);
 			//Toast.makeText(OrderReview.this, "OrderReview Page is called", Toast.LENGTH_SHORT).show();
 			locationManager=(LocationManager) this.getSystemService(LOCATION_SERVICE);
 			boolean isGPSok = false;

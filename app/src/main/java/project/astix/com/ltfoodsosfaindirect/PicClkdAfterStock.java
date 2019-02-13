@@ -53,7 +53,7 @@ public class PicClkdAfterStock extends AppCompatActivity implements DeletePic {
     LinkedHashMap<String ,String> hmapPhotoDetailsForSaving=new LinkedHashMap<>();
     LinkedHashMap<String ,ArrayList<String>> hmapCtgryPhotoSection=new LinkedHashMap<String,ArrayList<String>>();
     ImageAdapter adapterImage;
-    DBAdapterKenya dbengine=new DBAdapterKenya(PicClkdAfterStock.this);
+    DBAdapterKenya dbengine;
     public String storeID;
     public String imei;
     public String date;
@@ -109,6 +109,7 @@ public class PicClkdAfterStock extends AppCompatActivity implements DeletePic {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_clkd_after_stock);
+        dbengine=new DBAdapterKenya(PicClkdAfterStock.this);
         getDataFromIntent();
         expandable_gridview= (ExpandableHeightGridView) findViewById(R.id.expandable_gridview);
         btn_camera= (Button) findViewById(R.id.btn_camera);

@@ -332,8 +332,6 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
     TextView txt_rfrshCmnt;
 
     ImageView img_exit;
-    DBAdapterKenya helperDb;
-
     String date_value="";
     public static String rID;
     public  int sectionToShowHide=1;
@@ -374,7 +372,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
 
     MyReceiver myReceiver;
 
-   DBAdapterKenya dbengineSO=new DBAdapterKenya(this);
+   DBAdapterKenya dbengineSO;
     DatabaseAssistantSO DA=new DatabaseAssistantSO(this);
 
     public static String  VisitStartTimeOfNewStore="NA";
@@ -421,7 +419,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newstoredynamicsectionwise_so);
-
+        dbengineSO = new DBAdapterKenya(this);
         disableAllCheckBox("Loading Data");
 
     }
@@ -432,7 +430,6 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
         flgStoreVisitMode= CommonInfo.flgLTFoodsSOOnlineOffLine;
         refreshCount=0;
         locationManager=(LocationManager) this.getSystemService(LOCATION_SERVICE);
-        helperDb=new DBAdapterKenya(AddNewStore_DynamicSectionWiseSO.this);
         locVo=new LocationVo();
         address="";
         pincode="";
@@ -531,11 +528,9 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
 
         checkHighAccuracyLocationMode(AddNewStore_DynamicSectionWiseSO.this);
 
-        helperDb.open();
-        String allLoctionDetails=  helperDb.getLocationDetails();
-        helperDb.close();
-        prvsStoreId=helperDb.getPreviousStoreId();
-        if(helperDb.fnCheckIfStoreIDExistsIn_tblStoreDeatils(selStoreID)==0)
+        String allLoctionDetails=  dbengineSO.getLocationDetails();
+        prvsStoreId=dbengineSO.getPreviousStoreId();
+        if(dbengineSO.fnCheckIfStoreIDExistsIn_tblStoreDeatils(selStoreID)==0)
         {
             flgOldNewStore=1;
             SOLattitudeFromLauncher = allLoctionDetails.split(Pattern.quote("^"))[0];
@@ -595,7 +590,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
         {
 
 
-            ArrayList<String> arrBasisDetailsAgainstStore=    helperDb.fnGetDetails_tblStoreDeatils(selStoreID,StoreName);
+            ArrayList<String> arrBasisDetailsAgainstStore=    dbengineSO.fnGetDetails_tblStoreDeatils(selStoreID,StoreName);
 
 
             allValuesOfPaymentStageID =  arrBasisDetailsAgainstStore.get(1);//bydefalt "0"
@@ -1206,14 +1201,14 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
         //QuestID,QuestCode,QuestDesc,QuestType,AnsControlType,AnsControlInputTypeID,AnsControlInputTypeMaxLength,AnsMustRequiredFlg,QuestBundleFlg,ApplicationTypeID,Sequence,AnsControlInputTypeMinLength,AnsHint,QuestBundleGroupId
         //hmapQuesIdValues.put("1^2", "1^")
 
-        hmapQuesIdValues=helperDb.fnGetQuestionMstr(StoreSectionCount);
-        hmapQuesGropKeySection=helperDb.fnGetQuestionMstrKey();
-        hmapGroupId_Desc=helperDb.getGroupDescription();
-        hmapSctnId_GrpId=helperDb.fnGetGroupIdMpdWdSectionId(StoreSectionCount);
-        hmapDpndtQustGrpId=helperDb.fnGetDependentQuestionMstr();
-        hmapSection_key=helperDb.fnGetSection_Key();
+        hmapQuesIdValues=dbengineSO.fnGetQuestionMstr(StoreSectionCount);
+        hmapQuesGropKeySection=dbengineSO.fnGetQuestionMstrKey();
+        hmapGroupId_Desc=dbengineSO.getGroupDescription();
+        hmapSctnId_GrpId=dbengineSO.fnGetGroupIdMpdWdSectionId(StoreSectionCount);
+        hmapDpndtQustGrpId=dbengineSO.fnGetDependentQuestionMstr();
+        hmapSection_key=dbengineSO.fnGetSection_Key();
         //   hmapOptionId_OptionValue=helperDb.fnGetOptionId_OptionValue();
-        QuestIDForOutChannel=helperDb.fnGetQuestIDForOutChannelFromQuestionMstr();
+        QuestIDForOutChannel=dbengineSO.fnGetQuestIDForOutChannelFromQuestionMstr();
 
     }
     public void showSettingsAlert(){
@@ -1303,7 +1298,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 //  int BusinessSegmentID = helperDb.fnGetBusinessSegmentIDAgainstStoreType(ansValForBSgmntId);
 
 
-                helperDb.fnsaveOutletQuestAnsMstrSectionWise(hmapStoreQuestAnsNew, 0, selStoreID,StoreCategoryType);
+                dbengineSO.fnsaveOutletQuestAnsMstrSectionWise(hmapStoreQuestAnsNew, 0, selStoreID,StoreCategoryType);
 
                 long syncTIMESTAMP = System.currentTimeMillis();
                 Date datefromat = new Date(syncTIMESTAMP);
@@ -1317,7 +1312,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 int ApplicationID = CommonInfo.Application_TypeID;
 
 
-                String allValuesOfPaymentStageID = helperDb.fngettblNewStoreSalesQuotePaymentDetails(selStoreID);
+                String allValuesOfPaymentStageID = dbengineSO.fngettblNewStoreSalesQuotePaymentDetails(selStoreID);
 
                 if(SOProviderFromLauncher.equals("Fused"))
                 {
@@ -1333,39 +1328,33 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 }
 
 
-                helperDb.saveLatLngToTxtFile(selStoreID,SOLattitudeFromLauncher, SOLongitudeFromLauncher,AccuracyFromLauncher,SOProviderFromLauncher,SOGpsLatFromLauncher,SOGpsLongFromLauncher,SOGpsAccuracyFromLauncher,SONetworkLatFromLauncher,SONetworkLongFromLauncher,SONetworkAccuracyFromLauncher,SOFusedLatFromLauncher,SOFusedLongFromLauncher,SOFusedAccuracyFromLauncher,3,"0",fnAddressFromLauncher,SOAllProvidersLocationFromLauncher,SOGpsAddressFromLauncher,SONetwAddressFromLauncher,SOFusedAddressFromLauncher,SOFusedLocationLatitudeWithFirstAttemptFromLauncher
+                dbengineSO.saveLatLngToTxtFile(selStoreID,SOLattitudeFromLauncher, SOLongitudeFromLauncher,AccuracyFromLauncher,SOProviderFromLauncher,SOGpsLatFromLauncher,SOGpsLongFromLauncher,SOGpsAccuracyFromLauncher,SONetworkLatFromLauncher,SONetworkLongFromLauncher,SONetworkAccuracyFromLauncher,SOFusedLatFromLauncher,SOFusedLongFromLauncher,SOFusedAccuracyFromLauncher,3,"0",fnAddressFromLauncher,SOAllProvidersLocationFromLauncher,SOGpsAddressFromLauncher,SONetwAddressFromLauncher,SOFusedAddressFromLauncher,SOFusedLocationLatitudeWithFirstAttemptFromLauncher
                         ,SOFusedLocationLongitudeWithFirstAttemptFromLauncher,SOFusedLocationAccuracyWithFirstAttemptFromLauncher);
-                helperDb.fnInsertOrUpdate_tblStoreDeatils(selStoreID, StoreName, SOLattitudeFromLauncher, SOLongitudeFromLauncher, VisitStartTimeOfNewStore, VisitEndFinalTS, SOProviderFromLauncher, SOAccuracyFromLauncer, "" + battLevel, IsStoreDataCompleteSaved, allValuesOfPaymentStageID, 1, hmapStoreAddress.get("0"), hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"), 3,flgApproveOrRejectOrNoActionOrReVisit,flgStoreVisitMode,StoreCategoryType,StoreSectionCount,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder,flgUpdateSomeNewStoreFlags, hmapStoreAddress.get("4"), hmapStoreAddress.get("5"), hmapStoreAddress.get("6"), hmapStoreAddress.get("7"), hmapStoreAddress.get("8"), hmapStoreAddress.get("9"));
+                dbengineSO.fnInsertOrUpdate_tblStoreDeatils(selStoreID, StoreName, SOLattitudeFromLauncher, SOLongitudeFromLauncher, VisitStartTimeOfNewStore, VisitEndFinalTS, SOProviderFromLauncher, SOAccuracyFromLauncer, "" + battLevel, IsStoreDataCompleteSaved, allValuesOfPaymentStageID, 1, hmapStoreAddress.get("0"), hmapStoreAddress.get("2"), hmapStoreAddress.get("1"), hmapStoreAddress.get("3"), 3,flgApproveOrRejectOrNoActionOrReVisit,flgStoreVisitMode,StoreCategoryType,StoreSectionCount,flgLocationServicesOnOff,flgGPSOnOff,flgNetworkOnOff,flgFusedOnOff,flgInternetOnOffWhileLocationTracking,flgRestart,flgStoreOrder,flgUpdateSomeNewStoreFlags, hmapStoreAddress.get("4"), hmapStoreAddress.get("5"), hmapStoreAddress.get("6"), hmapStoreAddress.get("7"), hmapStoreAddress.get("8"), hmapStoreAddress.get("9"));
                 //String StoreID,String ActualLatitude,String ActualLongitude,String VisitStartTS,String VisitEndTS,String LocProvider,String Accuracy,String BateryLeftStatus,int IsStoreDataCompleteSaved,String PaymentStage,int flgLocationTrackEnabled,String StoreAddress,String StoreCity,String StorePinCode,String StoreState,int Sstat)
 
                 if (FLAG_NEW_UPDATE.equals("UPDATE")) {
-                    int CurrentCoverageIDOfStore=helperDb.fetch_GetCoverageAreaIDAgsinstStoreID(selStoreID);
+                    int CurrentCoverageIDOfStore=dbengineSO.fetch_GetCoverageAreaIDAgsinstStoreID(selStoreID);
                     // helperDb.fnInsertOrUpdate_tblDSRSummaryDetials(CurrentCoverageIDOfStore,1);
-                    helperDb.open();
-                    helperDb.UpdateStoreReturnphotoFlagSO(selStoreID, StoreName);
-                    helperDb.close();
+                    dbengineSO.UpdateStoreReturnphotoFlagSO(selStoreID, StoreName);
                 } else {
                     // helperDb.fnInsertOrUpdate_tblDSRSummaryDetials(0,0);
-                    String storeCountDeatails=helperDb.getTodatAndTotalStores();
+                    String storeCountDeatails=dbengineSO.getTodatAndTotalStores();
                     int  totaltarget = Integer.parseInt(storeCountDeatails.split(Pattern.quote("^"))[0]);
                     int todayTarget = Integer.parseInt(storeCountDeatails.split(Pattern.quote("^"))[1]);
 
-                    helperDb.open();
-                    helperDb.deletetblStoreCountDetails();
+                    dbengineSO.deletetblStoreCountDetails();
                     totaltarget=totaltarget+1;
                     todayTarget=todayTarget+1;
-                    helperDb.saveTblStoreCountDetails(String.valueOf(totaltarget),String.valueOf(todayTarget));
+                    dbengineSO.saveTblStoreCountDetails(String.valueOf(totaltarget),String.valueOf(todayTarget));
                     //helperDb.saveTblPreAddedStores(selStoreID, StoreName, SOLattitudeFromLauncher, SOLongitudeFromLauncher, VisitDate, 1, 3);
-                    helperDb.close();
                 }
-                helperDb.open();
 
                    /* helperDb.deletetblstoreMstrOnStoreIDBasis(selStoreID);
                     helperDb.savetblStoreMain("NA", selStoreID, StoreName, "NA", "NA", "NA", "NA", "NA", "NA", "NA", "0", StoreTypeTradeChannel,
                             BusinessSegmentID, 0, 0, 0, "NA", VisitStartTS, imei, "" + battLevel, 1, 1, String.valueOf(fnLati), String.valueOf(fnLongi), "" + fnAccuracy, "" + fnAccurateProvider, 0, fetchAddress, allValuesOfPaymentStageID, flgHasQuote, flgAllowQuotation, flgSubmitFromQuotation);
 */
 
-                helperDb.close();
                /* if (mIsServiceStarted) {
                     mIsServiceStarted = false;
                     stopService(new Intent(AddNewStore_DynamicSectionWise.this, LocationUpdateService.class));
@@ -1732,12 +1721,12 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 String VisitEndFinalTS = df.format(datefromat);
                 if(!TextUtils.isEmpty(prvsStoreId.trim()))
                 {
-                    helperDb.updateMsgToRestartPopUpShown(prvsStoreId,VisitEndFinalTS);
+                    dbengineSO.updateMsgToRestartPopUpShown(prvsStoreId,VisitEndFinalTS);
                 }
                 else
                 {
 
-                    helperDb.updateMsgToRestartPopUpShown(selStoreID,VisitEndFinalTS);
+                    dbengineSO.updateMsgToRestartPopUpShown(selStoreID,VisitEndFinalTS);
                 }
                 finish();
                 // finish();
@@ -2885,7 +2874,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                 {
                     if(!TextUtils.isEmpty(prvsStoreId))
                     {
-                        if(helperDb.isPrvsStoreMsgShownAndRestrtDone(prvsStoreId))
+                        if(dbengineSO.isPrvsStoreMsgShownAndRestrtDone(prvsStoreId))
                         {
 
                             showAlertForEveryOne("Location is same,Please Restart your phone after clicking Ok button.");
@@ -2899,7 +2888,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
                     else
                     {
                         //String prvsStoreID,String CrntStoreID,String isSavedOrSubmittedStore,String MsgToRestartPopUpShown,String isRestartDoneByDSR,String Sstat)
-                        helperDb.insertRestartStoreInfo(selStoreID,selStoreID,"0","1","0",0,VisitStartTS);
+                        dbengineSO.insertRestartStoreInfo(selStoreID,selStoreID,"0","1","0",0,VisitStartTS);
                         showAlertForEveryOne("Location is same,Please Restart your phone after clicking Ok button.");
                     }
 
@@ -2978,7 +2967,7 @@ public class AddNewStore_DynamicSectionWiseSO extends FragmentActivity implement
 
             dbengineSO.open();
             // dbengineSO.UpdateStoreEndVisit(selStoreID, StampEndsTime);
-            dbengineSO.UpdateStoreFlag(selStoreID, 3);
+            dbengineSO.UpdateStoreFlagSO(selStoreID, 3);
             dbengineSO.UpdateStoreImageTableFlag(selStoreID, 3);
             dbengineSO.close();
 

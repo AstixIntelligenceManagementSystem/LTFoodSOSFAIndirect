@@ -42,7 +42,7 @@ public class TargetVsAchievedActivityForAll extends Activity
     public TableLayout tbl3_dyntable_SchemeApplicable,tl_headerVal;
     TextView txt_note;
     public TableRow tr2PG2;
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     public String[] AllDataContainer;
     String note="";
 
@@ -81,7 +81,7 @@ public class TargetVsAchievedActivityForAll extends Activity
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_target_achieved_summary);
-
+        dbengine = new DBAdapterKenya(this);
         Intent extras = getIntent();
         if(extras !=null)
         {

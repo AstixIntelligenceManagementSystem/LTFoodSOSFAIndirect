@@ -28,7 +28,6 @@ import android.view.ContextThemeWrapper;
 import android.widget.Toast;
 
 import com.astix.Common.CommonInfo;
-import com.bugsense.trace.BugSenseHandler;
 import com.example.gcm.ApplicationConstants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -66,7 +65,7 @@ public class SplashScreen extends AppCompatActivity {
     SharedPreferences sPref, sPrefAttandance, sPrefIncentive;
     public int flgTodaySalesTargetToShow = 0;
 
-    DBAdapterKenya dbengine = new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
     // DBAdapterLtFoods dbengineSO = new DBAdapterLtFoods(this);
     ServiceWorker newservice = new ServiceWorker();
     public String imei;
@@ -113,20 +112,15 @@ public class SplashScreen extends AppCompatActivity {
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         imei = tManager.getDeviceId();
 
-        //  imei="352672074232463";  // Live user
-
+//        imei="865686031037922";  // Live user
         // imei="356417061840118"; // Shivani Kesarsa
         // imei="353572080913610"; // stagging
-
         //   imei="358674084810068"; // Test Release
         // imei="867290026163310"; // Dev Release
-
         //imei="354010084603910";// Dev For Alok
-       // imei="359473079352536";  // Test Ramesh
-
-      //  imei = "867290026163310";//for development
-
-       // imei="352801088236109";
+        //imei="359473079352536";  // Test Ramesh
+        //  imei = "867290026163310";//for development
+        // imei="352801088236109";
 
         CommonInfo.imei = imei;
         sPref = getSharedPreferences(CommonInfo.Preference, MODE_PRIVATE);
@@ -231,7 +225,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        BugSenseHandler.setup(this, "17c967c9");
+         dbengine= new DBAdapterKenya(this);
 
         if (Build.VERSION.SDK_INT > 14) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -907,21 +901,18 @@ public class SplashScreen extends AppCompatActivity {
                 // run a thread after 2 seconds to start the home screen
                 handler.postDelayed(new Runnable() {
                     @Override
-                    public void run(){
+                    public void run() {
                         dbengine.open();
-                        serverDateForSPref=	dbengine.fnGetServerDate();
+                        serverDateForSPref = dbengine.fnGetServerDate();
                         dbengine.close();
 
-                        if(sPref.contains("DatePref"))
-                        {
+                        if (sPref.contains("DatePref")) {
 
-                            if(sPref.getString("DatePref", "").equals(serverDateForSPref))
-                            {
+                            if (sPref.getString("DatePref", "").equals(serverDateForSPref)) {
                               /*  dbengine.open();
                                 dbengine.reCreateDB();
                                 dbengine.close();*/
-                                if(!sPrefAttandance.contains("AttandancePref"))
-                                {
+                                if (!sPrefAttandance.contains("AttandancePref")) {
 
                                     dbengine.open();
                                     int flgPersonTodaysAtt = dbengine.FetchflgPersonTodaysAtt();
@@ -940,9 +931,7 @@ public class SplashScreen extends AppCompatActivity {
                                         SplashScreen.this.startActivity(intent);
                                         finish();
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
                                     intent.putExtra("imei", imei);
                                     SplashScreen.this.startActivity(intent);
@@ -950,9 +939,8 @@ public class SplashScreen extends AppCompatActivity {
                                 }
 
 
-                            }
-                            else
-                            {	SharedPreferences.Editor editor=sPref.edit();
+                            } else {
+                                SharedPreferences.Editor editor = sPref.edit();
                                 editor.clear();
                                 editor.commit();
                                 // sPref.edit().putString("DatePref", serverDateForSPref).commit();
@@ -967,7 +955,7 @@ public class SplashScreen extends AppCompatActivity {
                                     startActivity(i);
                                     finish();
                                 } else {
-                                    SharedPreferences.Editor editornew=sPrefAttandance.edit();
+                                    SharedPreferences.Editor editornew = sPrefAttandance.edit();
                                     editornew.clear();
                                     editornew.commit();
                                     sPrefAttandance.edit().putString("AttandancePref", fDate).commit();
@@ -977,20 +965,17 @@ public class SplashScreen extends AppCompatActivity {
                                     finish();
                                 }
                             }
-                        }
-                        else
-                        {
-                            SharedPreferences.Editor editor=sPref.edit();
+                        } else {
+                            SharedPreferences.Editor editor = sPref.edit();
                             editor.clear();
                             editor.commit();
 
                             sPref.edit().putString("DatePref", serverDateForSPref).commit();
-                            SharedPreferences.Editor editor1=sPrefAttandance.edit();
+                            SharedPreferences.Editor editor1 = sPrefAttandance.edit();
                             editor1.clear();
                             editor1.commit();
 
-                            if(!sPrefAttandance.contains("AttandancePref"))
-                            {
+                            if (!sPrefAttandance.contains("AttandancePref")) {
                                 //callDayStartActivity();
                                 dbengine.open();
                                 int flgPersonTodaysAtt = dbengine.FetchflgPersonTodaysAtt();
@@ -1000,10 +985,8 @@ public class SplashScreen extends AppCompatActivity {
                                     i.putExtra("IntentFrom", "SPLASH");
                                     startActivity(i);
                                     finish();
-                                }
-                                else
-                                {
-                                    SharedPreferences.Editor editornew=sPrefAttandance.edit();
+                                } else {
+                                    SharedPreferences.Editor editornew = sPrefAttandance.edit();
                                     editornew.clear();
                                     editornew.commit();
                                     sPrefAttandance.edit().putString("AttandancePref", fDate).commit();
@@ -1012,9 +995,7 @@ public class SplashScreen extends AppCompatActivity {
                                     SplashScreen.this.startActivity(intent);
                                     finish();
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 Intent intent = new Intent(SplashScreen.this, AllButtonActivity.class);
                                 intent.putExtra("imei", imei);
                                 SplashScreen.this.startActivity(intent);
@@ -1131,7 +1112,6 @@ public class SplashScreen extends AppCompatActivity {
     public void callIncentiveActivity() {
 
 
-
         dbengine.open();
         int flgPersonTodaysAtt = dbengine.FetchflgPersonTodaysAtt();
         dbengine.close();
@@ -1141,7 +1121,7 @@ public class SplashScreen extends AppCompatActivity {
             startActivity(i);
             finish();
         } else {
-            SharedPreferences.Editor editor=sPrefAttandance.edit();
+            SharedPreferences.Editor editor = sPrefAttandance.edit();
             editor.clear();
             editor.commit();
             sPrefAttandance.edit().putString("AttandancePref", fDate).commit();
@@ -1162,7 +1142,7 @@ public class SplashScreen extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            SharedPreferences.Editor editor=sPrefAttandance.edit();
+            SharedPreferences.Editor editor = sPrefAttandance.edit();
             editor.clear();
             editor.commit();
             sPrefAttandance.edit().putString("AttandancePref", fDate).commit();
@@ -1436,7 +1416,8 @@ public class SplashScreen extends AppCompatActivity {
 
         File file2send = new File(newzipfile);
 
-        String urlString = CommonInfo.DistributorSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+//        String urlString = CommonInfo.DistributorSyncPath.trim() + "?CLIENTFILENAME=" + zipFileName;
+        String urlString = CommonInfo.COMMON_SYNC_PATH_URL.trim() + CommonInfo.ClientFileNameDistributorSyncPath + "&CLIENTFILENAME=" + zipFileName;
 
         try {
 

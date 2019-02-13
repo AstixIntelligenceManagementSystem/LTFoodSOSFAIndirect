@@ -53,7 +53,7 @@ public class DetailReportSummaryActivity extends Activity
 
 	public String back="0";
 
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine;
 	public TableLayout tl2;
 	public int bck = 0;
 
@@ -155,6 +155,7 @@ public class DetailReportSummaryActivity extends Activity
 		setContentView(R.layout.activity_day_summary);
 		tbl_inflate= (TableLayout) findViewById(R.id.tbl_inflate);
 		Intent extras = getIntent();
+		dbengine = new DBAdapterKenya(this);
 
 		bck = extras.getIntExtra("bck", 0);
 

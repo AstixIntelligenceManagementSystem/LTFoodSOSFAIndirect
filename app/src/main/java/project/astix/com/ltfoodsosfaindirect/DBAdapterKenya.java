@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -33,11 +34,10 @@ import project.astix.com.ltfoodsosfaindirect.Models.ActualVisitProductInfo;
 
 import com.astix.Common.CommonInfo;
 
-public class DBAdapterKenya 
-{
-    SharedPreferences sPref,sPrefAttandance,sPrefIncentive;
-	public Cursor cursor;
-	public static final String KEY_PHID = "phID";
+public class DBAdapterKenya {
+    SharedPreferences sPref, sPrefAttandance, sPrefIncentive;
+    public Cursor cursor;
+    public static final String KEY_PHID = "phID";
 
     private static final String TAG = "DBAdapterKenya";
 
@@ -45,41 +45,39 @@ public class DBAdapterKenya
 
 
     private static final String TABLE_tblBloodGroup_Define = "tblBloodGroup";
-    private static final String DATABASE_CREATE_TABLE_tblBloodGroup = "create table tblBloodGroup (BloddGroups text null);";
+    private static final String DATABASE_CREATE_TABLE_tblBloodGroup = "create table IF NOT EXISTS tblBloodGroup(BloddGroups text null);";
 
     private static final String TABLE_tblEducationQuali = "tblEducationQuali";
-    private static final String DATABASE_CREATE_TABLE_tblEducationQuali = "create table tblEducationQuali (Qualification text null);";
-
-
+    private static final String DATABASE_CREATE_TABLE_tblEducationQuali = "create table IF NOT EXISTS tblEducationQuali(Qualification text null);";
 
 
     private static final String DATABASE_TABLE_REASON_ORDER_CANCEL = "tblReasonOrderCncl";
-    private static final String DATABASE_CREATE_REASON_ORDER_CANCEL = "create table tblReasonOrderCncl (ReasonCodeID text null,ReasonDescr text null);";
+    private static final String DATABASE_CREATE_REASON_ORDER_CANCEL = "create table IF NOT EXISTS tblReasonOrderCncl(ReasonCodeID text null,ReasonDescr text null);";
 
     //execution image table
     private static final String DATABASE_TABLE_tblExecutionImages = "tblExecutionImages";
-    private static final String DATABASE_CREATE_TABLE_tblExecutionImages = "create table tblExecutionImages (OrderID text null,StoreID text null, ImageName integer not null, ImagePath integer not null,Sstat integer not null,InvNumber text null,InvDate text null);";
+    private static final String DATABASE_CREATE_TABLE_tblExecutionImages = "create table IF NOT EXISTS tblExecutionImages(OrderID text null,StoreID text null, ImageName integer not null, ImagePath integer not null,Sstat integer not null,InvNumber text null,InvDate text null);";
 
 
     private static final String TABLE_STORE_STOCK_CMPTTR_AVLBL = "tableStoreLtfoodStkCompttrAvlbl";
-    private static final String DATABASE_CREATE_TABLE_STOCK_CMPTTR_AVLBL = "create table tableStoreLtfoodStkCompttrAvlbl(StoreID text null,flgLtfoodsStkAvlbl integer null,flgCompttrAvlbl integer null,flgStockRetailerAllowed integer null,flgCmpttrRetailerAllowed integer null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_STOCK_CMPTTR_AVLBL = "create table IF NOT EXISTS tableStoreLtfoodStkCompttrAvlbl(StoreID text null,flgLtfoodsStkAvlbl integer null,flgCompttrAvlbl integer null,flgStockRetailerAllowed integer null,flgCmpttrRetailerAllowed integer null,Sstat integer null);";
 
 
     private static final String TABLE_STORE_SECTIONIMAGE = "tableStoreSctnImage";
-    private static final String DATABASE_CREATE_TABLE_STORE_SECTIONIMAGE = "create table tableStoreSctnImage(StoreID text null,imageName text null,imagePath text null,ImageClicktime text null,flgSectionPic text null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_STORE_SECTIONIMAGE = "create table IF NOT EXISTS tableStoreSctnImage(StoreID text null,imageName text null,imagePath text null,ImageClicktime text null,flgSectionPic text null,Sstat integer null);";
 
-//values.put("PTC", PTC);
+    //values.put("PTC", PTC);
     private static final String DATABASE_TABLE_CompetitrPrdctPTRPTC = "tblCompetitrPrdctPTRPTC";
-    private static final String DATABASE_CREATE_TABLE_CompetitrPrdctPTRPTC = "create table tblCompetitrPrdctPTRPTC(" +
+    private static final String DATABASE_CREATE_TABLE_CompetitrPrdctPTRPTC = "create table IF NOT EXISTS tblCompetitrPrdctPTRPTC(" +
             "StoreID text null,CompetitionProductID text null,CompetitionProductName text null,PTR text null,PTC text null,BusinessUnitId int null,BusinessUnit text null,SurveyDate text null,Sstat int null);";
 
     private static final String DATABASE_TABLE_CompetitrPrdctMstr = "tblCompetitrPrdctMstr";
-    private static final String DATABASE_CREATE_TABLE_CompetitrPrdctMstr = "create table tblCompetitrPrdctMstr(" +
+    private static final String DATABASE_CREATE_TABLE_CompetitrPrdctMstr = "create table IF NOT EXISTS tblCompetitrPrdctMstr(" +
             "CompetitionProductID text null,CompetitionProductName text null,CompetitorBrandID text null,LTFoodsSimilarBrand text null," +
             "CategoryID int null,Seq int null,Category text null,BusinessUnitId int null,BusinessUnit text null,ProductImg text null,flgActive text null,Unit_In_gram text null,MinRate text null,MaxRate text null,photoPath text null);";
 
     private static final String TABLE_tblAttandanceDetails = "tblAttandanceDetails";
-    private static final String DATABASE_CREATE_TABLE_tblAttandanceDetails = "create table tblAttandanceDetails(AttandanceTime text null," +
+    private static final String DATABASE_CREATE_TABLE_tblAttandanceDetails = "create table IF NOT EXISTS tblAttandanceDetails(AttandanceTime text null," +
             "PersonNodeID text null, PersonNodeType text null," +
             "OptionID text null,OptionDesc text null,ReasonID text null,ReasonDesc text null,Comment text null, Address text null,PinCode text null, City text null, State text null," +
             "fnLati text null,fnLongi text null,fnAccuracy text null," +
@@ -95,20 +93,20 @@ public class DBAdapterKenya
 
     //feedbck competitor
     private static final String DATABASE_TABLE_FeedbackCompetitrMstr = "tblFeedbackCompetitrMstr";
-    private static final String DATABASE_CREATE_TABLE_FeedbackCompetitrMstr = "create table tblFeedbackCompetitrMstr(" +
+    private static final String DATABASE_CREATE_TABLE_FeedbackCompetitrMstr = "create table IF NOT EXISTS tblFeedbackCompetitrMstr(" +
             "CompetitorID text null,CompetitorDesc text null,CategoryID text null,CategoryDesc text null," +
             "CatSeq int null,ProdSeq int null);";
 
     private static final String DATABASE_TABLE_FeedbackCompetitr = "tblFeedbackCompetitr";
-    private static final String DATABASE_CREATE_TABLE_FeedbackCompetitr = "create table tblFeedbackCompetitr(StoreID text null,CompetitorID text null,CompetitorDesc text null,CategoryID text null,ProductId text null,PrdctDesc text null,flgAvlblPrdct integer null,Sstat text null,stockQuantity text null);";
+    private static final String DATABASE_CREATE_TABLE_FeedbackCompetitr = "create table IF NOT EXISTS tblFeedbackCompetitr(StoreID text null,CompetitorID text null,CompetitorDesc text null,CategoryID text null,ProductId text null,PrdctDesc text null,flgAvlblPrdct integer null,Sstat text null,stockQuantity text null);";
 
     private static final String TABLE_tblStateCityMaster = "tblStateCityMaster";
-    private static final String DATABASE_CREATE_TABLE_tblStateCityMaster = "create table tblStateCityMaster(" +
+    private static final String DATABASE_CREATE_TABLE_tblStateCityMaster = "create table IF NOT EXISTS tblStateCityMaster(" +
             "StateID int null, State text null,CityID int null,City text null,CityDefault integer null);";
 
 
     private static final String TABLE_tblDistributorCheckin = "tblDistributorCheckin";
-    private static final String DATABASE_CREATE_TABLE_tblDistributorCheckin = "create table tblDistributorCheckin(" +
+    private static final String DATABASE_CREATE_TABLE_tblDistributorCheckin = "create table IF NOT EXISTS tblDistributorCheckin(" +
             "DistribtrUniqueId text null, DistribtrId text null,DistributorNodeType text null,flgGSTCapture text null," +
             "flgGSTCompliance text null,GSTNumber text null, Address text null,PinCode text null, City text null, State text null," +
             "fnLati text null,fnLongi text null,fnAccuracy text null," +
@@ -123,37 +121,37 @@ public class DBAdapterKenya
 
     //pcs and kg
     private static final String DATABASE_TABLE_tblOrderInPcsOrKg = "tblOrderInPcsOrKg";
-    private static final String DATABASE_CREATE_TABLE_tblOrderInPcsOrKg = "create table tblOrderInPcsOrKg ( StoreID text null, OrderID text null, FlgPcsOrKg text null);";
+    private static final String DATABASE_CREATE_TABLE_tblOrderInPcsOrKg = "create table IF NOT EXISTS tblOrderInPcsOrKg( StoreID text null, OrderID text null, FlgPcsOrKg text null);";
 
     //actual visit stock
     private static final String DATABASE_TABLE_tblActualVisitStock = "tblActualVisitStock";
-    private static final String DATABASE_CREATE_TABLE_tblActualVisitStock = "create table tblActualVisitStock(storeID text null,ProductID text null,Stock text null,Sstat integer null,isDefaultProduct int null, displayUnit text null);";
+    private static final String DATABASE_CREATE_TABLE_tblActualVisitStock = "create table IF NOT EXISTS tblActualVisitStock(storeID text null,ProductID text null,Stock text null,Sstat integer null,isDefaultProduct int null, displayUnit text null);";
 
 
     // SO Tables
 
     private static final String TABLE_tblAllServicesCalledSuccessfull = "tblAllServicesCalledSuccessfull";
-    private static final String DATABASE_CREATE_tblAllServicesCalledSuccessfull = "create table tblAllServicesCalledSuccessfull(flgAllServicesCalledOrNot int null);";
+    private static final String DATABASE_CREATE_tblAllServicesCalledSuccessfull = "create table IF NOT EXISTS tblAllServicesCalledSuccessfull(flgAllServicesCalledOrNot int null);";
 
 
     private static final String DATABASE_TABLE_tblDSRSummaryDetials = "tblDSRSummaryDetials";
-    private static final String DATABASE_CREATE_TABLE_tblDSRSummaryDetials = "create table tblDSRSummaryDetials(DSRID int null,DSRName text null,TotStoreAdded int null,Approved int null,Rejected int null,ReMap int null,Pending int null,flgDSROrSO int null);";
+    private static final String DATABASE_CREATE_TABLE_tblDSRSummaryDetials = "create table IF NOT EXISTS tblDSRSummaryDetials(DSRID int null,DSRName text null,TotStoreAdded int null,Approved int null,Rejected int null,ReMap int null,Pending int null,flgDSROrSO int null);";
 
     private static final String DATABASE_TABLE_tblSOName = "tblSONameAndSummurayRefreshTime";
-    private static final String DATABASE_CREATE_TABLE_tblSONameAndSummurayRefreshTime = "create table tblSONameAndSummurayRefreshTime(SOName text null,SummurayRefreshTime text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSONameAndSummurayRefreshTime = "create table IF NOT EXISTS tblSONameAndSummurayRefreshTime(SOName text null,SummurayRefreshTime text null);";
 
 
     private static final String TABLE_QSTOUTCHANNEL = "tblQuestIDForOutChannel";
-    private static final String DATABASE_CREATE_TABLE_QSTOUTCHANNEL = "create table tblQuestIDForOutChannel(GrpQstId int null,QuestID int null,OptID text null,SectionCount int null);";
+    private static final String DATABASE_CREATE_TABLE_QSTOUTCHANNEL = "create table IF NOT EXISTS tblQuestIDForOutChannel(GrpQstId int null,QuestID int null,OptID text null,SectionCount int null);";
 
     private static final String TABLE_QST_NAME = "tblQuestIDForName";
-    private static final String DATABASE_CREATE_TABLE_QST_NAME = "create table tblQuestIDForName(GrpQstId int null,QuestID int null);";
+    private static final String DATABASE_CREATE_TABLE_QST_NAME = "create table IF NOT EXISTS tblQuestIDForName(GrpQstId int null,QuestID int null);";
 
     private static final String DATABASE_TABLE_tblStoreCountDetails = "tblStoreCountDetails";
-    private static final String DATABASE_CREATE_TABLE_tblStoreCountDetails = "create table tblStoreCountDetails (TotStoreAdded int null,TodayStoreAdded int null);";
+    private static final String DATABASE_CREATE_TABLE_tblStoreCountDetails = "create table IF NOT EXISTS tblStoreCountDetails(TotStoreAdded int null,TodayStoreAdded int null);";
 
     private static final String DATABASE_TABLE_tblPreAddedStores = "tblPreAddedStores";
-    private static final String DATABASE_CREATE_TABLE_tblPreAddedStores = "create table tblPreAddedStores(StoreID text null,StoreName text null,LatCode text null," +
+    private static final String DATABASE_CREATE_TABLE_tblPreAddedStores = "create table IF NOT EXISTS tblPreAddedStores(StoreID text null,StoreName text null,LatCode text null," +
             "LongCode text null,DateAdded text null,DistanceNear int null,flgOldNewStore int null,CoverageAreaID int null,CoverageAreaType int null," +
             "RouteNodeID int null,RouteNodeType int null,City text null,State text null,PinCode text null,StoreCategoryType text null,StoreSectionCount int null," +
             "flgApproveOrRejectOrNoActionOrReVisit int null,SOLatCode text null,SOLongCode text null,VisitStartTS text null,VisitEndTS text null," +
@@ -161,25 +159,26 @@ public class DBAdapterKenya
             "flgStoreVisitMode int null,Sstat int null,StoreAddress text null,SOAccuracy text null,flgRemap int null,flgLocationServicesOnOff int null,flgGPSOnOff int null,flgNetworkOnOff int null,flgFusedOnOff int null,flgInternetOnOffWhileLocationTracking int null,flgRestart int null,flgStoreOrder int null,MapAddress text null,MapCity text null,MapPinCode text null,MapState text null,CityId text null,StateId text null,flgSelfStoreNode int null);";
 
     private static final String DATABASE_TABLE_tblCoverageMaster = "tblCoverageMaster";
-    private static final String DATABASE_CREATE_TABLE_tblCoverageMaster = "create table tblCoverageMaster(CoverageAreaNodeID int null,CoverageAreaNodeType int null,CoverageArea text null);";
+
+    private static final String DATABASE_CREATE_TABLE_tblCoverageMaster = "create table IF NOT EXISTS tblCoverageMaster(CoverageAreaNodeID int null,CoverageAreaNodeType int null,CoverageArea text null);";
     private static final String DATABASE_TABLE_tblRouteMasterWithCoverageMapping = "tblRouteMasterWithCoverageMapping";
-    private static final String DATABASE_CREATE_TABLE_tblRouteMasterWithCoverageMapping = "create table tblRouteMasterWithCoverageMapping (CoverageAreaNodeID int null,CoverageAreaNodeType int null,CoverageArea text null,RouteID int null,RouteType int null,Route text null);";
+    private static final String DATABASE_CREATE_TABLE_tblRouteMasterWithCoverageMapping = "create table IF NOT EXISTS tblRouteMasterWithCoverageMapping (CoverageAreaNodeID int null,CoverageAreaNodeType int null,CoverageArea text null,RouteID int null,RouteType int null,Route text null);";
 
 
     private static final String DATABASE_TABLE_tblStoreImageList = "tblStoreImageList";
-    private static final String DATABASE_CREATE_TABLE_tblStoreImageList = "create table tblStoreImageList (StoreID text null,StoreImagename text null,ImageType int null);";
+    private static final String DATABASE_CREATE_TABLE_tblStoreImageList = "create table IF NOT EXISTS tblStoreImageList(StoreID text null,StoreImagename text null,ImageType int null);";
     private static final String DATABASE_TABLE_tblStorePaymentStageMapping = "tblStorePaymentStageMapping";
-    private static final String DATABASE_CREATE_TABLE_tblStorePaymentStageMapping = "create table tblStorePaymentStageMapping (StoreID text null,PaymentStage text null);";
+    private static final String DATABASE_CREATE_TABLE_tblStorePaymentStageMapping = "create table IF NOT EXISTS tblStorePaymentStageMapping (StoreID text null,PaymentStage text null);";
 
     private static final String DATABASE_TABLE_tblPreAddedStoresDataDetails = "tblPreAddedStoresDataDetails";
-    private static final String DATABASE_CREATE_TABLE_tblPreAddedStoresDataDetails = "create table tblPreAddedStoresDataDetails (StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
+    private static final String DATABASE_CREATE_TABLE_tblPreAddedStoresDataDetails = "create table IF NOT EXISTS tblPreAddedStoresDataDetails(StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
 
 
     private static final String DATABASE_TABLE_tblFSOMaster = "tblFSOMaster";
-    private static final String DATABASE_CREATE_TABLE_tblFSOMaster = "create table tblFSOMaster (FSOID int null,PersonName text null);";
+    private static final String DATABASE_CREATE_TABLE_tblFSOMaster = "create table IF NOT EXISTS tblFSOMaster(FSOID int null,PersonName text null);";
 
     private static final String DATABASE_TABLE_MAINtblStoreDeatils = "tblStoreDetails";
-    private static final String DATABASE_CREATE_TABLE_tblStoreDeatils = "create table tblStoreDetails(StoreID text not null,StoreName text null," +
+    private static final String DATABASE_CREATE_TABLE_tblStoreDeatils = "create table IF NOT EXISTS tblStoreDetails(StoreID text not null,StoreName text null," +
             "ActualLatitude text null,ActualLongitude text null,VisitStartTS text null,VisitEndTS text null," +
             "LocProvider text null, Accuracy text null, BateryLeftStatus text null," +
             "IsStoreDataCompleteSaved int null,PaymentStage text null," +
@@ -187,86 +186,86 @@ public class DBAdapterKenya
 
 
     private static final String TABLE_QuestionMstr = "tblQuestionMstr";
-    private static final String DATABASE_CREATE_TABLE_QUESTIONMstr = "create table tblQuestionMstr(QuestID int null,QuestCode int null,QuestDesc text null,QuestType int null,AnsControlType int null,AnsControlInputTypeID int null,AnsControlInputTypeMinLength int null,AnsControlInputTypeMaxLength int null,AnsMustRequiredFlg int null,QuestBundleFlg int null,ApplicationTypeID int null,Sequence int null,AnsHint text null,flgQuestIDForOutChannel int null,flgNewStore int null,flgStoreValidation int null);";
+    private static final String DATABASE_CREATE_TABLE_QUESTIONMstr = "create table IF NOT EXISTS tblQuestionMstr(QuestID int null,QuestCode int null,QuestDesc text null,QuestType int null,AnsControlType int null,AnsControlInputTypeID int null,AnsControlInputTypeMinLength int null,AnsControlInputTypeMaxLength int null,AnsMustRequiredFlg int null,QuestBundleFlg int null,ApplicationTypeID int null,Sequence int null,AnsHint text null,flgQuestIDForOutChannel int null,flgNewStore int null,flgStoreValidation int null);";
 
     private static final String TABLE_QuestGrpMappingMstr = "tblPDAQuestGrpMappingMstr";
-    private static final String DATABASE_CREATE_TABLE_QuestGrpMappingMstr = "create table tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null,GrpCopyID int null,QuestCopyID int null,Sequence int null,flgNewStore int null,flgStoreValidation int null);";
+    private static final String DATABASE_CREATE_TABLE_QuestGrpMappingMstr = "create table IF NOT EXISTS tblPDAQuestGrpMappingMstr(GrpQuestID int null,QuestID int null,GrpID int null,GrpNodeID int null,GrpDesc text null,SectionNo int null,GrpCopyID int null,QuestCopyID int null,Sequence int null,flgNewStore int null,flgStoreValidation int null);";
     private static final String TABLE_OptionMstr = "tblOptionMstr";
-    private static final String DATABASE_CREATE_TABLE_OPTIONMstr = "create table tblOptionMstr(OptID text null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
+    private static final String DATABASE_CREATE_TABLE_OPTIONMstr = "create table IF NOT EXISTS tblOptionMstr(OptID text null,QuestID int null,OptionNo int null,OptionDescr text null,Sequence int null );";
     private static final String TABLE_QuestionDependentMstr = "tblQuestionDependentMstr";
-    private static final String DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr = "create table tblQuestionDependentMstr(QuestionID int null,OptionID text null,DependentQuestionID int null,GrpID int null,GrpDepQuestID int null);";
+    private static final String DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr = "create table IF NOT EXISTS tblQuestionDependentMstr(QuestionID int null,OptionID text null,DependentQuestionID int null,GrpID int null,GrpDepQuestID int null);";
     private static final String TABLE_QuestOptionDependentMstr = "tblPDAQuestOptionDependentMstr";
-    private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_DEPENDENTMstr = "create table tblPDAQuestOptionDependentMstr(QstID int null,DepQstId int null,GrpQuestID int null,GrpDepQuestID int null);";
+    private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_DEPENDENTMstr = "create table IF NOT EXISTS tblPDAQuestOptionDependentMstr(QstID int null,DepQstId int null,GrpQuestID int null,GrpDepQuestID int null);";
     private static final String TABLE_QuestOptionValuesDependentMstr = "tblPDAQuestOptionValuesDependentMstr";
-    private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_VAL_DEPENDENTMstr = "create table tblPDAQuestOptionValuesDependentMstr(DepQstId int null,DepAnswValId text null,QstId int null,AnswValId text null,OptDescr text null,Sequence int null,GrpQuestID int null,GrpDepQuestID int null);";
+    private static final String DATABASE_CREATE_TABLE_QUESTION_OPTION_VAL_DEPENDENTMstr = "create table IF NOT EXISTS tblPDAQuestOptionValuesDependentMstr(DepQstId int null,DepAnswValId text null,QstId int null,AnswValId text null,OptDescr text null,Sequence int null,GrpQuestID int null,GrpDepQuestID int null);";
 
 
     private static final String TABLE_OutletQuestAnsMstr = "tblOutletQuestAnsMstr";
-    private static final String DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr = "create table tblOutletQuestAnsMstr (OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null,QuestionGroupID integer null,sectionID integer null,Sstat integer not null,optionValue text null);";
+    private static final String DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr = "create table IF NOT EXISTS tblOutletQuestAnsMstr(OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null,QuestionGroupID integer null,sectionID integer null,Sstat integer not null,optionValue text null);";
 
 
     private static final String Table_tblDSRCoverageMaster_Define = "tblDSRCoverageMaster";
-    private static final String Table_tblDSRCoverageMaster_Definition = "create table tblDSRCoverageMaster (CoverageAreaNodeID text null,CoverageAreaNodeType text null,CoverageArea text null,PersonNodeID text null,PersonNodeType text null,PersonName text null,flgRegistered text null,LastProfileUpdateDate text null);";
+    private static final String Table_tblDSRCoverageMaster_Definition = "create table IF NOT EXISTS tblDSRCoverageMaster(CoverageAreaNodeID text null,CoverageAreaNodeType text null,CoverageArea text null,PersonNodeID text null,PersonNodeType text null,PersonName text null,flgRegistered text null,LastProfileUpdateDate text null);";
 
 
     private static final String DATABASE_TABLE_DayAndSummary = "tblAllSummaryDay";
-    private static final String DATABASE_CREATE_TABLE_DayAndSummary = "create table tblAllSummaryDay (AutoId int not null,Measures text null," +
+    private static final String DATABASE_CREATE_TABLE_DayAndSummary = "create table IF NOT EXISTS tblAllSummaryDay(AutoId int not null,Measures text null," +
             "TodaysSummary text null,MTDSummary text null,TableNo text not null,ColorCode text not null);";
 
     private static final String DATABASE_TABLE_Main271 = "tblLatLongDetails";
-    private static final String DATABASE_CREATE_TABLE_271 = "create table tblLatLongDetails (StoreID text null,fnLati text null,fnLongi text null,fnAccuracy text null,flgLocNotFound text null,fnAccurateProvider text null,AllProvidersLocation text null,fnAddress text null,GpsLat text null, GpsLong text null, GpsAccuracy text null, GpsAddress text null, NetwLat text null, NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null,FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_271 = "create table IF NOT EXISTS tblLatLongDetails(StoreID text null,fnLati text null,fnLongi text null,fnAccuracy text null,flgLocNotFound text null,fnAccurateProvider text null,AllProvidersLocation text null,fnAddress text null,GpsLat text null, GpsLong text null, GpsAccuracy text null, GpsAddress text null, NetwLat text null, NetwLong text null, NetwAccuracy text null, NetwAddress text null, FusedLat text null, FusedLong text null, FusedAccuracy text null, FusedAddress text null,FusedLocationLatitudeWithFirstAttempt text null,FusedLocationLongitudeWithFirstAttempt text null,FusedLocationAccuracyWithFirstAttempt text null,Sstat integer null);";
 
     private static final String DATABASE_TABLE_tblSameLocationForStoreRestartDone = "tblsameLocationForStoreRestartDone";
-    private static final String DATABASE_CREATE_TABLE_tblSameLocationForStoreRestartDone = "create table tblsameLocationForStoreRestartDone(UniqueID INTEGER PRIMARY KEY AUTOINCREMENT,prvsStoreID text null,CrntStoreID text null,isSavedOrSubmittedStore text null,isMsgToRestartPopUpShown text null,isRestartDoneByDSR text null ,Sstat integer null,ActionTime text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSameLocationForStoreRestartDone = "create table IF NOT EXISTS tblsameLocationForStoreRestartDone(UniqueID INTEGER PRIMARY KEY AUTOINCREMENT,prvsStoreID text null,CrntStoreID text null,isSavedOrSubmittedStore text null,isMsgToRestartPopUpShown text null,isRestartDoneByDSR text null ,Sstat integer null,ActionTime text null);";
 
 
     private static final String DATABASE_TABLE_MAIN23 = "tblStoreWiseTarget";
     private static final String DATABASE_TABLE_MAIN235 = "tblTargetVsAchievedSummary";
 
-    private static final String DATABASE_CREATE_TABLE_23 = "create table tblStoreWiseTarget (StoreID text not null,TargetValue text null);";
-    private static final String DATABASE_CREATE_TABLE_235 = "create table tblTargetVsAchievedSummary (AutoId int not null,Descr text null," +
+    private static final String DATABASE_CREATE_TABLE_23 = "create table IF NOT EXISTS tblStoreWiseTarget(StoreID text not null,TargetValue text null);";
+    private static final String DATABASE_CREATE_TABLE_235 = "create table IF NOT EXISTS tblTargetVsAchievedSummary(AutoId int not null,Descr text null," +
             "TodayTarget text null,TodayAchieved text null,TodayBal text null,Todayflg text null,MonthTarget text null,MonthAchieved text null,MonthBal text null,Monthflg text null,ValTgtOrPrdctFlg int not null);";
 
     private static final String DATABASE_TABLE_MAIN236 = "tblTargetVsAchievedNote";
-    private static final String DATABASE_CREATE_TABLE_236 = "create table tblTargetVsAchievedNote (MsgToDisplay text null);";
+    private static final String DATABASE_CREATE_TABLE_236 = "create table IF NOT EXISTS tblTargetVsAchievedNote(MsgToDisplay text null);";
 
     // Tables Data Coming at Splash Screen Starts
     private static final String TABLE_tblUserAuthenticationMstr_Define = "tblUserAuthenticationMstr";
-    private static final String TABLE_tblUserAuthenticationMstr_Definition = "create table tblUserAuthenticationMstr (flgUserAuthenticated text null,flgAllRoutesData integer null,PersonNodeID integer null,PersonNodeType integer null,CoverageAreaNodeID integer null,CoverageAreaNodeType integer null,flgAppStatus text null,DisplayMessage text null,flgValidApplication text null,MessageForInvalid text null,flgPersonTodaysAtt text null,PersonName text null,SalesAreaName text null,ContactNumber text null,FlgRegistered text null);";
+    private static final String TABLE_tblUserAuthenticationMstr_Definition = "create table IF NOT EXISTS tblUserAuthenticationMstr(flgUserAuthenticated text null,flgAllRoutesData integer null,PersonNodeID integer null,PersonNodeType integer null,CoverageAreaNodeID integer null,CoverageAreaNodeType integer null,flgAppStatus text null,DisplayMessage text null,flgValidApplication text null,MessageForInvalid text null,flgPersonTodaysAtt text null,PersonName text null,SalesAreaName text null,ContactNumber text null,FlgRegistered text null);";
     private static final String TABLE_tblAvailableVersionMstr_Define = "tblAvailableVersionMstr";
-    private static final String TABLE_tblAvailableVersionMstr_Definition = "create table tblAvailableVersionMstr (VersionID text null,VersionSerialNo text null,VersionDownloadStatus text null,ServerDate text null);";//, AutoIdOutlet int null
+    private static final String TABLE_tblAvailableVersionMstr_Definition = "create table IF NOT EXISTS tblAvailableVersionMstr(VersionID text null,VersionSerialNo text null,VersionDownloadStatus text null,ServerDate text null);";//, AutoIdOutlet int null
 
 
     private static final String TABLE_tblSORegDetailsFromServer = "tblSORegDetailsFromServer";
-    private static final String DATABASE_CREATE_TABLE_tblSORegDetailsFromServer = "create table tblSORegDetailsFromServer (PersonNodeId text null,  PersonNodeType text null,Name text null,ContactNo text null,DOB text null,SelfieName text null,SignImgName text null,BankAccountnumber text null,BankID text null,IFSCCode text null,flgUPIID text null,UPIID text null,SelfieNameURL text null,EmailID text null,AadhaarNumber text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSORegDetailsFromServer = "create table IF NOT EXISTS tblSORegDetailsFromServer(PersonNodeId text null,  PersonNodeType text null,Name text null,ContactNo text null,DOB text null,SelfieName text null,SignImgName text null,BankAccountnumber text null,BankID text null,IFSCCode text null,flgUPIID text null,UPIID text null,SelfieNameURL text null,EmailID text null,AadhaarNumber text null);";
 
     private static final String TABLE_tblUserRegistarationStatus = "tblUserRegistarationStatus";
-    private static final String DATABASE_CREATE_TABLE_tblUserRegistarationStatus = "create table tblUserRegistarationStatus (Flag text null,MsgToDisplay text null);";
+    private static final String DATABASE_CREATE_TABLE_tblUserRegistarationStatus = "create table IF NOT EXISTS tblUserRegistarationStatus(Flag text null,MsgToDisplay text null);";
     //Registration
     private static final String DATABASE_TABLE_tblRegistrationDetail = "tblRegistrationDetail";
-    private static final String DATABASE_CREATE_RegistrationDetail = "create table tblRegistrationDetail (RecordId text null,ClickedDateTime text null,PhotoName text null,PDAPhotoPath text null,SignName text null,SignPath text null,Sstat integer null,Name text null,ContactNo text null,DOB text null,AccNo text null,BankID text null,IFSC text null,UPIID_Flag text null,UPIID_text text null,IMEI text null,NodeID text null,NodeType text null,EmailID text null,AadhaarNumber text null);";
+    private static final String DATABASE_CREATE_RegistrationDetail = "create table IF NOT EXISTS tblRegistrationDetail(RecordId text null,ClickedDateTime text null,PhotoName text null,PDAPhotoPath text null,SignName text null,SignPath text null,Sstat integer null,Name text null,ContactNo text null,DOB text null,AccNo text null,BankID text null,IFSC text null,UPIID_Flag text null,UPIID_text text null,IMEI text null,NodeID text null,NodeType text null,EmailID text null,AadhaarNumber text null);";
 
 
     private static final String TABLE_tblRouteMstr_Define = "tblRouteMstr";
-    private static final String TABLE_tblRouteMstr_Definition = "create table tblRouteMstr(ID string null,RouteType string null, Descr string null, Active integer null,flgTodayRoute integer null,RouteDate string null,CoverageAreaNodeID text null,CoverageAreaNodeType text null);";
+    private static final String TABLE_tblRouteMstr_Definition = "create table IF NOT EXISTS tblRouteMstr(ID string null,RouteType string null, Descr string null, Active integer null,flgTodayRoute integer null,RouteDate string null,CoverageAreaNodeID text null,CoverageAreaNodeType text null);";
 
     private static final String TABLE_tblNotificationMstr_Define = "tblNotificationMstr";
-    private static final String TABLE_tblNotificationMstr_Definition = "create table tblNotificationMstr (SerialNo int null,IMEI text null, Noti_text text null,Noti_DateTime text null,Noti_ReadStatus int null,Noti_NewOld int null,Noti_ReadDateTime text null,Sstat int null,MsgServerID int null);";
+    private static final String TABLE_tblNotificationMstr_Definition = "create table IF NOT EXISTS tblNotificationMstr(SerialNo int null,IMEI text null, Noti_text text null,Noti_DateTime text null,Noti_ReadStatus int null,Noti_NewOld int null,Noti_ReadDateTime text null,Sstat int null,MsgServerID int null);";
 
 
     private static final String TABLE_tblNoVisitReasonMaster_Define = "tblNoVisitReasonMaster";
     //private static final String TABLE_tblNoVisitReasonMaster_Definition = "create table tblNoVisitReasonMaster(AutoIdStore integer null,ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null);";
-    private static final String TABLE_tblNoVisitReasonMaster_Definition = "create table tblNoVisitReasonMaster(AutoIdStore integer null,ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null,flgSOApplicable int null,flgDSRApplicable int null,flgNoVisitOption int null,SeqNo int null,flgDelayedReason int null);";
+    private static final String TABLE_tblNoVisitReasonMaster_Definition = "create table IF NOT EXISTS tblNoVisitReasonMaster(AutoIdStore integer null,ReasonId text null,ReasonDescr text null,FlgToShowTextBox integer null,flgSOApplicable int null,flgDSRApplicable int null,flgNoVisitOption int null,SeqNo int null,flgDelayedReason int null);";
 
     private static final String TABLE_tblNoVisitStoreDetails_Define = "tblNoVisitStoreDetails";
-    private static final String TABLE_tblNoVisitStoreDetails_Definition = "create table tblNoVisitStoreDetails(IMEI text null,CurDate text null,ReasonId text null,ReasonDescr text null,flgHasVisit integer null,Sstat integer not null);";
+    private static final String TABLE_tblNoVisitStoreDetails_Definition = "create table IF NOT EXISTS tblNoVisitStoreDetails(IMEI text null,CurDate text null,ReasonId text null,ReasonDescr text null,flgHasVisit integer null,Sstat integer not null);";
 
 
     //new Store master data Start
 
 
     private static final String DATABASE_TABLE_NewStoreSalesQuotePaymentDetails = "tblNewStoreSalesQuotePaymentDetails";
-    private static final String DATABASE_NewStoreSalesQuotePaymentDetails = "create table tblNewStoreSalesQuotePaymentDetails (StoreId text null,PymtStageId text null,Sstat text null);";
+    private static final String DATABASE_NewStoreSalesQuotePaymentDetails = "create table IF NOT EXISTS tblNewStoreSalesQuotePaymentDetails(StoreId text null,PymtStageId text null,Sstat text null);";
 
 
     //private static final String TABLE_QSTOUTCHANNEL = "tblQuestIDForOutChannel"; // show how many section we have to show
@@ -294,7 +293,7 @@ public class DBAdapterKenya
 
 
     private static final String DATABASE_TABLE_tblUserName = "tblUserName";
-    private static final String DATABASE_CREATE_TABLE_tblUserName = "create table tblUserName (UserName text null);";
+    private static final String DATABASE_CREATE_TABLE_tblUserName = "create table IF NOT EXISTS tblUserName(UserName text null);";
 
 //	private static final String DATABASE_TABLE_tblStoreCountDetails = "tblStoreCountDetails";
 //	private static final String DATABASE_CREATE_TABLE_tblStoreCountDetails = "create table tblStoreCountDetails (TotStoreAdded int null,TodayStoreAdded int null);";
@@ -306,7 +305,7 @@ public class DBAdapterKenya
 //	private static final String DATABASE_CREATE_TABLE_tblPreAddedStoresDataDetails = "create table tblPreAddedStoresDataDetails (StoreIDDB text null,GrpQuestID text null,QstId text null,AnsControlTypeID text null,AnsTextVal text null,flgPrvVal text null);";
 
     private static final String DATABASE_TABLE_tblLocationDetails = "tblLocationDetails";
-    private static final String DATABASE_CREATE_TABLE_tblLocationDetails = "create table tblLocationDetails (Lattitude text null,Longitude text null,Accuracy text null,Address text null,City text null,Pincode text null,State text null,fnAccurateProvider  text null,GpsLat  text null,GpsLong  text null,GpsAccuracy  text null,NetwLat  text null,NetwLong  text null,NetwAccuracy  text null,FusedLat  text null,FusedLong  text null,FusedAccuracy  text null,AllProvidersLocation  text null,GpsAddress  text null,NetwAddress  text null,FusedAddress  text null,FusedLocationLatitudeWithFirstAttempt  text null,FusedLocationLongitudeWithFirstAttempt  text null,FusedLocationAccuracyWithFirstAttempt  text null);";
+    private static final String DATABASE_CREATE_TABLE_tblLocationDetails = "create table IF NOT EXISTS tblLocationDetails(Lattitude text null,Longitude text null,Accuracy text null,Address text null,City text null,Pincode text null,State text null,fnAccurateProvider  text null,GpsLat  text null,GpsLong  text null,GpsAccuracy  text null,NetwLat  text null,NetwLong  text null,NetwAccuracy  text null,FusedLat  text null,FusedLong  text null,FusedAccuracy  text null,AllProvidersLocation  text null,GpsAddress  text null,NetwAddress  text null,FusedAddress  text null,FusedLocationLatitudeWithFirstAttempt  text null,FusedLocationLongitudeWithFirstAttempt  text null,FusedLocationAccuracyWithFirstAttempt  text null);";
 
     //private static final String DATABASE_TABLE_MAINtblStoreDeatils = "tblStoreDetails";
 
@@ -320,7 +319,7 @@ public class DBAdapterKenya
 
 
     private static final String TABLE_IMAGE = "tableImage";
-    private static final String DATABASE_CREATE_TABLE_Image = "create table tableImage(StoreID text null,QstIdAnsCntrlTyp text null,imageName text null,imagePath text null,ImageClicktime text null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_Image = "create table IF NOT EXISTS tableImage(StoreID text null,QstIdAnsCntrlTyp text null,imageName text null,imagePath text null,ImageClicktime text null,Sstat integer null);";
 
     //private static final String TABLE_OutletQuestAnsMstr = "tblOutletQuestAnsMstr";
     //private static final String DATABASE_CREATE_TABLE_tblOutletQuestAnsMstr = "create table tblOutletQuestAnsMstr (OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null,QuestionGroupID integer null,sectionID integer null,Sstat integer not null);";
@@ -330,33 +329,33 @@ public class DBAdapterKenya
 
     // Surbhi Change for Incentive
     private static final String TABLE_tblIncentiveMaster = "tblIncentiveMaster";
-    private static final String CREATE_TABLE_tblIncentiveMaster = "create table tblIncentiveMaster(IncId int null,OutputType int null,IncentiveName text null,flgAcheived text null,Earning text null);";
+    private static final String CREATE_TABLE_tblIncentiveMaster = "create table IF NOT EXISTS tblIncentiveMaster(IncId int null,OutputType int null,IncentiveName text null,flgAcheived text null,Earning text null);";
 
 
     private static final String TABLE_tblIncentiveSecondaryMaster = "tblIncentiveSecondaryMaster";
-    private static final String CREATE_TABLE_tblIncentiveSecondaryMaster = "create table tblIncentiveSecondaryMaster(IncSlabId int null,IncId int null,OutputType int null,IncSlabName text null,flgAcheived text null,Earning text null);";
+    private static final String CREATE_TABLE_tblIncentiveSecondaryMaster = "create table IF NOT EXISTS tblIncentiveSecondaryMaster(IncSlabId int null,IncId int null,OutputType int null,IncSlabName text null,flgAcheived text null,Earning text null);";
 
 
     private static final String TABLE_tblIncentiveDetailsData = "tblIncentiveDetailsData";
     private static String DATABASE_CREATE_TABLE_tblIncentiveDetailsData = "";
 
     private static final String TABLE_tblIncentiveDetailsColumnsDesc = "tblIncentiveDetailsColumnsDesc";
-    private static final String CREATE_TABLE_tblIncentiveDetailsColumnsDesc = "create table tblIncentiveDetailsColumnsDesc(IncSlabId int null,ReportColumnName text null,DisplayColumnName text null);";
+    private static final String CREATE_TABLE_tblIncentiveDetailsColumnsDesc = "create table IF NOT EXISTS tblIncentiveDetailsColumnsDesc(IncSlabId int null,ReportColumnName text null,DisplayColumnName text null);";
 
     private static final String TABLE_tblTotalEarning = "tblTotalEarning";
-    private static final String CREATE_TABLE_tblTotalEarning = "create table tblTotalEarning(Total_Earning text null);";
+    private static final String CREATE_TABLE_tblTotalEarning = "create table IF NOT EXISTS tblTotalEarning(Total_Earning text null);";
 
     private static final String TABLE_tblIncentivePastDetailsData = "tblIncentivePastDetailsData";
     private static String DATABASE_CREATE_TABLE_tblIncentivePastDetailsData = "";
 
     private static final String TABLE_tblIncentivePastDetailsColumnsDesc = "tblIncentivePastDetailsColumnsDesc";
-    private static final String CREATE_TABLE_tblIncentivePastDetailsColumnsDesc = "create table tblIncentivePastDetailsColumnsDesc(IncSlabId int null,ReportColumnName text null,DisplayColumnName text null,Ordr text null);";
+    private static final String CREATE_TABLE_tblIncentivePastDetailsColumnsDesc = "create table IF NOT EXISTS tblIncentivePastDetailsColumnsDesc(IncSlabId int null,ReportColumnName text null,DisplayColumnName text null,Ordr text null);";
 
     private static final String TABLE_tblIncentiveMsgToDisplay_Define = "tblIncentiveMsgToDisplay";
-    private static final String CREATE_tblIncentiveMsgToDisplay_Definition = "create table tblIncentiveMsgToDisplay(MsgToDisplay text null,flgBankDetailsToShow int null);";
+    private static final String CREATE_tblIncentiveMsgToDisplay_Definition = "create table IF NOT EXISTS tblIncentiveMsgToDisplay(MsgToDisplay text null,flgBankDetailsToShow int null);";
 
     private static final String TABLE_tblIncentiveBankDetails = "tblIncentiveBankDetails";
-    private static final String CREATE_tblIncentiveBankDetails = "create table tblIncentiveBankDetails(LvlName text null,Value text null);";
+    private static final String CREATE_tblIncentiveBankDetails = "create table IF NOT EXISTS tblIncentiveBankDetails(LvlName text null,Value text null);";
 
 
     // End Surbhi Change for Incentive
@@ -369,7 +368,7 @@ public class DBAdapterKenya
 
 
     private static final String TABLE_XMLFILES = "tbl_XMLfiles";
-    private static final String DATABASE_CREATE_TABLE_XMLfiles = "create table tbl_XMLfiles(XmlFileName text null,Sstat text null,filetype text null);";
+    private static final String DATABASE_CREATE_TABLE_XMLfiles = "create table IF NOT EXISTS tbl_XMLfiles(XmlFileName text null,Sstat text null,filetype text null);";
 
     private static final String TABLE_RETURN_REASON = "tblReturnReason";
     // Dynamic Store Mapping Start
@@ -389,32 +388,32 @@ public class DBAdapterKenya
     private static final String TABLE_MinDeliverQntty = "tblMinDeliverQntty";
 
 
-    private static final String DATABASE_CREATE_TABLE_OutletPhotoDetail = "create table tblOutletPhotoDetail(OutletID text null,ClickedDateTime text null,PhotoName text null,PhotoComment text null,PDAPhotoPath text null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_OutletPhotoDetail = "create table IF NOT EXISTS tblOutletPhotoDetail(OutletID text null,ClickedDateTime text null,PhotoName text null,PhotoComment text null,PDAPhotoPath text null,Sstat integer null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_OutletChannelBusinessSegmentMasterr = "create table tblOutletChannelBusinessSegmentMaster(OutChannelID int null,ChannelName text null,BusinessSegmentID int null,BusinessSegment text null);";
+    private static final String DATABASE_CREATE_TABLE_OutletChannelBusinessSegmentMasterr = "create table IF NOT EXISTS tblOutletChannelBusinessSegmentMaster(OutChannelID int null,ChannelName text null,BusinessSegmentID int null,BusinessSegment text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table tblOutletMstr (OutletID text not null,VisitStartTS text not null,VisitEndTS text null,AppVersion int null,ActualLatitude text null, ActualLongitude text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreName text null,imei text null, ISNewStore int null,Sstat integer not null);";
-    private static final String DATABASE_CREATE_TABLE_tblViewOutletQuestAnsMstr = "create table tblViewOutletQuestAnsMstr (OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null);";
+    private static final String DATABASE_CREATE_TABLE_tblOutletMstr = "create table IF NOT EXISTS tblOutletMstr(OutletID text not null,VisitStartTS text not null,VisitEndTS text null,AppVersion int null,ActualLatitude text null, ActualLongitude text null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreName text null,imei text null, ISNewStore int null,Sstat integer not null);";
+    private static final String DATABASE_CREATE_TABLE_tblViewOutletQuestAnsMstr = "create table IF NOT EXISTS tblViewOutletQuestAnsMstr(OutletID text not null,QuestID text not null,AnswerType text null, AnswerValue text null);";
 
-    private static final String DATABASE_CREATE_TABLE_ViewOutletNameAndId = "create table tblViewOutletNameAndId(OutletID text not null,OutletName text not null);";
+    private static final String DATABASE_CREATE_TABLE_ViewOutletNameAndId = "create table IF NOT EXISTS tblViewOutletNameAndId(OutletID text not null,OutletName text not null);";
 
     // private static final String DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr = "create table tblQuestionDependentMstr(QuestionID int null,OptionID int null,DependentQuestionID int null,GrpID int null,GrpDepQuestID int null);";
-    private static final String DATABASE_StoreSalesOrderPaymentDetails = "create table tblStoreSalesOrderPaymentDetails (StoreId text null,OrderID text null,PymtStageId text null,Sstat text null);";
-    private static final String DATABASE_StoreAddressMapDetailsMstr = "create table tblStoreAddressMapDetailsMstr (StoreID text null,OutAddTypeID int null,Address text null,AddressDet text null,OutAddID int null);";
-    private static final String DATABASE_StoreOrderBillAddressDetails = "create table tblStoreOrderBillAddressDetails (StoreID text null,OrderID text null,BillToAddress text null,ShipToAddress int null,Sstat text null);";
+    private static final String DATABASE_StoreSalesOrderPaymentDetails = "create table IF NOT EXISTS tblStoreSalesOrderPaymentDetails(StoreId text null,OrderID text null,PymtStageId text null,Sstat text null);";
+    private static final String DATABASE_StoreAddressMapDetailsMstr = "create table IF NOT EXISTS tblStoreAddressMapDetailsMstr(StoreID text null,OutAddTypeID int null,Address text null,AddressDet text null,OutAddID int null);";
+    private static final String DATABASE_StoreOrderBillAddressDetails = "create table IF NOT EXISTS tblStoreOrderBillAddressDetails(StoreID text null,OrderID text null,BillToAddress text null,ShipToAddress int null,Sstat text null);";
 
-    private static final String DATABASE_MinDeliverQntty = "create table tblMinDeliverQntty (PrdId text null,StoreID text null,QPBT text null,QPAT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
+    private static final String DATABASE_MinDeliverQntty = "create table IF NOT EXISTS tblMinDeliverQntty(PrdId text null,StoreID text null,QPBT text null,QPAT text null,QPTaxAmount text null,MinDlvrQty int null,UOMID text null,Sstat text null);";
 
     private static final String TABLE_tblSalesQuoteSponsorMstr = "tblSalesQuoteSponsorMstr";
     private static final String TABLE_tblManufacturerMstrMain = "tblManufacturerMstrMain";
     private static final String TABLE_tblRateDistribution = "tblRateDistribution";
 
     //nitika
-    private static final String DATABASE_CREATE_TABLE_tblSalesQuoteSponsorMstr = "create table tblSalesQuoteSponsorMstr(SalesQuoteSponsorID text null,SponsorDescr text null,Ordr text null);";
-    private static final String DATABASE_CREATE_TABLE_tblManufacturerMstrMain = "create table tblManufacturerMstrMain(ManufacturerID text null,ManufacturerName text null,NodeType text null);";
-    private static final String DATABASE_CREATE_TABLE_tblRateDistribution = "create table tblRateDistribution(SalesQuoteId text null,StoreId text null,SalesQuoteSponsorID  text null,ManufacturerID  text null,Percentage  text null,SponsorDescr  text null,ManufacturerName  text null,Sstat text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSalesQuoteSponsorMstr = "create table IF NOT EXISTS tblSalesQuoteSponsorMstr(SalesQuoteSponsorID text null,SponsorDescr text null,Ordr text null);";
+    private static final String DATABASE_CREATE_TABLE_tblManufacturerMstrMain = "create table IF NOT EXISTS tblManufacturerMstrMain(ManufacturerID text null,ManufacturerName text null,NodeType text null);";
+    private static final String DATABASE_CREATE_TABLE_tblRateDistribution = "create table IF NOT EXISTS tblRateDistribution(SalesQuoteId text null,StoreId text null,SalesQuoteSponsorID  text null,ManufacturerID  text null,Percentage  text null,SponsorDescr  text null,ManufacturerName  text null,Sstat text null);";
 
     //  private static final String TABLE_MinDeliverQntty = "tblMinDeliverQntty";
     // Dynamic Store Mapping End
@@ -532,7 +531,6 @@ public class DBAdapterKenya
     private static final String DATABASE_TABLE_MAIN146 = "tblForPDAGetExecutionSummary";
 
     private static final String DATABASE_TABLE_MAIN151 = "tblProductListForAvailableStock";
-    private static final String DATABASE_TABLE_MAIN152 = "tblCatagoryMstrForDailyTarget";
 
     //surbhi
     private static final String DATABASE_TABLE_UOMMstr = "tblUOMMstr";
@@ -548,17 +546,17 @@ public class DBAdapterKenya
 
 
     //surbhi
-    private static final String DATABASE_CREATE_TABLE_UOMMstr = "create table tblUOMMstr (UOMID text null,UOM text null);";
-    private static final String DATABASE_CREATE_TABLE_SalesQuotePrcsMstr = "create table tblSalesQuotePrcsMstr (SalesQuotePrcsId text null, SalesQuotePrcs text null);";
-    private static final String DATABASE_SalesQuotePersonMeetMstr = "create table tblSalesQuotePersonMeetMstr (SalesQuoteId text null,SalesQuoteCode text null,SalesQuotePrcsId text null,SalesQuotePrcs text null,StoreName text null,Remarks text null,StoreId text null,CreditLimit text null,CreditDays text null,ExpectedBusinessValue text null,SalesQuoteValidFrom text null,SalesQuoteValidTo text null,SalesQuoteDate text null,SalesQuoteType text null,ContactPerson text null,ContactPersonEmail text null,ContactPersonPhone text null,PaymentModeId text null,Sstat text null,PymtStageId text null,ManufacturerID text null,ManufacturerName text null);";
-    private static final String DATABASE_CREATE_SalesQuoteProductsMstr = "create table tblSalesQuoteProductsMstr (SalesQuoteId text null,Row_No text null,PrdId text null,StandardRate text null,StandardRateBeforeTax text null,RateOffer text null,InclusiveTax text null,ValidFrom text null,ValidTo text null,MinDlvryQty text null,UOMID text null,Remarks text null,LastTranscRate text null,Sstat text null,TaxRate text null);";
-    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentModeMstr = "create table tblSalesQuotePaymentModeMstr (PymtModeId text null,PymtMode text null);";
+    private static final String DATABASE_CREATE_TABLE_UOMMstr = "create table IF NOT EXISTS tblUOMMstr (UOMID text null,UOM text null);";
+    private static final String DATABASE_CREATE_TABLE_SalesQuotePrcsMstr = "create table IF NOT EXISTS tblSalesQuotePrcsMstr(SalesQuotePrcsId text null, SalesQuotePrcs text null);";
+    private static final String DATABASE_SalesQuotePersonMeetMstr = "create table IF NOT EXISTS tblSalesQuotePersonMeetMstr(SalesQuoteId text null,SalesQuoteCode text null,SalesQuotePrcsId text null,SalesQuotePrcs text null,StoreName text null,Remarks text null,StoreId text null,CreditLimit text null,CreditDays text null,ExpectedBusinessValue text null,SalesQuoteValidFrom text null,SalesQuoteValidTo text null,SalesQuoteDate text null,SalesQuoteType text null,ContactPerson text null,ContactPersonEmail text null,ContactPersonPhone text null,PaymentModeId text null,Sstat text null,PymtStageId text null,ManufacturerID text null,ManufacturerName text null);";
+    private static final String DATABASE_CREATE_SalesQuoteProductsMstr = "create table IF NOT EXISTS tblSalesQuoteProductsMstr(SalesQuoteId text null,Row_No text null,PrdId text null,StandardRate text null,StandardRateBeforeTax text null,RateOffer text null,InclusiveTax text null,ValidFrom text null,ValidTo text null,MinDlvryQty text null,UOMID text null,Remarks text null,LastTranscRate text null,Sstat text null,TaxRate text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentModeMstr = "create table IF NOT EXISTS tblSalesQuotePaymentModeMstr(PymtModeId text null,PymtMode text null);";
 
-    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageMstr = "create table tblSalesQuotePaymentStageMstr (PymtStageId text null,PymtStage text null,PymtModeId text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageMstr = "create table IF NOT EXISTS tblSalesQuotePaymentStageMstr(PymtStageId text null,PymtStage text null,PymtModeId text null);";
 
-    private static final String DATABASE_CREATE_TABLE_tblSalesQuoteTypeMstr = "create table tblSalesQuoteTypeMstr (SalesQuotetypeId	text null, SalesQuoteType text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSalesQuoteTypeMstr = "create table IF NOT EXISTS tblSalesQuoteTypeMstr(SalesQuotetypeId	text null, SalesQuoteType text null);";
 
-    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageModeMapMstr = "create table tblSalesQuotePaymentStageModeMapMstr (PymtStageId text null, PymtModeId text null);";
+    private static final String DATABASE_CREATE_TABLE_tblSalesQuotePaymentStageModeMapMstr = "create table IF NOT EXISTS tblSalesQuotePaymentStageModeMapMstr(PymtStageId text null, PymtModeId text null);";
 
     //private static final String DATABASE_TABLE_Summarytable = "tblDaySummary";
     private static final String DATABASE_TABLE_SummaryDayTableSummaryNew = "tblDaySummaryNew";
@@ -578,8 +576,8 @@ public class DBAdapterKenya
     private static final String DATABASE_TABLE_Main166 = "tblStorePOSLastVisitALLMaterialDetails";
 
 
-    private static final String DATABASE_CREATE_TABLE_165 = "create table tblStorePOSLastVisitDateDetail (StoreID text null,LastVisitDate text null);";
-    private static final String DATABASE_CREATE_TABLE_166 = "create table tblStorePOSLastVisitALLMaterialDetails (StoreID text null,POSMaterialID text null,POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null,ReturnQty text null,DamageQty text null);";
+    private static final String DATABASE_CREATE_TABLE_165 = "create table IF NOT EXISTS tblStorePOSLastVisitDateDetail(StoreID text null,LastVisitDate text null);";
+    private static final String DATABASE_CREATE_TABLE_166 = "create table IF NOT EXISTS tblStorePOSLastVisitALLMaterialDetails(StoreID text null,POSMaterialID text null,POSMaterialDescr text null,CurrentStockQty text null,NewOrderQty text null,ReturnQty text null,DamageQty text null);";
 
 
     public static String DATABASE_NAME = CommonInfo.DATABASE_NAME;
@@ -594,30 +592,30 @@ public class DBAdapterKenya
     // ReasonId,ReasonDescr,FlgToShowTextBox
 
 
-    private static final String DATABASE_CREATE_TABLE_161 = "create table tblPOSMaterialMstr (POSMaterialID text null,POSMaterialDescr text null);";
-    private static final String DATABASE_CREATE_TABLE_162 = "create table tblStoreIDAndMaterialIDMap (StoreID text null,VisitID text null,MaterialID text null,CurrentStockQty text null);";
+    private static final String DATABASE_CREATE_TABLE_161 = "create table IF NOT EXISTS tblPOSMaterialMstr(POSMaterialID text null,POSMaterialDescr text null);";
+    private static final String DATABASE_CREATE_TABLE_162 = "create table IF NOT EXISTS tblStoreIDAndMaterialIDMap(StoreID text null,VisitID text null,MaterialID text null,CurrentStockQty text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_163 = "create table tblStoreMaterialDetail (RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null,ReturntoDistributor integer null,FreshOrder integer null,DiscardDamage integer null,Sstat integer null);";
-    private static final String DATABASE_CREATE_TABLE_164 = "create table tblStoreMaterialPhotoDetail (RouteID text null,StoreID text null,MaterialID text null,ClickedDateTime text null,PhotoName text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_163 = "create table IF NOT EXISTS tblStoreMaterialDetail(RouteID text null,StoreID text null,MaterialID text null,ExistStock integer null,ReturntoDistributor integer null,FreshOrder integer null,DiscardDamage integer null,Sstat integer null);";
+    private static final String DATABASE_CREATE_TABLE_164 = "create table IF NOT EXISTS tblStoreMaterialPhotoDetail(RouteID text null,StoreID text null,MaterialID text null,ClickedDateTime text null,PhotoName text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_214 = "create table tblAlrtVal (StoreId text null,ProductID text null,SpinnerVal text null,SpinnerPosition text null,Product text null,schSlabId text null,schmAlrtId text null,OrderIDPDA text null);";
-    private static final String DATABASE_CREATE_TABLE_215 = "create table tblProductMappedWithSchemeSlabApplied (StoreId text null,ProductID text null,schSlabId text null,schmIdMapped text null,Sstat int null,OrderIDPDA text null);";
+    private static final String DATABASE_CREATE_TABLE_214 = "create table IF NOT EXISTS tblAlrtVal(StoreId text null,ProductID text null,SpinnerVal text null,SpinnerPosition text null,Product text null,schSlabId text null,schmAlrtId text null,OrderIDPDA text null);";
+    private static final String DATABASE_CREATE_TABLE_215 = "create table IF NOT EXISTS tblProductMappedWithSchemeSlabApplied(StoreId text null,ProductID text null,schSlabId text null,schmIdMapped text null,Sstat int null,OrderIDPDA text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_213 = "create table tblStoreReturnDetail (RouteID text null,StoreID text null,ReturnProductID text null, ProdReturnQty text null, ProdReturnReason text null, ProdReturnReasonIndex text null,ReturnDate text null,Sstat integer null,OrderIDPDA text null);";
-    private static final String DATABASE_CREATE_TABLE_212 = "create table tblStoreProductPhotoDetail (StoreID text null,ProductID text null,ClickedDateTime text null,PhotoName text null,ReasonForReturn text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null,OrderIDPDA text null);";
-    private static final String DATABASE_CREATE_TABLE_221 = "create table tblStoreTypeMstr(AutoIdStore integer null,StoreTypeID integer null,StoreTypeDescr text null);";
+    private static final String DATABASE_CREATE_TABLE_213 = "create table IF NOT EXISTS tblStoreReturnDetail(RouteID text null,StoreID text null,ReturnProductID text null, ProdReturnQty text null, ProdReturnReason text null, ProdReturnReasonIndex text null,ReturnDate text null,Sstat integer null,OrderIDPDA text null);";
+    private static final String DATABASE_CREATE_TABLE_212 = "create table IF NOT EXISTS tblStoreProductPhotoDetail(StoreID text null,ProductID text null,ClickedDateTime text null,PhotoName text null,ReasonForReturn text null,PhotoValidation text null,PDAPhotoPath text null,Sstat integer null,OrderIDPDA text null);";
+    private static final String DATABASE_CREATE_TABLE_221 = "create table IF NOT EXISTS tblStoreTypeMstr(AutoIdStore integer null,StoreTypeID integer null,StoreTypeDescr text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_222 = "create table tblStoreProductClassificationTypeListMstr(AutoIdStore integer null," +
+    private static final String DATABASE_CREATE_TABLE_222 = "create table IF NOT EXISTS tblStoreProductClassificationTypeListMstr(AutoIdStore integer null," +
             "CategoryNodeID integer null,CategoryNodeType integer null, Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null);";
 
-    private static final String DATABASE_CREATE_TABLE_223 = "create table tblTradeChannelMstr(AutoIdStore integer null,TradeChannelID integer null,TradeChannelName text null);";
+    private static final String DATABASE_CREATE_TABLE_223 = "create table IF NOT EXISTS tblTradeChannelMstr(AutoIdStore integer null,TradeChannelID integer null,TradeChannelName text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_21 = "create table tblNewStoreEntries (RouteID text null,StoreID text not null,StoreName text null," +
+    private static final String DATABASE_CREATE_TABLE_21 = "create table IF NOT EXISTS tblNewStoreEntries(RouteID text null,StoreID text not null,StoreName text null," +
             "RetailerName text  null,emailID text null,TinNo text null,RetailerContactNo text  null," +
             "StoreAddress text  null,StorePincode text  null,City text  null,KeyAccount text null,TradeChannelID integer null,StoreAttrHierID integer null,StoreProductClassificationID text null,ActualLatitude text null, ActualLongitude text null," +
             "LocProvider text null, Accuracy text null," +
@@ -625,40 +623,40 @@ public class DBAdapterKenya
             "CityId integer null,AppVersion text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_22 = "create table tblTemp(RouteID text null,StoreID text not null," +
+    private static final String DATABASE_CREATE_TABLE_22 = "create table IF NOT EXISTS tblTemp(RouteID text null,StoreID text not null," +
             "CategoryNodeID integer null,CategoryNodeType integer null,Category text null,ProductTypeNodeID integer null,ProductTypeNodeType integer null,ProductType text null,IsCategorySeleted int null,IsSubCategorySeleted int null,SubCategoryValue text null,Sstat integer null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_251 = "create table tblMessageTextFileContainer (FileName text null,FileFlag integer null);";
+    private static final String DATABASE_CREATE_TABLE_251 = "create table IF NOT EXISTS tblMessageTextFileContainer(FileName text null,FileFlag integer null);";
 
 
     // Tables for New Schemes Structure
 
-    private static final String DATABASE_CREATE_TABLE_201 = "create table tblSchemeStoreMapping (StoreID text null,SchemeID text null);";
-    private static final String DATABASE_CREATE_TABLE_202 = "create table tblSchemeMstr (SchemeID text null,SchemeName text null,SchemeApplicationID text null,SchemeAppliedRule text null);";
-    private static final String DATABASE_CREATE_TABLE_203 = "create table tblSchemeSlabDetail (SchemeID text null,SchemeSlabID text null,SchemeSlabDesc text null,BenifitDescr text null);";
+    private static final String DATABASE_CREATE_TABLE_201 = "create table IF NOT EXISTS tblSchemeStoreMapping(StoreID text null,SchemeID text null);";
+    private static final String DATABASE_CREATE_TABLE_202 = "create table IF NOT EXISTS tblSchemeMstr(SchemeID text null,SchemeName text null,SchemeApplicationID text null,SchemeAppliedRule text null);";
+    private static final String DATABASE_CREATE_TABLE_203 = "create table IF NOT EXISTS tblSchemeSlabDetail(SchemeID text null,SchemeSlabID text null,SchemeSlabDesc text null,BenifitDescr text null);";
 
-    private static final String DATABASE_CREATE_TABLE_204 = "create table tblSchemeSlabBucketDetails (RowID text null,SchemeID text null" +
+    private static final String DATABASE_CREATE_TABLE_204 = "create table IF NOT EXISTS tblSchemeSlabBucketDetails(RowID text null,SchemeID text null" +
             ",SchemeSlabID text null,BucketID text null,SubBucketID text null,SlabSubBucketType text null,SlabSubBucketValue text null,SubBucketValType text null);";
 
-    private static final String DATABASE_CREATE_TABLE_205 = "create table tblSchemeSlabBucketProductMapping (RowID text null,ProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_205 = "create table IF NOT EXISTS tblSchemeSlabBucketProductMapping(RowID text null,ProductID text null);";
 
-    private static final String DATABASE_CREATE_TABLE_206 = "create table tblSchemeSlabBenefitsBucketDetails (RowID text null," +
+    private static final String DATABASE_CREATE_TABLE_206 = "create table IF NOT EXISTS tblSchemeSlabBenefitsBucketDetails (RowID text null," +
             "SchemeID text null,SchemeSlabID text null,BucketID text null,SubBucketID text null,BenSubBucketType text null," +
             "BenDiscApplied text null,CouponCode text null,BenSubBucketValue text null,Per real null,UOM real null,ProRata int null);";
 
-    private static final String DATABASE_CREATE_TABLE_207 = "create table tblSchemeSlabBenefitsProductMappingDetail (RowID text null,ProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_207 = "create table IF NOT EXISTS tblSchemeSlabBenefitsProductMappingDetail(RowID text null,ProductID text null);";
 
-    private static final String DATABASE_CREATE_TABLE_208 = "create table tblSchemeSlabBenefitsValueDetail (RowID text null,BenValue text null,Remarks text null,Type text null);";
+    private static final String DATABASE_CREATE_TABLE_208 = "create table IF NOT EXISTS tblSchemeSlabBenefitsValueDetail(RowID text null,BenValue text null,Remarks text null,Type text null);";
 
-    private static final String DATABASE_CREATE_TABLE_209 = "create table tblProductRelatedScheme (ProductID text null,PrdString text null);";
+    private static final String DATABASE_CREATE_TABLE_209 = "create table IF NOT EXISTS tblProductRelatedScheme(ProductID text null,PrdString text null);";
     //private static final String DATABASE_CREATE_TABLE_210 = "create table tblStoreProdcutPurchaseDetails (IMEIno text not null,RouteID int null,RouteNodeType text null,StoreID text not null,CatID text  null,ProdID text not null,TransDate string not null,Stock integer not null,OrderQty integer not null,OrderVal real not null,FreeQty integer not null,DisVal real not null,Sstat integer not null,SampleQuantity int null,ProductShortName text null,ProductPrice real null, TaxRate real null,TaxValue real null,StoreCatNodeId int null,OrderIDPDA text null,flgIsQuoteRateApplied int null);";
 
-    private static final String DATABASE_CREATE_TABLE_210 = "create table tblStoreProdcutPurchaseDetails (IMEIno text not null,RouteID int null,StoreID text not null,CatID text  null,ProdID text not null,TransDate string not null,Stock integer not null,OrderQty integer not null,OrderVal real not null,FreeQty integer not null,DisVal real not null,Sstat integer not null,SampleQuantity int null,ProductShortName text null,ProductPrice real null, TaxRate real null,TaxValue real null,StoreCatNodeId int null,OrderIDPDA text null,flgIsQuoteRateApplied int null,ProductAvgPricePerUnit real null,SelectedOrderType text null,DistributorIDMapProdID text null,MainDistributorID text null,OrderQtyPerKG real null,GSTPcs real null,GSTKg real null,RtAfterTaxPcs real null,RtAfterTaxKG real null);";
-    private static final String DATABASE_CREATE_TABLE_211 = "create table tblStoreProductAppliedSchemesBenifitsRecords (StoreID text not null,ProductID int not null,schId int not null,schSlabId integer not null,schSlbBuckId integer not null,schSlabSubBucketValue real not null,schSubBucketValType integer not null,schSlabSubBucketType int not null,BenifitRowID integer not null,BenSubBucketType int null,FreeProductID int null,BenifitSubBucketValue real null,BenifitMaxValue real null,BenifitAssignedValue real null,BenifitAssignedValueType int null,BenifitDiscountApplied int null,BenifitCouponCode text null,Sstat integer not null,Per real null,UOM real null,WhatFinallyApplied int null,schSlbRowId int null,SchTypeId int null,DiscountPercentage real null,OrderIDPDA text null);";
+    private static final String DATABASE_CREATE_TABLE_210 = "create table IF NOT EXISTS tblStoreProdcutPurchaseDetails(IMEIno text not null,RouteID int null,StoreID text not null,CatID text  null,ProdID text not null,TransDate string not null,Stock integer not null,OrderQty integer not null,OrderVal real not null,FreeQty integer not null,DisVal real not null,Sstat integer not null,SampleQuantity int null,ProductShortName text null,ProductPrice real null, TaxRate real null,TaxValue real null,StoreCatNodeId int null,OrderIDPDA text null,flgIsQuoteRateApplied int null,ProductAvgPricePerUnit real null,SelectedOrderType text null,DistributorIDMapProdID text null,MainDistributorID text null,OrderQtyPerKG real null,GSTPcs real null,GSTKg real null,RtAfterTaxPcs real null,RtAfterTaxKG real null);";
+    private static final String DATABASE_CREATE_TABLE_211 = "create table IF NOT EXISTS tblStoreProductAppliedSchemesBenifitsRecords(StoreID text not null,ProductID int not null,schId int not null,schSlabId integer not null,schSlbBuckId integer not null,schSlabSubBucketValue real not null,schSubBucketValType integer not null,schSlabSubBucketType int not null,BenifitRowID integer not null,BenSubBucketType int null,FreeProductID int null,BenifitSubBucketValue real null,BenifitMaxValue real null,BenifitAssignedValue real null,BenifitAssignedValueType int null,BenifitDiscountApplied int null,BenifitCouponCode text null,Sstat integer not null,Per real null,UOM real null,WhatFinallyApplied int null,schSlbRowId int null,SchTypeId int null,DiscountPercentage real null,OrderIDPDA text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_RETURNREASON = "create table tblReturnReason(StockStatusId text not null,StockStatus text not null);";
+    private static final String DATABASE_CREATE_TABLE_RETURNREASON = "create table IF NOT EXISTS tblReturnReason(StockStatusId text not null,StockStatus text not null);";
 
 
     private static final String TABLE_tblDistributorDayReport = "tblDistributorDayReport";
@@ -666,10 +664,10 @@ public class DBAdapterKenya
     private static final String TABLE_tblDistributorSavedData = "tblDistributorSavedData";
     private static final String TABLE_tblDistributorOldStockData = "tblDistributorOldStockData";
 
-    private static final String CREATE_TABLE_tblDistributorDayReport = "create table tblDistributorDayReport(ProductNodeID text null, ProductNodeType text null, SKUName text null, FlvShortName text null,StockDate text null,DistributorNodeID int null,DistributorNodeType int null);";
-    private static final String CREATE_TABLE_tblDistributorDayReportColumnsDesc = "create table tblDistributorDayReportColumnsDesc(DistDayReportCoumnName text null, DistDayReportColumnDisplayName text null,DistributorNodeID int null,DistributorNodeType int null);";
-    private static final String CREATE_TABLE_tblDistributorSavedData = "create table tblDistributorSavedData(ProductName text null,ShortName text null,ProductID text null,Date text null,EnteredValue text null,DistribtrId int null,DistributorNodeType int null,ProductNodeType int null,StockDate text null,EntryType int null,StockPcsCaseType int null,Sstat int null);";
-    private static final String CREATE_TABLE_tblDistributorOldStockData = "create table tblDistributorOldStockData (DistribtrId text null,DistributorNodeType text null,DistribtrTag text null,EnteredValue text null);";
+    private static final String CREATE_TABLE_tblDistributorDayReport = "create table IF NOT EXISTS tblDistributorDayReport(ProductNodeID text null, ProductNodeType text null, SKUName text null, FlvShortName text null,StockDate text null,DistributorNodeID int null,DistributorNodeType int null);";
+    private static final String CREATE_TABLE_tblDistributorDayReportColumnsDesc = "create table IF NOT EXISTS tblDistributorDayReportColumnsDesc(DistDayReportCoumnName text null, DistDayReportColumnDisplayName text null,DistributorNodeID int null,DistributorNodeType int null);";
+    private static final String CREATE_TABLE_tblDistributorSavedData = "create table IF NOT EXISTS tblDistributorSavedData(ProductName text null,ShortName text null,ProductID text null,Date text null,EnteredValue text null,DistribtrId int null,DistributorNodeType int null,ProductNodeType int null,StockDate text null,EntryType int null,StockPcsCaseType int null,Sstat int null);";
+    private static final String CREATE_TABLE_tblDistributorOldStockData = "create table IF NOT EXISTS tblDistributorOldStockData(DistribtrId text null,DistributorNodeType text null,DistribtrTag text null,EnteredValue text null);";
 
 
 
@@ -695,7 +693,7 @@ public class DBAdapterKenya
 
     //AutoId int null
 
-    private static final String DATABASE_CREATE_TABLE_231 = "create table tblSKUWiseDaySummary (AutoId int not null,ProductId text null," +
+    private static final String DATABASE_CREATE_TABLE_231 = "create table IF NOT EXISTS tblSKUWiseDaySummary(AutoId int not null,ProductId text null," +
             "Product text null,MRP text null,Rate text null,NoofStores text null,OrderQty text null,FreeQty text null," +
             "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null," +
             "Category text null,UOM text null);";
@@ -709,7 +707,7 @@ public class DBAdapterKenya
 	 String ValAfterTax="0";
 	 String Lvl="0";*/
 
-    private static final String DATABASE_CREATE_TABLE_232 = "create table tblStoreWiseDaySummary (AutoId int not null,Store text null," +
+    private static final String DATABASE_CREATE_TABLE_232 = "create table IF NOT EXISTS tblStoreWiseDaySummary(AutoId int not null,Store text null," +
             "LinesperBill text null,StockValue text null,DiscValue text null,ValBeforeTax text null,TaxValue text null," +
             "ValAfterTax text null,Lvl text null,AvgRate text null,OrderQty text null,FreeQty text null);";
 
@@ -728,22 +726,22 @@ public class DBAdapterKenya
 	 */
 
 
-    private static final String DATABASE_CREATE_TABLE_233 = "create table tblStoreSKUWiseDaySummary (AutoId int not null,ProductId text null," +
+    private static final String DATABASE_CREATE_TABLE_233 = "create table IF NOT EXISTS tblStoreSKUWiseDaySummary(AutoId int not null,ProductId text null," +
             "Product text null,MRP text null,Rate text null,OrderQty text null,FreeQty text null," +
             "DiscValue text null,ValBeforeTax text null,TaxValue text null,ValAfterTax text null,Lvl text null,StoreId text null,StockQty text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_234 = "create table tblAllSummary (AutoId int not null,Measures text null," +
+    private static final String DATABASE_CREATE_TABLE_234 = "create table IF NOT EXISTS tblAllSummary(AutoId int not null,Measures text null," +
             "TodaysSummary text null,MTDSummary text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_11 = "create table tblPdaDate (PdaDate text null);";
-    private static final String DATABASE_CREATE_TABLE_12 = "create table tblDayStartEndDetails (IMEINo text null,SyncTime text null,RouteID text null,EndTime text null,DayEndFlag int null,ChangeRouteFlg int null,ForDate text null,AppVersionID string null,Sstat int null);";//,AppVersionID int null//, VersionNo string null
+    private static final String DATABASE_CREATE_TABLE_11 = "create table IF NOT EXISTS tblPdaDate(PdaDate text null);";
+    private static final String DATABASE_CREATE_TABLE_12 = "create table IF NOT EXISTS tblDayStartEndDetails(IMEINo text null,SyncTime text null,RouteID text null,EndTime text null,DayEndFlag int null,ChangeRouteFlg int null,ForDate text null,AppVersionID string null,Sstat int null);";//,AppVersionID int null//, VersionNo string null
 
     //private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList (StoreID text not null, StoreType string not null, StoreName string not null, StoreLatitude real not null, StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null, Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null, VisitStartTS text null, VisitEndTS text null, ISNewStore int null, AutoIdStore int null, LocProvider text null, Accuracy text null, BateryLeftStatus text null,StoreRouteID text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_13 = "create table tblStoreList(StoreID text not null, " +
+    private static final String DATABASE_CREATE_TABLE_13 = "create table IF NOT EXISTS tblStoreList(StoreID text not null, " +
             "StoreType string not null, StoreName string not null, StoreLatitude real not null, " +
             "StoreLongitude real not null, LastVisitDate string not null, LastTransactionDate string not null," +
             " Sstat integer not null, ForDate string not null, ActualLatitude text null, ActualLongitude text null, " +
@@ -761,109 +759,109 @@ public class DBAdapterKenya
     //private static final String DATABASE_CREATE_TABLE_2 = "create table tblProductList (ProductID text not null, ProductShortName text not null, ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string nulll);";//,DisplayUnit string nul
 
 
-    private static final String DATABASE_CREATE_TABLE_14 = "create table tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null);";
+    private static final String DATABASE_CREATE_TABLE_14 = "create table IF NOT EXISTS tblProductList(CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real null, ProductRLP real null, ProductTaxAmount real null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null,SearchField text null,ManufacturerID int null);";
 
     //private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
-    private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table tblProductSegementMap(ProductID text  null,ProductMRP real null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
+    private static final String DATABASE_CREATE_TABLE_ProductSegementMap = "create table IF NOT EXISTS tblProductSegementMap(ProductID text  null,ProductMRP real null, ProductRLP real not null, ProductTaxAmount real not null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,BusinessSegmentId int null,flgPriceAva int null);";
 
-    private static final String DATABASE_CREATE_TABLE_15 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null,CatOrdr int null);";
+    private static final String DATABASE_CREATE_TABLE_15 = "create table IF NOT EXISTS tblCatagoryMstr(CategoryID text not null,CategoryDescr text null,CatOrdr int null);";
 
     //private static final String DATABASE_CREATE_TABLE_5 = "create table tblCategoryQuestionInformation (CategoryID text null,ProductID text null, Stock text null,Sstat integer not null,StoreID text not null);";
 
     //private static final String DATABASE_CREATE_TABLE_7 = "create table tblDistributionStoreProductWiseDetails (CatId integer not null,ProductID integer not null,StoreID text not null,Stock text null,ProductMfgDate text null,Sstat integer not null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_9 = "create table tblVisibilityMstr (VisibilityID text null, VisibilityDescr text null);";
+    private static final String DATABASE_CREATE_TABLE_9 = "create table IF NOT EXISTS tblVisibilityMstr(VisibilityID text null, VisibilityDescr text null);";
 
-    private static final String DATABASE_CREATE_TABLE_10 = "create table tblVisibilityDetails (StoreID text not null,VisibilityID text null, VisibilityStock text null,Sstat  integer not null);";
+    private static final String DATABASE_CREATE_TABLE_10 = "create table IF NOT EXISTS tblVisibilityDetails(StoreID text not null,VisibilityID text null, VisibilityStock text null,Sstat  integer not null);";
 
-    private static final String DATABASE_CREATE_TABLE_16 = "create table tblNewStoreListEntries (StoreID text null, StoreCity text null, StorePinCode text not null, StoreState text null, ActiveRouteID text null, Sstat integer not null);";
-    private static final String DATABASE_CREATE_TABLE_17 = "create table tblPDALastInvoiceDet (StoreID text null, InvoiceID text null, LastTransDate text not null, BalanceAmount text null,CreditPreviousDue real null);";
-    private static final String DATABASE_CREATE_TABLE_18 = "create table tblPDATargetQtyForSecondPage (StoreID text null, ProductID text null, SKUShortName text not null, TargetQty text null);";
-
-
-    private static final String DATABASE_CREATE_TABLE_19 = "create table tblPDAProductReturnMstr (AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null, TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null,OrderIDPDA text not null);";
-    private static final String DATABASE_CREATE_TABLE_20 = "create table tblPDAProductReturnDetails (AutoReturnDetailsId int null,ReturnIdMstr int null, ProductId text null, ProdReturnQty text null, ProdRate real null, ProdReturnValue real null, ProdReturnReason text null, ProdReturnReasonDescr text null, ProdLastOrderDate text null, ProdLastOrderQyt text null, Sstat integer null,AdjustReturnQty integer null,AdjustReturnValue real null);";
+    private static final String DATABASE_CREATE_TABLE_16 = "create table IF NOT EXISTS tblNewStoreListEntries(StoreID text null, StoreCity text null, StorePinCode text not null, StoreState text null, ActiveRouteID text null, Sstat integer not null);";
+    private static final String DATABASE_CREATE_TABLE_17 = "create table IF NOT EXISTS tblPDALastInvoiceDet(StoreID text null, InvoiceID text null, LastTransDate text not null, BalanceAmount text null,CreditPreviousDue real null);";
+    private static final String DATABASE_CREATE_TABLE_18 = "create table IF NOT EXISTS tblPDATargetQtyForSecondPage(StoreID text null, ProductID text null, SKUShortName text not null, TargetQty text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_31 = "create table tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null, Stock integer not null, OrderQty integer not null, OrderVal real not null, FreeQty integer not null, DisVal real not null, SchemeID text null, AppliedSlab text null, AppliedAbsVal text null, Sstat integer not null, SampleQuantity int null, ProductShortName text null, ProductPrice real null,RouteID int null,CatID text  null);";//, DisplayUnit text null
+    private static final String DATABASE_CREATE_TABLE_19 = "create table IF NOT EXISTS tblPDAProductReturnMstr(AutoReturnIdMstr int null,StoreID text null, ReturnDate text null, Comment text null, TotalReturnQty int null, TotalReturnValue real null, Sstat integer null,TotalAdjustQty integer null,TotalAdjustValue real null,FinalBalanceAmount real null,LastCreditAmount real null,OrderIDPDA text not null);";
+    private static final String DATABASE_CREATE_TABLE_20 = "create table IF NOT EXISTS tblPDAProductReturnDetails(AutoReturnDetailsId int null,ReturnIdMstr int null, ProductId text null, ProdReturnQty text null, ProdRate real null, ProdReturnValue real null, ProdReturnReason text null, ProdReturnReasonDescr text null, ProdLastOrderDate text null, ProdLastOrderQyt text null, Sstat integer null,AdjustReturnQty integer null,AdjustReturnValue real null);";
+
+
+    private static final String DATABASE_CREATE_TABLE_31 = "create table IF NOT EXISTS tblTransac(IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null, Stock integer not null, OrderQty integer not null, OrderVal real not null, FreeQty integer not null, DisVal real not null, SchemeID text null, AppliedSlab text null, AppliedAbsVal text null, Sstat integer not null, SampleQuantity int null, ProductShortName text null, ProductPrice real null,RouteID int null,CatID text  null);";//, DisplayUnit text null
 
     //private static final String DATABASE_CREATE_TABLE_31 = "create table tblTransac (IMEIno text not null, TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, OrderVal real not null, Sstat integer not null,ProductMRP real not null,TaxRate real not null);";
     //private static final String DATABASE_CREATE_TABLE_32 = "create table tblInvoice (IMEIno text not null, StoreID text not null, InvoiceDate string not null,  TaxAmt real not null,  InvoiceVal real not null,GrossVal real not null,  Sstat integer not null, AmtColl real null, AmtOut real null);";
-    private static final String DATABASE_CREATE_TABLE_32 = "create table tblInvoice (IMEIno text not null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null, AmtPrevDue real null, AmtColl real null, AmtOut real null, NoCoupon int null, TotalCoupunAmount real null,RouteID int null,OrderIDPDA text not null);";
+    private static final String DATABASE_CREATE_TABLE_32 = "create table IF NOT EXISTS tblInvoice(IMEIno text not null, StoreID text not null, InvoiceDate string not null, TotalBeforeTaxDis real not null, TaxAmt real not null, TotalDis real not null, InvoiceVal real not null, FreeTotal integer not null, Sstat integer not null, InvAfterDis real not null, AddDis real not null, AmtPrevDue real null, AmtColl real null, AmtOut real null, NoCoupon int null, TotalCoupunAmount real null,RouteID int null,OrderIDPDA text not null);";
 
 
     //private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table tblSIMEInotoreProductMap (StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null);";
 
-    private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table tblStoreProductMap (StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null,CategoryID integer null);";
+    private static final String DATABASE_CREATE_TABLE_StoreProductMap = "create table IF NOT EXISTS tblStoreProductMap(StoreID text  null,ProductID text  null, ProductMRP real  null, ProductRLP real  null, ProductTaxAmount real  null, DistributorPrice real null,CategoryID integer null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_51 = "create table tblSchemeList (SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null,flgDiscountType integer null);";
-    private static final String DATABASE_CREATE_TABLE_52 = "create table tblSchemeDetails (SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null, Discount real not null, FreeProductID text null);";
-    private static final String DATABASE_CREATE_TABLE_53 = "create table tblschemeStoreTypeMap (SchemeID text not null, StoreTypeID integer not null);";
-    private static final String DATABASE_CREATE_TABLE_54 = "create table tblschemeProductMap (SchemeID text not null, ProductID text not null, SchemeType int null);";
-    private static final String DATABASE_CREATE_TABLE_55 = "create table tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null,flgSpecialScheme integer null);";
-    private static final String DATABASE_CREATE_TABLE_56 = "create table tblPDAIsSchemeApplicable (IsSchemeApplicable int null);";
+    private static final String DATABASE_CREATE_TABLE_51 = "create table IF NOT EXISTS tblSchemeList(SchemeID text not null, SchemeName string not null, SchemeType string not null, StoreType string null, CombTypeID integer null,flgDiscountType integer null);";
+    private static final String DATABASE_CREATE_TABLE_52 = "create table IF NOT EXISTS tblSchemeDetails(SchemeDetID text not null, SchemeID text not null, SlabFrom integer not null, SlabTo integer not null, FreeQuantity integer not null, Discount real not null, FreeProductID text null);";
+    private static final String DATABASE_CREATE_TABLE_53 = "create table IF NOT EXISTS tblschemeStoreTypeMap(SchemeID text not null, StoreTypeID integer not null);";
+    private static final String DATABASE_CREATE_TABLE_54 = "create table IF NOT EXISTS tblschemeProductMap(SchemeID text not null, ProductID text not null, SchemeType int null);";
+    private static final String DATABASE_CREATE_TABLE_55 = "create table IF NOT EXISTS tblspForPDASchemeApplicableList(SchemeID string null, StoreType string null, SchemeDesc string null,flgSpecialScheme integer null);";
+    private static final String DATABASE_CREATE_TABLE_56 = "create table IF NOT EXISTS tblPDAIsSchemeApplicable(IsSchemeApplicable int null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_61 = "create table tblLastTransactionDetails (StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null,CategoryID integer null);";
-    private static final String DATABASE_CREATE_TABLE_62 = "create table tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
-    private static final String DATABASE_CREATE_TABLE_63 = "create table tblStorTypeMstr(ID string null, Descr string null);";
+    private static final String DATABASE_CREATE_TABLE_61 = "create table IF NOT EXISTS tblLastTransactionDetails(StoreID text not null, ProductID text not null, LastTransDate string not null, Quantity integer not null, SampleQuantity int null,CategoryID integer null);";
+    private static final String DATABASE_CREATE_TABLE_62 = "create table IF NOT EXISTS tblPDALastTranDateForSecondPage(StoreID text null, LastTransDate string null, RetailerName string null, SKUName string null, Stock string null, OrderQty string null, FreeQty string null);";
+    private static final String DATABASE_CREATE_TABLE_63 = "create table IF NOT EXISTS tblStorTypeMstr(ID string null, Descr string null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_71 = "create table tblSyncSummuryDetails (ActualCalls int null,ProductiveCalls int null, TotSalesValue text null, TotKGSales text null, TotFreeQtyKGSales text null, TotSampleKGSales text null, TotLTSales text null, TotFreeQtyLTSales text null, TotSampleLTSales text null, TotDiscountKGSales text null, TotDiscountLTales text null,Lines int null);";
-    private static final String DATABASE_CREATE_TABLE_72 = "create table tblSyncSummuryForProductDetails (SkuName text null,OrderQty text null, FreeQty text null, SampleQty text null, TotalOrderKgs text null, TotalFreeKgs text null, TotalSampleKgs text null, TotalSales text null,Lines int null,OrderVal text null,DisVal text null,ProductPrice text null);";
+    private static final String DATABASE_CREATE_TABLE_71 = "create table IF NOT EXISTS tblSyncSummuryDetails(ActualCalls int null,ProductiveCalls int null, TotSalesValue text null, TotKGSales text null, TotFreeQtyKGSales text null, TotSampleKGSales text null, TotLTSales text null, TotFreeQtyLTSales text null, TotSampleLTSales text null, TotDiscountKGSales text null, TotDiscountLTales text null,Lines int null);";
+    private static final String DATABASE_CREATE_TABLE_72 = "create table IF NOT EXISTS tblSyncSummuryForProductDetails(SkuName text null,OrderQty text null, FreeQty text null, SampleQty text null, TotalOrderKgs text null, TotalFreeKgs text null, TotalSampleKgs text null, TotalSales text null,Lines int null,OrderVal text null,DisVal text null,ProductPrice text null);";
 
-    private static final String DATABASE_CREATE_TABLE_81 = "create table tblStrachApplicableOnScheme (SchID int null, flgIsStrachApplicable int null);";
-    private static final String DATABASE_CREATE_TABLE_82 = "create table tblStrachOnSchemeDetails (SchID int null, cardStrachID int null, Slab int Null, Qty int null, ProductValueOrSlabBased int null);";
+    private static final String DATABASE_CREATE_TABLE_81 = "create table IF NOT EXISTS tblStrachApplicableOnScheme(SchID int null, flgIsStrachApplicable int null);";
+    private static final String DATABASE_CREATE_TABLE_82 = "create table IF NOT EXISTS tblStrachOnSchemeDetails(SchID int null, cardStrachID int null, Slab int Null, Qty int null, ProductValueOrSlabBased int null);";
 
-    private static final String DATABASE_CREATE_TABLE_91 = "create table tblOutLetInfoOnQuadVolumeCategoryBasis (OutID text null,OutletName text  null," +
+    private static final String DATABASE_CREATE_TABLE_91 = "create table IF NOT EXISTS tblOutLetInfoOnQuadVolumeCategoryBasis(OutID text null,OutletName text  null," +
             " OwnerName text  null,ContactNo text null,MarketAreaName text null,Latitude text null,Longitutde text null);";
-    private static final String DATABASE_CREATE_TABLE_92 = "create table tblSelectedStoreIDinChangeRouteCase (StoreID text null);";
+    private static final String DATABASE_CREATE_TABLE_92 = "create table tblSelectedStoreIDinChangeRouteCase(StoreID text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_94 = "create table tblSysVisitID (IMEINo text null,SysVisitID int null );";
+    private static final String DATABASE_CREATE_TABLE_94 = "create table IF NOT EXISTS tblSysVisitID(IMEINo text null,SysVisitID int null );";
 
 
     // private static final String DATABASE_CREATE_tblDaySummary = "create table tblDaySummary (StoreID text null,flgTarget int null,flgActualVisited int null,flgProductiveDay int null,flgProductiveMTD int null,DaySales real null,MTDSales real null);";//, AutoIdOutlet int null
 
-    private static final String DATABASE_CREATE_tblDaySummaryNew = "create table tblDaySummaryNew (TargetCalls int null,ActualCallOnRoute int null,ActualCallOffRoute int null,ProdCallOnRoute int null,ProdCallOffRoute real null,TargetSalesForDay real null,TotalSalesForDay real null,CallsRemaining int null,TargetSalesMTD real null,AchievedSalesMTD real null,ProdStoresMTD int null,RunRate real null);";//, AutoIdOutlet int null
+    private static final String DATABASE_CREATE_tblDaySummaryNew = "create table IF NOT EXISTS tblDaySummaryNew(TargetCalls int null,ActualCallOnRoute int null,ActualCallOffRoute int null,ProdCallOnRoute int null,ProdCallOffRoute real null,TargetSalesForDay real null,TotalSalesForDay real null,CallsRemaining int null,TargetSalesMTD real null,AchievedSalesMTD real null,ProdStoresMTD int null,RunRate real null);";//, AutoIdOutlet int null
 
 
-    private static final String DATABASE_CREATE_TABLE_101 = "create table tblFirstOrderDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text null,OrderQty integer null,FreeQty integer null,Stock integer null,SKUName text null);";
+    private static final String DATABASE_CREATE_TABLE_101 = "create table IF NOT EXISTS tblFirstOrderDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text null,OrderQty integer null,FreeQty integer null,Stock integer null,SKUName text null);";
 
-    private static final String DATABASE_CREATE_TABLE_102 = "create table tblSecondVisitDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text  null,OrderQty integer null,SKUName text null);";
+    private static final String DATABASE_CREATE_TABLE_102 = "create table IF NOT EXISTS tblSecondVisitDetailsOnLastVisitDetailsActivity(StoreID text null,Date text null,SKUID text  null,OrderQty integer null,SKUName text null);";
 
-    private static final String DATABASE_CREATE_TABLE_103 = "create table tblLODOnLastSalesSummary(StoreID text null,Date text null,SKUID text  null,Qty integer null,SKUName text null);";
+    private static final String DATABASE_CREATE_TABLE_103 = "create table IF NOT EXISTS tblLODOnLastSalesSummary(StoreID text null,Date text null,SKUID text  null,Qty integer null,SKUName text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_111 = "create table tblInvoiceButtonStoreMstr(StoreID text null," +
+    private static final String DATABASE_CREATE_TABLE_111 = "create table IF NOT EXISTS tblInvoiceButtonStoreMstr(StoreID text null," +
             "StoreName text null,RouteId text null,RouteName text null,DistId text null,DistName text null," +
             "InvoiceForDate text null,flgSubmit text null,Sstat integer not null,IMEIno text not null,OrderID text  null,flgCancel int null,ServerOrdersFlg int null);";
 
-    private static final String DATABASE_CREATE_TABLE_112 = "create table tblInvoiceButtonProductMstr (ProductId text null, ProductName text null);";
+    private static final String DATABASE_CREATE_TABLE_112 = "create table IF NOT EXISTS tblInvoiceButtonProductMstr(ProductId text null, ProductName text null);";
 
-    private static final String DATABASE_CREATE_TABLE_113 = "create table tblInvoiceButtonStoreProductwiseOrder (StoreID text null," +
+    private static final String DATABASE_CREATE_TABLE_113 = "create table IF NOT EXISTS tblInvoiceButtonStoreProductwiseOrder(StoreID text null," +
             " ProductID text null,OrderQty text null,ProductPrice text null,InvoiceForDate text null,OrderID text null,CatID text null,Freeqty int null,TotLineDiscVal real null);";
 
-    private static final String DATABASE_CREATE_TABLE_114 = "create table tblInvoiceButtonTransac (IMEIno text not null, " +
+    private static final String DATABASE_CREATE_TABLE_114 = "create table IF NOT EXISTS tblInvoiceButtonTransac(IMEIno text not null, " +
             "TransDate string not null, StoreID text not null, ProdID text not null, OrderQty integer not null, " +
             "DelQty integer not null,FreeQty integer not null,Sstat integer not null,ProductShortName text null, ProductPrice real null," +
             "RouteID int null,OrderID text  null,CatID text null,flgCancel int null,DiscountVal real null,additionalDiscount text null,CancelRemarks text null,CancelReasonId text null,InvNumber text null,InvDate text null,LineValue text null);";
     //private static final String DATABASE_CREATE_TABLE_115 = "create table tblPdaDate (PdaDate text null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_141 = "create table tblForPDAGetLastVisitDate(StoreID text null,VisitDate text null,flgOrder text null);";
-    private static final String DATABASE_CREATE_TABLE_142 = "create table tblForPDAGetLastOrderDate(StoreID text null,OrderDate text null,flgExecutionSummary text null);";
-    private static final String DATABASE_CREATE_TABLE_143 = "create table tblForPDAGetLastVisitDetails(StoreID text null,Date123 text null,Order123 text null,Stock text null,SKUName text null,ExecutionQty text null);";
-    private static final String DATABASE_CREATE_TABLE_144 = "create table tblForPDAGetLastOrderDetails(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,FreeQty text null,PrdName text null,ExecutionQty text null);";
-    private static final String DATABASE_CREATE_TABLE_145 = "create table tblspForPDAGetLastOrderDetailsTotalValues(StoreID text null,OrderValue text null,ExecutionValue text null);";
+    private static final String DATABASE_CREATE_TABLE_141 = "create table IF NOT EXISTS tblForPDAGetLastVisitDate(StoreID text null,VisitDate text null,flgOrder text null);";
+    private static final String DATABASE_CREATE_TABLE_142 = "create table IF NOT EXISTS tblForPDAGetLastOrderDate(StoreID text null,OrderDate text null,flgExecutionSummary text null);";
+    private static final String DATABASE_CREATE_TABLE_143 = "create table IF NOT EXISTS tblForPDAGetLastVisitDetails(StoreID text null,Date123 text null,Order123 text null,Stock text null,SKUName text null,ExecutionQty text null);";
+    private static final String DATABASE_CREATE_TABLE_144 = "create table IF NOT EXISTS tblForPDAGetLastOrderDetails(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,FreeQty text null,PrdName text null,ExecutionQty text null);";
+    private static final String DATABASE_CREATE_TABLE_145 = "create table IF NOT EXISTS tblspForPDAGetLastOrderDetailsTotalValues(StoreID text null,OrderValue text null,ExecutionValue text null);";
 
-    private static final String DATABASE_CREATE_TABLE_146 = "create table tblForPDAGetExecutionSummary(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,flgInvStatus text null,ProductQty text null,PrdName text null);";
-    private static final String DATABASE_CREATE_TABLE_147 = "create table tblStoreSchemeFreeProQtyOtherDetails(StoreID text null,StoreType text null,SchemeID text null,SchemeType string not null,CombTypeID integer null,flgDiscountType integer null,FreeProductID text null,FreeProductQty text null,Discount real not null);";
+    private static final String DATABASE_CREATE_TABLE_146 = "create table IF NOT EXISTS tblForPDAGetExecutionSummary(StoreID text null,OrderDate text null,ProductID text null,OrderQty text null,flgInvStatus text null,ProductQty text null,PrdName text null);";
+    private static final String DATABASE_CREATE_TABLE_147 = "create table IF NOT EXISTS tblStoreSchemeFreeProQtyOtherDetails(StoreID text null,StoreType text null,SchemeID text null,SchemeType string not null,CombTypeID integer null,flgDiscountType integer null,FreeProductID text null,FreeProductQty text null,Discount real not null);";
 
 
-    private static final String DATABASE_CREATE_TABLE_151 = "create table tblProductListForAvailableStock (ProductID text  null, ProductName text  null);";
+    private static final String DATABASE_CREATE_TABLE_151 = "create table IF NOT EXISTS tblProductListForAvailableStock(ProductID text  null, ProductName text  null);";
     //private static final String DATABASE_CREATE_TABLE_152 = "create table tblCatagoryMstr (CategoryID text not null,CategoryDescr text null);";
 
 
@@ -871,24 +869,24 @@ public class DBAdapterKenya
     private static final String DATABASE_TABLE_MAIN262 = "tblSelectedManagerDetails";
 
 
-    private static final String DATABASE_CREATE_TABLE_261 = "create table tblManagerMstr(PersonID text null,PersonType text null" +
+    private static final String DATABASE_CREATE_TABLE_261 = "create table IF NOT EXISTS tblManagerMstr(PersonID text null,PersonType text null" +
             ",PersonName text null,ManagerID text null,ManagerType text null,ManagerName text null);";
 
-    private static final String DATABASE_CREATE_TABLE_262 = "create table tblSelectedManagerDetails(IMEI text null,CurDate text null,PersonID text null,PersonType text null" +
+    private static final String DATABASE_CREATE_TABLE_262 = "create table IF NOT EXISTS tblSelectedManagerDetails(IMEI text null,CurDate text null,PersonID text null,PersonType text null" +
             ",PersonName text null,ManagerID text null,ManagerType text null,ManagerName text null,OtherName text null,Sstat integer not null);";
 
 
     private static final String DATABASE_TABLE_MAIN4 = "tblDistributorListMaster";
 
 
-    private static final String DATABASE_CREATE_TABLE_4 = "create table tblDistributorListMaster (DBRNodeID int null,DistributorNodeType int null,Distributor text null);";
+    private static final String DATABASE_CREATE_TABLE_4 = "create table IF NOT EXISTS tblDistributorListMaster(DBRNodeID int null,DistributorNodeType int null,Distributor text null);";
 
     //map distributor
     private static final String TABLE_tblDistribtorMstr = "tblDistribtorMstr";
-    private static final String DATABASE_CREATE_TABLE_tblDistribtorMstr = "create table tblDistribtorMstr (DBRNodeID int null,DistributorNodeType int null,Distributor text null, flgRemap int null,DistributorLastStockDate text null,flgSODistributorFirstVisit int null,ContactNumber text null,EmailID text null);";
+    private static final String DATABASE_CREATE_TABLE_tblDistribtorMstr = "create table IF NOT EXISTS tblDistribtorMstr(DBRNodeID int null,DistributorNodeType int null,Distributor text null, flgRemap int null,DistributorLastStockDate text null,flgSODistributorFirstVisit int null,ContactNumber text null,EmailID text null);";
 
     private static final String TABLE_tblDistributorMapping = "tblDistributorMapping";
-    private static final String DATABASE_CREATE_TABLE_tblDistributorMapping = "create table tblDistributorMapping(" +
+    private static final String DATABASE_CREATE_TABLE_tblDistributorMapping = "create table IF NOT EXISTS tblDistributorMapping(" +
             "DistribtrUniqueId text null, DistribtrId text null,DistributorNodeType text null,flgGSTCapture text null," +
             "flgGSTCompliance text null,GSTNumber text null, Address text null,PinCode text null, City text null, State text null," +
             "fnLati text null,fnLongi text null,fnAccuracy text null," +
@@ -901,7 +899,7 @@ public class DBAdapterKenya
 
     //market visit proceed btn loc fetch
     private static final String TABLE_tblDsrLocationDetails = "tblDsrLocationDetails";
-    private static final String DATABASE_CREATE_TABLE_tblDsrLocationDetails = "create table tblDsrLocationDetails(" +
+    private static final String DATABASE_CREATE_TABLE_tblDsrLocationDetails = "create table IF NOT EXISTS tblDsrLocationDetails(" +
             "DSRId text null,DSRNodeType text null,PersonNodeID text null,PersonNodeType text null,DateTime text null," +
             "Address text null,PinCode text null, City text null, State text null," +
             "fnLati text null,fnLongi text null,fnAccuracy text null," +
@@ -913,22 +911,22 @@ public class DBAdapterKenya
 
     //account census
     private static final String DATABASE_TABLE_tblDAGetAddedOutletSummaryReport = "tblDAGetAddedOutletSummaryReport";
-    private static final String DATABASE_CREATE_TABLE_tblDAGetAddedOutletSummaryReport = "create table tblDAGetAddedOutletSummaryReport (Header text null,Child text null,TotalStores text null,Validated text null,Pending text null,FlgNormalOverall int null);";
+    private static final String DATABASE_CREATE_TABLE_tblDAGetAddedOutletSummaryReport = "create table IF NOT EXISTS tblDAGetAddedOutletSummaryReport(Header text null,Child text null,TotalStores text null,Validated text null,Pending text null,FlgNormalOverall int null);";
 
     //video table
     private static final String DATABASE_TABLE_tblVideoStoreWise = "tblContentStoreWise";
-    private static final String DATABASE_CREATE_TABLE_tblVideoStoreWise = "create table tblContentStoreWise (StoreID text null,flagVideoShow text null,ContentURL text null,VideoDownloadPath text null,Contentname text null,flgNewVedioLaunched text null,ContentViewed text null,Sstat integer null,ChannelID text null,ContentID text null,ContentType text null,Versionupdatedtime text null,ViewDateTime text null,FullVideoPlayed text null);";
+    private static final String DATABASE_CREATE_TABLE_tblVideoStoreWise = "create table IF NOT EXISTS tblContentStoreWise(StoreID text null,flagVideoShow text null,ContentURL text null,VideoDownloadPath text null,Contentname text null,flgNewVedioLaunched text null,ContentViewed text null,Sstat integer null,ChannelID text null,ContentID text null,ContentType text null,Versionupdatedtime text null,ViewDateTime text null,FullVideoPlayed text null);";
     //StoreProductStock
     private static final String DATABASE_TABLE_tblProductListLastVisitStockOrOrderMstr = "tblProductListLastVisitStockOrOrderMstr";
-    private static final String DATABASE_CREATE_TABLEtblProductListLastVisitStockOrOrderMstr = "create table tblProductListLastVisitStockOrOrderMstr (StoreID text null,PrdID text null);";
+    private static final String DATABASE_CREATE_TABLEtblProductListLastVisitStockOrOrderMstr = "create table IF NOT EXISTS tblProductListLastVisitStockOrOrderMstr(StoreID text null,PrdID text null);";
     private static final String DATABASE_TABLE_tblBankMaster = "tblBankMaster";
     private static final String DATABASE_TABLE_tblInstrumentMaster = "tblInstrumentMaster";
     //Amount Collection
-    private static final String DATABASE_CREATE_TABLE_tblBankMaster = "create table tblBankMaster (BankId text null, BankName text null, LoginIdIns text null, TimeStampIns text null, LoginIdUpd text null, TimeStampUpd text null);";
-    private static final String DATABASE_CREATE_TABLE_tblInstrumentMaster = "create table tblInstrumentMaster (InstrumentModeId text null, InstrumentMode text null, InstrumentType text null);";
+    private static final String DATABASE_CREATE_TABLE_tblBankMaster = "create table IF NOT EXISTS tblBankMaster(BankId text null, BankName text null, LoginIdIns text null, TimeStampIns text null, LoginIdUpd text null, TimeStampUpd text null);";
+    private static final String DATABASE_CREATE_TABLE_tblInstrumentMaster = "create table IF NOT EXISTS tblInstrumentMaster (InstrumentModeId text null, InstrumentMode text null, InstrumentType text null);";
     //DSM PROFILE
     private static final String TABLE_tblDSMRegDetailsFromServer = "tblDSMRegDetailsFromServer";
-    private static final String DATABASE_CREATE_TABLE_tblDSMRegDetailsFromServer = "create table tblDSMRegDetailsFromServer (PersonNodeId text null,  PersonNodeType text null,Name text null,ContactNo text null,DOB text null,SelfieName text null,SignImgName text null,BankAccountnumber text null,BankID text null,IFSCCode text null,flgUPIID text null,UPIID text null,SelfieNameURL text null,LastworkingDate text null,DistributorName text null,EmailID text null,AadhaarNumber text null);";
+    private static final String DATABASE_CREATE_TABLE_tblDSMRegDetailsFromServer = "create table IF NOT EXISTS tblDSMRegDetailsFromServer(PersonNodeId text null,  PersonNodeType text null,Name text null,ContactNo text null,DOB text null,SelfieName text null,SignImgName text null,BankAccountnumber text null,BankID text null,IFSCCode text null,flgUPIID text null,UPIID text null,SelfieNameURL text null,LastworkingDate text null,DistributorName text null,EmailID text null,AadhaarNumber text null);";
 
 
     private final Context context;
@@ -943,6 +941,9 @@ public class DBAdapterKenya
     public DBAdapterKenya(Context ctx) {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
+        if(!isDatabaseOpen())
+            openDb();
+
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -953,7 +954,8 @@ public class DBAdapterKenya
         @Override
         public void onCreate(SQLiteDatabase db) {
 
-            try {
+                db.execSQL(DATABASE_CREATE_TABLE_11);
+                db.execSQL(DATABASE_CREATE_TABLE_12);
                 db.execSQL(DATABASE_CREATE_TABLE_tblBloodGroup);
                 db.execSQL(DATABASE_CREATE_TABLE_tblEducationQuali);
                 db.execSQL(DATABASE_CREATE_REASON_ORDER_CANCEL);
@@ -1082,9 +1084,6 @@ public class DBAdapterKenya
                 db.execSQL(DATABASE_CREATE_TABLE_QUESTION_DEPENDENTMstr);
 
 
-                db.execSQL(DATABASE_CREATE_TABLE_11);
-                db.execSQL(DATABASE_CREATE_TABLE_12);
-
                 db.execSQL(DATABASE_CREATE_TABLE_14);
                 db.execSQL(DATABASE_CREATE_TABLE_ProductSegementMap);
                 db.execSQL(DATABASE_CREATE_TABLE_15);
@@ -1209,220 +1208,29 @@ public class DBAdapterKenya
                 //market visit proceed btn loc fetch
                 db.execSQL(DATABASE_CREATE_TABLE_tblDsrLocationDetails);
 
-            } catch (Exception e) {
-                Log.e(TAG, "Error: onCreate db");
-            }
+
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            try {
-                db.execSQL("DROP TABLE IF EXISTS tblBloodGroup");
-                db.execSQL("DROP TABLE IF EXISTS tblEducationQuali");
-                db.execSQL("DROP TABLE IF EXISTS tblReasonOrderCncl");
-                db.execSQL("DROP TABLE IF EXISTS tblExecutionImages");
-                db.execSQL("DROP TABLE IF EXISTS tableStoreLtfoodStkCompttrAvlbl");
-                db.execSQL("DROP TABLE IF EXISTS tableStoreLtfoodStkCompttrAvlbl");
 
-                db.execSQL("DROP TABLE IF EXISTS tableStoreSctnImage");
+            Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+            List<String> tables = new ArrayList<>();
 
-                db.execSQL("DROP TABLE IF EXISTS tblCompetitrPrdctPTRPTC");
-
-                db.execSQL("DROP TABLE IF EXISTS tblCompetitrPrdctMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblFeedbackCompetitrMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblFeedbackCompetitr");
-                db.execSQL("DROP TABLE IF EXISTS tblAttandanceDetails");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblDSMRegDetailsFromServer");
-                db.execSQL("DROP TABLE IF EXISTS tblBankMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblInstrumentMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblContentStoreWise");
-                db.execSQL("DROP TABLE IF EXISTS tblProductListLastVisitStockOrOrderMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblActualVisitStock");
-                db.execSQL("DROP TABLE IF EXISTS tblStateCityMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorCheckin");
-                //account census
-                db.execSQL("DROP TABLE IF EXISTS tblDAGetAddedOutletSummaryReport");
-
-                // SO TAbles
-                db.execSQL("DROP TABLE IF EXISTS tblOrderInPcsOrKg");
-                db.execSQL("DROP TABLE IF EXISTS tblAllServicesCalledSuccessfull");
-                db.execSQL("DROP TABLE IF EXISTS tblDSRSummaryDetials");
-
-                db.execSQL("DROP TABLE IF EXISTS tblSONameAndSummurayRefreshTime");
-                db.execSQL("DROP TABLE IF EXISTS tblQuestIDForOutChannel");
-                db.execSQL("DROP TABLE IF EXISTS tblQuestIDForName");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreCountDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblPreAddedStores");
-                db.execSQL("DROP TABLE IF EXISTS tblOptionMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblCoverageMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblRouteMasterWithCoverageMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreImageList");
-                db.execSQL("DROP TABLE IF EXISTS tblStorePaymentStageMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblFSOMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblPreAddedStoresDataDetails");
-
-                db.execSQL("DROP TABLE IF EXISTS tblsameLocationForStoreRestartDone");
-                db.execSQL("DROP TABLE IF EXISTS tblLatLongDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedNote");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorOldStockData");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorListMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReport");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorDayReportColumnsDesc");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorSavedData");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitStoreDetails");
-
-                db.execSQL("DROP TABLE IF EXISTS tblManagerMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSelectedManagerDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTargetVsAchievedSummary");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseTarget");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblMinDeliverQntty");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblNewStoreSalesQuotePaymentDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSalesOrderPaymentDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreAddressMapDetailsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreOrderBillAddressDetails");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblReturnReason");
-                db.execSQL("DROP TABLE IF EXISTS tbl_XMLfiles");
-                db.execSQL("DROP TABLE IF EXISTS tblUserAuthenticationMstr");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblSORegDetailsFromServer");
-                db.execSQL("DROP TABLE IF EXISTS tblUserRegistarationStatus");
-                db.execSQL("DROP TABLE IF EXISTS tblRegistrationDetail");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblAvailableVersionMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblNotificationMstr");
-                //surbhi
-                db.execSQL("DROP TABLE IF EXISTS tblUOMMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePrcsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePersonMeetMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteProductsMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentModeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteTypeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuotePaymentStageModeMapMstr");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblPDAQuestGrpMappingMstr");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreList");
-                db.execSQL("DROP TABLE IF EXISTS tblProductList");
-                db.execSQL("DROP TABLE IF EXISTS tblProductSegementMap");
-                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstr");
-                //db.execSQL("DROP TABLE IF EXISTS tblCategoryQuestionInformation");
-                db.execSQL("DROP TABLE IF EXISTS tblVisibilityMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblVisibilityDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblTransac");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoice");
-                db.execSQL("DROP TABLE IF EXISTS tblPDALastInvoiceDet");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductMap");
-                db.execSQL("DROP TABLE IF EXISTS tblSelectedStoreIDinChangeRouteCase");
-                db.execSQL("DROP TABLE IF EXISTS tblDayStartEndDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSysVisitID");
-                db.execSQL("DROP TABLE IF EXISTS tblDaySummaryNew");
-
-                db.execSQL("DROP TABLE IF EXISTS tblFirstOrderDetailsOnLastVisitDetailsActivity");
-                db.execSQL("DROP TABLE IF EXISTS tblSecondVisitDetailsOnLastVisitDetailsActivity");
-                db.execSQL("DROP TABLE IF EXISTS tblLODOnLastSalesSummary");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonProductMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonStoreProductwiseOrder");
-                db.execSQL("DROP TABLE IF EXISTS tblInvoiceButtonTransac");
-                db.execSQL("DROP TABLE IF EXISTS tblPdaDate");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDate");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDate");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastVisitDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetLastOrderDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblspForPDAGetLastOrderDetailsTotalValues");
-                db.execSQL("DROP TABLE IF EXISTS tblForPDAGetExecutionSummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSchemeFreeProQtyOtherDetails");
-
-                db.execSQL("DROP TABLE IF EXISTS tblProductListForAvailableStock");
-                db.execSQL("DROP TABLE IF EXISTS tblCatagoryMstrForDailyTarget");
-
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeStoreMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBucketProductMapping");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsBucketDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsProductMappingDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblSchemeSlabBenefitsValueDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblProductRelatedScheme");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProdcutPurchaseDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductAppliedSchemesBenifitsRecords");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreReturnDetail");
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreTypeMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductClassificationTypeListMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblTradeChannelMstr");
-
-                db.execSQL("DROP TABLE IF EXISTS tblNewStoreEntries");
-                db.execSQL("DROP TABLE IF EXISTS tblTemp");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblStoreProductPhotoDetail");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblSKUWiseDaySummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreWiseDaySummary");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreSKUWiseDaySummary");
-
-                db.execSQL("DROP TABLE IF EXISTS tblProductMappedWithSchemeSlabApplied");
-                db.execSQL("DROP TABLE IF EXISTS tblAlrtVal");
-                db.execSQL("DROP TABLE IF EXISTS tblAllSummary");
-
-
-                db.execSQL("DROP TABLE IF EXISTS tblPOSMaterialMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreIDAndMaterialIDMap");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialDetail");
-                db.execSQL("DROP TABLE IF EXISTS tblStoreMaterialPhotoDetail");
-
-                db.execSQL("DROP TABLE IF EXISTS tblNoVisitReasonMaster");
-
-                db.execSQL("DROP TABLE IF EXISTS tblSalesQuoteSponsorMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblManufacturerMstrMain");
-                db.execSQL("DROP TABLE IF EXISTS tblRateDistribution");
-
-                //map distributor
-                db.execSQL("DROP TABLE IF EXISTS tblDistribtorMstr");
-                db.execSQL("DROP TABLE IF EXISTS tblDistributorMapping");
-
-                //market visit proceed btn loc fetch
-                db.execSQL("DROP TABLE IF EXISTS tblDsrLocationDetails");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentiveMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentiveSecondaryMaster");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentiveDetailsColumnsDesc");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentivePastDetailsColumnsDesc");
-                db.execSQL("DROP TABLE IF EXISTS tblTotalEarning");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentiveMsgToDisplay");
-                db.execSQL("DROP TABLE IF EXISTS tblIncentiveBankDetails");
-                onCreate(db);
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error: onUpgrade db");
+            while (c.moveToNext()) {
+                tables.add(c.getString(0));
             }
+
+            for (String table : tables) {
+                if(!table.equalsIgnoreCase("sqlite_sequence")) {
+                    String dropQuery = "DROP TABLE IF EXISTS " + table;
+                    System.out.println("0000 Yogesh " + dropQuery);
+                    db.execSQL(dropQuery);
+                }
+            }
+           onCreate(db);
+
+
         }
     }
 
@@ -1585,7 +1393,7 @@ public class DBAdapterKenya
 
 
         //  db.execSQL("DELETE FROM tblOutletPhotoDetail");
-      //  db.execSQL("DELETE FROM tblAvailableVersionMstr");
+        //  db.execSQL("DELETE FROM tblAvailableVersionMstr");
         db.execSQL("DELETE FROM tblQuestionDependentMstr");
         db.execSQL("DELETE FROM tblPDAQuestGrpMappingMstr");
         db.execSQL("DELETE FROM tblReturnReason");
@@ -1890,19 +1698,19 @@ public class DBAdapterKenya
 
         Cursor cursor = db.rawQuery("SELECT *  FROM tblStoreWiseDaySummary", null);
         try {
-            String   allData[] =  new String[cursor.getCount()];
-            if(cursor.getCount()>0){
-            if (cursor.moveToFirst()) {
+            String allData[] = new String[cursor.getCount()];
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
 
-                for (int i = 0; i < cursor.getCount(); i++) {
+                    for (int i = 0; i < cursor.getCount(); i++) {
 
-                    allData[i] = (String) cursor.getString(0).toString().trim() + "^" + (String) cursor.getString(1).toString().trim() + "^" + (String) cursor.getString(2).toString().trim() + "^" + (String) cursor.getString(3).toString().trim() + "^" + (String) cursor.getString(4).toString().trim() + "^" + (String) cursor.getString(5).toString().trim() + "^" + (String) cursor.getString(6).toString().trim() + "^" + (String) cursor.getString(7).toString().trim() + "^" + (String) cursor.getString(8).toString().trim() + "^" + (String) cursor.getString(9).toString().trim() + "^" + (String) cursor.getString(10).toString().trim() + "^" + (String) cursor.getString(11).toString().trim();
-                    //// System.out.println("Value inserting 232 fetching :"+allData[i]);
-                    Log.d(TAG, allData[i]);
-                    cursor.moveToNext();
-                    // cursor.close();
+                        allData[i] = (String) cursor.getString(0).toString().trim() + "^" + (String) cursor.getString(1).toString().trim() + "^" + (String) cursor.getString(2).toString().trim() + "^" + (String) cursor.getString(3).toString().trim() + "^" + (String) cursor.getString(4).toString().trim() + "^" + (String) cursor.getString(5).toString().trim() + "^" + (String) cursor.getString(6).toString().trim() + "^" + (String) cursor.getString(7).toString().trim() + "^" + (String) cursor.getString(8).toString().trim() + "^" + (String) cursor.getString(9).toString().trim() + "^" + (String) cursor.getString(10).toString().trim() + "^" + (String) cursor.getString(11).toString().trim();
+                        //// System.out.println("Value inserting 232 fetching :"+allData[i]);
+                        Log.d(TAG, allData[i]);
+                        cursor.moveToNext();
+                        // cursor.close();
+                    }
                 }
-            }
 
             }
             ////// System.out.println("value  of new store is in DBadapter"+ScodecolumnIndex);
@@ -5408,6 +5216,7 @@ public class DBAdapterKenya
         db.execSQL("DELETE FROM tblDistributorMapping");
         db.execSQL("DELETE FROM tblDistributorCheckin");
         db.execSQL("DELETE FROM tblStoreList");
+        db.execSQL("DELETE FROM tblPreAddedStores");
         db.execSQL("DELETE FROM tblProductList");
         db.execSQL("DELETE FROM tblProductSegementMap");
         db.execSQL("DELETE FROM tblCatagoryMstr");
@@ -5497,9 +5306,28 @@ public class DBAdapterKenya
     }
 
     // ---opens the database---
-    public DBAdapterKenya open() throws SQLException {
+
+    public DBAdapterKenya openDb() throws SQLiteException {
         db = DBHelper.getWritableDatabase();
         isDBOpenflag = true;
+        return this;
+    }
+
+    public void closeDb(){
+        if(db!=null && db.isOpen())
+            db.close();
+    }
+
+    public boolean isDatabaseOpen(){
+        if(db!=null)
+        return db.isOpen();
+        else
+            return false;
+    }
+
+    public DBAdapterKenya open() throws SQLException {
+//        db = DBHelper.getWritableDatabase();
+//        isDBOpenflag = true;
         return this;
     }
 
@@ -5510,7 +5338,7 @@ public class DBAdapterKenya
 
     // ---closes the database---
     public void close() {
-        DBHelper.close();
+//        DBHelper.close();
     }
 
     public void refreshDataFromDB() {
@@ -7267,12 +7095,10 @@ public class DBAdapterKenya
 
     public void dropRoutesTBL() {
         //db.execSQL("DROP TABLE IF EXISTS tblRouteMstr");
-       // db.execSQL("DELETE FROM tblRouteMstr");
+        // db.execSQL("DELETE FROM tblRouteMstr");
         //db.execSQL("DROP TABLE IF EXISTS tblAvailableVersionMstr");
 
     }
-
-
 
 
     public String[] fnGetRouteIdsForDDL() {
@@ -20063,7 +19889,6 @@ public class DBAdapterKenya
     }
 
 
-
     public LinkedHashMap<String, String> getFileredOrderReviewProductListMap(String StoreId) {
         //tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null);";
         open();
@@ -26867,7 +26692,7 @@ public class DBAdapterKenya
     public void delete_all_storeDetailTables() {
         db.execSQL("DELETE FROM tblUserName");
         db.execSQL("DELETE FROM tblStoreCountDetails");
-        db.execSQL("DELETE FROM tblPreAddedStores");
+        db.execSQL("DELETE FROM tblPreAddedStores Where flgOldNewStore<>1");
 
         db.execSQL("DELETE FROM tblCoverageMaster");
         db.execSQL("DELETE FROM tblRouteMasterWithCoverageMapping");
@@ -28468,7 +28293,7 @@ public class DBAdapterKenya
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     for (int i = 0; i <= (cursor.getCount() - 1); i++) {
-                        hmap.put(cursor.getString(3) + "^" + cursor.getString(4) + "~" + cursor.getString(0) + "^" + cursor.getString(1) + "~" + cursor.getString(2), cursor.getString(5)+"^"+cursor.getString(6));
+                        hmap.put(cursor.getString(3) + "^" + cursor.getString(4) + "~" + cursor.getString(0) + "^" + cursor.getString(1) + "~" + cursor.getString(2), cursor.getString(5) + "^" + cursor.getString(6));
                         cursor.moveToNext();
                     }
                 }
@@ -28603,7 +28428,7 @@ public class DBAdapterKenya
         }
     }
 
-    public long savetblDsrRegDetails(String PersonNodeId, String PersonNodeType, String Name, String ContactNo, String DOB, String SelfieName, String SignImgName, String BankAccountnumber, String BankID, String IFSCCode, String flgUPIID, String UPIID, String SelfieNameURL, String LastworkingDate, String DistributorName, String EmailId,String AadhaarNumber) {
+    public long savetblDsrRegDetails(String PersonNodeId, String PersonNodeType, String Name, String ContactNo, String DOB, String SelfieName, String SignImgName, String BankAccountnumber, String BankID, String IFSCCode, String flgUPIID, String UPIID, String SelfieNameURL, String LastworkingDate, String DistributorName, String EmailId, String AadhaarNumber) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put("PersonNodeId", PersonNodeId.trim());
@@ -28642,7 +28467,7 @@ public class DBAdapterKenya
                                 emailID = (String) cursor.getString(15).toString();
                             }
                         }
-                        hmapQuestionMstr.put("DSRDETAILS", (String) cursor.getString(0).toString() + "^" + (String) cursor.getString(1).toString() + "^" + (String) cursor.getString(2).toString() + "^" + (String) cursor.getString(3).toString() + "^" + (String) cursor.getString(4).toString() + "^" + (String) cursor.getString(5).toString() + "^" + (String) cursor.getString(6).toString() + "^" + (String) cursor.getString(7).toString() + "^" + (String) cursor.getString(8).toString() + "^" + (String) cursor.getString(9).toString() + "^" + (String) cursor.getString(10).toString() + "^" + (String) cursor.getString(11).toString() + "^" + (String) cursor.getString(12).toString() + "^" + (String) cursor.getString(13).toString() + "^" + (String) cursor.getString(14).toString() + "^" + emailID+ "^" + (String) cursor.getString(16).toString());
+                        hmapQuestionMstr.put("DSRDETAILS", (String) cursor.getString(0).toString() + "^" + (String) cursor.getString(1).toString() + "^" + (String) cursor.getString(2).toString() + "^" + (String) cursor.getString(3).toString() + "^" + (String) cursor.getString(4).toString() + "^" + (String) cursor.getString(5).toString() + "^" + (String) cursor.getString(6).toString() + "^" + (String) cursor.getString(7).toString() + "^" + (String) cursor.getString(8).toString() + "^" + (String) cursor.getString(9).toString() + "^" + (String) cursor.getString(10).toString() + "^" + (String) cursor.getString(11).toString() + "^" + (String) cursor.getString(12).toString() + "^" + (String) cursor.getString(13).toString() + "^" + (String) cursor.getString(14).toString() + "^" + emailID + "^" + (String) cursor.getString(16).toString());
                         //    System.out.println("QuestID:"+(String)cursor.getString(0).toString()+"QuestCode:"+(String) cursor.getString(1).toString()+"QuestDesc:"+(String) cursor.getString(2).toString()+"QuestType:"+(String) cursor.getString(3).toString()+"AnsControlType:"+(String) cursor.getString(4).toString()+"AnsControlInputTypeID:"+(String) cursor.getString(5).toString()+"AnsControlInputTypeMaxLength:"+(String) cursor.getString(6).toString()+"AnsMustRequiredFlg:"+(String) cursor.getString(7).toString()+"QuestBundleFlg:"+(String) cursor.getString(8).toString()+"ApplicationTypeID:"+(String) cursor.getString(9).toString()+"Sequence:"+(String) cursor.getString(10).toString());
                         cursor.moveToNext();
                     }
@@ -28837,6 +28662,7 @@ public class DBAdapterKenya
         }
 
     }
+
     public void fnSettblAttandanceDetails() {
 
         try {
@@ -29090,7 +28916,7 @@ public class DBAdapterKenya
         return db.insert(TABLE_tblUserRegistarationStatus, null, initialValues);
     }
 
-    public long savetblSoRegDetails(String PersonNodeId, String PersonNodeType, String Name, String ContactNo, String DOB, String SelfieName, String SignImgName, String BankAccountnumber, String BankID, String IFSCCode, String flgUPIID, String UPIID, String SelfieNameURL, String EmailID,String AadhaarNumber) {
+    public long savetblSoRegDetails(String PersonNodeId, String PersonNodeType, String Name, String ContactNo, String DOB, String SelfieName, String SignImgName, String BankAccountnumber, String BankID, String IFSCCode, String flgUPIID, String UPIID, String SelfieNameURL, String EmailID, String AadhaarNumber) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put("PersonNodeId", PersonNodeId.trim());
@@ -29143,7 +28969,7 @@ public class DBAdapterKenya
                                 emailID = (String) cursor.getString(13).toString();
                             }
                         }
-                        hmapQuestionMstr.put("DSRDETAILS", (String) cursor.getString(0).toString() + "^" + (String) cursor.getString(1).toString() + "^" + (String) cursor.getString(2).toString() + "^" + (String) cursor.getString(3).toString() + "^" + (String) cursor.getString(4).toString() + "^" + (String) cursor.getString(5).toString() + "^" + (String) cursor.getString(6).toString() + "^" + (String) cursor.getString(7).toString() + "^" + (String) cursor.getString(8).toString() + "^" + (String) cursor.getString(9).toString() + "^" + (String) cursor.getString(10).toString() + "^" + (String) cursor.getString(11).toString() + "^" + (String) cursor.getString(12).toString() + "^" + emailID+ "^" + (String) cursor.getString(14).toString());
+                        hmapQuestionMstr.put("DSRDETAILS", (String) cursor.getString(0).toString() + "^" + (String) cursor.getString(1).toString() + "^" + (String) cursor.getString(2).toString() + "^" + (String) cursor.getString(3).toString() + "^" + (String) cursor.getString(4).toString() + "^" + (String) cursor.getString(5).toString() + "^" + (String) cursor.getString(6).toString() + "^" + (String) cursor.getString(7).toString() + "^" + (String) cursor.getString(8).toString() + "^" + (String) cursor.getString(9).toString() + "^" + (String) cursor.getString(10).toString() + "^" + (String) cursor.getString(11).toString() + "^" + (String) cursor.getString(12).toString() + "^" + emailID + "^" + (String) cursor.getString(14).toString());
                         //    System.out.println("QuestID:"+(String)cursor.getString(0).toString()+"QuestCode:"+(String) cursor.getString(1).toString()+"QuestDesc:"+(String) cursor.getString(2).toString()+"QuestType:"+(String) cursor.getString(3).toString()+"AnsControlType:"+(String) cursor.getString(4).toString()+"AnsControlInputTypeID:"+(String) cursor.getString(5).toString()+"AnsControlInputTypeMaxLength:"+(String) cursor.getString(6).toString()+"AnsMustRequiredFlg:"+(String) cursor.getString(7).toString()+"QuestBundleFlg:"+(String) cursor.getString(8).toString()+"ApplicationTypeID:"+(String) cursor.getString(9).toString()+"Sequence:"+(String) cursor.getString(10).toString());
                         cursor.moveToNext();
                     }
@@ -29212,7 +29038,7 @@ public class DBAdapterKenya
     }
 
 
-    public void inserttblProfilePhotoSignDetail(String RecordId, String ClickedDateTime, String PhotoName, String PDAPhotoPath, String SignName, String SignPath, String Name, String ContactNo, String DOB, String AccNo, String BankID, String IFSC, String UPIID_Flag, String UPIID_text, String IMEI, String NodeID, String NodeType, String EmailID,String AadhaarNumber) {
+    public void inserttblProfilePhotoSignDetail(String RecordId, String ClickedDateTime, String PhotoName, String PDAPhotoPath, String SignName, String SignPath, String Name, String ContactNo, String DOB, String AccNo, String BankID, String IFSC, String UPIID_Flag, String UPIID_text, String IMEI, String NodeID, String NodeType, String EmailID, String AadhaarNumber) {
         //tblProfileData(DBId text null,DOId text null,QuestId text null,SectionID text null,QuestDesc text null);";
 // private static final String DATABASE_CREATE_tblProfileData= "create table tblProfileData(DBId text null,DOId text null,QuestId text null,QuestDesc text null,ControlType text null);";
 
@@ -29608,7 +29434,7 @@ public class DBAdapterKenya
         initialValues.put("CategoryID", CategoryID.trim());
         initialValues.put("ProductId", ProductId.trim());
         initialValues.put("PrdctDesc", PrdctDesc.trim());
-        initialValues.put("stockQuantity",stockQuantity);
+        initialValues.put("stockQuantity", stockQuantity);
         initialValues.put("flgAvlblPrdct", flgAvlblPrdct);
 
         initialValues.put("Sstat", Sstat.trim());
@@ -30154,7 +29980,7 @@ public class DBAdapterKenya
     }
 
 
-    public ArrayList<ActualVisitProductInfo> getFileredProductListMapStoreCheck(String _searchString, int BusinessSegmentId, String ctgryId, int flgCompanyCompetitorProducts,String StoreID) {
+    public ArrayList<ActualVisitProductInfo> getFileredProductListMapStoreCheck(String _searchString, int BusinessSegmentId, String ctgryId, int flgCompanyCompetitorProducts, String StoreID) {
         //tblProductList (CategoryID text  null,ProductID text  null, ProductShortName text  null, DisplayUnit text null, CalculateKilo real  null,ProductMRP real not null, ProductRLP real not null, ProductTaxAmount real not null, KGLiter string null,RetMarginPer real null,VatTax real null,StandardRate real null,StandardRateBeforeTax real null,StandardTax real null,CatOrdr int null,PrdOrdr int null,StoreCatNodeId int null);";
         open();
         String searchString = "";
@@ -30255,6 +30081,7 @@ public class DBAdapterKenya
             return productInfoArrayList;
         }
     }
+
     public LinkedHashMap<String, String> fnGettblBloodGroup() {
         LinkedHashMap<String, String> hmapQuestionMstr = new LinkedHashMap<String, String>();
         open();
@@ -30285,6 +30112,7 @@ public class DBAdapterKenya
         db.execSQL("DELETE FROM tblEducationQuali");
 
     }
+
     public long savetblBloodGroup(String BloddGroups) {
 
         ContentValues initialValues = new ContentValues();
@@ -30295,6 +30123,7 @@ public class DBAdapterKenya
 
         return db.insert(TABLE_tblBloodGroup_Define, null, initialValues);
     }
+
     public LinkedHashMap<String, String> fnGettblEducationQuali() {
         LinkedHashMap<String, String> hmapQuestionMstr = new LinkedHashMap<String, String>();
         open();
@@ -30327,6 +30156,7 @@ public class DBAdapterKenya
         // System.out.println("Data Insert in Table MAIN1User");
         return db.insert(TABLE_tblEducationQuali, null, initialValues);
     }
+
     public ArrayList<String> fetch_Text_To_Show() {
         open();
         ArrayList<String> listTxtBxToShow = new ArrayList<>();
@@ -30349,6 +30179,7 @@ public class DBAdapterKenya
             close();
         }
     }
+
     public LinkedHashMap<String, String> fetch_Reason_Late() {
         open();
         LinkedHashMap<String, String> hmapCatgry = new LinkedHashMap<>();
@@ -30375,19 +30206,19 @@ public class DBAdapterKenya
 
     public String fetch_DistributorNodeIDTypeFromAttendanceTable() {
         open();
-        String DistributorNodeIDTypeFromAttendanceTable ="0^0^0";
+        String DistributorNodeIDTypeFromAttendanceTable = "0^0^0";
         Cursor cursor = db.rawQuery("SELECT DistributorId,DistributorNodeType,DistributorName FROM tblAttandanceDetails", null);// and flgDelayedReason=1
         try {
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
 
-                    DistributorNodeIDTypeFromAttendanceTable=cursor.getString(0)+"^"+ cursor.getString(1)+"^"+ cursor.getString(2);
+                    DistributorNodeIDTypeFromAttendanceTable = cursor.getString(0) + "^" + cursor.getString(1) + "^" + cursor.getString(2);
                 }
 
             }
             return DistributorNodeIDTypeFromAttendanceTable;
         } finally {
-            if(cursor!=null) {
+            if (cursor != null) {
                 cursor.close();
             }
             close();
@@ -30398,18 +30229,18 @@ public class DBAdapterKenya
     public int FetchflgUserAuthenticatedAndRegistered() {
         int SnamecolumnIndex1 = 0;
         int flgUserAuthenticatedAndRegistered = 0;
-open();
+        open();
         Cursor cursor = db.rawQuery("SELECT ifnull(flgUserAuthenticated,0) AS flgUserAuthenticated,ifnull(FlgRegistered,0) AS FlgRegistered from tblUserAuthenticationMstr", null);
         try {
-            if (cursor.getCount()>0) {
+            if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
-                    if(Integer.parseInt((String) cursor.getString(0).toString())==1 && Integer.parseInt((String) cursor.getString(1).toString())==1)
-                    flgUserAuthenticatedAndRegistered = 1;
+                    if (Integer.parseInt((String) cursor.getString(0).toString()) == 1 && Integer.parseInt((String) cursor.getString(1).toString()) == 1)
+                        flgUserAuthenticatedAndRegistered = 1;
                 }
             }
             return flgUserAuthenticatedAndRegistered;
         } finally {
-            if(cursor!=null) {
+            if (cursor != null) {
                 cursor.close();
             }
             close();

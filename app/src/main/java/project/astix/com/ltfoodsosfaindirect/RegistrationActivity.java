@@ -140,7 +140,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     public static String imei="";
     LinkedHashMap<String, String> hmapDsrRegAllDetails;
     Button Submit,validate_btn,CancelButton;
-    DBAdapterKenya dbengine=new DBAdapterKenya(this);
+    DBAdapterKenya dbengine;
    // DataBaseAssistantRegistration DA=new DataBaseAssistantRegistration(this);
     String dbNameID="";
     String doNameID="";
@@ -199,6 +199,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_activity);
+        dbengine = new DBAdapterKenya(this);
+
         hashmapBank = dbengine.fnGettblBankMaster();
         Intent intent = getIntent();
         String  NodeID_NodeType= intent.getStringExtra("NodeID_NodeType");

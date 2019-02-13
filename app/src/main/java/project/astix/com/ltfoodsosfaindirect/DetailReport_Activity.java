@@ -109,7 +109,7 @@ public class DetailReport_Activity extends Activity
 	TextView totalFreeLt;
 	TextView totalSampleLt;
 	TextView totalDiscount;
-	DBAdapterKenya dbengine = new DBAdapterKenya(this);
+	DBAdapterKenya dbengine;
 	public TableLayout tl2; 
 	public int bck = 0;
 	
@@ -359,8 +359,9 @@ protected void onCreate(Bundle savedInstanceState)
 				// TODO Auto-generated method stub
 				super.onCreate(savedInstanceState);
 				setContentView(R.layout.today_sales_summary);
-				
-				//setContentView(R.layout.summary_testing);
+			dbengine=new DBAdapterKenya(this);
+
+			//setContentView(R.layout.summary_testing);
 				decimalFormat.applyPattern(pattern);
 				Intent extras = getIntent();
 				bck = extras.getIntExtra("bck", 0);

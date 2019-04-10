@@ -23,7 +23,7 @@ public class StockCheckAndCmpttrAvilable extends AppCompatActivity {
     public String pickerDate;
     ImageView img_back_Btn;
     public String selStoreName;
-    DBAdapterKenya dbengine = new DBAdapterKenya(StockCheckAndCmpttrAvilable.this);
+   DBAdapterKenya dbengine;
 
     ArrayList<Integer> listStkCmpttr;
 
@@ -66,6 +66,7 @@ public class StockCheckAndCmpttrAvilable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_check_and_cmpttr_avilable);
+        dbengine = new DBAdapterKenya(StockCheckAndCmpttrAvilable.this);
 
         btn_Next = (Button) findViewById(R.id.btn_Next);
         rg_compttr = (RadioGroup) findViewById(R.id.rg_compttr);

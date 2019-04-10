@@ -48,7 +48,7 @@ public class FeedbackCompetitorActivity extends BaseActivity implements CheckedU
 
     private CustomKeyboard mCustomKeyboard;
     Button btn_save;
-    DBAdapterKenya dbengine = new DBAdapterKenya(FeedbackCompetitorActivity.this);
+    DBAdapterKenya dbengine;
     public String StoreID;
     public String imei, date, pickerDate;
     int bck = 0;
@@ -63,7 +63,7 @@ public class FeedbackCompetitorActivity extends BaseActivity implements CheckedU
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_competitor);
-
+        dbengine = new DBAdapterKenya(FeedbackCompetitorActivity.this);
         Intent intent = getIntent();
         StoreID = intent.getStringExtra("storeID");
         imei = intent.getStringExtra("imei");

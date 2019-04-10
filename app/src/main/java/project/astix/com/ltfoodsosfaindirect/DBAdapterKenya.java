@@ -30048,7 +30048,7 @@ public class DBAdapterKenya {
                             "where (" + searchString + ") " +
                             "and tblProductSegementMap.BusinessSegmentId=" + BusinessSegmentId + " " +
                             "AND tblProductList.CategoryID='" + ctgryId +
-                            "'  and tblProductList.ProductID not in(Select tblProductListLastVisitStockOrOrderMstr.PrdID from tblProductListLastVisitStockOrOrderMstr) order by PrdOrdr Asc", null);
+                            "'  and tblProductList.ProductID not in(Select tblProductListLastVisitStockOrOrderMstr.PrdID from tblProductListLastVisitStockOrOrderMstr Where tblProductListLastVisitStockOrOrderMstr.StoreID='"+StoreID+"') order by PrdOrdr Asc", null);
                 } else {
                     cur = db.rawQuery("Select tblProductList.ProductID,ProductShortName,'Pcs' AS DisplayUnit " +
                             "from tblProductList " +
@@ -30056,7 +30056,7 @@ public class DBAdapterKenya {
                             "on tblProductList.ProductID=tblProductSegementMap.ProductID " +
                             "where (" + searchString + ") " +
                             "and tblProductSegementMap.BusinessSegmentId=" + BusinessSegmentId +
-                            " and tblProductList.ProductID not in(Select tblProductListLastVisitStockOrOrderMstr.PrdID from tblProductListLastVisitStockOrOrderMstr) order by PrdOrdr Asc", null);
+                            " and tblProductList.ProductID not in(Select tblProductListLastVisitStockOrOrderMstr.PrdID from tblProductListLastVisitStockOrOrderMstr Where tblProductListLastVisitStockOrOrderMstr.StoreID='"+StoreID+"') order by PrdOrdr Asc", null);
                 }
             }
 
